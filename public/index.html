@@ -1,36 +1,224 @@
-<!-- Referenced: https://www.w3schools.com/html/html_responsive.asp-->
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" type="text/css" href="/css/styles.css">
+  <title>shmspace</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet">
+  <!-- let's include the css file for bootstrap, then our custom css -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/xp.css" />
+
+
+
+  <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+  
+  <!-- let's also include these javascript scripts. -->
+  <!--script src = "tabs.js"></script-->
+
+
 </head>
 
-<!-- you can also specify styles straight in html! Let's use Verdana on this page.-->
-<body style="font-family:Verdana;">
-<div style="background-color:#e5e5e5;padding:15px;text-align:center;">
-  <h1>Hello World</h1>
+<body>
+
+
+
+
+  <div class="window">
+    <div class="title-bar">
+      <div class="title-bar-text">
+        My First Window
+      </div>
+    </div> <!--end window header-->
+    <div class="window-body">
+      <section class="tabs">
+        <menu role="tablist" aria-labelledby="tablist-1" class="manual">
+          <button id="tab-1" type="button" role="tab" aria-selected="true" aria-controls="tabpanel-1" class="mytabpanel">
+            <span class="focus">TAB 1</span>
+          </button>
+          <button id="tab-2" type="button" role="tab" aria-selected="false" aria-controls="tabpanel-2" tabindex="-1">
+            <span class="focus">TAB 2</span>
+          </button>
+          <button id="tab-3" type="button" role="tab" aria-selected="false" aria-controls="tabpanel-3" tabindex="-1">
+            <span class="focus">TAB 3</span>
+          </button>
+        </menu>
+      </section>
+
+      <div id="tabpanel-1" role="tabpanel" aria-labelledby="tab-1" >
+
+        <p style="font-size= 50px">
+          TAB 1 CONTENT WILL GO HERE!
+        </p>
+
+
+      </div>
+      <div id="tabpanel-2" role="tabpanel" aria-labelledby="tab-2" style="display:none;">
+        <p>
+          <a href="https://en.wikipedia.org/wiki/Joachim_Andersen_(composer)">Carl Joachim Andersen</a>
+          (29 April 1847 – 7 May 1909) was a Danish flutist, conductor and composer born in Copenhagen, son of the flutist Christian Joachim Andersen.
+          Both as a virtuoso and as composer of flute music, he is considered one of the best of his time.
+          He was considered to be a tough leader and teacher and demanded as such a lot from his orchestras but through that style he reached a high level.
+        </p>
+      </div>
+      <div id="tabpanel-3" role="tabpanel" aria-labelledby="tab-3" style="display:none;">
+        <p>
+          tab 3
+        </p>
+      </div>
+    </div> <!-- end of window body -->
+  </div>
+
+</section>
+</div>
 </div>
 
-<div style="overflow:auto">
-  <div class="menu">
-    <a href="/a">Normal Rabbit</a>
-    <a href="/b">Gray Rabbit</a>
-    <a href="/c">Sepia Rabbit</a>
-  </div>
 
-  <div class="main">
-    <h2>Why are these colors so ugly?</h2>
-    <p>Sure makes you feel motivated to pick a better color-scheme for yourself instead of sticking with these ugly default colors, huh? >:)</p>
-  </div>
+<script>
+  //TAB LIST
+  /* From: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/tab_role
+ *   This content is licensed according to the W3C Software License at
+ *   https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document
+ *
+ *   File:   tabs-manual.js
+ *
+ *   Desc:   Tablist widget that implements ARIA Authoring Practices
+ */
 
-  <div class="right">
-    <h2>About</h2>
-    <p>This is some example code prepared for CS160: User Interface Design & Development, Summer 2022.</p>
-  </div>
-</div>
+  'use strict';
 
+  class TabsManual {
+    constructor(groupNode) {
+      console.log("wowoow");
+      this.tablistNode = groupNode;
+
+      this.tabs = [];
+
+      this.firstTab = null;
+      this.lastTab = null;
+
+      this.tabs = Array.from(this.tablistNode.querySelectorAll('[role=tab]'));
+      this.tabpanels = [];
+
+      for (var i = 0; i < this.tabs.length; i += 1) {
+        var tab = this.tabs[i];
+        var tabpanel = document.getElementById(tab.getAttribute('aria-controls'));
+
+        tab.tabIndex = -1;
+        tab.setAttribute('aria-selected', 'false');
+        this.tabpanels.push(tabpanel);
+
+        tab.addEventListener('keydown', this.onKeydown.bind(this));
+        tab.addEventListener('click', this.onClick.bind(this));
+
+        if (!this.firstTab) {
+          this.firstTab = tab;
+        }
+        this.lastTab = tab;
+      }
+
+      this.setSelectedTab(this.firstTab);
+    }
+
+    setSelectedTab(currentTab) {
+      for (var i = 0; i < this.tabs.length; i += 1) {
+        var tab = this.tabs[i];
+        if (currentTab === tab) {
+          tab.setAttribute('aria-selected', 'true');
+          tab.removeAttribute('tabindex');
+          this.tabpanels[i].style.display = "block";
+        } else {
+          tab.setAttribute('aria-selected', 'false');
+          tab.tabIndex = -1;
+          this.tabpanels[i].style.display="none";
+        }
+      }
+    }
+
+    moveFocusToTab(currentTab) {
+      currentTab.focus();
+    }
+
+    moveFocusToPreviousTab(currentTab) {
+      var index;
+
+      if (currentTab === this.firstTab) {
+        this.moveFocusToTab(this.lastTab);
+      } else {
+        index = this.tabs.indexOf(currentTab);
+        this.moveFocusToTab(this.tabs[index - 1]);
+      }
+    }
+
+    moveFocusToNextTab(currentTab) {
+      var index;
+
+      if (currentTab === this.lastTab) {
+        this.moveFocusToTab(this.firstTab);
+      } else {
+        index = this.tabs.indexOf(currentTab);
+        this.moveFocusToTab(this.tabs[index + 1]);
+      }
+    }
+
+  /* EVENT HANDLERS */
+
+    onKeydown(event) {
+      var tgt = event.currentTarget,
+      flag = false;
+
+      switch (event.key) {
+      case 'ArrowLeft':
+        this.moveFocusToPreviousTab(tgt);
+        flag = true;
+        break;
+
+      case 'ArrowRight':
+        this.moveFocusToNextTab(tgt);
+        flag = true;
+        break;
+
+      case 'Home':
+        this.moveFocusToTab(this.firstTab);
+        flag = true;
+        break;
+
+      case 'End':
+        this.moveFocusToTab(this.lastTab);
+        flag = true;
+        break;
+
+      default:
+        break;
+      }
+
+      if (flag) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+    }
+
+  // Since this example uses buttons for the tabs, the click onr also is activated
+  // with the space and enter keys
+    onClick(event) {
+      this.setSelectedTab(event.currentTarget);
+    }
+  }
+
+
+
+      // Initialize tablist
+
+  window.addEventListener('load', function () {
+    console.log("hello!")
+    var tablists = document.querySelectorAll('[role=tablist].manual');
+    for (var i = 0; i < tablists.length; i++) {
+      new TabsManual(tablists[i]);
+    }
+
+  });
+
+</script>
 
 </body>
-</html>
 
+</html>
