@@ -92,7 +92,7 @@ details[open] summary span{
   overflow-y: auto;
 }
 
-@media (max-width : 500px) {
+@media (max-width : 600px) {
   .row{
     flex-direction: column;
   }
@@ -115,7 +115,7 @@ https://codepen.io/Mark_Bowley/pen/LYZEBq */
 body {
   background: linear-gradient(186deg, #0360C8 6.25%, #267FD3 70.65%, #A4C5AB 100%);
   color: #333;
-  font: 100% Arial, Sans Serif;
+  /*font: 100% Arial, Sans Serif;*/
   height: 90vh;
   margin: 0;
   padding: 0;
@@ -161,7 +161,170 @@ body {
     }
 }
 
-/* ANIMATIONS */
+
+/**---- LISTBOXES from https://www.w3.org/WAI/ARIA/apg/patterns/listbox/examples/listbox-scrollable/----*/
+.listbox-area {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: repeat(2, 1fr);
+  padding: 1em;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  background: #eee;
+  font: "Pixelated MS Sans Serif", Arial;
+  
+}
+
+[role="listbox"] {
+  margin: 1em 0 0;
+  padding: 2px;
+  border: 1px solid #aaa;
+  max-height: 6em;
+  /*max-width: 55%;*/
+  background: white;
+  
+}
+
+[role="listbox"]#sem_list {
+  position: relative;
+  overflow-y: auto;
+  
+}
+
+[role="listbox"] + *,
+.listbox-label + * {
+  margin-top: 0.5em;
+}
+
+[role="group"] {
+  margin: 0;
+  padding: 0;
+}
+
+[role="group"] > [role="presentation"] {
+  display: block;
+  margin: 0;
+  padding: 0 2em;
+  font-weight: bold;
+  line-height: 1.5em;
+  background-color: #ccc;
+  font-size: 10px;
+}
+
+[role="option"] {
+  position: relative;
+  display: block;
+  padding: 0.5em 1.5em 0 1.5em;
+  line-height: 1.5em;
+  font-size: 10px;
+  font-family: "Pixelated MS Sans Serif", Arial;
+}
+
+[role="option"].focused {
+  background-clip:padding-box;
+  background-color: #a8d6a7;
+}
+
+[role="option"][aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "✅";
+  background-color: #a8d6a7;
+}
+
+button[aria-haspopup="listbox"] {
+  position: relative;
+  padding: 5px 10px;
+  width: 150px;
+  border-radius: 0;
+  text-align: left;
+}
+
+button[aria-haspopup="listbox"]::after {
+  position: absolute;
+  right: 5px;
+  top: 10px;
+  width: 0;
+  height: 0;
+  border: 8px solid transparent;
+  border-top-color: currentcolor;
+  border-bottom: 0;
+  content: "";
+}
+
+button[aria-haspopup="listbox"][aria-expanded="true"]::after {
+  position: absolute;
+  right: 5px;
+  top: 10px;
+  width: 0;
+  height: 0;
+  border: 8px solid transparent;
+  border-top: 0;
+  border-bottom-color: currentcolor;
+  content: "";
+}
+
+button[aria-haspopup="listbox"] + [role="listbox"] {
+  position: absolute;
+  margin: 0;
+  width: 9.5em;
+  max-height: 10em;
+  border-top: 0;
+  overflow-y: auto;
+}
+
+[role="toolbar"] {
+  display: flex;
+}
+
+[role="toolbar"] > * {
+  border: 1px solid #aaa;
+  background: #ccc;
+}
+
+[role="toolbar"] > [aria-disabled="false"]:focus {
+  background-color: #eee;
+}
+
+button {
+  font-size: inherit;
+}
+
+button[aria-disabled="true"] {
+  opacity: 0.5;
+}
+
+.move-right-btn::after {
+  content: " →";
+}
+
+.move-left-btn::before {
+  content: "← ";
+}
+
+.annotate {
+  color: #366ed4;
+  font-style: italic;
+}
+
+.hidden {
+  display: none;
+}
+
+.offscreen {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+
+
+/* --- ANIMATIONS -----*/
 
 .x1 {
   -webkit-animation: animateCloud 75s linear infinite;
