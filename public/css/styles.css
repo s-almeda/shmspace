@@ -92,7 +92,8 @@ details[open] summary span{
   overflow-y: auto;
 }
 
-@media (max-width : 600px) {
+/* -- MOBILE/ skinty view -- --*/
+@media (max-width : 700px) {
   .row{
     flex-direction: column;
   }
@@ -104,6 +105,9 @@ details[open] summary span{
   }
   .col-3{
     width:100%;
+  }
+  [role="option"]{
+    font-size: 16px;
   }
   [role="tab"]{
     font-size: min(1.5vh, 15px);
@@ -163,24 +167,40 @@ body {
 
 
 /**---- LISTBOXES from https://www.w3.org/WAI/ARIA/apg/patterns/listbox/examples/listbox-scrollable/----*/
+.select-description{
+  /*parent- aka the container that holds both the selecty box and the description*/
+  display: inline-flex;
+  align-items: stretch;
+  width: 100%;
+  height: 15vh;
+}
+.select-description-child{
+  /*the 2 childrenz*/
+  flex: 1;
+  align-items: stretch;
+  margin: 2px;
+  font-family: "MS Sans Serif", Arial;
+  font-size: 11px;
+  
+}
+
 .listbox-area {
   display: grid;
   grid-gap: 1em;
   grid-template-columns: repeat(2, 1fr);
-  padding: 1em;
+  padding: 0em;
   border: 1px solid #aaa;
   border-radius: 4px;
   background: #eee;
-  font: "Pixelated MS Sans Serif", Arial;
-  
+  width: 100%;
+  -
 }
 
 [role="listbox"] {
   margin: 1em 0 0;
   padding: 2px;
   border: 1px solid #aaa;
-  max-height: 6em;
-  /*max-width: 55%;*/
+  max-height: 8em;
   background: white;
   
 }
@@ -198,38 +218,62 @@ body {
 
 [role="group"] {
   margin: 0;
-  padding: 0;
+  padding: 0.2em;
 }
 
 [role="group"] > [role="presentation"] {
   display: block;
   margin: 0;
-  padding: 0 2em;
+  padding: 0 1em;
   font-weight: bold;
   line-height: 1.5em;
   background-color: #ccc;
-  font-size: 10px;
+  font-size: 11px;
 }
 
 [role="option"] {
   position: relative;
   display: block;
-  padding: 0.5em 1.5em 0 1.5em;
-  line-height: 1.5em;
-  font-size: 10px;
+  padding: 0em 1.2em 0 1.6em;
+  line-height: 1.4em;
+  font-size: 11px;
   font-family: "Pixelated MS Sans Serif", Arial;
 }
 
 [role="option"].focused {
   background-clip:padding-box;
-  background-color: #a8d6a7;
+  background-color: #c6e2a5;
 }
 
-[role="option"][aria-selected="true"]::before {
+#sem_su21[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
-  content: "✅";
-  background-color: #a8d6a7;
+  content: "☀️";
+}
+#sem_su22[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "☀️";
+}
+#sem_sp22[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "🌸";
+}
+#sem_sp23[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "🌸";
+}
+#sem_su23[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "☀️";
+}
+#sem_fa23[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "🍁";
 }
 
 button[aria-haspopup="listbox"] {
