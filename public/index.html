@@ -66,38 +66,23 @@
 
     <div id="tabpanel-1" role="tabpanel" aria-labelledby="tab-1" class="verticalscroll" >
       <div class="container">
-        <div class="row">
+        <div class="row" style=" ">
           <!-- computer image -->
-          <div class="col-4"style="padding: 1.5vw; ">
-            <img src="images/computer.svg" style="max-height:50%; width: 80%;">
-            <div style="padding: 1.5vw;">
-                  <fieldset style="height: 20; min-width: 20vw; margin: 0px;">
-                    <legend>teaching</legend>
-                    <em>CS160: User Interface Design and Development</em>
-                    <div class="container">
-                      <div class="row">
-                        <div class="col-1">
-                          <span id="ss_sems" class="listbox-label"></span>
-                          <ul id="sem_list" tabindex="0" role="listbox" aria-labelledby="ss_sems">
-                          <li id="sem_su21" role="option">Summer 21</li>
-                          <li id="sem_sp22" role="option">Spring 22</li>
-                          <li id="sem_su22" role="option">Summer 22</li>
-                          <li id="sem_sp23" role="option">Spring 23</li>
-                          </ul>
-                        </div>
-                        <div class="col-1">
-                          <fieldset style="height: 20; min-width: 20vw; margin: 0px;">
-                          <legend>teaching</legend>
-                          <em>CS160: User Interface Design and Development</em>
-                          </fieldset>    
-                        </div><!--end of col for description box-->
-                      </div><!-- end of internal row-->
-                    </div>
+          <div class="col-4"style="padding: 0.5vw; padding-right: 0.5vw;">
+            <img src="images/computer.svg" style="padding: 1vw; max-height:60%; width: 95%; display: inline; align: center;">
+            
+            
+            <div style="padding: 1vw;">
+            <fieldset style="height: 100%">
+              <legend> contact</legend>
+                ✉️ email : <em>firstname (dot) lastname (at) berkeley.edu</em> <br>
+                🖼 instagram: @ shm.uh <br>
+                🐦 twitter: @ shmu_h<br>
+                📆 office hours: <a href="https://calendly.com/shmothy/office-hours-with-shm?month=2023-08">by appointment</a>
+            </fieldset>
+            </div>
 
-                  </fieldset>
-                </div>
-
-          </div>
+          </div> <!-- end of col with computer and contact -->
 
           <!-- right side -->
           <div class="col-8">
@@ -108,7 +93,7 @@
               <div class="field-row">
                 <ul class="tree-view">
                   <details open>
-                    <summary><em>currently...</em><span style="color: #de7e00; font-size: 12px;">(click to expand)</span></summary>
+                    <summary onclick="togglePreviously();"><strong>currently... </strong><span style="color: #de7e00; font-size: 12px;">(click to expand)</span></summary>
                     <ul>
                       <li>SF Bay Area artist & computer scientist</li> 
                       <li>4th-year PhD in the EECS Program at UC Berkeley, with Bjoern Hartmann. </li>
@@ -116,7 +101,7 @@
                     </ul>
                   </details>
                   <details closed>
-                    <summary><em>previously... </em><span>(click to expand)</span></summary>
+                    <summary><strong>previously... </strong><span>(click to expand)</span></summary>
                     <ul>
                       <li>...a child <span>😱</span> </li>
                       <li>Class of 2020 @ The College of New Jersey, Computer Science + Fine Art </li> 
@@ -126,50 +111,82 @@
                 </ul>
               </div>
             </fieldset>
+              <div class="row">
+                
+                  <fieldset style="height: 20; width: 100%; margin: 0px;">
+                    <legend>teaching</legend>
+                      <div id="semesterheading" style="font-style:italic; font-size: 14px">Select 1 of my 6 semesters of teaching below to view details.</div>
+                      <div class="select-description">
+                        <div class="select-description-child select"style="display:inline; margin: 3px; width: 50%;">
+                          <span id="ss_sems" class="listbox-label"></span>
+                          <ul id="sem_list" tabindex="0" role="listbox" aria-labelledby="ss_sems">
+                          <li id="sem_su21" role="option">CS160 - Summer 2021</li>
+                          <li id="sem_sp22" role="option">CS160 - Spring 2022</li>
+                          <li id="sem_su22" role="option">CS160 - Summer 2022</li>
+                          <li id="sem_sp23" role="option">CS160 - Spring 2023</li>
+                          <li id="sem_su23" role="option">DESINV23 - Summer 2023</li>
+                          <li id="sem_fa23" role="option">DESINV202 - Fall 2023</li>
+                          </ul>
+                        </div>
+                        <div class="select-description-child description"style="display:inline; margin: 8px; max-width: 45%;">
+                          <fieldset id="cs160-description">
+                            <em>course details will appear here.</em>
+                          </fieldset>  
+                        </div><!--end of col for description box-->
+                      </div><!-- end of internal cs160 selectbox + description row-->
 
-              <div class="row"style=" color: #FFFFFF; padding: 1.5vw">
-
-                <div class="col-4">
-                  <fieldset>
-                    <legend>pronouns</legend>
-                    <em></em>
-                    <ul>
-                      <li>a</li>
-                      <li>b</li>
-                      <li>c</li>
-                    </ul>
                   </fieldset>
-                </div>
-
-                <div class="col-4">
-                  <fieldset>
-                    <legend>row2 right</legend>
-                    <ul>
-                      <li>a</li>
-                      <li>b</li>
-                      <li>c</li>
-                    </ul>
-                  </fieldset>
-                </div>
-
-                <div class="col-4">
-                  <fieldset>
-                    <legend>row2 right</legend>
-                    <ul>
-                      <li>a</li>
-                      <li>b</li>
-                      <li>c</li>
-                    </ul>
-                  </fieldset>
-                </div>
-
               </div>
             </div> 
 
-          </div><!-- end right side -->
-
         </div><!-- end row 1 -->
 
+        </div><!-- end row 1 -->
+        <!--ROW 2 pronouns etc etc-->
+        <div class="row"style=" padding-left: 1.5vw">
+
+          <div class="col-4" style = "padding-right: 1.5vw">
+            <fieldset>
+              <legend>pronouns</legend>
+              <div class="field-row">
+                <input checked type="checkbox" id="example2" onclick="return false;">
+                <label for="example2">they/them/theirs</label>
+              </div>
+              <div class="field-row">
+                <input checked type="checkbox" id="example2" onclick="return false;">
+                <label for="example2">siya</label>
+              </div>
+              <div class="field-row">
+                <input checked type="checkbox" id="example2" onclick="return false;">
+                <label for="example2">he/him/his</label>
+              </div>
+
+            </fieldset>
+          </div>
+
+          <div class="col-4">
+            <fieldset>
+              <legend>row2 right</legend>
+              <ul>
+                <li>a</li>
+                <li>b</li>
+                <li>c</li>
+              </ul>
+            </fieldset>
+          </div>
+
+          <div class="col-4">
+            <fieldset>
+              <legend>row2 right</legend>
+              <ul>
+                <li>a</li>
+                <li>b</li>
+                <li>c</li>
+              </ul>
+            </fieldset>
+          </div>
+
+        </div>
         <div class="row"> <!-- row 2-->
           <div class="col-4"style=" color: #FFFFFF; padding: 1.5vw;">
             <div class="field-row">
@@ -211,7 +228,7 @@
     <div id="tabpanel-2" role="tabpanel" aria-labelledby="tab-2" style="display:none;" class="verticalscroll">
           <div class = "container">
 
-            <div class="row" style="padding: 1.5vw"> <!-- project 1-->
+            <div class="row" style="padding: 1vw"> <!-- project 1-->
               <fieldset>
                 <legend><em>NFT Art World</em></legend>
                 The Influence of Decentralized Systems on the Development of Novel Online Creative Communities and Cooperative Practices, with Bjoern Hartmann
@@ -266,7 +283,7 @@
 
             </div> <!-- end project 2-->
 
-            <div class="row" style="padding: 1.5vw"> <!-- project 3-->
+            <div class="row"> <!-- project 3-->
               <fieldset>
                 <legend><em>oligoFriend</em></legend>
                 Synthesis Cost-Optimal Targeted Mutant Protein Libraries - with Madeline Febinger and Dimitris Papamichail
@@ -341,6 +358,23 @@
 
 
 
+<script>
+
+  // Fetch all the details element.
+const details = document.querySelectorAll("details");
+
+// Add the onclick listeners.
+details.forEach((targetDetail) => {
+  targetDetail.addEventListener("click", () => {
+    // Close all the details that are not targetDetail.
+    details.forEach((detail) => {
+      if (detail !== targetDetail) {
+        detail.removeAttribute("open");
+      }
+    });
+  });
+});
+</script>
 <script>
   //TAB LIST
   /* From: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/tab_role
@@ -519,7 +553,37 @@ aria.Listbox = function (listboxNode) {
   this.downButton = null;
   this.moveButton = null;
   this.keysSoFar = '';
-  this.handleFocusChange = function () {};
+  this.handleFocusChange = function (element) {
+    var semester = element.getAttribute('id');
+    var description = document.getElementById('cs160-description');
+    var heading = document.getElementById('semesterheading');
+    switch(semester){
+      case('sem_su21'):
+        heading.innerHTML = 'CS160: User Interface Design and Development @ UC Berkeley';
+        description.innerHTML = 'Head TA for Nate Weinman and Janaki Vivrekar.<br>🔗<a href="https://www.cs160summer2021.com/"> Course Site</a>';
+        break;
+      case('sem_sp22'):
+        heading.innerHTML = 'CS160: User Interface Design and Development @ UC Berkeley';
+        description.innerHTML = 'Head TA for John Canny.';
+        break;
+      case('sem_su22'):
+        heading.innerHTML = 'CS160: User Interface Design and Development @ UC Berkeley';
+        description.innerHTML = 'Course Instructor, with Diyah Mettupalli & Timothy Yang. <br>🔗<a href="https://cs160-su22.github.io/"> Course Site</a>';
+        break;
+      case('sem_sp23'):
+        heading.innerHTML = 'CS160: User Interface Design and Development @ UC Berkeley';
+        description.innerHTML = 'Head TA for Bjoern Hartmann.';
+        break;
+      case('sem_su23'):
+        heading.innerHTML = 'DESINV 23: Creative Programming and Electronics';
+        description.innerHTML = 'Course Instructor, with Albert Hodo <br>🔗<a href="https://sites.google.com/berkeley.edu/makerlaunchpadsummer2023/"> Course Site</a>';
+      break;
+      case('sem_fa23'):
+        heading.innerHTML = 'DESINV 202: Technology Design Foundations';
+        description.innerHTML = 'Head TA for Sudhu Tewari, Jeff Lubow, and TJ McLeish <br>🔗<a href="https://github.com/Berkeley-MDes/desinv-202/wiki"> Course Site</a>';
+      break;
+    }
+  };
   this.handleItemChange = function () {};
   this.registerEvents();
 };
@@ -838,6 +902,7 @@ aria.Listbox.prototype.checkClickItem = function (evt) {
   this.toggleSelectItem(evt.target);
   this.updateScroll();
 
+
   if (this.multiselectable && evt.shiftKey) {
     this.selectRange(this.startRangeIndex, evt.target);
   }
@@ -898,9 +963,11 @@ aria.Listbox.prototype.defocusItem = function (element) {
  *  The element to focus
  */
 aria.Listbox.prototype.focusItem = function (element) {
+  
   this.defocusItem(document.getElementById(this.activeDescendant));
   if (!this.multiselectable) {
     element.setAttribute('aria-selected', 'true');
+    
   }
   element.classList.add('focused');
   this.listboxNode.setAttribute('aria-activedescendant', element.id);
