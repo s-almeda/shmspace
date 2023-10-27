@@ -2,28 +2,37 @@
   box-sizing: border-box;
 }
 
-
+.button{
+  font-size: max(1.3vw, 12pt);
+}
+select{
+  font-size: max(0.5vw, 10pt);
+}
+#colorSelect {
+  transition: background-color 0.5s, color 0.3s; /* Add transitions for both background color and text color changes */
+}
 .window {
   min-width: 300px;
   margin-top: 15vh; 
-  margin-bottom: 10px;
-  margin-left: 4vw;
-  margin-right: 4vw;
-  width: 80 vw; 
+  margin-bottom: 5v;
+  margin-left: auto;
+  margin-right: auto;
   height: 80vh;
-
+  max-width:80vw;
+  justify-content: center;
 }
 .window-body{
   padding: 3vw;
   padding-top:1vh;
+  padding-bottom:1vh;
 }
 
 .title-bar {
-  height: 5%; 
-  padding: 5%;
+  height: 2%; 
+  padding: 4%;
 }
 .title-bar-text{
-  font-size: 3.5vw;
+  font-size: 3vw;
 }
 
 .col-8{
@@ -31,9 +40,27 @@
     width: 66.666663%;
 }
 .col-4{
-    flex: 0 0 auto;
+    flex: 2 0 auto;
     width: 33.333333333%;
 }
+.col-5{
+  flex-grow: 1;
+  margin: 1vw;
+  padding: 1vw;
+  display: flex;
+  flex-flow: column wrap;
+}
+.col-5 button{
+  height: 5vh; 
+  margin:2px; 
+  width: 100%; 
+  font-size: max(1.2vw, 11pt);
+}
+.col-2{
+  flex-grow: 1;
+  width: 10%;
+}
+
 .row{
     display: flex;
     flex-flow: row wrap;
@@ -106,24 +133,65 @@ details[open] summary span{
   .col-3{
     width:100%;
   }
+  .col-5{
+    width:100%;
+  }
+  .col-2{
+    width:100%;
+  }
   [role="option"]{
     font-size: 16px;
   }
   [role="tab"]{
     font-size: min(1.5vh, 15px);
   }
+  #colors{
+    margin: 0.5em;
+  }
+
 }
+
+/* -- tooltips --*/
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 0px dotted black; /* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: #fffbde;
+  color: #000000;
+  text-align: left;
+  padding: 5px;
+  border: 1px solid black;
+  top: 100%;
+  left: 50%;
+  margin-left: 0em; /* Use half of the width (120/2 = 60), to center the tooltip */
+ 
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
 
 /* --  clouds based on code from Mark Bowley on codepen:  -----
 https://codepen.io/Mark_Bowley/pen/LYZEBq */
 body {
-  background: linear-gradient(186deg, #0360C8 6.25%, #267FD3 70.65%, #A4C5AB 100%);
-  color: #333;
+  background: linear-gradient(186deg, #0360C8 6.25%, #267FD3 55%, #A4C5AB 83%, #A4C5AB 100%);
   /*font: 100% Arial, Sans Serif;*/
-  height: 90vh;
+  overflow:hidden;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  height: 100vh;
 }
 
 #background-wrap {
@@ -164,7 +232,9 @@ body {
         margin-left: 100%;
     }
 }
-
+fieldset{
+  font-size: max(1.1vw, 11px);
+}
 
 /**---- LISTBOXES from https://www.w3.org/WAI/ARIA/apg/patterns/listbox/examples/listbox-scrollable/----*/
 .select-description{
@@ -172,7 +242,7 @@ body {
   display: inline-flex;
   align-items: stretch;
   width: 100%;
-  height: 15vh;
+  min-height: 15vh;
 }
 .select-description-child{
   /*the 2 childrenz*/
@@ -180,7 +250,7 @@ body {
   align-items: stretch;
   margin: 2px;
   font-family: "MS Sans Serif", Arial;
-  font-size: 11px;
+  font-size: max(1.4vw, 12px);
   
 }
 
@@ -236,7 +306,7 @@ body {
   display: block;
   padding: 0em 1.2em 0 1.6em;
   line-height: 1.4em;
-  font-size: 11px;
+  font-size: max(1.4vw, 12px);
   font-family: "Pixelated MS Sans Serif", Arial;
 }
 
@@ -421,7 +491,35 @@ button[aria-disabled="true"] {
 }
 
 /* OBJECTS */
+.grasshill-left {
+  position: fixed;
+  bottom: -5vh;
+  left: 25vw;
+  display: flex;
+  justify-content: left;
+  width: 75vw; /* Adjust the width to make the ellipse wider */
+  height: 25vh; /* Adjust the height to control the roundness */
+  border-radius: 369px 1083px 0 0;
+  background: var(--grass, linear-gradient(202deg, rgba(129, 200, 39, 0.90) 2.19%, rgba(136, 186, 29, 0.90) 43.55%, rgba(23, 94, 47, 0.90) 87.93%));
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  
 
+  transform: translateX(-50%); /* Center the ellipse horizontally */
+}
+.grasshill-right {
+  z-index: 2;
+  position: fixed;
+  bottom: -20vh;
+  right: -6vw;
+  display: flex;
+  justify-content: right;
+  border-radius: 2000px 2000px 2000px 500px;
+  background: var(--grass, linear-gradient(202deg, rgba(129, 200, 39, 0.90) 2.19%, rgba(136, 186, 29, 0.90) 43.55%, rgba(23, 94, 47, 0.90) 87.93%));
+  box-shadow: 5px 51px 16px 0px rgba(0, 0, 0, 0.25);
+  width: 50vw; /* Adjust the width to make the ellipse wider */
+  height: 39vh; /* Adjust the height to control the roundness */
+
+}
 .cloud {
   background-color: rgba(1,1,1,.5);
   background: #fff;
@@ -468,5 +566,5 @@ button[aria-disabled="true"] {
   width: 580px;
   height: 480px;
   right: 350px;
-  top: -190px;
+  top: -130px;
 }
