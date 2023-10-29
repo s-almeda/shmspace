@@ -50,7 +50,7 @@
 
 <div class="window">
   <div class="title-bar">
-    <div class="title-bar-text">
+    <div class="title-bar-text tooltip">
       shm garanganao almeda
     </div>
   </div> <!--end window header-->
@@ -64,9 +64,9 @@
         <button id="tab-2" type="button" role="tab" aria-selected="false" aria-controls="tabpanel-2" tabindex="-1">
           <span class="focus">Projects</span>
         </button>
-        <button id="tab-3" type="button" role="tab" aria-selected="false" aria-controls="tabpanel-3" tabindex="-1">
+        <!--button id="tab-3" type="button" role="tab" aria-selected="false" aria-controls="tabpanel-3" tabindex="-1">
           <span class="focus">Links</span>
-        </button>
+        </button-->
       </menu>
     </section>
 
@@ -74,10 +74,8 @@
       <div class="container">
         <div class="row" style=" ">
           <!-- computer image -->
-          <div class="col-4"style="padding: 0.5vw; padding-right: 0.5vw;">
+          <div class="col-4"style="padding: 0.5vw; padding-right: 0.5vw; ">
             <img src="images/computer.svg" style="padding: 1vw; max-height:60%; width: 95%; display: inline; align: center;">
-            
-            
             <div style="padding: 1vw;">
             <fieldset style="height: 100%">
               <legend> contact</legend>
@@ -88,6 +86,14 @@
             </fieldset>
             </div>
 
+            <div class="col-5"style = "padding: 1vw; margin: auto; padding-top: 0vh;">
+              <!--a href= "https://shmgaranganao.myportfolio.com/"><button> About this website</button></a-->
+              <a href= "https://drive.google.com/file/d/1pLD6hs0mysRQCoZTNWtTvFwleTJYHK39/view?usp=sharing" target=”_blank” ><button> CV</button></a>
+              <a href= "https://shmgaranganao.myportfolio.com/"target=”_blank” ><button> portfolio</button></a>
+              <!--a href= "a.html"><button> BART Trivia!</button></a-->
+              
+            </div>
+  
 
             <div class="col-5" style = "padding: 0.5vw; margin: auto">
               <fieldset>
@@ -98,7 +104,11 @@
                 </div>
                 <div class="field-row">
                   <input checked type="checkbox" id="example2" onclick="return false;">
-                  <label class="tooltip" for="example2">siya �<span class="tooltiptext">3rd-person personal pronoun in Tagalog, Ilonggo, and Bisaya. Filipino languages are naturally genderneutral; gendered language and binary norms are colonial influences.</span></label>
+                  <label class="tooltip" for="example2">siya 
+                    �<span class="tooltiptext">3rd-person personal pronoun in Tagalog, Ilonggo, and Bisaya. 
+                      Filipino languages are naturally genderneutral; gendered language and binary norms are colonial influences.
+                    </span>
+                    </label>
                 </div>
                 <div class="field-row">
                   <input checked type="checkbox" id="example2" onclick="return false;">
@@ -108,19 +118,16 @@
               </fieldset>
             </div>
 
-            <div class="col-5"style = "padding: 0.5vw; margin: auto;">
-              <button> View my portfolio</button>
-              <button> About this website</button>
-              <button> Train Control Panel</button>
-            </div>
-  
 
           </div> <!-- end of col with computer and contact -->
 
           <!-- right side -->
           <div class="col-8">
             <fieldset style="width: 100%">
-              <legend>shm garanganao almeda</legend>
+              <legend class="tooltip">shm garanganao almeda                    
+                �<span class="tooltiptext" style="font-size: 14px; align-content:center;";>pronounced: <strong>shim</strong> guh<strong>rang</strong>guhnow all<strong>may</strong>duh
+              </span>
+            </legend>
 
 
               <div class="field-row">
@@ -131,6 +138,7 @@
                       <li>SF Bay Area artist & computer scientist</li> 
                       <li>4th-year PhD in EECS Program at UC Berkeley, advised Bjoern Hartmann. </li>
                       <li>Human Computer Interaction researcher at the intersection of art + technology</li>
+                      <li>the train guy at UIST 2023</li>
                     </ul>
                   </details>
                   <details closed>
@@ -145,71 +153,83 @@
               </div>
             </fieldset>
 
-            <div class="row" style="">
-              <fieldset style="width: 100%; padding-left: 2vw; padding-right: 2vw; padding-top: 1vh; padding-bottom: 1vh;">
-                <legend>interests</legend>
-                researching:
-                <select style="width: 100%; margin: 0.5em">
-                  <option>the impact of emergent technologies on creative communities</option>
-                  <option>designing systems for sustainable and respectful human-machine co-creative relationships</option>
-                  <option>creativity support tools, systems, networks – and how awesome creative people use them</option>
-                  <option>amplifying historically marginalized voices</option>
-                </select>
-            </div>
 
+            <!--fieldset style="width: 100%; padding-left: 2vw; padding-right: 2vw; margin: 1vh 0;">
+              <legend>recent highlights</legend>
+              <div class="container">
+                  <div class="row">
+                      <div class="col-lg-6 col-md-6 col-12 mb-3">
+                          researching:
+                          <select style="width: 100%; margin: 0.5em; text-transform: lowercase;">
+                              <option>Leading a studio of </option>
+                              <option>Designing systems for sustainable human-machine co-creativity</option>
+                              <option>Creativity support tools & networks </option>
+                              <option>Amplifying historically marginalized voices</option>
+                          </select>
+                      </div>
+                  </div>
+          
+          </fieldset-->
+          
 
-              <div class="row" style="">
-                <fieldset style="width: 100%; padding-left: 2vw; padding-right: 2vw; padding-top: 1vh; padding-bottom: 1vh;">
-                  <legend>interests</legend>
-                  researching:
-                  <select style="width: 100%; margin: 0.5em">
-                    <option>the impact of emergent technologies on creative communities</option>
-                    <option>designing design education 🖋</option>
-                    <option>amplifying historically marginalized voices in tech</option>
-                    <option>designing to support respectful human-machine co-creativity</option>
-                    <option>creativity support tools, systems, networks – and how creative people use them</option>
-                    <option>metadata for sustainable content ecosystems</option>
-                  </select>
+            <fieldset style="width: 100%; padding-left: 2vw; padding-right: 2vw; margin: 1vh 0;">
+              <legend>interests</legend>
+              <div class="container">
+                  <div class="row">
+                      <div class="col-lg-6 col-md-6 col-12">
+                          researching:
+                          <div class="select-description">
+                            <div class="select-description-child select" style="display: inline; font-size: 1.2vh; margin-left: 0.5em; margin-right: 0.5em; margin-bottom: 0.5em; min-width: 100%;">
+                              <span id="res" class="listbox-label"></span>
+                              <ul id="res_list" tabindex="1" role="listbox" aria-labelledby="ss_sems">
+                               <li id="res_opt1" role="option">The impact of emergent technologies on creative communities</li>
+                                <li id="res_opt2" role="option">Designing systems for sustainable human-machine co-creativity</li>
+                                <li id="res_opt3" role="option">Creativity support tools & networks</li>
+                                <li id="res_opt4" role="option">Amplifying historically marginalized voices</li>
+                              </ul>
+                            </div>
+                          </div>
 
-                  <div class="container">
-                    <div class="row justify-content-between">
-                        <div class="col-lg-5 col-md-6 col-12 mb-3" style="width: 40%; padding: 0.5vw">
-                            <div>generally:</div>
-                            <select style="margin: 0">
-                                <option>bugs 🐌</option>
-                                <option>bunnies 🐇</option>
-                                <option>ecosystems 🔄</option>
-                                <option>painting 🖌</option>
-                                <option>characters ✍️</option>
-                                <option>V-Tubers ▶️</option>
-                                <option>public transportation 🚅</option>
-                                <option>true crime 🩸</option>
-                                <option>therapy ✨</option>
-                                <option>naps 💤</option>
-                            </select>
-                        </div>
-                
-                        <div id="colors" class="col-lg-5 col-md-6 col-12 mb-3" style="width: 40%;">
-                            <div>favorite colors:</div>
-                            <select id="colorSelect" style="background-color:#3f7d00; color:white;">
-                                <option value="#3f7d00">green ■</option>
-                                <option value="#eb7a24" style="color:#242644;">orange ■</option>
-                                <option value="#a7d532">lime ■</option>
-                                <option value="#905e70">taupe-mauve ■</option>
-                                <option value="#242644">navy ■</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                
-                </fieldset>
+                      </div>
+                  </div> 
+          
+                  <div class="row justify-content-between">
+                      <div class="col-4 faves" style="width: 40%; ;">
+                          <div>generally:</div>
+                          <select class="faves" style="width: 10em; margin: 0.5em; text-transform: lowercase; padding: 0.5vw;">
+                              <option>Bugs 🐌</option>
+                              <option>Bunnies 🐇</option>
+                              <option>Ecosystems 🔄</option>
+                              <option>Painting 🖌</option>
+                              <option>Characters ✍️</option>
+                              <option>V-Tubers ▶️</option>
+                              <option>Public transportation 🚅</option>
+                              <option>True crime 🩸</option>
+                              <option>Therapy ✨</option>
+                              <option>Naps 💤</option>
+                          </select>
+                      </div>
+                      
+                      <div id="colors" class="col-4 faves" style="width: 40%;">
+                          <div>favorite colors:</div>
+                          <select id="colorSelect"  class="faves" style="width: 10em; margin: 0.5em;background-color:#3f7d00; color:white;padding: 0.5vw" >
+                              <option value="#3f7d00">green ■</option>
+                              <option value="#eb7a24" style="color:#242644;">orange ■</option>
+                              <option value="#a7d532">lime ■</option>
+                              <option value="#905e70">taupe-mauve ■</option>
+                              <option value="#242644">navy ■</option>
+                          </select>
+                      </div>
+                  </div>
               </div>
+          </fieldset>
+          
               
 
                           
               <div class="row">
                 
-                <fieldset style="height: 28vh; width: 100%; margin: 0px;">
+                <fieldset style=" width: 100%; margin: 0px;">
                   <legend>teaching</legend>
                     <div id="semesterheading" style="font-style:italic; font-size: 14px">Select 1 of my 6 semesters of teaching below to view details.</div>
                     <div class="select-description">
@@ -261,21 +281,49 @@
 
             <div class="row" style="padding: 1vw"> <!-- project 1-->
               <fieldset>
-                <legend><em>NFT Art World</em></legend>
-                The Influence of Decentralized Systems on the Development of Novel Online Creative Communities and Cooperative Practices, with Bjoern Hartmann
+                <legend><em>DreamSheets </em></legend>
+                <strong>Prompting for Discovery: Flexible Sense-Making for AI Art-Making with Dreamsheets </strong>
+                Shm Garanganao Almeda, J.D. Zamfirescu-Pereira, Kyu Won Kim, Pradeep Mani Rathnam, Bjoern Hartmann
                 <div class="row" style="padding: 1vw; padding-bottom: 1.5vw;">
                   <div class="col-3">
-                    <a href=""> 📄 Paper (PDF) </a> | 
+                    <a href=""> 📄 Full Paper Currently Under Review </a> | 
                   </div> 
                   <div class="col-3">
-                    <a href=""> 🔗 ACM DL </a> | 
+                    <a href="https://arxiv.org/abs/2310.09985"> 🔗 arxiv preprint </a> | 
+                  </div>         
+                </div>
+                <fieldset style="">
+                  <details open>
+                    
+                  <summary><em>About</em></summary>
+                    <ul> 
+                      <li>How can generative artists use Text-to-Image models to reliably achieve desirable results? To study this, we developed DreamSheets, a design probe Text-To-Image “sandbox” in a spreadsheet. We observed novice and expert artists use it to define and develop their own creative workflows.  
+                      </li>
+                    </ul>
+                  </details>
+                </fieldset>
+              </fieldset> 
+
+            </div> <!-- end project 1-->
+
+            <div class="row" style="padding: 1vw"> <!-- project 2-->
+              <fieldset>
+                <legend><em>NFT Art World</em></legend>
+                <strong>The Influence of Decentralized Systems on the Development of Novel Online Creative Communities and Cooperative Practices</strong> 
+                Shm Garanganao Almeda, Bjoern Hartmann
+                <div class="row" style="padding: 1vw; padding-bottom: 1.5vw;">
+                  <div class="col-3">
+                    <a href="https://drive.google.com/file/d/1Ga3Zz6lZQ-pujSX53AQdlurO9NwXOd6X/view?usp=sharing"> 📄 Paper (PDF) </a> | 
+                  </div> 
+                  <div class="col-3">
+                    <a href="https://dl.acm.org/doi/10.1145/3563657.3596034"> 🔗 ACM DL </a> | 
                   </div>
                   <div class="col-3">
-                    <a href=""> ▶️ Video  </a>
+                    <a href="https://www.youtube.com/watch?v=UVnwuzKroZ4"> ▶️ Video  </a>
                   </div>          
                 </div>
                 <fieldset style="">
-                  <details closed>
+                  <details open>
                     
                   <summary><em>About</em></summary>
                     <ul> 
@@ -286,7 +334,7 @@
                 </fieldset>
               </fieldset> 
 
-            </div> <!-- end project 1-->
+            </div> <!-- end project 2-->
 
             <div class="row" style="padding: 1.5vw"> <!-- project 2-->
               <fieldset>
@@ -294,14 +342,14 @@
                 Parametric RGB color mixing system for digital painting that enables a novel color-mixing experience, advised by Jose Echevarria & Stephen Diverdi
                 <div class="row" style="width: 100%;padding: 1vw; padding-bottom: 1.5vw;">
                   <div class="col-3">
-                    <a href=""> 📄 Patent </a> | 
+                    <a href="https://patents.google.com/patent/US10924633B1"> 📄 Patent </a> | 
                   </div> 
                   <div class="col-3">
-                    <a href=""> ▶️ Video  </a>
+                    <a href="https://shmgaranganao.myportfolio.com/bpigment"> ▶️ Video  </a>
                   </div>          
                 </div>
                 <fieldset style="">
-                  <details closed>
+                  <details open>
                     
                   <summary><em>About</em></summary>
                     <ul> 
@@ -314,14 +362,14 @@
 
             </div> <!-- end project 2-->
 
-            <div class="row"> <!-- project 3-->
+            <div class="row"style="padding: 1.5vw"> <!-- project 3-->
               <fieldset>
                 <legend><em>oligoFriend</em></legend>
-                Synthesis Cost-Optimal Targeted Mutant Protein Libraries - with Madeline Febinger and Dimitris Papamichail
-
+                <strong>Synthesis Cost-Optimal Targeted Mutant Protein Libraries</strong>- 
+                Dimitris Papamichail, Madeline Febinger, Shm Almeda, Georgios Papamichail
                 <div class="row" style="width: 100%;padding: 1vw; padding-bottom: 1.5vw;">
                   <div class="col-3">
-                    <a href=""> 📄 Paper (PDF)  </a> | 
+                    <a href="https://arxiv.org/abs/2211.13898"> 📄 Paper (PDF)  </a> | 
                   </div> 
                   <div class="col-3">
                     <a href=""> 🔗 APBC 2023  </a> | 
@@ -331,7 +379,7 @@
                   </div>          
                 </div>
                 <fieldset style="">
-                  <details closed>
+                  <details open>
                     
                   <summary><em>About</em></summary>
                     <ul> 
@@ -351,14 +399,14 @@
                 Accessible American Sign Language Recognition with the Leap Motion Controller, advised by Andrea Salgian
                 <div class="row" style="width: 100%;padding: 1vw; padding-bottom: 1.5vw;">
                   <div class="col-3">
-                    <a href=""> 🔗 ACM DL   | </a>
+                    <a href="https://dl.acm.org/doi/10.1145/3287324.3293718"> 🔗 ACM DL   | </a>
                   </div> 
                   <div class="col-3">
-                    <a href=""> 🖼 Poster </a>
+                    <a href="https://shmgaranganao.myportfolio.com/signreader"> 🖼 Poster </a>
                   </div>          
                 </div>
                 <fieldset style="">
-                  <details closed>
+                  <details open>
                     
                   <summary><em>About</em></summary>
                     <ul> 
@@ -376,11 +424,11 @@
 
     </div> <!-- end of tabpanel2 ?? -->
         
-    <div id="tabpanel-3" role="tabpanel" aria-labelledby="tab-3" style="display:none;" class="verticalscroll" >
+    <!--div id="tabpanel-3" role="tabpanel" aria-labelledby="tab-3" style="display:none;" class="verticalscroll" >
       <p>
         tab 3
       </p>
-    </div> <!-- end of tabpanel 3-->
+    </div> <-- end of tabpanel 3-->
 
 
   </div> <!-- end of window body -->
@@ -634,7 +682,7 @@ aria.Listbox = function (listboxNode) {
         break;
       case('sem_su23'):
         heading.innerHTML = 'DESINV 23: Creative Programming & Electronics @ UC Berkeley';
-        description.innerHTML = 'Course Instructor, with Albert Hodo <br>🔗<a href="https://sites.google.com/berkeley.edu/makerlaunchpadsummer2023/"> Course Site</a>';
+        description.innerHTML = 'Course Instructor, with Albert Hodo - Led designers in creating portfolio-ready interactive installations for the Jacobs Institute of Design Summer 23 Program, while learning programming and prototyping skills.<br>🔗<a href="https://sites.google.com/berkeley.edu/makerlaunchpadsummer2023/"> Course Site</a>';
       break;
       case('sem_fa23'):
         heading.innerHTML = 'DESINV 202: Technology Design Foundations @ UC Berkeley';
@@ -1327,6 +1375,7 @@ aria.Listbox.prototype.setHandleFocusChange = function (focusChangeHandler) {
 
 window.addEventListener('load', function () {
   new aria.Listbox(document.getElementById('sem_list'));
+  new aria.Listbox(document.getElementById('res_list'));
 });
 'use strict';
 /**
