@@ -6,33 +6,41 @@
   font-size: max(1.3vw, 12pt);
 }
 select{
-  font-size: max(0.5vw, 10pt);
+  font-size: max(0.3vh, 10pt);
+  height: 2.3em;
+  background-position: right 2px center;
+  background-size: 1.2em 1.2em; /* Adjust the size as needed */
 }
 #colorSelect {
   transition: background-color 0.5s, color 0.3s; /* Add transitions for both background color and text color changes */
 }
 .window {
   min-width: 300px;
-  margin-top: 15vh; 
-  margin-bottom: 5v;
+  min-height: 75vh;
+  margin-top: 12vh; 
+  margin-bottom: 1vh;
   margin-left: auto;
   margin-right: auto;
-  height: 80vh;
+  max-height: 76vh;
   max-width:80vw;
   justify-content: center;
+  padding-bottom:30vh;
 }
 .window-body{
-  padding: 3vw;
+  padding: 2vw;
   padding-top:1vh;
-  padding-bottom:1vh;
+  margin-bottom: 100vh;
+  margin: 20px;
+
 }
 
 .title-bar {
   height: 2%; 
   padding: 4%;
+  max-height: 2.5vw;
 }
 .title-bar-text{
-  font-size: 3vw;
+  font-size: max(2vh, 2.5vw);
 }
 
 .col-8{
@@ -51,6 +59,12 @@ select{
   flex-flow: column wrap;
 }
 .col-5 button{
+  height: 5vh; 
+  margin:2px; 
+  width: 100%; 
+  font-size: max(1.2vw, 11pt);
+}
+.home{
   height: 5vh; 
   margin:2px; 
   width: 100%; 
@@ -119,8 +133,28 @@ details[open] summary span{
   overflow-y: auto;
 }
 
+/* For large screens (wider than 1200px) */
+@media (min-width: 1150px) {
+  .window {
+    max-height: 80vh;
+
+  }
+  .window-body {
+    height: 40%; /* Adjust the width as needed */
+  }
+}
+
 /* -- MOBILE/ skinty view -- --*/
 @media (max-width : 700px) {
+  .window{
+
+  }
+  .window-body{
+
+  }
+  .faves{
+    width: 100%;
+  }
   .row{
     flex-direction: column;
   }
@@ -145,9 +179,11 @@ details[open] summary span{
   [role="tab"]{
     font-size: min(1.5vh, 15px);
   }
-  #colors{
+  .select{
     margin: 0.5em;
+    width: 100%;
   }
+
 
 }
 
@@ -162,7 +198,7 @@ details[open] summary span{
 /* Tooltip text */
 .tooltip .tooltiptext {
   visibility: hidden;
-  width: 200px;
+  width: 33vw;
   background-color: #fffbde;
   color: #000000;
   text-align: left;
@@ -195,9 +231,10 @@ body {
 }
 
 #background-wrap {
-    bottom: 0;
+  bottom: 30vh;
   left: 0;
-  padding-top: 50px;
+  padding-top: 10px;
+  padding-bottom: 50px;
   position: fixed;
   right: 0;
   top: 0;
@@ -232,6 +269,7 @@ body {
         margin-left: 100%;
     }
 }
+
 fieldset{
   font-size: max(1.1vw, 11px);
 }
@@ -242,7 +280,7 @@ fieldset{
   display: inline-flex;
   align-items: stretch;
   width: 100%;
-  min-height: 15vh;
+  min-height: 16vh;
 }
 .select-description-child{
   /*the 2 childrenz*/
@@ -251,6 +289,7 @@ fieldset{
   margin: 2px;
   font-family: "MS Sans Serif", Arial;
   font-size: max(1.4vw, 12px);
+  min-height: 15vh;
   
 }
 
@@ -263,7 +302,6 @@ fieldset{
   border-radius: 4px;
   background: #eee;
   width: 100%;
-  -
 }
 
 [role="listbox"] {
@@ -272,7 +310,8 @@ fieldset{
   border: 1px solid #aaa;
   max-height: 8em;
   background: white;
-  
+  overflow-y: auto;
+  overflow-x: auto;
 }
 
 [role="listbox"]#sem_list {
@@ -280,11 +319,23 @@ fieldset{
   overflow-y: auto;
   
 }
+[role="listbox"]#res_list {
+  position: relative;
+  overflow-y: auto;
+  overflow-x: auto;
+  
+}
+
 
 [role="listbox"] + *,
 .listbox-label + * {
   margin-top: 0.5em;
 }
+
+#res_list li{
+  font-size: max(1.4vh, 14px);
+}
+
 
 [role="group"] {
   margin: 0;
@@ -341,6 +392,47 @@ fieldset{
   content: "☀️";
 }
 #sem_fa23[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "🍁";
+}
+
+#res_opt1[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "☀️";
+}
+#res_opt1[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "☀️";
+}
+#res_opt2[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "🌸";
+}
+#res_opt2[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "🌸";
+}
+#res_opt3[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "☀️";
+}
+#res_opt3[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "🍁";
+}
+#res_opt4[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "☀️";
+}
+#res_opt4[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
   content: "🍁";
@@ -493,12 +585,12 @@ button[aria-disabled="true"] {
 /* OBJECTS */
 .grasshill-left {
   position: fixed;
-  bottom: -5vh;
+  bottom: -3vh;
   left: 25vw;
   display: flex;
   justify-content: left;
   width: 75vw; /* Adjust the width to make the ellipse wider */
-  height: 25vh; /* Adjust the height to control the roundness */
+  height: 23vh; /* Adjust the height to control the roundness */
   border-radius: 369px 1083px 0 0;
   background: var(--grass, linear-gradient(202deg, rgba(129, 200, 39, 0.90) 2.19%, rgba(136, 186, 29, 0.90) 43.55%, rgba(23, 94, 47, 0.90) 87.93%));
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -510,14 +602,14 @@ button[aria-disabled="true"] {
   z-index: 2;
   position: fixed;
   bottom: -20vh;
-  right: -6vw;
+  right: -15vw;
   display: flex;
   justify-content: right;
   border-radius: 2000px 2000px 2000px 500px;
   background: var(--grass, linear-gradient(202deg, rgba(129, 200, 39, 0.90) 2.19%, rgba(136, 186, 29, 0.90) 43.55%, rgba(23, 94, 47, 0.90) 87.93%));
-  box-shadow: 5px 51px 16px 0px rgba(0, 0, 0, 0.25);
-  width: 50vw; /* Adjust the width to make the ellipse wider */
-  height: 39vh; /* Adjust the height to control the roundness */
+  box-shadow: 5px 40px 16px 16px rgba(0, 0, 0, 0.45);
+  width: 60vw; /* Adjust the width to make the ellipse wider */
+  height: 33vh; /* Adjust the height to control the roundness */
 
 }
 .cloud {
