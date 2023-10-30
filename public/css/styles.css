@@ -400,42 +400,42 @@ fieldset{
 #res_opt1[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
-  content: "☀️";
+  content: "🎨";
 }
 #res_opt1[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
-  content: "☀️";
+  content: "🎨";
 }
 #res_opt2[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
-  content: "🌸";
+  content: "🖋";
 }
 #res_opt2[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
-  content: "🌸";
+  content: "🖋";
 }
 #res_opt3[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
-  content: "☀️";
+  content: "🔄";
 }
 #res_opt3[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
-  content: "🍁";
+  content: "🔄";
 }
 #res_opt4[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
-  content: "☀️";
+  content: "📣";
 }
 #res_opt4[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
-  content: "🍁";
+  content: "📣";
 }
 
 button[aria-haspopup="listbox"] {
