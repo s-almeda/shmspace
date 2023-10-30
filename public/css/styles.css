@@ -317,12 +317,15 @@ fieldset{
 [role="listbox"]#sem_list {
   position: relative;
   overflow-y: auto;
+  overflow-x: hidden;
   
 }
 [role="listbox"]#res_list {
   position: relative;
   overflow-y: auto;
-  overflow-x: auto;
+  overflow-x: hidden;
+  height: 80%;
+  margin:0.5vh;
   
 }
 
