@@ -35,12 +35,12 @@ select{
 }
 
 .title-bar {
-  height: 2%; 
+  height: 6vh; 
   padding: 4%;
-  max-height: 2.5vw;
+  max-height: 5em;
 }
 .title-bar-text{
-  font-size: max(2vh, 2.5vw);
+  font-size: max(1.8vh, 2.5vw);
 }
 
 .col-8{
@@ -169,7 +169,7 @@ details[open] summary span{
   }
   .col-5{
     width:100%;
-  }
+  }f
   .col-2{
     width:100%;
   }
