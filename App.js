@@ -15,6 +15,7 @@ Bunny by Satyabratasm on Unsplash <https://unsplash.com/photos/u_kMWN-BWyU>
 //Node modules to *require*
 //if these cause errors, be sure you've installed them, ex: 'npm install express'
 const express = require('express');
+const favicon = require('express-favicon');
 const router = express.Router();
 const app = express();
 const path = require('path');
@@ -26,6 +27,8 @@ const port = 8000;
 var publicPath = path.join(__dirname, 'public'); //get the path to use our "public" folder where we stored our html, css, images, etc
 app.use(express.static(publicPath));  //tell express to use that folder
 
+//tell express where our custom favicon is located
+app.use(favicon(path.join(__dirname,'public','images','favicon.ico')));
 
 
 //here's where we specify what to send to users that connect to our web server...
