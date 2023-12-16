@@ -27,7 +27,7 @@ select{
   /* HEIGHT */
   padding-bottom:30vh;
   margin-bottom: 10vh;
-  margin-top: 12vh; 
+  margin-top: 8vh; 
   
   height: 85vh;
   min-height: 525px;
@@ -58,12 +58,12 @@ select{
 }
 
 .title-bar {
-  height: 6vh; 
-  padding: 4%;
+  height: 3vh; 
+  padding: 2em;
   max-height: 5em;
 }
 .title-bar-text{
-  font-size: max(1.8vh, 2.5vw);
+  font-size:calc(14px + 1vh);
 }
 
 .col-8{
