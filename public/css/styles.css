@@ -15,17 +15,40 @@ select{
   transition: background-color 0.5s, color 0.3s; /* Add transitions for both background color and text color changes */
 }
 .window {
+
+  /* WIDTH */
   min-width: 300px;
-  min-height: 75vh;
-  margin-top: 12vh; 
-  margin-bottom: 1vh;
+  max-width:80vw;
   margin-left: auto;
   margin-right: auto;
-  max-height: 76vh;
-  max-width:80vw;
+
   justify-content: center;
+
+  /* HEIGHT */
   padding-bottom:30vh;
+  margin-bottom: 10vh;
+  margin-top: 8vh; 
+  
+  height: 85vh;
+  min-height: 525px;
+  margin-bottom: 20vh;
+
 }
+
+#shmbo {
+  background: #eee;
+  z-index: 10; /* set higher z-index value */
+  width: 15vh;
+  height: 25vh;
+  min-width: 90px;
+  min-height: 150px;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 2vw;
+  padding: 2vw;
+}
+
 .window-body{
   padding: 2vw;
   padding-top:1vh;
@@ -35,12 +58,12 @@ select{
 }
 
 .title-bar {
-  height: 6vh; 
-  padding: 4%;
+  height: 3vh; 
+  padding: 2em;
   max-height: 5em;
 }
 .title-bar-text{
-  font-size: max(1.8vh, 2.5vw);
+  font-size:calc(14px + 1vh);
 }
 
 .col-8{
@@ -123,7 +146,13 @@ details[open] summary span{
 [role="tabpanel"] {
     border-top-outline: 1px;
     z-index:2;
-    max-height: 55vh;
+
+    margin-bottom: 15vh;
+
+    height: 64vh;
+    min-height: 250px;
+
+
 }
 
   
@@ -136,22 +165,36 @@ details[open] summary span{
 /* For large screens (wider than 1200px) */
 @media (min-width: 1150px) {
   .window {
-    max-height: 80vh;
+    min-height: 560px;
 
   }
-  .window-body {
-    height: 40%; /* Adjust the width as needed */
+  [role="tabpanel"] {
+
+    height: 61vh;
+    min-height: 180px;
   }
+
+
 }
 
 /* -- MOBILE/ skinty view -- --*/
-@media (max-width : 700px) {
+@media (max-width : 750px) {
   .window{
 
   }
   .window-body{
 
   }
+  [role="tabpanel"] {
+    border-top-outline: 1px;
+    z-index:2;
+
+
+    height: 65vh;
+    min-height: 300px;
+
+  }
+
   .faves{
     width: 100%;
   }
