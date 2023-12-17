@@ -27,7 +27,7 @@ select{
   /* HEIGHT */
   padding-bottom:30vh;
   margin-bottom: 10vh;
-  margin-top: 4vh; 
+  margin-top: 3vh; 
   
   height: 85vh;
   min-height: 525px;
@@ -268,7 +268,7 @@ body {
   background: linear-gradient(186deg, #0360C8 6.25%, #267FD3 55%, #A4C5AB 83%, #A4C5AB 100%);
   /*font: 100% Arial, Sans Serif;*/
   overflow:hidden;
-  overflow-x: hidden !important;
+  width: 100%;
   margin: 0;
   padding: 0;
   height: 100vh;
@@ -276,12 +276,11 @@ body {
 
 #background-wrap {
   bottom: 30vh;
+  width: 100%;
   overflow-x: hidden;
   left: 0;
   padding-top: 10px;
   padding-bottom: 50px;
-  padding-left: 0;
-  padding-right: 0;
   position: fixed;
   right: 0;
   top: 0;
