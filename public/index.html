@@ -448,8 +448,6 @@
 </div> <!-- end of window -->
 
 
-<!--div id="shmbo"> hellooo </div-->
-
 
 
 <script>
@@ -1524,6 +1522,59 @@ aria.Utils.bindMethods = function (object /* , ...methodNames */) {
   });
 };
 
+</script>
+
+<script>
+var dialogOpen = false, lastFocus, dialog, okbutton, pagebackground;
+
+function showAssistant(el) {
+  lastFocus = el || document.activeElement;
+  toggleAssistant('show');
+}
+function hideAssistant(el) {
+  toggleAssistant('hide');
+}
+
+function toggleAssistant(sh) {
+  dialog = document.getElementById("shmbo");
+  showAssistantButton = document.getElementById("showAssistantButton");
+
+  if (sh == "show") {
+    dialogOpen = true;
+    showAssistantButton.style.display = 'none';
+
+    // show the dialog 
+    dialog.style.display = 'block';
+    
+    
+  } else {
+    
+    showAssistantButton.style.display = 'block';
+    dialogOpen = false;
+    dialog.style.display = 'none';
+    pagebackground.setAttribute("aria-hidden","false");
+    lastFocus.focus(); 
+  }
+}
+
+
+document.addEventListener("focus", function(event) {
+
+    var d = document.getElementById("box");
+
+    if (dialogOpen && !d.contains(event.target)) {
+        event.stopPropagation();
+        d.focus();
+    }
+
+}, true);
+
+
+document.addEventListener("keydown", function(event) {
+    if (dialogOpen && event.keyCode == 27) {
+        toggleDialog('hide');
+    }
+}, true);
 </script>
 
 </body>

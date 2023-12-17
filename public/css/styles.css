@@ -27,7 +27,7 @@ select{
   /* HEIGHT */
   padding-bottom:30vh;
   margin-bottom: 10vh;
-  margin-top: 8vh; 
+  margin-top: 3vh; 
   
   height: 85vh;
   min-height: 525px;
@@ -36,12 +36,15 @@ select{
 }
 
 #shmbo {
-  background: #eee;
+  /*background: #eee;*/
+  border: 1px solid white ;
   z-index: 10; /* set higher z-index value */
   width: 15vh;
   height: 25vh;
-  min-width: 90px;
-  min-height: 150px;
+  min-width: 100px;
+  min-height: 160px;
+  max-width: 150px;
+  max-height: 290px;
   position: fixed;
   bottom: 0;
   right: 0;
@@ -61,10 +64,13 @@ select{
   height: 3vh; 
   padding: 2em;
   max-height: 5em;
+
 }
+
 .title-bar-text{
   font-size:calc(14px + 1vh);
 }
+
 
 .col-8{
     flex: 0 0 auto;
@@ -184,6 +190,10 @@ details[open] summary span{
   }
   .window-body{
 
+  }
+
+  .title-bar-text{
+  font-size:calc(10px + 1vh);
   }
   [role="tabpanel"] {
     border-top-outline: 1px;
