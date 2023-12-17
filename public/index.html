@@ -448,7 +448,20 @@
 </div> <!-- end of window -->
 
 
-<div id="shmbo"> hellooo </div>
+<!--div id="shmbo"
+  role="dialog"
+  aria-labelledby="dialog1Title"
+  aria-describedby="dialog1Desc">
+    <div class="title-bar-controls">
+    <button type="button" style="position: absolute; top:0; right: 0; width:10px"aria-label="Minimize" onclick="toggleAssistant('hide')">
+  </button>
+  </div>
+</div>
+
+
+<button id="showAssistantButton" style="display: none; position: fixed; bottom: 1px; right: 1px;"type="button" aria-label="show assistant" onclick="toggleAssistant('show')">
+  Re-Open Shmbo
+</button-->
 
 
 
@@ -1524,6 +1537,59 @@ aria.Utils.bindMethods = function (object /* , ...methodNames */) {
   });
 };
 
+</script>
+
+<script>
+var dialogOpen = false, lastFocus, dialog, okbutton, pagebackground;
+
+function showAssistant(el) {
+  lastFocus = el || document.activeElement;
+  toggleAssistant('show');
+}
+function hideAssistant(el) {
+  toggleAssistant('hide');
+}
+
+function toggleAssistant(sh) {
+  dialog = document.getElementById("shmbo");
+  showAssistantButton = document.getElementById("showAssistantButton");
+
+  if (sh == "show") {
+    dialogOpen = true;
+    showAssistantButton.style.display = 'none';
+
+    // show the dialog 
+    dialog.style.display = 'block';
+    
+    
+  } else {
+    
+    showAssistantButton.style.display = 'block';
+    dialogOpen = false;
+    dialog.style.display = 'none';
+    pagebackground.setAttribute("aria-hidden","false");
+    lastFocus.focus(); 
+  }
+}
+
+
+document.addEventListener("focus", function(event) {
+
+    var d = document.getElementById("box");
+
+    if (dialogOpen && !d.contains(event.target)) {
+        event.stopPropagation();
+        d.focus();
+    }
+
+}, true);
+
+
+document.addEventListener("keydown", function(event) {
+    if (dialogOpen && event.keyCode == 27) {
+        toggleDialog('hide');
+    }
+}, true);
 </script>
 
 </body>
