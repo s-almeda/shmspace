@@ -27,7 +27,7 @@ select{
   /* HEIGHT */
   padding-bottom:30vh;
   margin-bottom: 10vh;
-  margin-top: 3vh; 
+  margin-top: 3.5vh; 
   
   height: 85vh;
   min-height: 525px;
@@ -168,6 +168,7 @@ details[open] summary span{
     min-height: 560px;
 
   }
+
   [role="tabpanel"] {
 
     height: 61vh;
@@ -185,6 +186,11 @@ details[open] summary span{
   .window-body{
 
   }
+
+  .title-bar-text{
+  font-size:calc(11px + 1vh);
+  }
+
   [role="tabpanel"] {
     border-top-outline: 1px;
     z-index:2;
@@ -277,7 +283,7 @@ body {
 #background-wrap {
   bottom: 30vh;
   width: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
   left: 0;
   padding-top: 10px;
   padding-bottom: 50px;
