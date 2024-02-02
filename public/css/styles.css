@@ -2,6 +2,7 @@
   box-sizing: border-box;
 }
 
+
 .button{
   font-size: max(1.3vw, 12pt);
 }
@@ -97,6 +98,7 @@ select{
   flex-grow: 1;
   width: 10%;
 }
+
 
 .row{
     display: flex;
