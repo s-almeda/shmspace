@@ -84,20 +84,33 @@
               <fieldset>
                 <legend> hi there! </legend>
                <em> <strong>Shm is...</strong> </em>
-               recovering from an amazing (if chaotic) fall 23 semester! 
+               excited to present <a href="https://arxiv.org/abs/2310.09985">DreamSheets</a> at CHI2024!
                <!--looking for internship opportunities to pursue their interest in content metadata, provenance, and novel creativity support systems for sustainable Human-AI Co-Creativity.-->
               </fieldset>
             </div>
-            
-            <div style="padding: 1vw;">
-            <fieldset style="height: 100%">
-              <legend> contact</legend>
-                ✉️ email : <em>firstname (dot) lastname (at) berkeley.edu</em> <br>
-                🖼 instagram: <a href="https://www.instagram.com/shm.uh/">@ shm.uh </a><br>
-                🐦 twitter: <a href="https://twitter.com/shmu_h">@ shmu_h </a><br>
-                📆 office hours: <a href="https://calendly.com/shmothy/office-hours-with-shm?month=2023-08">by appointment</a>
-            </fieldset>
+
+            <div class="col-5" style = "padding: -5vw; margin: auto">
+              <fieldset>
+                <legend>advising</legend>
+                <div class="col-12">
+                  <div class="select-description">
+                    <div class="select-description-child" >
+                      <ul id="adv_list" tabindex="1" role="listbox" aria-labelledby="advisees">
+                        <li id="adv_1" role="option"target=”_blank”><a href ="https://isabel.li/">Isabel Li</a></li>
+                        <a href ="https://www.aceschen.com/"target=”_blank”><li id="adv_2" role="option">Ace Chen</li></a>
+                        <a href ="https://www.bobwei.top/"target=”_blank”><li id="adv_3" role="option">Bob Tianqi Wei</li></a>
+                        <a href ="https://www.pradeepmanirathnam.com/"target=”_blank”><li id="adv_4" role="option">Pradeep Mani Rathnam</li></a>
+                        <a href ="https://timoteayang.com/"target=”_blank”><li id="adv_5" role="option">Timothy Yang</li></a>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+  
+              </fieldset>
             </div>
+
+            
+            
 
             <div class="col-5"style = "padding: 1vw; margin: auto; padding-top: 0vh;">
               <!--a href= "https://shmgaranganao.myportfolio.com/"><button> About this website</button></a-->
@@ -129,6 +142,16 @@
                 </div>
   
               </fieldset>
+            </div>
+
+            <div style="padding: 1vw;">
+            <fieldset style="height: 100%">
+              <legend> contact</legend>
+                ✉️ email : <em>firstname (dot) lastname (at) berkeley.edu</em> <br>
+                🖼 instagram: <a href="https://www.instagram.com/shm.uh/">@ shm.uh </a><br>
+                🐦 twitter: <a href="https://twitter.com/shmu_h">@ shmu_h </a><br>
+                📆 office hours: <a href="https://calendly.com/shmothy/office-hours-with-shm?month=2023-08">by appointment</a>
+            </fieldset>
             </div>
 
 
@@ -1391,6 +1414,7 @@ aria.Listbox.prototype.setHandleFocusChange = function (focusChangeHandler) {
 window.addEventListener('load', function () {
   new aria.Listbox(document.getElementById('sem_list'));
   new aria.Listbox(document.getElementById('res_list'));
+  new aria.Listbox(document.getElementById('adv_list'));
 });
 'use strict';
 /**
