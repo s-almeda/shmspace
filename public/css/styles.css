@@ -468,6 +468,12 @@ fieldset{
   content: "🍁";
 }
 
+#sem_sp24[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "🌸";
+}
+
 #res_opt1[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
