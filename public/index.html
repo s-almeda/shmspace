@@ -217,10 +217,10 @@
                           <div class="select-description">
                             <div class="select-description-child" >
                               <ul id="res_list" tabindex="1" role="listbox" aria-labelledby="ss_sems">
-                               <li id="res_opt1" role="option">The impact of emergent technologies on creative communities</li>
-                                <li id="res_opt2" role="option">Designing systems for sustainable human-machine co-creativity</li>
-                                <li id="res_opt3" role="option">Creativity support tools & networks</li>
-                                <li id="res_opt4" role="option">Amplifying historically marginalized voices</li>
+                               <li id="res_opt1" role="option">The impact of emergent technologies on creative communities (I'm thinking about the downstream effects of genAI on visual culture )</li>
+                                <li id="res_opt2" role="option">Designing systems for sustainable human-machine co-creativity (I've been thinking a lot about metadata & data dignity)</li>
+                                <li id="res_opt3" role="option">Creativity support tools & networks (new ones, and those that have become a part of a generation's geneaology) </li>
+                                <li id="res_opt4" role="option">Amplifying historically marginalized voices (while resisting the commoditization of "diverse" bodies)</li>
                               </ul>
                             </div>
                           </div>
@@ -277,6 +277,7 @@
                         <li id="sem_sp23" role="option">CS160 - Spring 2023</li>
                         <li id="sem_su23" role="option">DESINV23 - Summer 2023</li>
                         <li id="sem_fa23" role="option">DESINV202 - Fall 2023</li>
+                        <li id="sem_sp24" role="option">DESINV23 - Spring 2024</li>
                         </ul>
                       </div>
                       <div class="select-description-child description"style="display:inline; margin-top: 8px; margin-bottom: 0px; max-width: 45%;">
@@ -725,6 +726,11 @@ aria.Listbox = function (listboxNode) {
       case('sem_fa23'):
         heading.innerHTML = 'DESINV 202: Technology Design Foundations @ UC Berkeley';
         description.innerHTML = 'Head TA for Sudhu Tewari, Jeff Lubow, and TJ McLeish <br>🔗<a href="https://github.com/Berkeley-MDes/desinv-202/wiki"> Course Site</a>';
+      break;
+
+    case('sem_sp24'):
+        heading.innerHTML = 'DESINV 23: Creative Programming & Electronics @ UC Berkeley';
+        description.innerHTML = 'Head TA for Sudhu Tewari <br>🔗<a href="https://sites.google.com/berkeley.edu/desinv23spring24/home"> Course Site</a>';
       break;
     }
   };
