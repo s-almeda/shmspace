@@ -334,7 +334,7 @@ fieldset{
   display: inline-flex;
   align-items: stretch;
   width: 100%;
-  min-height: 16vh;
+  /*min-height: 10vh;*/
 }
 .select-description-child{
   /*the 2 childrenz*/
@@ -343,7 +343,7 @@ fieldset{
   margin: 2px;
   font-family: "MS Sans Serif", Arial;
   font-size: max(1.4vw, 12px);
-  min-height: 15vh;
+  /*min-height: 15vh;*/
   
 }
 
@@ -391,6 +391,20 @@ fieldset{
 
 #res_list li{
   font-size: max(1.4vh, 14px);
+}
+
+[role="listbox"]#adv_list {
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  margin:0vh;
+  margin-top: -1em;
+  padding-left: 0.1em;
+  
+}
+#adv_list li{
+  font-size: max(1.3vh, 13px);
 }
 
 
@@ -459,16 +473,7 @@ fieldset{
   left: 0.1em;
   content: "🎨";
 }
-#res_opt1[aria-selected="true"]::before {
-  position: absolute;
-  left: 0.1em;
-  content: "🎨";
-}
-#res_opt2[aria-selected="true"]::before {
-  position: absolute;
-  left: 0.1em;
-  content: "🖋";
-}
+
 #res_opt2[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
@@ -479,21 +484,38 @@ fieldset{
   left: 0.1em;
   content: "🔄";
 }
-#res_opt3[aria-selected="true"]::before {
-  position: absolute;
-  left: 0.1em;
-  content: "🔄";
-}
+
 #res_opt4[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
   content: "📣";
 }
-#res_opt4[aria-selected="true"]::before {
+#adv_1[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
-  content: "📣";
+  content: "🌙";
 }
+#adv_2[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "♠️";
+}
+#adv_3[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "🐈";
+}
+#adv_4[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "🎥";
+}
+#adv_5[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "❇️";
+}
+
 
 button[aria-haspopup="listbox"] {
   position: relative;
