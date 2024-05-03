@@ -15,6 +15,17 @@ select{
 #colorSelect {
   transition: background-color 0.5s, color 0.3s; /* Add transitions for both background color and text color changes */
 }
+
+iframe{
+  width: 75%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  min-height: 525px;
+
+  justify-content: center;
+
+}
 .window {
 
   /* WIDTH */

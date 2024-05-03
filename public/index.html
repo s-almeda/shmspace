@@ -61,35 +61,45 @@
   <div class="window-body">
     <section class="tabs">
       <menu role="tablist" aria-labelledby="tablist-1" class="manual">
+        <!-- TAB MENU BAR! -->
         <button id="tab-1" type="button" role="tab" aria-selected="true" aria-controls="tabpanel-1">
           <span class="focus">About</span>
         </button>
+
         <button id="tab-2" type="button" role="tab" aria-selected="false" aria-controls="tabpanel-2" tabindex="-1">
           <span class="focus">Projects</span>
         </button>
-        <!--button id="tab-3" type="button" role="tab" aria-selected="false" aria-controls="tabpanel-3" tabindex="-1">
-          <span class="focus">Links</span>
-        </button-->
+
+        <button id="tab-2" type="button" role="tab" aria-selected="false" aria-controls="tabpanel-3" tabindex="-2">
+          <span class="focus"><img src="paintlogo.webp" style="max-height:2.5em"></span>
+        </button>
       </menu>
     </section>
 
+
+
     <div id="tabpanel-1" role="tabpanel" aria-labelledby="tab-1" class="verticalscroll" >
+
       <div class="container">
         <div class="row" style=" ">
-          <!-- computer image -->
-          <div class="col-4"style="padding: 0.5vw; padding-right: 0.5vw; ">
+
+
+          
+          <div class="col-4" id = "left-column" style="padding: 0.5vw; padding-right: 0.5vw; ">
+            <!-- computer image -->
             <img src="images/computer.png" style="padding: 1vw; max-height:60%; width: 95%; display: inline; align: center;">
             
             <div class="col-5"style = "padding: 1vw; margin: 0px; padding-top: 0vh;">
               <fieldset>
                 <legend> hi there! </legend>
                <em> <strong>Shm is...</strong> </em>
-               excited to present <a href="https://arxiv.org/abs/2310.09985">DreamSheets</a> at CHI2024!
+               excited to present <a href="https://programs.sigchi.org/chi/2024/program/content/147361">DreamSheets</a> on Wednesday, May 15 at CHI2024!
                <!--looking for internship opportunities to pursue their interest in content metadata, provenance, and novel creativity support systems for sustainable Human-AI Co-Creativity.-->
               </fieldset>
             </div>
 
-            <div class="col-5" style = "padding: -5vw; margin: auto">
+
+            <div class="col-5" id="advising-section" style = "padding: -5vw; margin: auto">
               <fieldset>
                 <legend>advising</legend>
                 <div class="col-12">
@@ -153,59 +163,39 @@
                 📆 office hours: <a href="https://calendly.com/shmothy/office-hours-with-shm?month=2023-08">by appointment</a>
             </fieldset>
             </div>
-
-
-          </div> <!-- end of col with computer and contact -->
+          </div> <!-- end of left column-->
 
           <!-- right side -->
-          <div class="col-8">
+          <div class="col-8 col-md-push-8">
             <fieldset style="width: 100%">
               <legend class="tooltip">shm garanganao almeda                    
                 �<span class="tooltiptext" style="font-size: 14px; align-content:center;";>pronounced: <strong>shim</strong> guh<strong>rang</strong>guhnow all<strong>may</strong>duh
-              </span>
-            </legend>
+                </span>
+              </legend>
 
 
               <div class="field-row">
-                <ul class="tree-view">
-                  <details open style="width: 100%; margin: 0;">
-                    <summary onclick="togglePreviously();"><strong>currently... </strong><span style="color: #de7e00; font-size: 12px;">(click to expand)</span></summary>
-                    <ul>
-                      <li>SF Bay Area artist & computer scientist</li> 
-                      <li>4th-year PhD in EECS Program at UC Berkeley, advised Bjoern Hartmann. </li>
-                      <li>Human Computer Interaction researcher at the intersection of art + technology</li>
-                    </ul>
-                  </details>
-                  <details closed>
-                    <summary><strong>previously... </strong><span>(click to expand)</span></summary>
-                    <ul>
-                      <li>a child</li>
-                      <li>Class of 2020 @ The College of New Jersey, Computer Science + Fine Art </li> 
-                      <li>Adobe Research Fellow, Computational Artistry Intern with Jose Echevaria and Stephen DiVerdi - 2019 </li>
-                      <li>the train guy at UIST 2023</li>
-                    </ul>
-                  </details>
-                </ul>
-              </div>
+                  <ul class="tree-view">
+                    <details open style="width: 100%; margin: 0;">
+                      <summary onclick="togglePreviously();"><strong>currently... </strong><span style="color: #de7e00; font-size: 12px;">(click to expand)</span></summary>
+                      <ul>
+                        <li>SF Bay Area artist & computer scientist</li> 
+                        <li>4th-year PhD in EECS Program at UC Berkeley, advised Bjoern Hartmann. </li>
+                        <li>Human Computer Interaction researcher at the intersection of art + technology</li>
+                      </ul>
+                    </details>
+                    <details closed>
+                      <summary><strong>previously... </strong><span>(click to expand)</span></summary>
+                      <ul>
+                        <li>a child</li>
+                        <li>Class of 2020 @ The College of New Jersey, Computer Science + Fine Art </li> 
+                        <li>Adobe Research Fellow, Computational Artistry Intern with Jose Echevaria and Stephen DiVerdi - 2019 </li>
+                        <li>the train guy at UIST 2023</li>
+                      </ul>
+                    </details>
+                  </ul>
+                </div>
             </fieldset>
-
-
-            <!--fieldset style="width: 100%; padding-left: 2vw; padding-right: 2vw; margin: 1vh 0;">
-              <legend>recent highlights</legend>
-              <div class="container">
-                  <div class="row">
-                      <div class="col-lg-6 col-md-6 col-12 mb-3">
-                          researching:
-                          <select style="width: 100%; margin: 0.5em; text-transform: lowercase;">
-                              <option>Leading a studio of </option>
-                              <option>Designing systems for sustainable human-machine co-creativity</option>
-                              <option>Creativity support tools & networks </option>
-                              <option>Amplifying historically marginalized voices</option>
-                          </select>
-                      </div>
-                  </div>
-          
-          </fieldset-->
           
 
             <fieldset style="width: 100%; padding-left: 2vw; padding-right: 2vw; margin: 1vh 0;">
@@ -257,12 +247,12 @@
                       </div>
                   </div>
               </div>
-          </fieldset>
+            </fieldset>
           
               
 
                           
-              <div class="row">
+              <div class="row" id="teaching-section"> <!-- semesters of teaching --> 
                 
                 <fieldset style=" width: 100%; margin: 0px;">
                   <legend>teaching</legend>
@@ -286,31 +276,17 @@
                         </fieldset>  
                       </div><!--end of col for description box-->
                     </div><!-- end of internal cs160 selectbox + description row-->
-
                 </fieldset>
-                
-            </div>
+              </div>
 
 
             </div> 
 
-        </div><!-- end row 1 -->
+          </div><!-- end right column! -->
 
-        </div><!-- end row 1 -->
-        <!--ROW 2  etc etc-->
-      
-        <div class="row"style="">
+      </div><!-- end of tab-1panel's internalcontainer-->
 
-
-          
-
-
-        </div>
-        
-
-
-
-    </div> <!------- ////   end of tab-1  /////-------->
+    </div> <!------- ////   end of tab-1 panel /////-------->
 
     <div id="tabpanel-2" role="tabpanel" aria-labelledby="tab-2" style="display:none;" class="verticalscroll">
           <div class = "container">
@@ -460,11 +436,13 @@
 
     </div> <!-- end of tabpanel2 ?? -->
         
-    <!--div id="tabpanel-3" role="tabpanel" aria-labelledby="tab-3" style="display:none;" class="verticalscroll" >
-      <p>
-        tab 3
-      </p>
-    </div> <-- end of tabpanel 3-->
+    <div id="tabpanel-3" role="tabpanel" aria-labelledby="tab-3" style="display:none;" class="verticalscroll" >
+      <div class="container">
+        
+         <iframe src="https://shmgaranganao.myportfolio.com/"></iframe>
+        
+     </div>
+    </div> <!-- end of tabpanel 3-->
 
 
   </div> <!-- end of window body -->
