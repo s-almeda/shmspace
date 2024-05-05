@@ -86,6 +86,27 @@ iframe{
     flex: 2 0 auto;
     width: 33.333333333%;
 }
+.project-text{
+    flex: 2 0 auto;
+    width: 70%;
+    float: left;
+    font-size: max(0.3vh, 10pt);
+}
+.project-img{
+    
+    flex: 2 0 auto;
+    width: 30%;
+    float: center;
+    display: inline;
+    overflow: hidden;
+    margin-bottom: 13px;
+    max-height: 38vh
+    
+}
+.project-img img{
+    display: inline;
+    max-width: 25vh; 
+}
 .col-5{
   flex-grow: 1;
   margin: 1vw;
@@ -112,8 +133,10 @@ iframe{
 
 
 .row{
+  grid-auto-flow: column;
     display: flex;
     flex-flow: row wrap;
+    flex-direction: row
     flex-shrink: 0;
     width: 100%;
     max-width: 100%;
@@ -133,13 +156,16 @@ summary{
 details[closed] summary span{
   display: inline;
   color: #de7e00;
-  font-size: 12px;  
 }
 
 details[open] summary span{
   display: none;
-  color: #de7e00;
-  font-size: 12px;  
+}
+details[closed] summary p{
+  display: none;
+}
+details[open] summary p{
+  display: inline;
 }
 
 
@@ -175,8 +201,16 @@ details[open] summary span{
   overflow-y: auto;
 }
 
+#teaching-description{
+  max-height: 100%;
+  overflow-y: scroll; 
+  overflow-wrap: normal;
+  overflow-x: hidden;
+}
+
 /* For large screens (wider than 1200px) */
 @media (min-width: 1150px) {
+
   .window {
     min-height: 560px;
 
@@ -190,16 +224,54 @@ details[open] summary span{
 
 
 }
+/* -- MOBILE/ skinty view -- --*/
+@media (max-width : 1050px) {
+  .project-text{
+    flex: 2 0 auto;
+    width: 100%;
+    float: left;
+  }
+  .project-img{
+    position: center;
+    align-items: center;
+    align-content: center;
+    align-self: center;
+    float: auto;
+    margin: auto;
+  }
+  .project-img img{
+
+      max-width: 100%;
+      max-height: 50vh;
+      position: center;
+      overflow: visible;
+      float: center;
+  }
+}
 
 /* -- MOBILE/ skinty view -- --*/
 @media (max-width : 750px) {
-  .window{
-
+  .project-text{
+    flex: 2 0 auto;
+    width: 100%;
+    float: left;
   }
-  .window-body{
-
+  .project-img{
+    position: center;
+    align-items: center;
+    align-content: center;
+    align-self: center;
+    float: auto;
+    margin: auto;
   }
+  .project-img img{
 
+      max-width: 100%;
+      display: block;
+      position: center;
+      overflow: visible;
+      float: center;
+  }
   .title-bar-text{
   font-size:calc(11px + 1vh);
   }
@@ -217,7 +289,8 @@ details[open] summary span{
   .faves{
     width: 100%;
   }
-  .row{
+  .row{ /* mobile*/
+
     flex-direction: column;
   }
   .col-8{
