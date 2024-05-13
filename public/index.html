@@ -3,6 +3,7 @@
 <head>
   <title>shmspace</title>
 
+
   <link href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet">
 
   <link rel="stylesheet" href="https://unpkg.com/xp.css" />
@@ -71,7 +72,7 @@
         </button>
 
         <button id="tab-2" type="button" role="tab" aria-selected="false" aria-controls="tabpanel-3" tabindex="-2">
-          <span class="focus"><img src="paintlogo.webp" style="max-height:2.5em"></span>
+          <span class="focus"><img src="images/paintlogo.webp" style="max-height:2.5em"></span>
         </button>
       </menu>
     </section>
@@ -177,15 +178,16 @@
               <div class="field-row">
                   <ul class="tree-view">
                     <details open style="width: 100%; margin: 0;">
-                      <summary onclick="togglePreviously();"><strong>currently... </strong><span style="color: #de7e00; font-size: 12px;">(click to expand)</span></summary>
+                      <summary><strong>currently... </strong><span style="color: #de7e00; font-size: 12px;">(click to expand)</span></summary>
                       <ul>
                         <li>SF Bay Area artist & computer scientist</li> 
                         <li>4th-year PhD in EECS Program at UC Berkeley, advised Bjoern Hartmann. </li>
                         <li>Human Computer Interaction researcher at the intersection of art + technology</li>
+                        <li>Chancellor's Fellow, Responsible Decentralized Intelligence (RDI) Frontier Research Fellow
                       </ul>
                     </details>
                     <details closed>
-                      <summary><strong>previously... </strong><span>(click to expand)</span></summary>
+                      <summary><strong>previously... </strong><span style="color: #de7e00; font-size: 12px;">(click to expand)</span></summary>
                       <ul>
                         <li>a child</li>
                         <li>Class of 2020 @ The College of New Jersey, Computer Science + Fine Art </li> 
@@ -254,24 +256,27 @@
                           
               <div class="row" id="teaching-section"> <!-- semesters of teaching --> 
                 
-                <fieldset style=" width: 100%; margin: 0px;">
+                <fieldset style="width: 100%; margin: 0px;">
                   <legend>teaching</legend>
-                    <div id="semesterheading" style="font-style:italic; font-size: 14px">Select 1 of my 6 semesters of teaching below to view details.</div>
-                    <div class="select-description">
-                      <div class="select-description-child select"style="display:inline; margin: 3px; width: 50%;">
+                    <div id="semesterheading" style="font-style:italic; font-size: 14px">Select 1 of my 7 semesters of teaching below to read more!</div>
+                    <br>
+
+                    <div class="select-description" style="display: flex; align-items: stretch; ">
+                      <div class="select-description-child select"style="display:inline; margin: 3px; width: 40%;">
                         <span id="ss_sems" class="listbox-label"></span>
                         <ul id="sem_list" tabindex="0" role="listbox" aria-labelledby="ss_sems">
+                          <li id="sem_sp24" role="option">DESINV23 - Spring 2024</li>
+                          <li id="sem_fa23" role="option">DESINV202 - Fall 2023</li>
+                          <li id="sem_su23" role="option">DESINV23 - Summer 2023</li>
+                          <li id="sem_sp23" role="option">CS160 - Spring 2023</li>
+                           <li id="sem_su22" role="option">CS160 - Summer 2022</li>
+                            <li id="sem_sp22" role="option">CS160 - Spring 2022</li>
                         <li id="sem_su21" role="option">CS160 - Summer 2021</li>
-                        <li id="sem_sp22" role="option">CS160 - Spring 2022</li>
-                        <li id="sem_su22" role="option">CS160 - Summer 2022</li>
-                        <li id="sem_sp23" role="option">CS160 - Spring 2023</li>
-                        <li id="sem_su23" role="option">DESINV23 - Summer 2023</li>
-                        <li id="sem_fa23" role="option">DESINV202 - Fall 2023</li>
-                        <li id="sem_sp24" role="option">DESINV23 - Spring 2024</li>
+
                         </ul>
                       </div>
                       <div class="select-description-child description"style="display:inline; margin-top: 8px; margin-bottom: 0px; max-width: 45%;">
-                        <fieldset id="cs160-description" style="max-height: 15.5vh;overflow-y: scroll; overflow-wrap: normal; overflow-x: hidden;">
+                        <fieldset id="teaching-description">
                           <em>Select a course to learn more.</em>
                         </fieldset>  
                       </div><!--end of col for description box-->
@@ -289,68 +294,102 @@
     </div> <!------- ////   end of tab-1 panel /////-------->
 
     <div id="tabpanel-2" role="tabpanel" aria-labelledby="tab-2" style="display:none;" class="verticalscroll">
-          <div class = "container">
+          <div class = "container" id="projects-section">
 
-            <div class="row" style="padding: 1vw"> <!-- project 1-->
-              <fieldset>
+            <div class="row" style="display: flex; padding: 1vw; justify-content: space-around;"> <!-- project 1-->
+
+              <fieldset class="project-fieldset">
+
                 <legend><em>DreamSheets </em></legend>
-                <strong>Prompting for Discovery: Flexible Sense-Making for AI Art-Making with Dreamsheets </strong>
-                Shm Garanganao Almeda, J.D. Zamfirescu-Pereira, Kyu Won Kim, Pradeep Mani Rathnam, Bjoern Hartmann
-                <div class="row" style="padding: 1vw; padding-bottom: 1.5vw;">
-                  <div class="col-3">
-                    <a href=""> 📄 Full Paper Currently Under Review </a> | 
-                  </div> 
-                  <div class="col-3">
-                    <a href="https://arxiv.org/abs/2310.09985"> 🔗 arxiv preprint </a> | 
-                  </div>         
+
+                <div class="project-img">
+                  <img src="images/dreamsheets.png">
                 </div>
-                <fieldset style="">
-                  <details open>
-                    
-                  <summary><em>About</em></summary>
-                    <ul> 
-                      <li>How can generative artists use Text-to-Image models to reliably achieve desirable results? To study this, we developed DreamSheets, a design probe Text-To-Image “sandbox” in a spreadsheet. We observed novice and expert artists use it to define and develop their own creative workflows.  
-                      </li>
-                    </ul>
-                  </details>
-                </fieldset>
-              </fieldset> 
+
+                <div class="project-text">
+
+                  <br>
+                  <strong>Prompting for Discovery: Flexible Sense-Making for AI Art-Making with Dreamsheets </strong>
+                  <br> 
+                  Shm Garanganao Almeda, J.D. Zamfirescu-Pereira, Kyu Won Kim, Pradeep Mani Rathnam, Bjoern Hartmann
+                  <br>
+
+                  <a href="https://drive.google.com/file/d/1mUh4N-m8YHDwcwFGoYjw2uG7FQ7fGARx/view?usp=sharing"> 📄 Paper (PDF) </a>  | 
+                  <a href="https://dl.acm.org/doi/10.1145/3613904.3642858"> 🔗 ACM DL </a>  | 
+                  <a href="https://arxiv.org/abs/2310.09985"> 🔗 arxiv  </a> 
+
+                  <br>
+                  <fieldset style="" id="summary-fieldset">
+                    <details closed>
+                        <summary> <span style="color: #000; display: inline;"> How do artists learn how to use Text-to-Image models to generate reliably desirable results? </span>
+                          <p> 
+                            To study this, we developed DreamSheets, a design probe Text-To-Image “sandbox” in a spreadsheet. We observed novice and expert artists use the as a computational substrate develop "sheet-system" TTI interfaces exemplifying a variety of sensemaking strategies and creative exploration styles. 
+
+                          </p>
+                      </summary>
+                    </details>
+                  </fieldset>
+              </div>
+
+
+              </div>
+
+
+
+              </fieldset> <!-- end of larger fieldset labeled with proect name. -->
+
 
             </div> <!-- end project 1-->
 
             <div class="row" style="padding: 1vw"> <!-- project 2-->
-              <fieldset>
+             <fieldset class="project-fieldset">
                 <legend><em>NFT Art World</em></legend>
+
+
+                <div class="project-img">
+                  <img src="images/nfts.gif">
+                </div>
+
+                <div class="project-text">
+                  <br>
                 <strong>The Influence of Decentralized Systems on the Development of Novel Online Creative Communities and Cooperative Practices</strong> 
                 Shm Garanganao Almeda, Bjoern Hartmann
-                <div class="row" style="padding: 1vw; padding-bottom: 1.5vw;">
-                  <div class="col-3">
-                    <a href="https://drive.google.com/file/d/1Ga3Zz6lZQ-pujSX53AQdlurO9NwXOd6X/view?usp=sharing"> 📄 Paper (PDF) </a> | 
-                  </div> 
-                  <div class="col-3">
-                    <a href="https://dl.acm.org/doi/10.1145/3563657.3596034"> 🔗 ACM DL </a> | 
-                  </div>
-                  <div class="col-3">
-                    <a href="https://www.youtube.com/watch?v=UVnwuzKroZ4"> ▶️ Video  </a>
-                  </div>          
-                </div>
-                <fieldset style="">
-                  <details open>
-                    
-                  <summary><em>About</em></summary>
-                    <ul> 
-                      <li>Interviews with 16 creatives utilizing NFTs reveal a vast NFT Art World: cooperative networks developing novel creative practices, interactions, and communities with unique artistic subcultures. 
-                      </li>
-                    </ul>
-                  </details>
-                </fieldset>
-              </fieldset> 
+
+                    <div class="row" style="padding: 1vw; padding-bottom: 1.5vw;">
+                      <div class="col-3">
+                        <a href="https://drive.google.com/file/d/1Ga3Zz6lZQ-pujSX53AQdlurO9NwXOd6X/view?usp=sharing"> 📄 Paper (PDF) </a> | 
+                      </div> 
+                      <div class="col-3">
+                        <a href="https://dl.acm.org/doi/10.1145/3563657.3596034"> 🔗 ACM DL </a> | 
+                      </div>
+                      <div class="col-3">
+                        <a href="https://www.youtube.com/watch?v=UVnwuzKroZ4"> ▶️ Video  </a>
+                      </div>          
+                    </div>
+
+
+                    <fieldset style="">
+                      <details closed>
+                          <summary> <span style="color: #000;"> What characterizes the artistic communities of NFT platforms – and how were they shaped by the (infrastructure, hype, stigma)?</span>
+                            <p> What characterizes the artistic communities of NFT platforms – and how were they shaped by the (infrastructure, hype, stigma)? Interviews with 16 creatives utilizing NFT platforms reveal a vast and, perhaps unexpectedly, nuanced NFT Art World: cooperative networks developing novel creative practices, interactions, and communities with unique artistic subcultures. 
+                            </p>
+                        </summary>
+                      </details>
+                    </fieldset>
+
+                </div> <!-- end of project-text--> 
+                </fieldset> 
+
+
+              
+
 
             </div> <!-- end project 2-->
 
-            <div class="row" style="padding: 1.5vw"> <!-- project 2-->
-              <fieldset>
+            <div class="row" style="padding: 1.5vw"> <!-- project 3-->
+              <fieldset class="project-fieldset">
                 <legend><em>bPigment</em></legend>
+                <div class="project-text">
                 Parametric RGB color mixing system for digital painting that enables a novel color-mixing experience, advised by Jose Echevarria & Stephen Diverdi
                 <div class="row" style="width: 100%;padding: 1vw; padding-bottom: 1.5vw;">
                   <div class="col-3">
@@ -361,22 +400,23 @@
                   </div>          
                 </div>
                 <fieldset style="">
-                  <details open>
-                    
-                  <summary><em>About</em></summary>
-                    <ul> 
-                      <li>Techniques for parametric color mixing in a digital painting application. A methodology implementing techniques including generating a Bezier curve extending from a first point to a second point in a 3-Dimensional space.
-                      </li>
-                    </ul>
+                  <details closed>
+                      <summary> <span  style="color: #000;"> Techniques for parametric color mixing in a digital painting application...</span>
+                        <p> Techniques for parametric color mixing in a digital painting application. A methodology implementing techniques including generating a Bezier curve extending from a first point to a second point in a 3-Dimensional space. 
+                        </p>
+                    </summary>
                   </details>
+                    
                 </fieldset>
+              </div> <!-- end of project text -->
               </fieldset> 
 
             </div> <!-- end project 2-->
 
             <div class="row"style="padding: 1.5vw"> <!-- project 3-->
-              <fieldset>
+              <fieldset class="project-fieldset">
                 <legend><em>oligoFriend</em></legend>
+                <div class="project-text">
                 <strong>Synthesis Cost-Optimal Targeted Mutant Protein Libraries</strong>- 
                 Dimitris Papamichail, Madeline Febinger, Shm Almeda, Georgios Papamichail
                 <div class="row" style="width: 100%;padding: 1vw; padding-bottom: 1.5vw;">
@@ -391,23 +431,23 @@
                   </div>          
                 </div>
                 <fieldset style="">
-                  <details open>
-                    
-                  <summary><em>About</em></summary>
-                    <ul> 
-                      <li> Algorithms that optimize oligonucleotide chain design to minimize the cost of synthesizing proteins, towards more effective protein variant library design.
-                      </li>
-                    </ul>
+                  <details closed>
+                      <summary> <span style="color: #000;"> How can we optimize oligonucleotide chain design to minimize the cost of protein synthesis?</span>
+                        <p> Algorithms that optimize oligonucleotide chain design to minimize the cost of synthesizing proteins, towards more effective protein variant library design; implemented as a web application, designed for the needs of a team of protein designers at Princeton. 
+                        </p>
+                    </summary>
                   </details>
                 </fieldset>
+              </div>
               </fieldset> 
 
             </div> <!-- end project 3-->
 
 
             <div class="row" style="padding: 1.5vw"> <!-- project 4-->
-              <fieldset>
+              <fieldset class="project-fieldset">
                 <legend><em>SignReader</em></legend>
+                <div class="project-text">
                 Accessible American Sign Language Recognition with the Leap Motion Controller, advised by Andrea Salgian
                 <div class="row" style="width: 100%;padding: 1vw; padding-bottom: 1.5vw;">
                   <div class="col-3">
@@ -416,17 +456,17 @@
                   <div class="col-3">
                     <a href="https://shmgaranganao.myportfolio.com/signreader"> 🖼 Poster </a>
                   </div>          
+                  <em> 1st Place ACM Student Research Competition at SIGCSE 2019</em>
                 </div>
                 <fieldset style="">
-                  <details open>
-                    
-                  <summary><em>About</em></summary>
-                    <ul> 
-                      <li> Communities that use visual languages to communicate are underrepresented by translation and language learning tools. Utilized the Python and C++ with the LeapMotion infrared hand-tracking controller to recognize and translate ASL fingerspelling.
-                      </li>
-                    </ul>
+                  <details closed>
+                      <summary> <span style="color: #000;"> Communities that use visual languages to communicate are underrepresented by translation and language learning tools...</span>
+                        <p> Communities that use visual languages to communicate are underrepresented by translation and language learning tools. Utilized the Python and C++ with the LeapMotion infrared hand-tracking controller to recognize and translate ASL fingerspelling.
+                        </p>
+                    </summary>
                   </details>
                 </fieldset>
+              </div>
               </fieldset> 
 
             </div> <!-- end project 4-->
@@ -434,14 +474,16 @@
           </div> <!-- end of container -->
 
 
-    </div> <!-- end of tabpanel2 ?? -->
+
         
-    <div id="tabpanel-3" role="tabpanel" aria-labelledby="tab-3" style="display:none;" class="verticalscroll" >
-      <div class="container">
-        
-         <iframe src="https://shmgaranganao.myportfolio.com/"></iframe>
-        
-     </div>
+    <div id="tabpanel-3" role="tabpanel" aria-labelledby="tab-3" style="" class="verticalscroll" >
+        <div class="container">
+
+           <iframe src="https://shmgaranganao.myportfolio.com/"></iframe>
+          
+       </div>
+
+
     </div> <!-- end of tabpanel 3-->
 
 
@@ -678,12 +720,12 @@ aria.Listbox = function (listboxNode) {
   this.keysSoFar = '';
   this.handleFocusChange = function (element) {
     var semester = element.getAttribute('id');
-    var description = document.getElementById('cs160-description');
+    var description = document.getElementById('teaching-description');
     var heading = document.getElementById('semesterheading');
     switch(semester){
       case('sem_su21'):
         heading.innerHTML = 'CS160: User Interface Design and Development @ UC Berkeley';
-        description.innerHTML = 'Head TA for Nate Weinman and Janaki Vivrekar.<br>Taught discussion sections and managed accommodations.<br>🔗<a href="https://www.cs160summer2021.com/"> Course Site</a>';
+        description.innerHTML = 'Head TA for Nate Weinman and Janaki Vivrekar.<br>Taught discussion sections and managed DSP accommodations.<br>🔗<a href="https://www.cs160summer2021.com/"> Course Site</a>';
         break;
       case('sem_sp22'):
         heading.innerHTML = 'CS160: User Interface Design and Development @ UC Berkeley';
@@ -691,24 +733,24 @@ aria.Listbox = function (listboxNode) {
         break;
       case('sem_su22'):
         heading.innerHTML = 'CS160: User Interface Design and Development @ UC Berkeley';
-        description.innerHTML = 'Course Instructor, with Diyah Mettupalli & Timothy Yang.<br>I designed new web-focused curriculum! :] <br>🔗<a href="https://cs160-su22.github.io/"> Course Site</a>';
+        description.innerHTML = 'Course Instructor, with Diyah Mettupalli & Timothy Yang.<br>Designed new web-focused curriculum! :] <br>🔗<a href="https://cs160-su22.github.io/"> Course Site</a>';
         break;
       case('sem_sp23'):
         heading.innerHTML = 'CS160: User Interface Design and Development @ UC Berkeley';
-        description.innerHTML = 'Head TA for Bjoern Hartmann.<br>Taught discussion sections and managed accommodations.';
+        description.innerHTML = 'Head TA for Bjoern Hartmann.<br>Taught discussion sections, managed accommodations, and guided final project teams to success in building human-centered full-stack web applications, grounded in user research.';
         break;
       case('sem_su23'):
         heading.innerHTML = 'DESINV 23: Creative Programming & Electronics @ UC Berkeley';
-        description.innerHTML = 'Course Instructor, with Albert Hodo - Led designers in creating portfolio-ready interactive installations for the Jacobs Institute of Design Summer 23 Program, while learning programming and prototyping skills.<br>🔗<a href="https://sites.google.com/berkeley.edu/makerlaunchpadsummer2023/"> Course Site</a>';
+        description.innerHTML = 'Course Instructor, with Albert Hodo - Led student designers & makers in creating portfolio-ready interactive installations for the Jacobs Institute of Design Summer 23 Program, learning programming and prototyping skills as part of a collaboratively creative studio community. <br>🔗<a href="https://sites.google.com/berkeley.edu/makerlaunchpadsummer2023/"> Course Site</a>';
       break;
       case('sem_fa23'):
         heading.innerHTML = 'DESINV 202: Technology Design Foundations @ UC Berkeley';
-        description.innerHTML = 'Head TA for Sudhu Tewari, Jeff Lubow, and TJ McLeish <br>🔗<a href="https://github.com/Berkeley-MDes/desinv-202/wiki"> Course Site</a>';
+        description.innerHTML = 'Head TA with Sudhu Tewari, Jeff Lubow, TJ McLeish and the ~45 amazing students in Cohort 4 of the <a href="https://design.berkeley.edu/mdes-cohort"> Jacobs Institute 2024 Masters of Design Cohort. </a> building foundational design & technology skills through hands-on portfolio projects incorporating emergent IoT, genAI, and web development technologies. <br>🔗<a href="https://github.com/Berkeley-MDes/desinv-202/wiki"> Course Site</a>';
       break;
 
     case('sem_sp24'):
         heading.innerHTML = 'DESINV 23: Creative Programming & Electronics @ UC Berkeley';
-        description.innerHTML = 'Head TA for Sudhu Tewari <br>🔗<a href="https://sites.google.com/berkeley.edu/desinv23spring24/home"> Course Site</a>';
+        description.innerHTML = 'Head TA for Sudhu Tewari. robotic instruments, kinetic sculptures, and interactive installations - teaching foundational programming, electronics, and design skills through art practice with a diverse (no prerequisites) class of amazing student makers collaborating in studio environmnt <br>🔗<a href="https://sites.google.com/berkeley.edu/desinv23spring24/home"> Course Site</a>';
       break;
     }
   };
