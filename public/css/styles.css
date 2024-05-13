@@ -87,15 +87,12 @@ iframe{
     width: 33.333333333%;
 }
 .project-text{
-    flex: 2 0 auto;
-    width: 70%;
+    flex-grow: 1;
     float: left;
     font-size: max(0.3vh, 10pt);
 }
 .project-img{
-    
-    flex: 2 0 auto;
-    width: 30%;
+    flex-grow: 1;
     float: center;
     display: inline;
     overflow: hidden;
@@ -131,18 +128,26 @@ iframe{
   width: 10%;
 }
 
+.project-fieldset{
+  width:100%;
+  display: flex;
+  flex-flow: row;
+  flex-wrap: nowrap;
+  flex-direction: column;
+}
 
 .row{
+  justify-content: space-between;
   grid-auto-flow: column;
-    display: flex;
-    flex-flow: row wrap;
-    flex-direction: row
-    flex-shrink: 0;
-    width: 100%;
-    max-width: 100%;
-    padding-right: calc(var(--bs-gutter-x) * .5);
-    padding-left: calc(var(--bs-gutter-x) * .5);
-    margin-top: var(--bs-gutter-y);
+  display: flex;
+  flex-flow: row wrap;
+  flex-direction: row
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 100%;
+  padding-right: calc(var(--bs-gutter-x) * .5);
+  padding-left: calc(var(--bs-gutter-x) * .5);
+  margin-top: var(--bs-gutter-y);
 }
 legend{
   font-size: max(2vh, 20px);
@@ -222,56 +227,36 @@ details[open] summary p{
     min-height: 180px;
   }
 
-
-}
-/* -- MOBILE/ skinty view -- --*/
-@media (max-width : 1050px) {
-  .project-text{
-    flex: 2 0 auto;
-    width: 100%;
-    float: left;
-  }
   .project-img{
-    position: center;
-    align-items: center;
-    align-content: center;
-    align-self: center;
-    float: auto;
-    margin: auto;
+    flex: 2 1 auto;
+    width: 100%;
+    overflow-x: hidden;
+
   }
   .project-img img{
-
-      max-width: 100%;
-      max-height: 50vh;
-      position: center;
-      overflow: visible;
-      float: center;
+    flex: 2 1 auto;
   }
+
+
 }
 
 /* -- MOBILE/ skinty view -- --*/
 @media (max-width : 750px) {
-  .project-text{
-    flex: 2 0 auto;
-    width: 100%;
+  .project-text{ 
+    flex:  1 1 80%;
+    width: 80%;
     float: left;
   }
   .project-img{
-    position: center;
-    align-items: center;
-    align-content: center;
-    align-self: center;
-    float: auto;
-    margin: auto;
+    flex: 2 1 auto;
+
   }
   .project-img img{
-
-      max-width: 100%;
-      display: block;
-      position: center;
-      overflow: visible;
-      float: center;
+    flex: 2 1 auto;
+    max-width: 90%;
   }
+
+
   .title-bar-text{
   font-size:calc(11px + 1vh);
   }
