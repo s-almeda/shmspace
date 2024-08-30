@@ -1,0 +1,136 @@
+<!-- Referenced: https://www.w3schools.com/html/html_responsive.asp-->
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- let's link to our stylesheet (found in public/css/styles.css)-->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://unpkg.com/xp.css" />
+<link rel="stylesheet" type="text/css" href="/css/styles.css"> 
+
+<title>what time did shm leave the house today</title>
+</head>
+
+<body>
+
+
+<div class="window"style="overflow-y: hidden; max-height: 400px; padding-bottom:20px">
+  
+  <div class="title-bar"> 
+    <div class="title-bar-text">
+      what time did shm leave the house today
+    </div>
+  </div>
+
+
+
+
+  <div class="window-body" style="max-height: 395px; padding: 10px;">
+    <a href="/"><button class="float-right">  return home </button></a>
+    <section class="tabs">
+      <menu role="tablist" aria-labelledby="tablist-1" class="manual">
+        <button id="tab-1" type="button" role="tab" aria-selected="true" aria-controls="tabpanel-1">
+          <span class="focus">tracker</span>
+        </button>
+        <button id="tab-2" type="button" role="tab" aria-selected="false" aria-controls="tabpanel-1">
+          <span class="focus">about</span>
+        </button>
+
+        
+      </menu>
+
+    </section>
+    <div class="container"  role="tabpanel" style="max-height: 350px; overflow-y: auto;">
+      shm's reward inventory: ✨
+    <div class="container mt-5" >
+      <div class="row justify-content-center">
+        <div class="col-md-12">
+           
+          <fieldset>
+            
+          <table id="dataTable" class="table table-bordered" style="font-size: max(1.5vh, 15px);">
+            <thead>
+              <tr>
+                <th>
+                  <label for="password">for shm use only:</label>
+                  <input type="password" id="password" class="form-control mb-2">
+                </th>
+                <th>
+                  <button id="addRowButton" disabled>Add Row</button>
+                </th>
+              </tr>
+              <tr>
+                <th>
+                  on this date...
+                </th>
+                <th>
+                  shm left the house at...
+                </th>
+                <th>
+                  earning...
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2/2/2024</td>
+                <td>9:50AM</td>
+                <td>a 💖</td>
+              </tr>
+              <!-- Add more rows as needed -->
+            </tbody>
+          </table>
+        </fieldset>
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var passwordInput = document.getElementById('password');
+      var addRowButton = document.getElementById('addRowButton');
+
+      passwordInput.addEventListener('input', function () {
+        // Enable the button if the password is correct
+        addRowButton.disabled = (passwordInput.value !== 'asdf');
+      });
+
+      var addButton = document.getElementById('addRowButton');
+      addButton.addEventListener('click', function () {
+        addRowToTable();
+      });
+
+      function getReward(){
+        return "✨";
+      }
+
+      function addRowToTable() {
+        var table = document.getElementById('dataTable');
+        var newRow = table.insertRow(table.rows.length);
+
+        // Add cells with sample data, adjust as needed
+        var cell1 = newRow.insertCell(0);
+        var cell2 = newRow.insertCell(1);
+        var cell3 = newRow.insertCell(2);
+
+        var currentDateTime = new Date();
+        var currentDate = currentDateTime.toLocaleDateString();
+        var currentTime = currentDateTime.toLocaleTimeString();
+
+        cell1.innerHTML = currentDate;
+        cell2.innerHTML = currentTime;
+        cell3.innerHTML = getReward();
+        }
+  });
+
+  </script>
+
+
+</body>
+
+
+</html>
+

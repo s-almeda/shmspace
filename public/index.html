@@ -94,7 +94,8 @@
               <fieldset>
                 <legend> hi there! </legend>
                <em> <strong>Shm is...</strong> </em>
-               excited to be interning with Adobe Research this summer!
+               <a href=https://calendar.app.google/TyPWc5mRKU4bqFDs7>taking OH appointments (prioritizing CS61A & DATA C88C students!)</a>
+               <!--excited to be interning with Adobe Research this summer!-->
                <!--looking for internship opportunities to pursue their interest in content metadata, provenance, and novel creativity support systems for sustainable Human-AI Co-Creativity.-->
               </fieldset>
             </div>
@@ -180,9 +181,9 @@
                     <details open style="width: 100%; margin: 0;">
                       <summary><strong>currently... </strong><span style="color: #de7e00; font-size: 12px;">(click to expand)</span></summary>
                       <ul>
-                        <li>SF Bay Area artist & computer scientist</li> 
-                        <li>4th-year PhD in EECS Program at UC Berkeley, advised Bjoern Hartmann. </li>
-                        <li>Human Computer Interaction researcher at the intersection of art + technology</li>
+                        <li>SF Bay Area artist, computer scientist, & arts sociotechnologist</li> 
+                        <li>5th-year PhD in EECS Program at UC Berkeley, advised Bjoern Hartmann. </li>
+                        <li>Human Computer Interaction researcher taking a sociotechnical lens to emergent arts technologies</li>
                         <li>Chancellor's Fellow, Responsible Decentralized Intelligence (RDI) Frontier Research Fellow
                       </ul>
                     </details>
@@ -191,7 +192,8 @@
                       <ul>
                         <li>a child</li>
                         <li>Class of 2020 @ The College of New Jersey, Computer Science + Fine Art </li> 
-                        <li>Adobe Research Fellow, Computational Artistry Intern with Jose Echevaria and Stephen DiVerdi - 2019 </li>
+                        <li>Adobe Research Co-Creation for Audio, Video, and Animation Lab Intern with Joy Kim</li>
+                        <li>Adobe Research Fellow, Computational Artistry Intern with Jose Echevaria and Stephen DiVerdi</li>
                         <li>the train guy at UIST 2023</li>
                       </ul>
                     </details>
@@ -209,7 +211,8 @@
                           <div class="select-description">
                             <div class="select-description-child" >
                               <ul id="res_list" tabindex="1" role="listbox" aria-labelledby="ss_sems">
-                               <li id="res_opt1" role="option">The impact of emergent technologies on creative communities (I'm thinking about the downstream effects of genAI on visual culture )</li>
+                               <li id="res_opt1" role="option">The impact of emergent technologies on creative communities</li>
+                               <li id="res_opt1" role="option">The downstream effects of genAI on visual culture</li>
                                 <li id="res_opt2" role="option">Designing systems for sustainable human-machine co-creativity (I've been thinking a lot about metadata & data dignity)</li>
                                 <li id="res_opt3" role="option">Creativity support tools & networks (new ones, and those that have become a part of a generation's geneaology) </li>
                                 <li id="res_opt4" role="option">Amplifying historically marginalized voices (while resisting the commoditization of "diverse" bodies)</li>
@@ -265,6 +268,7 @@
                       <div class="select-description-child select"style="display:inline; margin: 3px; width: 40%;">
                         <span id="ss_sems" class="listbox-label"></span>
                         <ul id="sem_list" tabindex="0" role="listbox" aria-labelledby="ss_sems">
+                          <li id="sem_fa24" role="option">CS61A + DATAC88C - Fall 2024</li>
                           <li id="sem_sp24" role="option">DESINV23 - Spring 2024</li>
                           <li id="sem_fa23" role="option">DESINV202 - Fall 2023</li>
                           <li id="sem_su23" role="option">DESINV23 - Summer 2023</li>
@@ -739,10 +743,15 @@ aria.Listbox = function (listboxNode) {
         description.innerHTML = 'Head TA with Sudhu Tewari, Jeff Lubow, TJ McLeish and the ~45 amazing students in Cohort 4 of the <a href="https://design.berkeley.edu/mdes-cohort"> Jacobs Institute 2024 Masters of Design Cohort. </a> building foundational design & technology skills through hands-on portfolio projects incorporating emergent IoT, genAI, and web development technologies. <br>🔗<a href="https://github.com/Berkeley-MDes/desinv-202/wiki"> Course Site</a>';
       break;
 
-    case('sem_sp24'):
-        heading.innerHTML = 'DESINV 23: Creative Programming & Electronics @ UC Berkeley';
-        description.innerHTML = 'Head TA for Sudhu Tewari. robotic instruments, kinetic sculptures, and interactive installations - teaching foundational programming, electronics, and design skills through art practice with a diverse (no prerequisites) class of amazing student makers collaborating in studio environmnt <br>🔗<a href="https://sites.google.com/berkeley.edu/desinv23spring24/home"> Course Site</a>';
+    case('sem_fa24'):
+        heading.innerHTML = 'CS61A / DATAC88C';
+        description.innerHTML = 'Co-Instructor with Jedidiah Tsang, John DeNero, and an amazing course staff of legends.  <br>🔗<a href="https://cs61a.org/"> 61A Course Site</a><br>🔗<a href="https://c88c.org/fa24/"> 88C Course Site</a>';
       break;
+
+      case('sem_sp24'):
+          heading.innerHTML = 'DESINV 23: Creative Programming & Electronics @ UC Berkeley';
+          description.innerHTML = 'Head TA for Sudhu Tewari. robotic instruments, kinetic sculptures, and interactive installations - teaching foundational programming, electronics, and design skills through art practice with a diverse (no prerequisites) class of amazing student makers collaborating in studio environmnt <br>🔗<a href="https://sites.google.com/berkeley.edu/desinv23spring24/home"> Course Site</a>';
+        break;
     }
   };
   this.handleItemChange = function () {};
