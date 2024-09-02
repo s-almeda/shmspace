@@ -16,6 +16,10 @@ select{
 #colorSelect {
   transition: background-color 0.5s, color 0.3s; /* Add transitions for both background color and text color changes */
 }
+.field-row label{
+  font-size: calc(10px + 0.3vh);
+
+}
 
 iframe{
   width: 75%;
@@ -76,7 +80,7 @@ iframe{
   max-height: 5em;
 }
 .title-bar-text{
-  font-size:calc(14px + 1vh);
+  font-size:calc(16px + 1vh);
 }
 
 .col-8{
