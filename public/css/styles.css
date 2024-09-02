@@ -4,13 +4,14 @@
 
 
 .button{
-  font-size: max(1.3vw, 12pt);
+  font-size: max(0.5vh, 12pt);
 }
 select{
-  font-size: max(0.3vh, 10pt);
-  height: 2.3em;
+  font-size: max(0.4vh, 10pt);
+  height: 2.5em; !important
   background-position: right 2px center;
-  background-size: 1.2em 1.2em; /* Adjust the size as needed */
+  background-size: 1.5em;
+  background-position: 97% 50%
 }
 #colorSelect {
   transition: background-color 0.5s, color 0.3s; /* Add transitions for both background color and text color changes */
@@ -155,8 +156,8 @@ legend{
 li{
   font-size: max(1vh, 15px);
 }
-summary{
-  font-size: 16px;
+summary{ /*currently... previuosly...*/
+  font-size: calc(12px + 0.25vh);
 }
 details[closed] summary span{
   display: inline;
@@ -176,13 +177,13 @@ details[open] summary p{
 
 
 
-[role="tab"]{
+[role="tab"]{ /*The About / Projects / Paintbrushes tabs titles*/
   padding:40px;
   height: 6vh;
   min-height: 40px;
   max-height: 50px;
   width: 20vw;
-  font-size: max(1.5vh, 15px);
+  font-size: calc(10px + 1vh);
   z-index: 4;
   border-bottom-width: 0px;
   top: 1px;
@@ -190,9 +191,7 @@ details[open] summary p{
 [role="tabpanel"] {
     border-top-outline: 1px;
     z-index:2;
-
     margin-bottom: 15vh;
-
     height: 64vh;
     min-height: 250px;
 
@@ -394,7 +393,7 @@ body {
 }
 
 fieldset{
-  font-size: max(1.1vw, 11px);
+  font-size: calc(11px + 0.5vh)
 }
 
 /**---- LISTBOXES from https://www.w3.org/WAI/ARIA/apg/patterns/listbox/examples/listbox-scrollable/----*/
@@ -441,8 +440,9 @@ fieldset{
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
-  
+
 }
+
 [role="listbox"]#res_list {
   position: relative;
   overflow-y: auto;
@@ -458,11 +458,11 @@ fieldset{
   margin-top: 0.5em;
 }
 
-#res_list li{
-  font-size: max(1.4vh, 14px);
+#res_list li{ /*interests, researching */
+  font-size: calc(12px + 0.2vh)
 }
 
-[role="listbox"]#adv_list {
+[role="listbox"]#adv_list { /*advising list */
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
@@ -472,8 +472,8 @@ fieldset{
   padding-left: 0.1em;
   
 }
-#adv_list li{
-  font-size: max(1.3vh, 13px);
+#adv_list li{ /*advising list, individual items*/
+  font-size: calc(5px + 1vh);
 }
 
 
@@ -489,15 +489,14 @@ fieldset{
   font-weight: bold;
   line-height: 1.5em;
   background-color: #ccc;
-  font-size: 11px;
 }
 
-[role="option"] {
+[role="option"] { /* each of the semesters in the drop down */
   position: relative;
   display: block;
   padding: 0em 1.2em 0 1.6em;
   line-height: 1.4em;
-  font-size: max(1.4vw, 12px);
+  font-size: calc(9px + 0.5vh);
   font-family: "Pixelated MS Sans Serif", Arial;
 }
 
@@ -548,19 +547,24 @@ fieldset{
   left: 0.1em;
   content: "🎨";
 }
-
 #res_opt2[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "🖼️";
+}
+
+#res_opt3[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
   content: "🖋";
 }
-#res_opt3[aria-selected="true"]::before {
+#res_opt4[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
   content: "🔄";
 }
 
-#res_opt4[aria-selected="true"]::before {
+#res_opt5[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
   content: "📣";
