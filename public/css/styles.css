@@ -197,7 +197,7 @@ details[closed] summary span{
 /*  color: #de7e00;*/
 }
 
-details[open] summary p{
+details[open] summary span{
   display: none;
 }
 details[closed] summary p{
