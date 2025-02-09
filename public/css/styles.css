@@ -192,19 +192,21 @@ summary{ /*currently... previuosly...*/
 }
 
 
-details[closed] summary span{
-  display: inline;
+details[closed] summary span{ /*click to open*/
+  display: inline-flex;
 /*  color: #de7e00;*/
 }
 
-details[open] summary span{
+details[open] summary span{/*click to open*/
   display: none;
 }
+
+
 details[closed] summary p{
   display: none;
 }
 details[open] summary p{
-  display: inline;
+  display: inline-flex;
 }
 
 #files_moving_bottom{
