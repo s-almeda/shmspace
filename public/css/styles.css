@@ -1,7 +1,26 @@
 * {
   box-sizing: border-box;
+
+
+}
+.link{
+  color: blue;
+  text-decoration: underline;
 }
 
+.link:hover {
+  color: darkblue;
+  text-decoration: none;
+}
+
+.link:visited {
+  color: blue;
+  text-decoration: underline;
+}
+
+.link:active {
+  color: #de7e00;
+}
 
 .button{
   font-size: max(0.5vh, 12pt);
@@ -171,12 +190,14 @@ summary{ /*currently... previuosly...*/
   font-size: clamp(12px, 2vh, 18px);
   padding: 12px;
 }
+
+
 details[closed] summary span{
   display: inline;
-  color: #de7e00;
+/*  color: #de7e00;*/
 }
 
-details[open] summary span{
+details[open] summary p{
   display: none;
 }
 details[closed] summary p{
@@ -186,6 +207,12 @@ details[open] summary p{
   display: inline;
 }
 
+#files_moving_bottom{
+  display: none;
+}
+#files_moving_top{
+  display: flex;
+}
 
 
 
@@ -328,6 +355,12 @@ details[open] summary p{
 
 /* -- MOBILE/ skinty view -- --*/
 @media (max-width : 750px) {
+  #files_moving_bottom{
+    display: flex;
+  }
+  #files_moving_top{
+    display: none;
+  }
   .project-text{ 
     flex:  1 1 80%;
     width: 80%;
