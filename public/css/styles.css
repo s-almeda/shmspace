@@ -290,6 +290,7 @@ details[open] summary p{
   width: 100%; /* Prevents unwanted shrinking */
 /*  min-width: 400px;*/
   flex-wrap: nowrap; /* Prevent wrapping */
+  padding: 5px;
 }
 
 
@@ -411,24 +412,19 @@ details[open] summary p{
   [role="tab"]{
     font-size:clamp(12px, 2vw, 14px);
   }
-  .select{
-    margin: 0.5em;
-    width: 100%;
-  }
 
   #select-container {
     flex-direction: column; /* Stack list and description vertically */
     align-items: center;
+    padding: 10px;
   }
 
   #sem_list_parent {
     max-height: 120px; /* Reduce height */
-    min-width: 100%;
   }
   #sem_list{
     max-height: 120px; /* Reduce height */
-    overflow-y: auto; /* Enable scrolling if needed */
-    width: 100%;
+
   }
 
   #teaching-description { /*MOBILE VIEW */
