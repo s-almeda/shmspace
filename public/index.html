@@ -302,14 +302,13 @@
                 
                 <fieldset style="width: 100%; margin: 0px;">
                   <legend>teaching</legend>
-                    <div id="semesterheading" style="font-style:italic; font-size: clamp(12px, 1vw, 18px)">Select 1 of my 7 semesters of teaching below to read more!</div>
+                    <div id="semesterheading" style="font-style:italic; font-size: clamp(12px, 1vw, 18px)">Select 1 of my 9 semesters of teaching below to read more!</div>
 
                     
-                    <div class="select-description" style="display: flex; align-items: stretch; margin-right: 4px;">
+                    <div class="select-description" id="sem_container" >
 
-                      <div class="select-description-child select"style="display:inline; margin: 3px; width: 40%;">
+                      <div class="select-description-child select" id="sem_list_parent">
 
-                        <span id="ss_sems" class="listbox-label"></span>
                         <ul id="sem_list" tabindex="0" role="listbox" aria-labelledby="ss_sems">
                           <li id="sem_sp25" role="option">DESINV23 - Spring 2025</li>
                           <li id="sem_fa24" role="option">CS61A + DATAC88C - Fall 2024</li>
@@ -322,11 +321,10 @@
                         <li id="sem_su21" role="option">CS160 - Summer 2021</li>
                         </ul>
                       </div>
-                      <div class="select-description-child description"style="display:flex;   max-height: 8em; margin-top: 8px; margin-bottom: 0px; max-width: 45%;">
-                        <fieldset id="teaching-description"  style="overflow-y: scroll;">
+
+                        <fieldset class="select-description-child description" id="teaching-description">
                           <em>Select a course to learn more.</em>
                         </fieldset>  
-                      </div><!--end of col for description box-->
 
 
 

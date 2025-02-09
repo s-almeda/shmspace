@@ -209,18 +209,10 @@ details[open] summary p{
 
 }
 
-  
 
 .verticalscroll{
   overflow-x: hidden;
   overflow-y: auto;
-}
-
-#teaching-description{
-  max-height: 100%;
-  overflow-y: scroll; 
-  overflow-wrap: normal;
-  overflow-x: hidden;
 }
 
 
@@ -269,6 +261,37 @@ details[open] summary p{
   z-index: 1000;
   pointer-events: none;
 }
+
+#sem_list {
+  max-height: 10em;
+  flex: 1; /* Ensures it stays proportional */
+  overflow: hidden; /* Prevents content overflow */
+}
+
+#teaching-description { 
+  margin-top: 0.5em;
+  flex: 2;
+  min-width: 200px;
+/*  max-width: 350px;*/
+  overflow: hidden; /* Prevents unexpected expansion */
+}
+
+#semesterheading {
+  font-style: italic;
+  font-size: clamp(12px, 1vw, 18px);
+}
+
+
+#select-container {
+  display: flex;
+  justify-content: space-between; /* Distributes space evenly */
+  align-items: flex-start;
+  max-width: 600px; /* Set a stable max width */
+  width: 100%; /* Prevents unwanted shrinking */
+/*  min-width: 400px;*/
+  flex-wrap: nowrap; /* Prevent wrapping */
+}
+
 
 
 
@@ -393,6 +416,26 @@ details[open] summary p{
     width: 100%;
   }
 
+  #select-container {
+    flex-direction: column; /* Stack list and description vertically */
+    align-items: center;
+  }
+
+  #sem_list_parent {
+    max-height: 120px; /* Reduce height */
+    min-width: 100%;
+  }
+  #sem_list{
+    max-height: 120px; /* Reduce height */
+    overflow-y: auto; /* Enable scrolling if needed */
+    width: 100%;
+  }
+
+  #teaching-description { /*MOBILE VIEW */
+    margin-top: 1em;
+    width: 100%; /* Allow full width for readability */
+/*    max-width: 400px;*/
+  }
 
 }
 
@@ -456,23 +499,7 @@ fieldset{
 }
 
 /**---- LISTBOXES from https://www.w3.org/WAI/ARIA/apg/patterns/listbox/examples/listbox-scrollable/----*/
-.select-description{
-  /*parent- aka the container that holds both the selecty box and the description*/
-  display: inline-flex;
-  align-items: stretch;
-  width: 100%;
-  /*min-height: 10vh;*/
-}
-.select-description-child{
-  /*the 2 childrenz*/
-  flex: 1;
-  align-items: stretch;
-  margin: 2px;
-  font-family: "MS Sans Serif", Arial;
-  font-size: max(1.4vw, 12px);
-  /*min-height: 15vh;*/
-  
-}
+
 
 .listbox-area {
   display: grid;
@@ -527,7 +554,6 @@ fieldset{
   overflow-x: hidden;
   height: 100%;
   margin:0vh;
-  margin-top: -1em;
   padding-left: 0.1em;
   
 }
