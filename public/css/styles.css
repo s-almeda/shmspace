@@ -34,7 +34,7 @@ iframe{
 .window {
 
   /* WIDTH */
-  min-width: 300px;
+  min-width: 360px;
   max-width:80vw;
   margin-left: auto;
   margin-right: auto;
@@ -80,6 +80,8 @@ iframe{
   max-height: 5em;
 }
 .title-bar-text{
+  position: relative;
+  display: inline-block;
   font-size:calc(16px + 1vh);
 }
 
@@ -107,7 +109,8 @@ iframe{
 }
 .project-img img{
     display: inline;
-    max-width: 25vh; 
+    max-height: 25vh; /* Limits width */
+    width: auto;
 }
 .col-5{
   flex-grow: 1;
@@ -163,6 +166,11 @@ li{
 summary{ /*currently... previuosly...*/
   font-size: calc(12px + 0.25vh);
 }
+
+.project-text summary{
+  font-size: clamp(12px, 2vh, 18px);
+  padding: 12px;
+}
 details[closed] summary span{
   display: inline;
   color: #de7e00;
@@ -182,12 +190,11 @@ details[open] summary p{
 
 
 [role="tab"]{ /*The About / Projects / Paintbrushes tabs titles*/
-  padding:40px;
   height: 6vh;
   min-height: 40px;
   max-height: 50px;
   width: 20vw;
-  font-size: calc(10px + 1vh);
+  font-size: calc(9px + 1vh);
   z-index: 4;
   border-bottom-width: 0px;
   top: 1px;
@@ -216,8 +223,60 @@ details[open] summary p{
   overflow-x: hidden;
 }
 
+
+/* -- tooltips --*/
+/* Tooltip container */
+.hasTooltip {
+  border-bottom: 0px dotted black; /* If you want dots under the hoverable text */
+}
+
+/* the actual tooltip */
+.hasTooltip .tooltip{
+  visibility: hidden;
+  width: fit-content;
+  background-color: #fffbde;
+  color: #000000;
+  text-align: left;
+  padding: 5px;
+  border: 1px solid black;
+  top: 2.5em;
+  left: 50%;
+  margin-left: 0em; /* Use half of the width (120/2 = 60), to center the tooltip */
+  font-size: 14px;
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 10;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.hasTooltip:hover .tooltip{
+  visibility: visible;
+}
+/* the actual tooltip */
+.isabelTip{
+  display: none;
+  width: fit-content;
+  background-color: #fffbde;
+  color: #000000;
+  text-align: right;
+  padding: 5px;
+  border: 1px solid black;
+  margin-left: 0em; /* Use half of the width (120/2 = 60), to center the tooltip */
+  font-size: 14px;
+    transform: translate(6em, 2em); /* Moves it down 20px */
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+
+
+
+
 /* For large screens (wider than 1200px) */
 @media (min-width: 1150px) {
+
 
   .window {
     min-height: 560px;
@@ -250,13 +309,40 @@ details[open] summary p{
     width: 80%;
     float: left;
   }
+  .project-fieldset{
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+  }
   .project-img{
     flex: 2 1 auto;
+    justify-content: center;
+    align-items: center;
+    max-height: 100%;
 
   }
   .project-img img{
     flex: 2 1 auto;
     max-width: 90%;
+  }
+
+  .hasTooltip .tooltip{
+    width: 35vw;
+    top: 1em;
+
+  }
+  .hasTooltip{
+    overflow:visible;
+    height: 1em;
+  }
+  #name-pronunciation{
+    display: inline-block;
+    align-content: center;
+    position:relative;
+    left:1vw;
+    top: 1em;
+    z-index: 9;
   }
 
 
@@ -300,7 +386,7 @@ details[open] summary p{
     font-size: 16px;
   }
   [role="tab"]{
-    font-size: max(1.5vh, 15px);
+    font-size:clamp(12px, 2vw, 14px);
   }
   .select{
     margin: 0.5em;
@@ -308,37 +394,6 @@ details[open] summary p{
   }
 
 
-}
-
-/* -- tooltips --*/
-/* Tooltip container */
-.tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 0px dotted black; /* If you want dots under the hoverable text */
-}
-
-/* Tooltip text */
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 33vw;
-  background-color: #fffbde;
-  color: #000000;
-  text-align: left;
-  padding: 5px;
-  border: 1px solid black;
-  top: 100%;
-  left: 50%;
-  margin-left: 0em; /* Use half of the width (120/2 = 60), to center the tooltip */
- 
-  /* Position the tooltip text - see examples below! */
-  position: absolute;
-  z-index: 1;
-}
-
-/* Show the tooltip text when you mouse over the tooltip container */
-.tooltip:hover .tooltiptext {
-  visibility: visible;
 }
 
 
@@ -545,6 +600,16 @@ fieldset{
   left: 0.1em;
   content: "🌸";
 }
+#sem_fa24[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "🍁";
+}
+#sem_sp25[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "🌸";
+}
 
 #res_opt1[aria-selected="true"]::before {
   position: absolute;
@@ -560,40 +625,48 @@ fieldset{
 #res_opt3[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
-  content: "🖋";
+  content: "🔄";
 }
 #res_opt4[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
-  content: "🔄";
+  content: "👥";
 }
 
 #res_opt5[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
-  content: "📣";
+  content: "♥️";
 }
+
+
+/* ADVISEE ICONS */
 #adv_1[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
-  content: "🌙";
+  content: "🌟";
 }
 #adv_2[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
-  content: "♠️";
+  content: "🌒 ";
 }
 #adv_3[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
-  content: "🐈";
+  content: "♠️";
 }
 #adv_4[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
-  content: "🎥";
+  content: "🐈";
 }
 #adv_5[aria-selected="true"]::before {
+  position: absolute;
+  left: 0.1em;
+  content: "🎥";
+}
+#adv_6[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
   content: "❇️";

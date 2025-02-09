@@ -53,7 +53,7 @@
 
 <div class="window">
   <div class="title-bar">
-    <div class="title-bar-text tooltip">
+    <div class="title-bar-text">
       shm garanganao almeda 
       <!--SUBTITLE: <span style="font-size: 0.65em"> is looking for summer internships ;-) </span-->
     </div>
@@ -94,7 +94,7 @@
               <fieldset>
                 <legend> hi there! </legend>
                <em> <strong>Shm is...</strong> </em>
-               <a href=https://calendar.app.google/TyPWc5mRKU4bqFDs7>taking OH appointments</a> (prioritizing CS61A & DATA C88C students!)
+               <a href=https://calendar.app.google/TyPWc5mRKU4bqFDs7>taking OH appointments</a> (prioritizing DESINV23 students!)
                <!--excited to be interning with Adobe Research this summer!-->
                <!--looking for internship opportunities to pursue their interest in content metadata, provenance, and novel creativity support systems for sustainable Human-AI Co-Creativity.-->
               </fieldset>
@@ -108,19 +108,28 @@
             </div>
 
 
+
+
             <div class="col-5" id="advising-section" style = "padding: -5vw; margin: auto">
+
               <fieldset>
                 <legend>advising</legend>
+                <div class="isabelTip">records a sort of<br>"CHI rave"(7)</div>
                 <div class="col-12">
                   <div class="select-description">
                     <div class="select-description-child" >
                       <ul id="adv_list" tabindex="1" role="listbox" aria-labelledby="advisees">
                         <li id="adv_1" role="option"target=”_blank”><a href ="https://ethantam.me/">Ethan Tam</a></li>
-                        <li id="adv_1" role="option"target=”_blank”><a href ="https://isabel.li/">Isabel Li</a></li>
-                        <a href ="https://www.aceschen.com/"target=”_blank”><li id="adv_2" role="option">Ace Chen</li></a>
-                        <a href ="https://www.bobwei.top/"target=”_blank”><li id="adv_3" role="option">Bob Tianqi Wei</li></a>
-                        <a href ="https://www.pradeepmanirathnam.com/"target=”_blank”><li id="adv_4" role="option">Pradeep Mani Rathnam</li></a>
-                        <a href ="https://timoteayang.com/"target=”_blank”><li id="adv_5" role="option">Timothy Yang</li></a>
+
+
+                            <li id="adv_2" role="option"target=”_blank”>
+                              <a href ="https://isabel.li/">Isabel Li �</a>
+                            </li>
+
+                        <a href ="https://www.aceschen.com/"target=”_blank”><li id="adv_3" role="option">Ace Chen</li></a>
+                        <a href ="https://www.bobwei.top/"target=”_blank”><li id="adv_4" role="option">Bob Tianqi Wei</li></a>
+                        <a href ="https://www.pradeepmanirathnam.com/"target=”_blank”><li id="adv_5" role="option">Pradeep Mani Rathnam</li></a>
+                        <a href ="https://timoteayang.com/"target=”_blank”><li id="adv_6" role="option">Timothy Yang</li></a>
                       </ul>
                     </div>
                   </div>
@@ -128,6 +137,34 @@
   
               </fieldset>
             </div>
+
+
+
+            <script>
+              console.log("hi isabel!!");
+              function updateTooltipVisibility() {
+                const item = document.querySelector('#adv_2');
+                const tooltip = document.querySelector('.isabelTip');
+
+                if (item.getAttribute('aria-selected') === 'true' || item.matches(':hover')) {
+                  tooltip.style.display = 'block';
+                } else {
+                  tooltip.style.display = 'none';
+                }
+              }
+
+              // Show/hide tooltip on hover
+              document.querySelector('#adv_2').addEventListener('mouseover', updateTooltipVisibility);
+              document.querySelector('#adv_2').addEventListener('mouseout', updateTooltipVisibility);
+
+              // Observe changes to aria-selected and update tooltip
+              const observer = new MutationObserver(updateTooltipVisibility);
+              observer.observe(document.querySelector('#adv_2'), { attributes: true, attributeFilter: ['aria-selected'] });
+
+
+
+            </script>
+
 
             
             
@@ -142,10 +179,10 @@
                 </div>
                 <div class="field-row">
                   <input checked type="checkbox" id="example2" onclick="return false;">
-                  <label class="tooltip" for="pronouns2">siya 
-                    �<span class="tooltiptext">3rd-person personal pronoun in Tagalog, Ilonggo, and Bisaya. 
+                  <label class="hasTooltip" for="pronouns2">siya 
+                    �<div class="tooltip" style="min-width: 20vw">3rd-person personal pronoun in Tagalog, Ilonggo, and Bisaya. 
                       Filipino languages are naturally genderneutral; gendered language and binary norms are colonial influences.
-                    </span>
+                    </div>
                     </label>
                 </div>
                 <div class="field-row">
@@ -170,10 +207,12 @@
           <!-- right side -->
           <div class="col-8 col-md-push-8">
             <fieldset style="width: 100%">
-              <legend class="tooltip">shm garanganao almeda                    
-                �<span class="tooltiptext" style="font-size: 14px; align-content:center;";>pronounced: <strong>shim</strong> guh<strong>rang</strong>guhnow all<strong>may</strong>duh
-                </span>
-              </legend>
+              <legend class="hasTooltip">shm garanganao almeda                    
+                �
+
+              <div id="name-pronunciation" class="tooltip" style="font-size: 14px;">pronounced: <br> <strong>shim</strong> guh<strong>rang</strong>guhnow all<strong>may</strong>duh
+              </div>
+                            </legend>
 
 
               <div class="field-row">
@@ -207,15 +246,15 @@
               <div class="container"> 
                   <div class="row">
                       <div class="col-lg-6 col-md-6 col-12">
-                          researching:
+                          in my research, I've been thinking about...:
                           <div class="select-description">
                             <div class="select-description-child" >
                               <ul id="res_list" tabindex="1" role="listbox" aria-labelledby="ss_res">
-                               <li id="res_opt1" role="option">The impact of emergent technologies on creative communities</li>
-                               <li id="res_opt2" role="option">The downstream effects of genAI on visual culture</li>
-                                <li id="res_opt3" role="option">Designing systems for sustainable human-machine co-creativity (I've been thinking a lot about metadata & data dignity)</li>
-                                <li id="res_opt4" role="option">Creativity support tools & networks (new ones, and those that have become a part of a generation's geneaology) </li>
-                                <li id="res_opt5" role="option">Amplifying historically marginalized voices (while resisting the commoditization of "diverse" bodies)</li>
+                               <li id="res_opt1" role="option"><strong>Living through a crucial moment of art, media, and human history:</strong> What might <em>technology-driven disruption events</em> in art & photography history teach us about the impacts of generative AI on arts, culture, and community today? </li>
+                               <li id="res_opt2" role="option"><strong>AI medium-specificity:</strong> can data-first designing present new-media roles for AI/ML -- in particular, how might it support engaging and <em>honoring</em> human-made art & cultural data?  </li>
+                                <li id="res_opt3" role="option"><strong>Digital creative geography & culture:</strong> What happens when creative tools and platforms become a part of a generation's geneaology, culture, sense of shared spaces and memories? </li>
+                                <li id="res_opt4" role="option">How can we better <strong>center marginalized perspectives and communities in technology design</strong> and codesign meaningfully inclusive sociotechnical systems -- all while operating within institutions designed to erase or commoditize diverse bodies?</li>
+                                <li id="res_opt5" role="option"> <strong>shadow the hedgehog:</strong> what is it that makes him look SOO cool? </li>
                               </ul>
                             </div>
                           </div>
@@ -229,7 +268,7 @@
                           <select class="faves" style="width: 10em; margin: 0.5em; text-transform: lowercase; padding: 0.5vw;">
                               <option>bugs 🐌</option>
                               <option>bunnies 🐇</option>
-                              <option>ecosystems 🔄</option>
+                              <option>creative sustainability 🔄</option>
                               <option>painting 🖌</option>
                               <option>characters ✍️</option>
                               <option>v-tubers ▶️</option>
@@ -243,11 +282,13 @@
                       <div id="colors" class="col-4 faves" style="width: 40%;">
                           <div>favorite colors:</div>
                           <select id="colorSelect"  class="faves" style="width: 10em; margin: 0.5em;background-color:#3f7d00; color:white;padding: 0.5vw" >
-                              <option value="#3f7d00">green ■</option>
-                              <option value="#eb7a24" style="color:#242644;">orange ■</option>
-                              <option value="#a7d532">lime ■</option>
-                              <option value="#905e70">taupe-mauve ■</option>
-                              <option value="#242644">navy ■</option>
+                              <option value="#3f7d00">☐ green </option>
+                              <option value="#eb7a24" style="color:#242644;">☐ orange</option>
+                              <option value="#a7d532">☐ lime </option>
+                              <option value="#ffda24">☐ dandelion </option>
+                              <option value="#7f7266">☐ warm-gray </option>
+                              
+                              <option value="#ac9b91">☐ taupe </option>
                           </select>
                       </div>
                   </div>
@@ -261,13 +302,16 @@
                 
                 <fieldset style="width: 100%; margin: 0px;">
                   <legend>teaching</legend>
-                    <div id="semesterheading" style="font-style:italic; font-size: 14px">Select 1 of my 7 semesters of teaching below to read more!</div>
-                    <br>
+                    <div id="semesterheading" style="font-style:italic; font-size: clamp(12px, 1vw, 18px)">Select 1 of my 7 semesters of teaching below to read more!</div>
 
-                    <div class="select-description" style="display: flex; align-items: stretch; ">
+                    
+                    <div class="select-description" style="display: flex; align-items: stretch; margin-right: 4px;">
+
                       <div class="select-description-child select"style="display:inline; margin: 3px; width: 40%;">
+
                         <span id="ss_sems" class="listbox-label"></span>
                         <ul id="sem_list" tabindex="0" role="listbox" aria-labelledby="ss_sems">
+                          <li id="sem_sp25" role="option">DESINV23 - Spring 2025</li>
                           <li id="sem_fa24" role="option">CS61A + DATAC88C - Fall 2024</li>
                           <li id="sem_sp24" role="option">DESINV23 - Spring 2024</li>
                           <li id="sem_fa23" role="option">DESINV202 - Fall 2023</li>
@@ -276,14 +320,16 @@
                            <li id="sem_su22" role="option">CS160 - Summer 2022</li>
                             <li id="sem_sp22" role="option">CS160 - Spring 2022</li>
                         <li id="sem_su21" role="option">CS160 - Summer 2021</li>
-
                         </ul>
                       </div>
-                      <div class="select-description-child description"style="display:inline; margin-top: 8px; margin-bottom: 0px; max-width: 45%;">
-                        <fieldset id="teaching-description">
+                      <div class="select-description-child description"style="display:flex;   max-height: 8em; margin-top: 8px; margin-bottom: 0px; max-width: 45%;">
+                        <fieldset id="teaching-description"  style="overflow-y: scroll;">
                           <em>Select a course to learn more.</em>
                         </fieldset>  
                       </div><!--end of col for description box-->
+
+
+
                     </div><!-- end of internal cs160 selectbox + description row-->
                 </fieldset>
               </div> <!-- end of semesters of teching section -->
@@ -292,13 +338,15 @@
                 
                 <fieldset style="width: 100%; margin: 5px;">
                   <legend>interested in research?</legend>
-                    <div id="research interest" style=" font-size: 12px">
-                      
-                      I am always excited to meet with folks interested in human computer interaction + creativity support research, with priority for Berkeley undergraduate students considering grad school or a career in research or art. 
+                    <div id="research interest" style=" padding: 5px, font-size: clamp(12px, 1.5vw, 18px);">
+                      I've got a full team of lovely undergraduate mentees! The only downside is not having the space to advise more at the moment.
+                      However, I am always excited to meet with folks interested in human computer interaction + creativity support research, especially if you are considering grad school and/or a career in research or art. 
                       <br>
+                      I'd also love to collaborate with more researchers in the space of art history and data science related to the arts & culture. If that sounds like you, please reach out! :3
+<!--                       <br>
                       System & artifact building is only one of the tools I use to help study the impact of technology on arts & culture, and not the main focus. My projects often demand strong web development & design skills; they always demand solid interpersonal skills, empathy, and openness. :)
                       <br> 
-                      Send me an email briefly describing your interest in working with me (it does not need to be a grand reason) with a link to your personal website or portfolio, ideally with projects that showcase your creativity or passions. :-)
+                      Send me an email briefly describing your interest in working with me (it does not need to be a grand reason) with a link to your personal website or portfolio, ideally with projects that showcase your creativity or passions. :-) -->
                     </div>
                 </fieldset>
               </div> <!-- end of research interest section-->
@@ -312,7 +360,58 @@
     </div> <!------- ////   end of tab-1 panel /////-------->
 
     <div id="tabpanel-2" role="tabpanel" aria-labelledby="tab-2" style="display:none;" class="verticalscroll">
+
+
+
+
           <div class = "container" id="projects-section">
+
+
+
+              <div class="row" style="display: flex; padding: 1vw; justify-content: space-around;"> <!-- project 1-->
+
+              <fieldset class="project-fieldset">
+
+                <legend><em>Creativity-Supportive Ecosystems </em></legend>
+
+                <div class="project-img"style="width: 100$">
+                  <img src="images/cse.jpg">
+                </div>
+
+                <div class="project-text">
+
+                  <br>
+                  <strong>Creativity Supportive Ecosystems: A Framework for Understanding Function and Disruption in Online Art Worlds </strong>
+                  <br> 
+                  Shm Garanganao Almeda, Joy Kim, Bjoern Hartmann
+                  <br>
+                  <a href="#"> 🌸 To Appear at CHI2025! </a>
+
+<!--                   <a href="https://drive.google.com/file/d/1mUh4N-m8YHDwcwFGoYjw2uG7FQ7fGARx/view?usp=sharing"> 📄 Paper (PDF) </a>  | 
+                  <a href="https://dl.acm.org/doi/10.1145/3613904.3642858"> 🔗 ACM DL </a>  | 
+                  <a href="https://arxiv.org/abs/2310.09985"> 🔗 arxiv  </a>  -->
+
+                  <br>
+                  <fieldset style="" id="summary-fieldset">
+                    <details closed>
+                        <summary> 
+                          <span style="color: #000; display: inline;"> How can we support artists navigating the online art world in times of disruption? </span>
+                          <p> 
+                            Creativity support tool (CST) research in HCI has focused on supporting art-making, not art-sharing. How might we better understand the way technology systems – including new generative AI systems – tend to support and disrupt online creative communities at a network level? Through interviews with 25 artists, data scientists, and data artists, we develop the Creativity Supportive Ecosystem: a framework for understanding the function of the online art world, and the roles that system designers can take to better empower artists against creative community threats, like non-consensual reuse.
+                          </p>
+                      </summary>
+                    </details>
+                  </fieldset>
+              </div>
+              </fieldset> <!-- end of larger fieldset labeled with proect name. -->
+            </div> <!-- end project -->
+
+
+
+
+
+
+
 
             <div class="row" style="display: flex; padding: 1vw; justify-content: space-around;"> <!-- project 1-->
 
@@ -348,16 +447,12 @@
                     </details>
                   </fieldset>
               </div>
-
-
               </div>
-
-
-
               </fieldset> <!-- end of larger fieldset labeled with proect name. -->
+            </div> <!-- end project -->
 
 
-            </div> <!-- end project 1-->
+
 
             <div class="row" style="padding: 1vw"> <!-- project 2-->
              <fieldset class="project-fieldset">
@@ -402,12 +497,13 @@
               <fieldset class="project-fieldset">
                 <legend><em>bPigment</em></legend>
 
-                <div class="project-img" style="overflow-y: visible;">
-                  <img src="images/mixing.png">
-                  <img src="images/pears.png">
-                </div>
+
 
                 <div class="project-text">
+                                  <div class="project-img" style="overflow: auto;">
+                  <img src="images/mixing.png"> <img src="images/pears.png">
+
+                </div>
                 
                 <div class="" style="width: 100%;padding: 1vw; padding-bottom: 1.5vw;">
 
@@ -738,7 +834,7 @@ aria.Listbox = function (listboxNode) {
         break;
       case('sem_sp22'):
         heading.innerHTML = 'CS160: User Interface Design and Development @ UC Berkeley';
-        description.innerHTML = 'Head TA for John Canny.<br>Taught discussion sections and managed accommodations.';
+        description.innerHTML = 'Head TA for Dr. John Canny.<br>Taught discussion sections and managed accommodations.';
         break;
       case('sem_su22'):
         heading.innerHTML = 'CS160: User Interface Design and Development @ UC Berkeley';
@@ -754,17 +850,21 @@ aria.Listbox = function (listboxNode) {
       break;
       case('sem_fa23'):
         heading.innerHTML = 'DESINV 202: Technology Design Foundations @ UC Berkeley';
-        description.innerHTML = 'Head TA with Sudhu Tewari, Jeff Lubow, TJ McLeish and the ~45 amazing students in Cohort 4 of the <a href="https://design.berkeley.edu/mdes-cohort"> Jacobs Institute 2024 Masters of Design Cohort. </a> building foundational design & technology skills through hands-on portfolio projects incorporating emergent IoT, genAI, and web development technologies. <br>🔗<a href="https://github.com/Berkeley-MDes/desinv-202/wiki"> Course Site</a>';
+        description.innerHTML = 'Head TA with Dr. Sudhu Tewari, Jeff Lubow, TJ McLeish and the ~45 amazing students in Cohort 4 of the <a href="https://design.berkeley.edu/mdes-cohort"> Jacobs Institute 2024 Masters of Design Cohort. </a> building foundational design & technology skills through hands-on portfolio projects incorporating emergent IoT, genAI, and web development technologies. <br>🔗<a href="https://github.com/Berkeley-MDes/desinv-202/wiki"> Course Site</a>';
       break;
 
     case('sem_fa24'):
-        heading.innerHTML = 'CS61A / DATAC88C';
-        description.innerHTML = 'Co-Instructor with the legendary John DeNero, Jedidiah Tsang, and an amazing course staff.  <br>🔗<a href="https://cs61a.org/"> 61A Course Site</a><br>🔗<a href="https://c88c.org/fa24/"> 88C Course Site</a>';
+        heading.innerHTML = 'CS61A + DATAC88C @ UC Berkeley';
+        description.innerHTML = 'Co-Instructor with the legendary Dr. John DeNero, Jedidiah Tsang, and an amazing course staff.  <br>🔗<a href="https://cs61a.org/"> 61A Course Site</a><br>🔗<a href="https://c88c.org/fa24/"> 88C Course Site</a>';
       break;
 
       case('sem_sp24'):
           heading.innerHTML = 'DESINV 23: Creative Programming & Electronics @ UC Berkeley';
-          description.innerHTML = 'Head TA for Sudhu Tewari. robotic instruments, kinetic sculptures, and interactive installations - teaching foundational programming, electronics, and design skills through art practice with a diverse (no prerequisites) class of amazing student makers collaborating in studio environmnt <br>🔗<a href="https://sites.google.com/berkeley.edu/desinv23spring24/home"> Course Site</a>';
+          description.innerHTML = 'Head TA for Dr. Sudhu Tewari. robotic instruments, kinetic sculptures, and interactive installations - teaching foundational programming, electronics, and design skills through art practice with a diverse (no prerequisites) class of amazing student makers collaborating in studio environmnt <br>🔗<a href="https://sites.google.com/berkeley.edu/desinv23spring24/home"> Course Site</a>';
+        break;
+      case('sem_sp25'):
+          heading.innerHTML = 'DESINV 23: Creative Programming & Electronics @ UC Berkeley';
+          description.innerHTML = 'Co-Instructor with Dr. Sudhu Tewari. robotic instruments, kinetic sculptures, and interactive installations - teaching foundational programming, electronics, and design skills through art practice with a diverse (no prerequisites) class of amazing student makers collaborating in studio environmnt <br>🔗<a href="https://sites.google.com/berkeley.edu/desinv-23-spring-25/home"> Course Site</a>';
         break;
     }
   };
