@@ -213,6 +213,28 @@ details[open] summary p{
 #files_moving_top{
   display: flex;
 }
+#advising-section-desktop{
+  display: flex;
+}
+#advising-section-mobile{
+  display: none;
+}
+
+#cv-section-desktop{
+  display: flex;
+}
+#cv-section-mobile{
+  display: none;
+}
+
+#pronouns-desktop{
+  display: flex;  
+}
+  #pronouns-mobile{
+    display: none;
+}
+
+
 
 
 
@@ -361,6 +383,31 @@ details[open] summary p{
   #files_moving_top{
     display: none;
   }
+
+  #advising-section-desktop{
+  display: none;
+  }
+  #advising-section-mobile{
+    display: flex;
+  }
+
+  #cv-section-desktop{
+  display: none;  
+}
+  #cv-section-mobile{
+    display: flex;
+  }
+
+  #pronouns-desktop{
+  display: none;  
+}
+  #pronouns-mobile{
+    display: flex;
+  }
+
+
+
+
   .project-text{ 
     flex:  1 1 80%;
     width: 80%;
