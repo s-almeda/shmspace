@@ -745,11 +745,22 @@ fieldset{
 
 
 /* ADVISEE ICONS */
-#adv_1[aria-selected="true"]::before {
+#adv_1[aria-selected="true"]::before { /*sophia*/
+  position: absolute;
+  left: 0.1em;
+  content: "🐥";
+}
+#adv_7[aria-selected="true"]::before { /*ethan*/
   position: absolute;
   left: 0.1em;
   content: "🌟";
 }
+#adv_8[aria-selected="true"]::before { /*elaine*/
+  position: absolute;
+  left: 0.1em;
+  content: "🎏";
+}
+
 #adv_2[aria-selected="true"]::before {
   position: absolute;
   left: 0.1em;
