@@ -233,7 +233,7 @@
                         <li>SF Bay Area artist, computer scientist, & arts sociotechnologist</li> 
                         <li>5th-year PhD in EECS at UC Berkeley </li>
                         <ul>
-                          <li> advised by <a class="link" href="https://people.eecs.berkeley.edu/~bjoern/">Björn Hartmann.</a> </li>
+                          <li> advised by <a class="link" target="_blank" href="https://people.eecs.berkeley.edu/~bjoern/">Björn Hartmann.</a> </li>
                         </ul>
                         <li>Human Computer Interaction researcher taking a sociotechnical lens to emergent arts technologies</li>
                         <li>Chancellor's Fellow, Responsible Decentralized Intelligence (RDI) Frontier Research Fellow
@@ -248,9 +248,9 @@
                         <li>Adobe Research Fellow & Intern</li>
                           <ul> 
                             <li>Co-Creation for Audio, Video, and Animation Lab (2024)</li>
-                            <ul><li>mentored by <a class="link" href="https://joyk.im/">Joy Kim</a></li></ul>
+                            <ul><li>mentored by <a class="link" target="_blank" href="https://joyk.im/">Joy Kim</a></li></ul>
                             <li>Computational Artistry Team (2019)</li>
-                            <ul><li>mentored by <a class="link" href="https://www.jiechevarria.com/">Jose Echevarria</a> and <a class="link" href="https://www.stephendiverdi.com/"> Stephen DiVerdi</a></li></ul>
+                            <ul><li>mentored by <a class="link" target="_blank"  href="https://www.jiechevarria.com/">Jose Echevarria</a> and <a class="link" target="_blank" href="https://www.stephendiverdi.com/"> Stephen DiVerdi</a></li></ul>
                           </ul>
                         <li>the train guy at UIST 2023</li>
                       </ul>
@@ -400,14 +400,14 @@
                 <div class="col-12">
                   <div class="select-description">
                     <div class="select-description-child" >
-                      <ul id="adv_list" tabindex="1" role="listbox" aria-labelledby="advisees">
+                      <ul id="adv_list_mobile" tabindex="1" role="listbox" aria-labelledby="advisees_mobile">
                         <li id="adv_1" role="option" ><a target=”_blank” href ="https://sophiawliu.com/">Sophia Liu</a></li>
                         <li id="adv_7" role="option"><a  target=”_blank” href ="https://ethantam.me/">Ethan Tam</a></li>
                         <li id="adv_8" role="option"><a target=”_blank” href ="#">Elaine Shu</a></li>
 
 
-                            <li id="adv_2" role="option"target=”_blank”>
-                              <a href ="https://isabel.li/">Isabel Li �</a>
+                            <li id="adv_2" role="option">
+                              <a target="_blank" href ="https://isabel.li/">Isabel Li �</a>
                             </li>
 
                         <a href ="https://www.aceschen.com/"target=”_blank”><li id="adv_3" role="option">Ace Chen</li></a>
@@ -424,10 +424,12 @@
 
 
 
+
+
               <div class="row" id="research-interest"> <!-- want to join me --> 
                 
                 <fieldset style="width: 100%; margin: 5px;">
-                  <legend>interested in research?</legend>
+                  <legend>interested in hci research?</legend>
                     <div id="research interest" style=" padding: 5px, font-size: clamp(12px, 1.5vw, 18px);">
                       I've got a full team of lovely undergraduate mentees! The only downside is not having the space to advise more at the moment.
                       However, I am always excited to meet with folks interested in human computer interaction + creativity support research, especially if you are considering grad school and/or a career in research or art. 
@@ -1645,6 +1647,22 @@ aria.Listbox.prototype.setHandleFocusChange = function (focusChangeHandler) {
  * @function onload
  * @description Initialize the listbox example once the page has loaded
  */
+
+
+let mql = window.matchMedia("(max-width: 600px)");
+
+function initializeMobileElements() {
+    if (mql.matches) {
+        new aria.Listbox(document.getElementById('adv_list_mobile'));
+    }
+}
+
+// Run on page load
+initializeMobileElements();
+
+// Listen for screen size changes
+mql.addEventListener("change", initializeMobileElements);
+
 
 window.addEventListener('load', function () {
   new aria.Listbox(document.getElementById('sem_list'));

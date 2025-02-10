@@ -635,9 +635,21 @@ fieldset{
   padding-left: 0.1em;
   
 }
-#adv_list li{ /*advising list, individual items*/
+.advising-section li{ /*advising list, individual items*/
   font-size: calc(5px + 1vh);
 }
+
+
+[role="listbox"]#adv_list_mobile { /*advising list mobile*/
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  margin:0vh;
+  padding-left: 0.1em;
+  
+}
+
 
 
 [role="group"] {
@@ -715,29 +727,29 @@ fieldset{
   content: "🌸";
 }
 
-#res_opt1[aria-selected="true"]::before {
+#res_opt1::before {
   position: absolute;
   left: 0.1em;
   content: "🎨";
 }
-#res_opt2[aria-selected="true"]::before {
+#res_opt2::before {
   position: absolute;
   left: 0.1em;
   content: "🖼️";
 }
 
-#res_opt3[aria-selected="true"]::before {
+#res_opt3::before {
   position: absolute;
   left: 0.1em;
   content: "🔄";
 }
-#res_opt4[aria-selected="true"]::before {
+#res_opt4::before {
   position: absolute;
   left: 0.1em;
   content: "👥";
 }
 
-#res_opt5[aria-selected="true"]::before {
+#res_opt5::before {
   position: absolute;
   left: 0.1em;
   content: "♥️";
@@ -745,43 +757,43 @@ fieldset{
 
 
 /* ADVISEE ICONS */
-#adv_1[aria-selected="true"]::before { /*sophia*/
+#adv_1::before { /*sophia*/
   position: absolute;
   left: 0.1em;
   content: "🐥";
 }
-#adv_7[aria-selected="true"]::before { /*ethan*/
+#adv_7::before { /*ethan*/
   position: absolute;
   left: 0.1em;
   content: "🌟";
 }
-#adv_8[aria-selected="true"]::before { /*elaine*/
+#adv_8::before { /*elaine*/
   position: absolute;
   left: 0.1em;
   content: "🎏";
 }
 
-#adv_2[aria-selected="true"]::before {
+#adv_2::before {
   position: absolute;
   left: 0.1em;
   content: "🌒 ";
 }
-#adv_3[aria-selected="true"]::before {
+#adv_3::before {
   position: absolute;
   left: 0.1em;
   content: "♠️";
 }
-#adv_4[aria-selected="true"]::before {
+#adv_4::before {
   position: absolute;
   left: 0.1em;
   content: "🐈";
 }
-#adv_5[aria-selected="true"]::before {
+#adv_5::before {
   position: absolute;
   left: 0.1em;
   content: "🎥";
 }
-#adv_6[aria-selected="true"]::before {
+#adv_6::before {
   position: absolute;
   left: 0.1em;
   content: "❇️";
