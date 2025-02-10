@@ -757,7 +757,6 @@ details.forEach((targetDetail) => {
 
   class TabsManual {
     constructor(groupNode) {
-      console.log("wowoow");
       this.tablistNode = groupNode;
 
       this.tabs = [];
@@ -771,7 +770,7 @@ details.forEach((targetDetail) => {
       for (var i = 0; i < this.tabs.length; i += 1) {
         var tab = this.tabs[i];
         var tabpanel = document.getElementById(tab.getAttribute('aria-controls'));
-        console.log(tab.getAttribute('aria-controls'));
+        //console.log(tab.getAttribute('aria-controls'));
         tab.tabIndex = -1;
         tab.setAttribute('aria-selected', 'false');
         this.tabpanels.push(tabpanel);
@@ -878,7 +877,7 @@ details.forEach((targetDetail) => {
       // Initialize tablist
 
   window.addEventListener('load', function () {
-    console.log("hello!")
+    console.log("hello! welcome to shm's website!!")
     var tablists = document.querySelectorAll('[role=tablist].manual');
     for (var i = 0; i < tablists.length; i++) {
       new TabsManual(tablists[i]);
