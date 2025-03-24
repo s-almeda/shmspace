@@ -41,8 +41,8 @@ router.get("/", function (req, res) {
 app.get('/about', function (req, res) {
     res.sendFile(publicPath + '/');
 });
-app.get('/b', function (req, res) {
-    res.sendFile(publicPath + '/b.html');
+app.get('/cv', function (req, res) {
+    res.sendFile(publicPath + '/cv.html');
 });
 app.get('/c', function (req, res) {
     res.sendFile(publicPath + '/c.html');
