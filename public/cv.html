@@ -1,45 +1,749 @@
-<!-- Referenced: https://www.w3schools.com/html/html_responsive.asp-->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- let's link to our stylesheet (found in public/css/styles.css)-->
-<link rel="stylesheet" type="text/css" href="/css/styles.css"> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shm Garanganao Almeda CV</title>
+    <style>
+      body {
+          font-family: 'Arial', sans-serif;
+          margin: 0;
+          margin-left: 15px;
+          margin-right: 15px;
+          padding: 0;
+          background: linear-gradient(180deg, #CDE9F9 0%, #FFF 38.63%, #FFF5EF 85.43%);
+          background-attachment: fixed;
+          background-size: cover;
+          color: #333;
+          line-height: 1.21;
+          padding-bottom: 250px;
+          position: relative;
+          overflow: visible;
+          min-height: 100vh;
+      }
+
+      a {
+        color: blue;
+        text-decoration: underline;
+      }
+
+      a:hover {
+        color: purple;
+      }
+      
+      .cloud {
+          position: fixed;
+          z-index: -1;
+          opacity: 0.8;
+          overflow: visible;
+      }
+      
+      .cloud-1 {
+          top: 100px;
+          right: -50px;
+      }
+      
+      .cloud-2 {
+          bottom: 100px;
+          left: -50px;
+          transform: scale(0.8);
+      }
+      
+      .container {
+          max-width: 1000px;
+          margin: 0 auto;
+          padding: 15px;
+          position: relative;
+          z-index: 1;
+      }
+      
+
+      .main-header {
+        margin-left: -10px;
+        display: block;
+        padding: 20px 40px;
+        border-top: 10px solid #1C4ECF;
+        border-right: 4px solid #1C4ECF;
+        border-bottom: 4px solid #1C4ECF;
+        border-left: 4px solid #1C4ECF;
+        background: #F1E6E3;
+        box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.25);
+        margin-bottom: 15px;
+        font-size: 24px;
+        color: #222;
+        text-align: left;
+      }
+
+      .main-header .header h1 {
+        font-size: 36px;
+        font-weight: bold;
+        margin: 0 0 0 0;
+        color: #1C4ECF;
+      }
+
+
+
+      .main-header .header .pronunciation {
+        font-size: 14px;
+        font-style: italic;
+        margin: 0 -5px 5px 0;
+        color: #555;
+      }
+
+      .main-header .header .contact-info {
+        font-size: 10px;
+        font-weight: normal;
+        line-height: 1.1;
+        margin: -1;
+        color: #333;
+      }
+
+      .main-header .header .contact-info p {
+        margin: 5px 0;
+      }
+      .main-header .bio{
+        margin: 5px 0;
+        font-size: 16px;
+      }
+      
+      
+      .section-header {
+          display: inline-flex;
+          height: 35px;
+          padding: 15px 35px 10px 20px;
+          margin-left: -10px;
+          align-items: center;
+          flex-shrink: 0;
+          border-top: 8px solid #1C4ECF;
+          border-right: 3px solid #1C4ECF;
+          border-bottom: 3px solid #1C4ECF;
+          border-left: 3px solid #1C4ECF;
+          background: #F1E6E3;
+          box-shadow: 1px 2px 2px 0px rgba(0, 0, 0, 0.25);
+          margin-bottom: 10px;
+          font-size: 20px;
+          font-weight: bold;
+          color: #222;
+      }
+      
+      .experience-item, .education-item, .publication-item {
+          margin-bottom: 18px;
+      }
+      
+      .experience-header, .education-header, .publication-header {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 2px;
+          gap: 40px;
+      }
+      
+      .title {
+          font-weight: bold;
+          font-size: 18px;
+      }
+      
+      .organization {
+          font-weight: bold;
+          padding-top: 3px;
+          padding-bottom: -3px;
+          line-height: 1.1;
+          color: #000099;
+      }
+      
+      .location {
+          font-style: italic;
+      }
+      
+      .date {
+          color: #444;
+          font-weight: normal;
+          font-size: small;
+          text-align: right;
+          flex:1;
+      }
+      
+      .description {
+          margin-top: 3px;
+          text-align: justify;
+      }
+      
+      .publication-title {
+          font-weight: bold;
+          font-size: 16px;
+          margin-bottom: 2px;
+          flex:2
+      }
+      
+      .publication-authors {
+          font-style: italic;
+          margin-bottom: 2px;
+      }
+      
+      .publication-link {
+          color: #1C4ECF;
+          text-decoration: none;
+          margin-bottom: 2px;
+          display: inline-block;
+      }
+      
+      .publication-link:hover {
+          text-decoration: underline;
+      }
+      
+      .awards-list, .leadership-list, .teaching-list {
+          list-style-type: none;
+          padding-left: 0;
+      }
+      
+      .awards-list li, .leadership-list li, .teaching-list li {
+          margin-bottom: 4px;
+          display: flex;
+          justify-content: space-between;
+      }
+      
+      .award-title, .leadership-title, .teaching-title {
+          font-weight: bold;
+      }
+      
+      
+      .two-column {
+          display: flex;
+          justify-content: space-between;
+          gap: 30px;
+      }
+      .column {
+          flex: 1;
+      }
+      
+
+      @media (max-width: 650px) {
+        .two-column {
+          flex-direction: column;
+          gap: 15px;
+        }
+        .column {
+          width: 100%;
+        }
+      }
+      /* Unique styles for mentorship items */
+.mentorship-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.mentorship-item {
+    margin-bottom: 10px;
+    font-size: 14px; /* Smaller text */
+}
+
+.mentorship-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.mentee-names {
+    font-weight: bold; /* Names are not bolded */
+    flex: 2; /* Less room for names */
+}
+.mentee-location {
+  font-style: italic;
+  font-weight: normal;
+}
+.mentorship-date {
+    flex: 1; /* More room for the date */
+    text-align: right;
+    font-size: 12px;
+    color: #555;
+}
+
+.mentorship-description {
+    margin-top: 5px;
+    font-size: 13px;
+    color: #333;
+}
+
+/* Unique styles for honors and fellowships */
+.honors-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.honor-item {
+    margin-bottom: 10px;
+    font-size: 14px; /* Smaller text */
+}
+
+.honor-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 0px;
+}
+
+.honor-title {
+  font-size: 15px;
+  line-height: 1.1;
+    font-weight: bold; /* Titles are not bolded */
+    flex: 2; /* Less room for the title */
+}
+
+.honor-date {
+    flex: 1; /* More room for the date */
+    text-align: right;
+    font-size: 12px;
+    color: #555;
+}
+  </style>
 </head>
+<body>
 
-<!-- you can also specify styles straight in html! Let's use Courier New and brown text on this page.-->
-<body style="font-family:'Courier New';color:#513605;">
+  <!-- Cloud SVGs -->
+  <svg class="cloud cloud-1" width="250" height="200"  fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g opacity="0.8">
+        <ellipse cx="74.4019" cy="80.1341" rx="88.0094" ry="88.1341" fill="url(#paint0_linear_621_518)"/>
+        <path d="M246 168.268C246 168.268 168.993 190 74 190C-20.993 190 -98 168.268 -98 168.268C-98 117.593 -20.993 76.5122 74 76.5122C168.993 76.5122 246 117.593 246 168.268Z" fill="url(#paint1_linear_621_518)"/>
+        <ellipse cx="162.813" cy="100.256" rx="67.9159" ry="68.0122" fill="url(#paint2_linear_621_518)"/>
+    </g>
+    <defs>
+        <linearGradient id="paint0_linear_621_518" x1="74.4019" y1="-8" x2="74.4019" y2="168.268" gradientUnits="userSpaceOnUse">
+            <stop offset="0.244792" stop-color="#F9EFE9"/>
+            <stop offset="1" stop-color="#F9EFE9" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="paint1_linear_621_518" x1="74" y1="76.5122" x2="74" y2="190" gradientUnits="userSpaceOnUse">
+            <stop offset="0.244792" stop-color="#F9EFE9"/>
+            <stop offset="1" stop-color="#F9EFE9" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="paint2_linear_621_518" x1="162.813" y1="32.2439" x2="162.813" y2="168.268" gradientUnits="userSpaceOnUse">
+            <stop offset="0.244792" stop-color="#F9EFE9"/>
+            <stop offset="1" stop-color="#F9EFE9" stop-opacity="0"/>
+        </linearGradient>
+    </defs>
+</svg>
 
-<div style="background-color:#A99063;padding:15px;text-align:center;"> 
-  <h1>Page 4, What a Score!</h1>
-</div>
+<svg class="cloud cloud-2" width="250" height="200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g opacity="0.8">
+        <ellipse cx="74.4019" cy="80.1341" rx="88.0094" ry="88.1341" fill="url(#paint0_linear_621_518)"/>
+        <path d="M246 168.268C246 168.268 168.993 190 74 190C-20.993 190 -98 168.268 -98 168.268C-98 117.593 -20.993 76.5122 74 76.5122C168.993 76.5122 246 117.593 246 168.268Z" fill="url(#paint1_linear_621_518)"/>
+        <ellipse cx="162.813" cy="100.256" rx="67.9159" ry="68.0122" fill="url(#paint2_linear_621_518)"/>
+    </g>
+    <defs>
+        <linearGradient id="paint0_linear_621_518" x1="74.4019" y1="-8" x2="74.4019" y2="168.268" gradientUnits="userSpaceOnUse">
+            <stop offset="0.244792" stop-color="#F9EFE9"/>
+            <stop offset="1" stop-color="#F9EFE9" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="paint1_linear_621_518" x1="74" y1="76.5122" x2="74" y2="190" gradientUnits="userSpaceOnUse">
+            <stop offset="0.244792" stop-color="#F9EFE9"/>
+            <stop offset="1" stop-color="#F9EFE9" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="paint2_linear_621_518" x1="162.813" y1="32.2439" x2="162.813" y2="168.268" gradientUnits="userSpaceOnUse">
+            <stop offset="0.244792" stop-color="#F9EFE9"/>
+            <stop offset="1" stop-color="#F9EFE9" stop-opacity="0"/>
+        </linearGradient>
+    </defs>
+</svg>
 
+    <div class="container">
+      <div class="main-header">
+        <div class="header">
+            <h1>Shm Garanganao Almeda</h1>
+            <p class="pronunciation">"SHIM guh-RANG-guh-now all-MAY-dah"</p>
+            <div class="contact-info" style="line-height: 1.1; font-size: 10px;">
+                <p>☀️ Berkeley, California</p>
+                <p>📧 shm.almeda@berkeley.edu</p>
+                <p>🌐 <a href="https://shmuh.co" style="color: #1C4ECF;">shmuh.co</a> </p>
+            </div>
+        </div>
+        
+        <div class="bio">
+            <p>Shm is a non-binary computer scientist, designer, and first-generation Filipinx-American PhD student researching Human-Computer Interaction at the University of California, Berkeley. They seek to leverage their creative & technical skillset towards building systems that serve & center real, creative, and human communities, designing socio-technical solutions for equitable empowerment at the intersection of creativity and emerging technology.</p>
+        </div>
+        </div>
+        
+        <div class="section-header">Education</div>
+        
+        <div class="education-item">
+            <div class="education-header">
+                <div class="organization">University of California, Berkeley</div>
+                <div class="date">2020 - Present</div>
+            </div>
+            <div class="title">PhD in Electrical Engineering & Computer Science</div>
+            <div class="description">Advised by Bjoern Hartmann</div>
+            <div class="location">Berkeley, CA</div>
+        </div>
+        
+        <div class="education-item">
+            <div class="education-header">
+                <div class="organization">The College of New Jersey</div>
+                <div class="date">2016 - 2020</div>
+            </div>
+            <div class="title">B.S. in Computer Science, Fine Art - <em>cum laude</em></div>
+            <div class="location">Ewing Township, NJ</div>
+        </div>
+        
+        <div class="section-header">Experience</div>
+        
+        <div class="experience-item">
+            <div class="experience-header">
+                <div class="organization">University of California, Berkeley</div>
+                <div class="date">2020 - Present</div>
+            </div>
+            <div class="title">Graduate Student Researcher</div>
+            <div class="description">Utilizing qualitative and quantitative user research skills to investigate the impact of emergent technologies on creative communities, including GenAI, decentralized marketplaces, and content platform design.</div>
+        </div>
+        
+        <div class="experience-item">
+            <div class="experience-header">
+                <div class="organization">Adobe Research</div>
+                <div class="date">May 2024 - August 2024</div>
+            </div>
+            <div class="title">Adobe Research Intern, Co-Creation for Audio, Video, & Animation Lab</div>
+            <div class="location">San Francisco, CA</div>
+            <div class="description">Conducted a sociotechnical research study into GenAl-driven data scraping practices and their impact on digital art communities, developing design guidelines to support the socioeconomic sustainability of public media infrastructure and promote equitable access to arts and culture. Advised by Joy Kim.</div>
+        </div>
+        
+        <div class="experience-item">
+            <div class="experience-header">
+                <div class="organization">Adobe Research</div>
+                <div class="date">June 2019 - August 2019</div>
+            </div>
+            <div class="title">Adobe Research Intern, Computational Artistry Team</div>
+            <div class="location">San Jose, CA</div>
+            <div class="description">Developed bPigment - a novel parametric color-mixing model and interface that emulates the behavior of physical pigments and produces unique effects that transcend existing color-blending technology. Advised by Stephen DiVerdi and Jose Echevarria.</div>
+        </div>
+        
+        <div style="page-break-before: always; margin-top: 20px;"></div>
 
-<div style="overflow:auto">
-  <div class="menu">
-    <a href="/">Home</a>
-    <a href="/a">Normal Rabbit</a>
-    <a href="/c">Sepia Rabbit</a>
-  </div>
+        <div class="experience-item">
+            <div class="experience-header">
+                <div class="organization">The College of New Jersey</div>
+                <div class="date">January 2018 - May 2020</div>
+            </div>
+            <div class="title">Accessible Sign Language Alphabet Recognition</div>
+            <div class="location">Ewing, NJ</div>
+            <div class="description">Communities that use visual languages to communicate are underrepresented by translation and language learning tools. Utilized the Python and C++ with the LeapMotion infrared hand-tracking controller to recognize and translate fingerspelling, and founded the ongoing research project team.</div>
+        </div>
+        
+        <div class="experience-item">
+            <div class="experience-header">
+                <div class="organization">The College of New Jersey</div>
+                <div class="date">June 2018 - May 2019</div>
+            </div>
+            <div class="title">Algorithms for Protein Variant Library Design</div>
+            <div class="location">Ewing Township, NJ</div>
+            <div class="description">Developed an algorithm for optimizing oligonucleotide chain design to minimize the cost of synthesizing proteins. Implemented a web tool and an online database with results generated by our programs to support a biology research team at Princeton.</div>
+        </div>
+        
+        <div class="section-header">Patents & Publications</div>
+        <p><strong>ORCiD:</strong> <a href="https://orcid.org/0000-0001-7660-313X" style="color: #1C4ECF;">0000-0001-7660-313X</a></p>
+        
+        <div class="publication-item">
+            <div class="publication-header">
+                <div class="publication-title">Creativity Supportive Ecosystems: A Framework for Understanding Function and Disruption in Online Art Worlds</div>
+                <div class="date">CHI 2025</div>
+            </div>
+            <div class="publication-authors">Shm Garanganao Almeda, Joy Kim, Bjoern Hartmann</div>
+            <div class="description">How can we support artists navigating the online art world in times of disruption? Today's artists distributing art online must manage distribution labor, creative rights infringement, and disruption from emergent technologies. How can we better understand the way technology systems - including generative Al - impact these creative communities at a network level? Through interviews with 25 artists, data scientists, and data artists, we develop an ecosystem framework for understanding the online art world, and identify roles technologists can take to better empower artists against creative threats like non-consensual reuse and genAl-driven displacement.</div>
+        </div>
+        
+        <div class="publication-item">
+            <div class="publication-header">
+                <div class="publication-title">Prompting for Discovery: Flexible Sense-Making for Al Art-Making with Dreamsheets</div>
+                <div class="date">CHI 2024, UIST 2023</div>
+            </div>
+            <div class="publication-authors">Shm Garanganao Almeda, J.D. Zamfirescu-Pereira, Kyu Won Kim, Pradeep Mani Rathnam, Bjoern Hartmann</div>
+            <a href="https://dl.acm.org/doi/10.1145/3613904.3642858" class="publication-link">ACM DL: https://dl.acm.org/doi/10.1145/3613904.3642858</a>
+            <div class="description">How can users of Text-to-Image (TTI) models reliably achieve interesting results? DreamSheets supports design space exploration with diffusion model generation and LLM-powered functions for prompt construction within a flexible spreadsheet interface. By enabling user-defined workflows, DreamSheets provided a design elicitation space for studying co-creation with Al, including the first such longitudinal study with expert generative artists</div>
+        </div>
+        
+        
+        <div class="publication-item">
+            <div class="publication-header">
+                <div class="publication-title">NFT Art World: The Lasting Impacts of Decentralization on the Development of Novel Creative Communities and Practices</div>
+                <div class="date">DIS 2023</div>
+            </div>
+            <div class="publication-authors">Shm Garanganao Almeda, Bjoern Hartmann</div>
+            <a href="https://doi.org/10.1145/3563657.3596034" class="publication-link">ACM DL: https://doi.org/10.1145/3563657.3596034</a>
+            <div class="description">Interviews with 16 creatives utilizing NFTs reveal a vast NFT Art World: cooperative networks developing novel creative practices, interactions, and communities with unique artistic subcultures - illuminates the (perhaps counterintuitive) potential of decentralized technology to empower creator and content dignity with systemic preservation of provenance and usage rights.</div>
+        </div>
 
-<!--let's override the background-color style from my stylesheet to make this section sepiatone, too.-->
-  <div class="main" style="background-color:#A99063"> 
-    <h2>This rabbit is sepiatone and likes to eat turnips.</h2>
-    <img src="/images/sepiabunny.jpg" alt="a sepiatone rabbit" class="responsive center">
-        <p>Photo credits: 
-      <a href="https://unsplash.com/photos/u_kMWN-BWyU">Satyabratasm on Unsplash </a>
-   </p>
-  </div>
+        <div style="page-break-before: always; margin-top: 20px;"></div>
+        
+        <div class="publication-item">
+            <div class="publication-header">
+                <div class="publication-title">Synthesis Cost-Optimal Targeted Mutant Protein Libraries</div>
+                <div class="date">APBC 2023</div>
+            </div>
+            <div class="publication-authors">Dimitris Papamichail, Madeline Febinger, Shm Almeda, Georgios Papamichail</div>
+            <a href="https://arxiv.org/abs/2211.13898" class="publication-link">arXiv preprint: arXiv:2211.13898</a>
+            <div class="description">We present an algorithm to calculate the minimum number of degenerate codons necessary to specify any given amino acid set, and a dynamic-programming + web app implementation to support a team of biologists working with large combinatorial libraries, helping them partition DNA sequences to minimize the cost of protein synthesis.</div>
+        </div>
+        
+        <div class="publication-item">
+            <div class="publication-header">
+                <div class="publication-title">US10924633Bl: RGB-based parametric color mixing system for digital painting</div>
+                <div class="date">2021</div>
+            </div>
+            <div class="publication-authors">Stephen Joseph DiVerdi, Shm (Sarah) Garanganao Almeda, Jose Ignacio Echevarria Vallespi</div>
+            <div class="description">Techniques for novel parametric color mixing in digital painting applications using Bezier curves in RGB space.</div>
+        </div>
+        
+        <div class="publication-item">
+            <div class="publication-header">
+                <div class="publication-title">Accessible American Sign Language Recognition with the Leap Motion Controller</div>
+                <div class="date">SIGCSE 2019</div>
+            </div>
+            <div class="publication-authors">Shm Garanganao (Sarah) Almeda</div>
+            <a href="https://doi.org/10.1145/3287324.3293718" class="publication-link">ACM DL: https://doi.org/10.1145/3287324.3293718</a>
+            </div>
+        
+        <div class="section-header">Teaching @ UC Berkeley</div>
+        
+        <div class="teaching-list">
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div class="title">DES INV 23: Creative Programming & Electronics</div>
+                    <div class="date">Summer 2023, Spring 2024, Spring 2025</div>
+                </div>
+                <div class="description">Head Course Instructor, with TA Albert Hodo</div>
+                <div class="description">Head Course Instructor, with Co-Instructor Sudhu Tewari</div>
+            </div>
+            
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div class="title">CS 61A: Structure and Interpretation of Computer Programs</div>
+                    <div class="date">Fall 2024</div>
+                </div>
+                <div class="description">Instructor with John DeNero & Jedidiah Tsang</div>
+            </div>
+            
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div class="title">DATA C8: Computational Structures in Data Science</div>
+                    <div class="date">Fall 2024</div>
+                </div>
+                <div class="description">Instructor with John DeNero & Jedidiah Tsang</div>
+            </div>
+            
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div class="title">DES INV 202: Technology Design Foundations</div>
+                    <div class="date">Fall 2023</div>
+                </div>
+                <div class="description">Head TA</div>
+            </div>
+            
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div class="title">CS160: User Interface Design & Development</div>
+                    <div class="date">Summer 2022</div>
+                </div>
+                <div class="description">Head Course Instructor, with Diyah Mettupalli & Timothy Yang</div>
+                <div class="description">Updated and authored new web-development & design centered curriculum</div>
+            </div>
+            
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div class="title">CS160: User Interface Design & Development</div>
+                    <div class="date">Summer 2021, Spring 2022, Spring 2023</div>
+                </div>
+                <div class="description">Head TA, Disability Support Program Coordinator</div>
+            </div>
+        </div>
 
-  <div class="right">
-    <h2>About</h2>
-    <p>This is some example code prepared for CS160: User Interface Design & Development, Summer 2022.</p>
-  </div>
-</div>
+        <div style="page-break-before: always; margin-top: 15px;"></div>
+        
+        <div class="two-column">
+            <div class="column">
+                <div class="section-header">Leadership & Service</div>
+                
+                <div class="honors-list">
+                    <div class="honor-item">
+                        <div class="honor-header">
+                            <div class="honor-title">Computer Science Graduate Student Association</div>
+                            <div class="honor-date">2020 - Present</div>
+                        </div>
+                        <div class="honor-description">President (<em>2024 - Present</em>)</div>
+                        <div class="honor-description">Officer, Visit Day Organizer, Lounge Coordinator (<em>2020 - 2024</em>)</div>
+                    </div>
+                    
+                    <div class="honor-item">
+                        <div class="honor-header">
+                            <div class="honor-title">House Rabbit Society Volunteer</div>
+                            <div class="honor-date">2022 - Present</div>
+                        </div>
+                    </div>
+                    
+                    <div class="honor-item">
+                        <div class="honor-header">
+                            <div class="honor-title">Diversity and Inclusion Group in Tech for All</div>
+                            <div class="honor-date">2017 - 2020</div>
+                        </div>
+                        <div class="honor-description">Executive Board, Outreach Chair, President</div>
+                    </div>
+                    
+                    <div class="honor-item">
+                        <div class="honor-header">
+                            <div class="honor-title">Association for Computing Machinery (ACM) Student Chapter</div>
+                            <div class="honor-date">2017 - 2020</div>
+                        </div>
+                        <div class="honor-description">Executive Board, Outreach Chair, Vice President</div>
+                    </div>
+                    
+                    <div class="honor-item">
+                        <div class="honor-header">
+                            <div class="honor-title">HackTCNJ Annual Hackathon</div>
+                            <div class="honor-date">2017 - 2018, 2019, 2020</div>
+                        </div>
+                        <div class="honor-description">Head Organizer, Executive Board Member</div>
+                    </div>
+                </div>
+                
+                <div class="section-header">Advising and Mentorship</div>
+                
+                <div class="mentorship-list">
+                    <div class="mentorship-item">
+                        <div class="mentorship-header">
+                            <div class="mentee-names">Bob Tianqi Wei, Ethan Tam, Elaine Shu, Sophia Liu</div>
+                            <div class="mentorship-date"> 2024 - Present</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mentorship-item">
+                        <div class="mentorship-header">
+                            <div class="mentee-names">Hosanna Kim</div>
+                            <div class="mentorship-date">Summer 2023</div>
+                        </div>
+                        <div class="mentorship-description"><em>Through the Transfer-to-Excellence Program at UC Berkeley</em></div>
+                    </div>
+                    <div class="mentorship-item">
+                      <div class="mentorship-header"></div>
+                      <div class="mentee-names">Isabel Li <span class="mentee-location">(Netflix)</span>, Ace Chen <span class="mentee-location">(Masters @UCSC)</span></div>
+                      <div class="mentorship-date">2022 - 2024</div>
+                      </div>
+                    </div>
 
+                    <div class="mentorship-item">
+                      <div class="mentorship-header">
+                      <div class="mentee-names">Pradeep Saravana Rathnam <span class="mentee-location">(Workday)</span></div>
+                      <div class="mentorship-date">2022 - 2023</div>
+                      </div>
+                    </div>
 
-
-
+                    <div class="mentorship-item">
+                      <div class="mentorship-header">
+                      <div class="mentee-names">Timothy Yang <span class="mentee-location">(InterSystems)</span></div>
+                      <div class="mentorship-date">2022 - 2023</div>
+                      </div>
+                </div>
+            </div>
+            
+            <div class="column">
+                <div class="section-header">Fellowships & Honors</div>
+                
+                <div class="honors-list">
+                    <div class="honor-item">
+                        <div class="honor-header">
+                            <div class="honor-title">Keynote Speaker & Workshop Leader</div>
+                            <div class="honor-date">2025</div>
+                        </div>
+                        <div class="honor-description">International Women's Day Global Techathon @ UC Berkeley</div>
+                    </div>
+                    
+                    <div class="honor-item">
+                        <div class="honor-header">
+                            <div class="honor-title">Center for Responsible Decentralized Intelligence Frontier Research Fellow</div>
+                            <div class="honor-date">2024</div>
+                        </div>
+                    </div>
+                    
+                    <div class="honor-item">
+                        <div class="honor-header">
+                            <div class="honor-title">Distinguished Speaker</div>
+                            <div class="honor-date">2024</div>
+                        </div>
+                        <div class="honor-description">NanoHubs' <em>Empowering Young Filipino Researchers for an Emerging Technology-Ready Philippines</em> Seminar Series</div>
+                    </div>
+                    
+                    <div class="honor-item">
+                        <div class="honor-header">
+                            <div class="honor-title">Berkeley EECS Department Chair's Special Award</div>
+                            <div class="honor-date">2022, 2023, 2024</div>
+                        </div>
+                    </div>
+                    
+                    <div class="honor-item">
+                        <div class="honor-header">
+                            <div class="honor-title">Keynote Speaker for the Queer, Trans (QT) Black, Indigenous, People of Color (BIPOC) Participatory Design Workshop</div>
+                            <div class="honor-date">CHI 2022</div>
+                        </div>
+                    </div>
+                    
+                    <div class="honor-item">
+                        <div class="honor-header">
+                            <div class="honor-title">Outstanding Graduate Student Instructor Award</div>
+                            <div class="honor-date">2022</div>
+                        </div>
+                    </div>
+                    
+                    <div class="honor-item">
+                        <div class="honor-header">
+                            <div class="honor-title">Chancellor's Fellowship for Graduate Study</div>
+                            <div class="honor-date">2020</div>
+                        </div>
+                    </div>
+                    
+                    <div class="honor-item">
+                        <div class="honor-header">
+                            <div class="honor-title">The Upsilon Pi Epsilon Computer Science Honors Society</div>
+                            <div class="honor-date">2019 - 2020</div>
+                        </div>
+                    </div>
+                    
+                    <div class="honor-item">
+                        <div class="honor-header">
+                            <div class="honor-title">The Charles H. Goldberg-Norman Neff Award</div>
+                            <div class="honor-date">2020</div>
+                        </div>
+                    </div>
+                    
+                    <div class="honor-item">
+                        <div class="honor-header">
+                            <div class="honor-title">The College of New Jersey Computer Science Department Service Award</div>
+                            <div class="honor-date">2018, 2019</div>
+                        </div>
+                    </div>
+                    
+                    <div class="honor-item">
+                        <div class="honor-header">
+                            <div class="honor-title">Adobe Research Women-in-Technology Scholar</div>
+                            <div class="honor-date">2019</div>
+                        </div>
+                    </div>
+                    
+                    <div class="honor-item">
+                        <div class="honor-header">
+                          <div class="honor-title">1st Place ACM Student Research Competition</div>
+                          <div class="honor-date">SIGCSE 2019</div>
+                        </div>
+                        <div class="honor-description">Accessible Sign Language Recognition with the Leap Motion Controller</div>
+                    </div>
+                    
+                    <div class="honor-item">
+                        <div class="honor-header">
+                            <div class="honor-title">Computing Research Association for Widening Participation (CRA-WP) Grace Hopper Scholar</div>
+                            <div class="honor-date">2018</div>
+                        </div>
+                    </div>
+                    
+                    <div class="honor-item">
+                        <div class="honor-header">
+                            <div class="honor-title">CRA-WP Collaborative Research Experience for Undergraduates Program Fellow</div>
+                            <div class="honor-date">2018</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
-
