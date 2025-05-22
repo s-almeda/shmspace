@@ -1,6 +1,6 @@
 /*
-Node + Express Example code for CS160 Summer 2022
-Prepared by Shm Garanganao Almeda 
+Based on the Node + Express Example code I made for CS160 Summer 2022
+by Shm Garanganao Almeda 
 
 Code referenced from: 
 https://www.digitalocean.com/community/tutorials/how-to-create-a-web-server-in-node-js-with-the-http-module"
@@ -36,6 +36,11 @@ app.use(favicon(path.join(__dirname,'public','images','favicon.ico')));
 router.get("/", function (req, res) {
     res.sendFile(path.join(__dirname, "/"));
 });
+
+app.get('/miku', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/images/mikus.jpg'));
+});
+
 
 //depending on what url extension the user navigates to, send them the respective html file. 
 app.get('/about', function (req, res) {
