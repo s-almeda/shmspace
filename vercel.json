@@ -4,5 +4,18 @@
         "source": "/:path*",
         "destination": "https://shmuh.co"
       }
+    ],
+    "version": 2,
+    "builds": [
+        {
+            "src": "./App.js",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "App.js"
+        }
     ]
   }
