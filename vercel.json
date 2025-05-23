@@ -1,21 +1,19 @@
 {
-    "rewrites": [
-      {
-        "source": "/:path*",
-        "destination": "https://shmuh.co"
-      }
-    ],
-    "version": 2,
-    "builds": [
-        {
-            "src": "./App.js",
-            "use": "@vercel/node"
-        }
-    ],
-    "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "App.js"
-        }
-    ]
-  }
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://shmuh.co/api/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/App.js"
+    }
+  ],
+  "builds": [
+    {
+      "src": "./App.js",
+      "use": "@vercel/node"
+    }
+  ]
+}
