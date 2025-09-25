@@ -234,7 +234,7 @@
   <script>
     async function displayImage(imagePath) {
   const container = document.querySelector('.artwork-display > div');
-  const fullImagePath = `http://45.79.81.173:3001/portfolio/${imagePath}`;
+  const fullImagePath = `https://art.snailbunny.site/portfolio/${imagePath}`;
   
   let description = "<br> i haven't written a description for this one. thanks for looking at my art. <br><br> - shm";
   let title = imagePath.split('/').pop().replace(/\.(jpg|png|jpeg|gif)$/i, '');
@@ -242,7 +242,7 @@
   try {
     // Check for specific description file (e.g., image.md)
     const specificDescPath = imagePath.replace(/\.(jpg|png|jpeg|gif)$/i, '.md');
-    const response = await fetch(`http://45.79.81.173:3001/api/description/${specificDescPath}`);
+    const response = await fetch(`https://art.snailbunny.site/api/description/${specificDescPath}`);
     
     if (response.ok) {
       const data = await response.json();
@@ -261,7 +261,7 @@
       // Check for folder-level description
       const folderPath = imagePath.substring(0, imagePath.lastIndexOf('/'));
       const folderName = folderPath.split('/').pop();
-      const folderDescResponse = await fetch(`http://45.79.81.173:3001/api/description/${folderPath}/${folderName}.md`);
+      const folderDescResponse = await fetch(`https://art.snailbunny.site/api/description/${folderPath}/${folderName}.md`);
       
       if (folderDescResponse.ok) {
         const data = await folderDescResponse.json();
@@ -331,7 +331,7 @@ function buildTree(structure, parentElement, path = '') {
   // Load file structure on page load
   async function loadFileStructure() {
     try {
-      const response = await fetch('http://45.79.81.173:3001/api/portfolio-files');
+      const response = await fetch('https://art.snailbunny.site/api/portfolio-files');
       const data = await response.json();
       
       const treeContainer = document.querySelector('.file-selector .tree-view');
