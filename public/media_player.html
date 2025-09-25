@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Player</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .media-player {
+            width: 655px;
+            height: 555px;
+            background-image: url('./images/media_player/media_player_bg.png');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+        .play-pause-button {
+            position: absolute;
+            bottom: 3%;
+            left: 3%;
+            width: 7.6%;
+            height: 9%;
+            border: none;
+            background: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .play-pause-button img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .play-pause-button:hover:not(:disabled) #buttonImg {
+            content: url('./images/media_player/play_button_hover.png');
+        }
+
+        .play-pause-button:hover:not(:disabled) #buttonImg[src*="pause"] {
+            content: url('./images/media_player/pause_button_hover.png');
+        }
+
+        .play-pause-button:active:not(:disabled) #buttonImg {
+            content: url('./images/media_player/play_button_clicked.png');
+        }
+
+        .play-pause-button:active:not(:disabled) #buttonImg[src*="pause"] {
+            content: url('./images/media_player/pause_button_clicked.png');
+        }
+
+        .play-pause-button:disabled #buttonImg {
+            content: url('./images/media_player/play_button_clicked.png');
+        }
+
+        .play-pause-button:disabled #buttonImg[src*="pause"] {
+            content: url('./images/media_player/pause_button_clicked.png');
+        }
+
+    </style>
+</head>
+<body>
+    <div class="media-player">
+        <button class="play-pause-button" id="playPauseBtn">
+            <img src="./images/media_player/play_button.png" alt="Play" id="buttonImg">
+        </button>
+    </div>
+
+    <script>
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const buttonImg = document.getElementById('buttonImg');
+        let isPlaying = false;
+
+        playPauseBtn.addEventListener('click', function() {
+            if (playPauseBtn.disabled) return;
+            
+            if (isPlaying) {
+                // Switch to play button
+                buttonImg.src = './images/media_player/play_button.png';
+                buttonImg.alt = 'Play';
+                isPlaying = false;
+            } else {
+                // Switch to pause button
+                buttonImg.src = './images/media_player/pause_button.png';
+                buttonImg.alt = 'Pause';
+                isPlaying = true;
+            }
+        });
+
+        // Example function to disable/enable button
+        function toggleButtonState() {
+            playPauseBtn.disabled = !playPauseBtn.disabled;
+        }
+
+        // You can call toggleButtonState() to test the disabled state
+    </script>
+</body>
+</html>
