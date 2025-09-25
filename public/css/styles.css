@@ -27,7 +27,7 @@
 }
 select{
   font-size: max(0.4vh, 10pt);
-  height: 2.5em; !important
+  height: 2.5em !important;
   background-position: right 2px center;
   background-size: 1.5em;
   background-position: 97% 50%
@@ -168,7 +168,7 @@ iframe{
   grid-auto-flow: column;
   display: flex;
   flex-flow: row wrap;
-  flex-direction: row
+  flex-direction: row;
   flex-shrink: 0;
   width: 100%;
   max-width: 100%;
