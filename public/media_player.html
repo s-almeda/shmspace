@@ -44,6 +44,29 @@
             object-fit: contain;
         }
 
+        .play-pause-button:hover:not(:disabled) #buttonImg {
+            content: url('./images/media_player/play_button_hover.png');
+        }
+
+        .play-pause-button:hover:not(:disabled) #buttonImg[src*="pause"] {
+            content: url('./images/media_player/pause_button_hover.png');
+        }
+
+        .play-pause-button:active:not(:disabled) #buttonImg {
+            content: url('./images/media_player/play_button_clicked.png');
+        }
+
+        .play-pause-button:active:not(:disabled) #buttonImg[src*="pause"] {
+            content: url('./images/media_player/pause_button_clicked.png');
+        }
+
+        .play-pause-button:disabled #buttonImg {
+            content: url('./images/media_player/play_button_clicked.png');
+        }
+
+        .play-pause-button:disabled #buttonImg[src*="pause"] {
+            content: url('./images/media_player/pause_button_clicked.png');
+        }
 
     </style>
 </head>
@@ -60,6 +83,8 @@
         let isPlaying = false;
 
         playPauseBtn.addEventListener('click', function() {
+            if (playPauseBtn.disabled) return;
+            
             if (isPlaying) {
                 // Switch to play button
                 buttonImg.src = './images/media_player/play_button.png';
@@ -72,6 +97,13 @@
                 isPlaying = true;
             }
         });
+
+        // Example function to disable/enable button
+        function toggleButtonState() {
+            playPauseBtn.disabled = !playPauseBtn.disabled;
+        }
+
+        // You can call toggleButtonState() to test the disabled state
     </script>
 </body>
 </html>
