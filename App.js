@@ -52,6 +52,9 @@ app.get('/cv', function (req, res) {
 app.get('/c', function (req, res) {
     res.sendFile(publicPath + '/c.html');
 });
+app.get('/portfolio', function (req, res) {
+    res.sendFile(publicPath + '/portfolio.html');
+});
 
 
 //run this server by entering "node App.js" using your command line. 
