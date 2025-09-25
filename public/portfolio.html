@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>shmspace - portfolio</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/xp.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+    }
+
+    .window {
+      width: calc(100vw - 40px);
+      height: calc(100vh - 80px);
+      max-width: none;
+      max-height: none;
+    }
+
+    .window-body {
+      padding: 10px;
+      height: calc(100% - 30px);
+      overflow-y: auto;
+      display: flex;
+      gap: 10px;
+    }
+
+    /* File selector fieldset */
+    .file-selector {
+      width: 250px;
+      min-width: 400px;
+      flex-shrink: 0;
+      margin: 0;
+      height: fit-content;
+    }
+
+    /* Artwork display fieldset */
+    .artwork-display {
+      flex: 1;
+      margin: 0;
+      min-width: 0; /* Prevents flex item from overflowing */
+    }
+
+    /* Tree view styling */
+    .tree-view ul {
+      margin-left: 20px;
+    }
+
+    /* Folder icons only for details summaries inside .file-selector */
+    .file-selector .tree-view summary::after {
+      content: "";
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      background-image: url('./images/folder_closed.png');
+      background-size: 30px 30px;
+      background-repeat: no-repeat;
+      margin-left: -6px;
+      margin-top: -6px;
+      vertical-align: top;
+    }
+
+    /* Open folder icon when details is open */
+    .tree-view details[open] > summary::after {
+      background-image: url('./images/folder_open.png');
+    }
+
+    /* Hide default disclosure triangle */
+    .tree-view summary {
+      list-style: none;
+      line-height: 1.2;
+    }
+
+    .tree-view summary::-webkit-details-marker {
+      display: none;
+    }
+
+    /* Responsive adjustment for smaller screens */
+    @media (max-width: 768px) {
+      .file-selector {
+        width: 150px;
+        min-width: 150px;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="window">
+    <div class="title-bar">
+      <div class="title-bar-text">
+        <img src="/images/paintlogo.webp" alt="Paint Logo" style="height: 25px; vertical-align: middle; margin-right: 8px;">
+        shm's visual art
+      </div>
+      <div class="title-bar-controls">
+        <label class="hasTooltip"> 
+          <!-- <div class="tooltip" for="title-bar-controls"> return home </div> -->
+          <a href="/"><button aria-label="Minimize"></button></a>
+          <a href="/"><button aria-label="Close"></button></a>
+        </label>
+      </div>
+    </div>
+
+    <div class="window-body">
+      <!-- FILE SELECTOR -->
+      <fieldset class="file-selector">
+        <ul class="tree-view">
+          <details open>
+            <summary><strong>highest level folder name</strong></summary>
+            <ul>
+              <li>level 2 inside folder name
+                <ul>
+                  <li>file</li>
+                  <li>level 3 inside folder name
+                    <ul>
+                      <li>file</li>
+                    </ul>
+                  </li>
+                  <li>file</li>
+                </ul>
+              </li>
+            </ul>
+          </details>
+          <details open>
+            <summary><strong>another highest level folder</strong></summary>
+            <ul>
+              <li>level 2 inside folder name
+                <ul>
+                  <li>file</li>
+                  <li>level 3 inside folder name
+                    <ul>
+                      <li>file</li>
+                    </ul>
+                  </li>
+                  <li>file</li>
+                </ul>
+              </li>
+            </ul>
+          </details>
+        </ul>
+      </fieldset>
+
+
+
+
+
+
+      <!-- ARTWORK DISPLAY AREA -->
+      
+      <fieldset style= "min-width: 100px; overflow-x: auto; text-align: left;" class="artwork-display">
+        <ul class="tree-view">
+
+        <div style = "padding: 1%; max-width: 400px;">
+            <a href="/images/mikus.jpg" target="_blank">
+            <img src="/images/mikus.jpg" alt="Artwork thumbnail" style="max-width: 400px; width: 100%; border: 2px solid #888;">
+            </a>
+
+             <details open>
+            <summary><strong>title of artwork</strong></summary>
+            <p style="font-size: 14px;">
+            This is a description of the artwork. It can include details about the medium, inspiration, year, and any other relevant information the artist wishes to share.
+            </p>
+            </details>
+        </div>
+        </fieldset>
+
+
+    </div>
+  </div>
+
+  <script>
+  </script>
+</body>
+</html>
