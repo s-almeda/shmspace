@@ -136,12 +136,25 @@
 
     /* Responsive adjustment for smaller screens */
     @media (max-width: 768px) {
-      .file-selector {
-        width: 150px;
-        min-width: 150px;
-        overflow-x: auto;
+      .window-body {
+        flex-direction: column;
+        height: calc(100%);
       }
 
+      .file-selector {
+        width: 100%;
+        min-width: unset;
+        max-height: 20vh;
+        order: 1;
+        flex-shrink: 0;
+        margin-bottom: 10px;
+      }
+
+      .artwork-display {
+        order: 2;
+        flex: 1;
+        max-height: calc(80vh - 40px);
+      }
     }
   </style>
 </head>
@@ -186,11 +199,13 @@
                 <ul class="tree-view">
 
         <details open>
-        <summary><strong>welcome to my art site</strong></summary>
+        <summary><strong>welcome to shm's digital art site</strong></summary>
         <p style="font-size: 14px; padding: 1em; line-height: 1.5;">
-           for over 10 years, I have poured my heart into the craft of many, many... <strong>image files.</strong> 
+           for over 10 years, I have poured my heart, soul, and many many hours (on average, 5 hours per piece, but sometimes as much as 40-60 hours) into crafting many, many... <strong>...image files.</strong>
            <br>
-           And I have repeatedly entrusted these image files to various large corporations, asking them to hold onto them and share them with the right people on my behalf. 
+           pushing pixels around a 2d array, you might say, if you are my kind of nerd. I used to exclusively use Adobe Photoshop and a graphics tablet, though recently I have almost entirely switched to using Procreate on an iPad + Apple Pencil for everything. 
+           <br>
+           I have repeatedly entrusted these intricately crafted image files to various large corporations, asking them to hold onto them, make them available to the public, and share them with the right people on my behalf. 
            <!-- I gamed their algorithms, I crossposted, I crafted engaging captions and picked strategic times to post...  -->
            <br><br>
            <!-- I asked you, dear internet user, to like & comment & follow all my silly crossposting accounts. to connect with me. 
@@ -199,11 +214,11 @@
            <br><br>
             and like i also found other people who like dragonball z and this was really freaking awesome too
              <br><br> -->
-           every silly image file I published on the internet created a window through which people around the world could <em>see me...</em> and they did! <br>strangers went out of their way to let me know that they did, and that they still liked me anyway. I will always be grateful for this.
+           this experience has been very meaningful to my growth as a person. every silly little image file I published onto the internet created a window through which people around the world could <em>see me...</em> and they did! <br>and people even went out of their way to let me know that they saw me, and that they liked me anyway. I will always be grateful for this.
            <br>            <br>
-           BUT THE LARGE CORPORATION-GOVERNED PLATFORMS??? THAT WE USE TO INTERMEDIATE THESE EXPERIENCES????! 
+           BUT THE LARGE CORPORATION-GOVERNED PLATFORMS THAT WE USE TO INTERMEDIATE THESE EXPERIENCES... my gratitude for them is stretching thin.
            <br>
-           I HAVE BEEN BETRAYED and DISEMPOWERED BY THEM TOO MANY TIMES!!
+           I HAVE BEEN BETRAYED and DISEMPOWERED TOO MANY TIMES!!
            <br>
            and (more importantly) in my work as a human-computer interaction researcher <a href="https://drive.google.com/file/d/1JDzBXyb7YiO4BK5YCuQgzFMALVSlMYr1/view" target="_blank">[ex]</a> I have talked to <strong>so many</strong> artists who have been repeatedly betrayed and disempowered by the platforms they entrust their artwork to, and depend upon for their creative livelihoods -- something I am privileged to not have to worry about in the same way. 
            <br><br>
@@ -213,19 +228,22 @@
         <br>
         to <em>post</em>, I shall put the new file(s) into the folder, then sync it-- and then it will appear here and you could look at it also if you wanted.
         <br>
-        I will probably tell social media about this sometimes but not all of the times. 
-        <br> maybe i'll hide blog posts here lolol
+        I will probably tell social media about this occasionally, but not all of the times. 
+        <br> hehehe maybe i'll hide things in here like unhinged manifesto mode blog posts hehehehe
        
            <br> 
-            it will not be a smooth and seamless art-viewing experience but frankly i do not want this for us i lovingly hope for our art experiences to become bumpy and frictive and just <em>chock full</em> of seams that i can fall into because i think art is worth slowing down for
+            so yeah the viewing of shm's art will not be a smooth and seamless art-viewing experience. but frankly. i do not want this for us. i lovingly hope for more art experiences that are bumpy and frictive and just <em>chock full</em> of seams that we can fall into and sit inside and maybe hold each other within. i think art is worth slowing down for. 
+            <br><br>(thanks to the brilliant [sophia liu](https://sophiawliu.com/) who is definitely responsible for my commitment to hypertext-y interface design. also whenever i use the word `intertwingled' (which i definitely do on this site) that is also their fault)
             <br><br>
-            (That said, I am gradually working on improving the accessibility & usability & fun of the site, e.g., writing alt text, make it easier for others to replicate, adding more art and hiding fun secrets; i plan to add a feature where you can share art with <em>me</em>, too...) this may take me some time. ty for ur patience. reach out if you have feedback/ideas!
+            (i do want to work on improving the accessibility & usability & fun of this site, e.g., writing alt text, adding more art and hiding fun secrets... i plan to add a feature where you can share art with <em>me</em>, too...) this will take me some time. ty for ur patience. reach out if you have feedback/ideas!
             <br>
-             I'm also so excited to make interactive / strangely formatted / deeply inconvenient digital art now that I am no longer cONSTRAINED within the fLATTENED, CARCERAL REGIMENTATION of sOCIAL MEDIA PLATFORMs' FOUCAULDIAN CONSTRAINTS oN CREATIVE MEDIA PUBLICATION 
+             I'm also so excited to make interactive / strangely formatted / deeply inconvenient digital art now that I am no longer cONSTRAINED within the fLATTENing, CARCERAL REGIMENTATION of sOCIAL MEDIA PLATFORMs and their FOUCAULDIAN CONSTRAINTS oN CREATIVE MEDIA 
             <br><br> 
+            thank you for reading, for looking, for seeing me.
+            <br>
             love and sparkles,
             <br><br>
-            shm, on 09/25/2025
+            shm, september 2025
         </p>
         </details>
         </ul>
@@ -275,6 +293,7 @@
     }
   } catch (e) {
     // Use default description
+    
   }
   
   container.innerHTML = `
@@ -282,7 +301,7 @@
       <img src="${fullImagePath}" alt="${title}" style="max-width: 100%; max-height: 70vh; width: auto; height: auto; border: 2px solid #888;">
     </a>
     
-    <details open>
+    <details>
       <summary><strong>${title}</strong></summary>
       <div style="font-size: 14px;">
         ${description}
