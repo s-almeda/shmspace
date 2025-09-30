@@ -191,7 +191,7 @@
       
     <!-- ARTWORK DISPLAY AREA -->
     <fieldset style="min-width: 100px; overflow-x: auto; text-align: left;" class="artwork-display">
-    <div id="artwork-container" style="padding: 1%; max-width: 100%;">
+    <div id="artwork-container" style="padding: 1%; max-width: 100%; overflow-y:visible;">
         <a href="/images/GOES_TO_DIE.jpg" target="_blank">
         <img src="/images/GOES_TO_DIE.jpg" alt="Artwork thumbnail" style="max-width: 100%; max-height: 75%; border: 2px solid #888;">
         </a>
@@ -201,11 +201,13 @@
         <details open>
         <summary><strong>welcome to shm's digital art site</strong></summary>
         <p style="font-size: 14px; padding: 1em; line-height: 1.5;">
-           for over 10 years, I have poured my heart, soul, and many many hours (on average, 5 hours per piece, but sometimes as much as 40-60 hours) into crafting many, many... <strong>...image files.</strong>
+           for over 10 years, I have poured my heart, soul, and many many hours (on average, 5 hours / piece, but sometimes 40-60 hours, occasionally, 200+...) into crafting many, many... <strong>...image files.</strong>
            <br>
-           pushing pixels around a 2d array, you might say, if you are my kind of nerd. I used to exclusively use Adobe Photoshop and a graphics tablet, though recently I have almost entirely switched to using Procreate on an iPad + Apple Pencil for everything. 
+           just. pushing colored pixels around in a 2D Array. 
            <br>
-           I have repeatedly entrusted these intricately crafted image files to various large corporations, asking them to hold onto them, make them available to the public, and share them with the right people on my behalf. 
+           I used to exclusively use Adobe Photoshop and a Wacom graphics tablet + pen; recently I have almost entirely switched to using Procreate on an iPad + Apple Pencil for everything. 
+           <br>
+           I have repeatedly entrusted these intricately crafted image files to various large corporations, asking them to hold onto my little trays of colored pixels, to make them available to the public, to share them with the right people on my behalf. 
            <!-- I gamed their algorithms, I crossposted, I crafted engaging captions and picked strategic times to post...  -->
            <br><br>
            <!-- I asked you, dear internet user, to like & comment & follow all my silly crossposting accounts. to connect with me. 
@@ -214,7 +216,7 @@
            <br><br>
             and like i also found other people who like dragonball z and this was really freaking awesome too
              <br><br> -->
-           this experience has been very meaningful to my growth as a person. every silly little image file I published onto the internet created a window through which people around the world could <em>see me...</em> and they did! <br>and people even went out of their way to let me know that they saw me, and that they liked me anyway. I will always be grateful for this.
+           this experience has been very meaningful to my growth as a person. every silly little image file I published onto the internet created a window through which people around the world could <em>see me...</em> and they did! <br> people even went out of their way to let me know that they saw me! and that they liked me anyway!! I will always be grateful for this.
            <br>            <br>
            BUT THE LARGE CORPORATION-GOVERNED PLATFORMS THAT WE USE TO INTERMEDIATE THESE EXPERIENCES... my gratitude for them is stretching thin.
            <br>
@@ -261,11 +263,11 @@
   const fullImagePath = `https://art.snailbunny.site/portfolio/${imagePath}`;
   
   let description = "<br> i haven't written a description for this one. thanks for looking at my art. <br><br> - shm";
-  let title = imagePath.split('/').pop().replace(/\.(jpg|png|jpeg|gif)$/i, '');
+  let title = imagePath.split('/').pop().replace(/\.(jpg|png|jpeg|gif|pdf)$/i, '');
   
   try {
-    // Check for specific description file (e.g., image.md)
-    const specificDescPath = imagePath.replace(/\.(jpg|png|jpeg|gif)$/i, '.md');
+    // Check for specific description file (e.g., image.md or document.md)
+    const specificDescPath = imagePath.replace(/\.(jpg|png|jpeg|gif|pdf)$/i, '.md');
     const response = await fetch(`https://art.snailbunny.site/api/description/${specificDescPath}`);
     
     if (response.ok) {
@@ -297,18 +299,34 @@
     
   }
   
+  // Check if the file is a PDF
+  const isPDF = imagePath.toLowerCase().endsWith('.pdf');
+  console.log('File path:', imagePath, 'Is PDF:', isPDF, 'Full path:', fullImagePath); // Debug
+  
+  let mediaContent;
+  if (isPDF) {
+    mediaContent = `
+      <object data="${fullImagePath}" type="application/pdf" width="100%" height="80vh" style="border: 2px solid #888; min-height: 600px;">
+        <p>Unable to display PDF file. <a href="${fullImagePath}" target="_blank">Download</a> instead.</p>
+      </object>
+    `;
+  } else {
+    mediaContent = `
+      <a href="${fullImagePath}" target="_blank">
+        <img src="${fullImagePath}" alt="${title}" style="max-width: 100%; max-height: 70vh; width: auto; height: auto; border: 2px solid #888;">
+      </a>
+    `;
+  }
+  
   container.innerHTML = `
-    <a href="${fullImagePath}" target="_blank">
-      <img src="${fullImagePath}" alt="${title}" style="max-width: 100%; max-height: 70vh; width: auto; height: auto; border: 2px solid #888;">
-    </a>
-            <ul class="tree-view">
-    
-    <details>
-      <summary><strong>${title}</strong></summary>
-      <div style="font-size: 14px;">
-        ${description}
-      </div>
-    </details>
+    ${mediaContent}
+    <ul class="tree-view">
+      <details>
+        <summary><strong>${title}</strong></summary>
+        <div style="font-size: 14px;">
+          ${description}
+        </div>
+      </details>
     </ul>
   `;
 }
@@ -372,6 +390,9 @@ function buildTree(structure, parentElement, path = '') {
   }
 
   document.addEventListener('DOMContentLoaded', loadFileStructure);
+
+
+  //todo, add keyboard navigation?
   </script>
 </body>
 </html>
