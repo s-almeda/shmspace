@@ -258,46 +258,54 @@
   </div>
 
   <script>
-    async function displayImage(imagePath) {
-  const container = document.querySelector('.artwork-display > div');
-  const fullImagePath = `https://art.snailbunny.site/portfolio/${imagePath}`;
-  
-  let description = "<br> i haven't written a description for this one. thanks for looking at my art. <br><br> - shm";
-  let title = imagePath.split('/').pop().replace(/\.(jpg|png|jpeg|gif|pdf)$/i, '');
-  
-  try {
-    // Check for specific description file (e.g., image.md or document.md)
-    const specificDescPath = imagePath.replace(/\.(jpg|png|jpeg|gif|pdf)$/i, '.md');
-    const response = await fetch(`https://art.snailbunny.site/api/description/${specificDescPath}`);
-    
-    if (response.ok) {
-      const data = await response.json();
-      // Parse the HTML to extract title from h1 if it exists
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = data.html;
-      const h1 = tempDiv.querySelector('h1');
-      if (h1) {
-        title = h1.textContent;
-        h1.remove(); // Remove the h1 from the description
-        description = tempDiv.innerHTML;
-      } else {
-        description = data.html;
-      }
-    } else {
-      // Check for folder-level description
-      const folderPath = imagePath.substring(0, imagePath.lastIndexOf('/'));
-      const folderName = folderPath.split('/').pop();
-      const folderDescResponse = await fetch(`https://art.snailbunny.site/api/description/${folderPath}/${folderName}.md`);
-      
-      if (folderDescResponse.ok) {
-        const data = await folderDescResponse.json();
-        description = data.html;
-      }
+    // Add this function to update the URL when an image is selected
+    function updateURL(imagePath) {
+      window.location.hash = imagePath;
     }
-  } catch (e) {
-    // Use default description
-    
-  }
+
+    async function displayImage(imagePath) {
+      // Update the URL
+      updateURL(imagePath);
+      
+      const container = document.querySelector('.artwork-display > div');
+      const fullImagePath = `https://art.snailbunny.site/portfolio/${imagePath}`;
+      
+      let description = "<br> i haven't written a description for this one. thanks for looking at my art. <br><br> - shm";
+      let title = imagePath.split('/').pop().replace(/\.(jpg|png|jpeg|gif|pdf)$/i, '');
+      
+      try {
+        // Check for specific description file (e.g., image.md or document.md)
+        const specificDescPath = imagePath.replace(/\.(jpg|png|jpeg|gif|pdf)$/i, '.md');
+        const response = await fetch(`https://art.snailbunny.site/api/description/${specificDescPath}`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          // Parse the HTML to extract title from h1 if it exists
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = data.html;
+          const h1 = tempDiv.querySelector('h1');
+          if (h1) {
+            title = h1.textContent;
+            h1.remove(); // Remove the h1 from the description
+            description = tempDiv.innerHTML;
+          } else {
+            description = data.html;
+          }
+        } else {
+          // Check for folder-level description
+          const folderPath = imagePath.substring(0, imagePath.lastIndexOf('/'));
+          const folderName = folderPath.split('/').pop();
+          const folderDescResponse = await fetch(`https://art.snailbunny.site/api/description/${folderPath}/${folderName}.md`);
+          
+          if (folderDescResponse.ok) {
+            const data = await folderDescResponse.json();
+            description = data.html;
+          }
+        }
+      } catch (e) {
+        // Use default description
+        
+      }
   
   // Check if the file is a PDF
   const isPDF = imagePath.toLowerCase().endsWith('.pdf');
@@ -373,6 +381,38 @@ function buildTree(structure, parentElement, path = '') {
     }
   }
 
+  // Add function to load image from URL on page load
+  function loadImageFromURL() {
+    const hash = window.location.hash.substring(1); // Remove the #
+    if (hash) {
+      // Decode the URL in case it has special characters
+      const imagePath = decodeURIComponent(hash);
+      
+      // Wait for file tree to load, then display the image
+      setTimeout(() => {
+        displayImage(imagePath);
+        
+        // Also highlight it in the file tree
+        const fileLink = document.querySelector(`span[data-path="${imagePath}"]`);
+        if (fileLink) {
+          // Open parent folders if needed
+          let parent = fileLink.closest('details');
+          while (parent) {
+            parent.open = true;
+            parent = parent.parentElement.closest('details');
+          }
+          
+          // Scroll it into view
+          fileLink.scrollIntoView({ block: 'center', behavior: 'smooth' });
+          
+          // Highlight it
+          fileLink.style.backgroundColor = '#316AC5';
+          fileLink.style.color = 'white';
+        }
+      }, 500); // Wait for tree to build
+    }
+  }
+
   // Load file structure on page load
   async function loadFileStructure() {
     try {
@@ -383,6 +423,9 @@ function buildTree(structure, parentElement, path = '') {
       treeContainer.innerHTML = ''; // Clear the mock data
       buildTree(data.portfolio, treeContainer);
       
+      // Check if there's an image in the URL to load
+      loadImageFromURL();
+      
     } catch (error) {
       console.error('Error loading files:', error);
       document.querySelector('.file-selector .tree-view').innerHTML = '<li>Error loading portfolio</li>';
@@ -391,6 +434,13 @@ function buildTree(structure, parentElement, path = '') {
 
   document.addEventListener('DOMContentLoaded', loadFileStructure);
 
+  // Listen for browser back/forward buttons
+  window.addEventListener('hashchange', () => {
+    const hash = window.location.hash.substring(1);
+    if (hash) {
+      displayImage(decodeURIComponent(hash));
+    }
+  });
 
   //todo, add keyboard navigation?
   </script>
