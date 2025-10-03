@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>I DYED MY HAIR BLACK</title>
-    <link rel="canonical" href="https://art.snailbunny.site/portfolio/00_interactive/I_DYED_MY_HAIR_BLACK.HTML">
     <style>
         body {
                         background: #001906;
@@ -188,14 +187,59 @@
         #idmhb-frame .hidden-text.revealed {
             display: block;
         }
+
+        /* Mobile styles - make everything skinnier and closer to center */
+        @media (max-width: 768px) {
+            #idmhb-frame .container {
+                max-width: 600px; /* Narrower container */
+                padding: 0 15px; /* Less side padding */
+            }
+
+            #idmhb-frame .image-wrapper {
+                margin: 80px 0; /* Less vertical margin */
+            }
+
+            #idmhb-frame .image-wrapper img {
+                max-width: 400px; /* Smaller images on mobile */
+            }
+
+            #idmhb-frame .text-panel {
+                width: 85%; /* Narrower text panels */
+                max-width: 350px; /* Smaller max width */
+                padding: 15px; /* Less padding */
+                font-size: 13px; /* Slightly smaller text */
+                max-height: 180px; /* Shorter panels */
+            }
+
+            #idmhb-frame .image-section {
+                min-height: 600px; /* Less height on mobile */
+                margin-bottom: 100px; /* Less bottom margin */
+            }
+
+            #idmhb-frame h1 {
+                margin-bottom: 40px; /* Less margin below title */
+                font-size: 1.2em; /* Smaller title */
+            }
+        }
     </style>
 </head>
 <body id="idmhb-frame">
     <div class="container">
         <h1>
-            <a href="https://art.snailbunny.site/portfolio/00_interactive/I_DYED_MY_HAIR_BLACK.HTML" target=_blank style="color: #f0f0f0;  text-decoration: none;">
-            I DYED MY HAIR BLACK
+            <a href="https://art.snailbunny.site/portfolio/00_interactive/I_DYED_MY_HAIR_BLACK.HTML" target="_blank" class="idmhb-title-link">
+                I DYED MY HAIR BLACK
             </a>
+            <style>
+                #idmhb-frame .idmhb-title-link {
+                    color: #f0f0f0;
+                    text-decoration: none;
+                    transition: color 0.2s;
+                }
+                #idmhb-frame .idmhb-title-link:hover {
+                    color: #002eab;
+                    text-decoration: underline;
+                }
+            </style>
         </h1>
 
 
