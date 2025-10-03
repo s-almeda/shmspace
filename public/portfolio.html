@@ -267,6 +267,30 @@
       // Update the URL
       updateURL(imagePath);
       
+      // Open parent folders and highlight the file in the tree
+      const fileLink = document.querySelector(`span[data-path="${imagePath}"]`);
+      if (fileLink) {
+        // Open all parent folders
+        let parent = fileLink.closest('details');
+        while (parent) {
+          parent.open = true;
+          parent = parent.parentElement.closest('details');
+        }
+        
+        // Scroll it into view
+        fileLink.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        
+        // Remove previous highlights
+        document.querySelectorAll('.file-selector span[data-path]').forEach(span => {
+          span.style.backgroundColor = '';
+          span.style.color = '#0000ee';
+        });
+        
+        // Highlight current file
+        fileLink.style.backgroundColor = '#316AC5';
+        fileLink.style.color = 'white';
+      }
+      
       const container = document.querySelector('.artwork-display > div');
       const fullImagePath = `https://art.snailbunny.site/portfolio/${imagePath}`;
       
