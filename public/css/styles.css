@@ -748,7 +748,7 @@ fieldset{
 #res_opt3::before {
   position: absolute;
   left: 0.1em;
-  content: "🔄";
+  content: "🖌️";
 }
 #res_opt4::before {
   position: absolute;
