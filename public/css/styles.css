@@ -3,23 +3,30 @@
 
 
 }
-.link{
-  color: blue;
+
+/* Link styles - made more specific to override XP.css */
+a.link, a.link:link {
+  color: blue !important;
+  text-decoration: underline;
+}
+a.link:visited {
+  color: rgb(88, 42, 101) !important;
   text-decoration: underline;
 }
 
-.link:hover {
-  color: darkblue;
+a.link:hover {
+  color: #fff !important;
+  background-color: #142bff;
+  padding: 0 2px;
   text-decoration: none;
 }
 
-.link:visited {
-  color: blue;
-  text-decoration: underline;
-}
 
-.link:active {
-  color: #de7e00;
+
+a.link:active {
+  color: #dd9000 !important;
+    background-color: #3f5d24;
+  padding: 0 2px;
 }
 
 .button{
