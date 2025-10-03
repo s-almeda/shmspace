@@ -5,47 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>I DYED MY HAIR BLACK</title>
     <style>
-        body {
+        /* Scope everything to this specific iframe */
+        #idmhb-frame {
             background: #000000;
             color: #f0f0f0;
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
         }
 
-        .idmhb-interactive.container {
-            max-width: 1400px;
+        #idmhb-frame * {
+            color: #f0f0f0; /* Force all text to be light */
+        }
+
+        #idmhb-frame .container {
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px; /* Add padding to prevent edge touching */
+            padding: 0 20px;
         }
 
-        .idmhb-interactive .image-section {
-            margin-bottom: 120px; /* Adjust spacing between images */
+        #idmhb-frame .image-section {
+            margin-bottom: 100px;
             position: relative;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
+            min-height: 400px; /* Ensure space for text panels */
         }
 
-        .idmhb-interactive .image-wrapper {
+        #idmhb-frame .image-wrapper {
             position: relative;
             transition: transform 0.3s ease;
             cursor: pointer;
+            z-index: 10;
         }
 
-        .idmhb-interactive .image-wrapper.askew-left {
+        #idmhb-frame .image-wrapper.clicked {
             transform: rotate(-2deg) scale(1.05);
         }
-        .idmhb-interactive .image-wrapper.askew-right {
-            transform: rotate(2deg) scale(1.05);
-        }
 
-
-        .idmhb-interactive .image-wrapper img {
+        #idmhb-frame .image-wrapper img {
             display: block;
-            max-width: 300px; /* CHANGE from 500px to 300px */
+            max-width: 350px;
             height: auto;
             transition: opacity 0.2s ease;
         }
 
-        .idmhb-interactive .hover-image {
+        #idmhb-frame .hover-image {
             position: absolute;
             top: 0;
             left: 0;
@@ -53,113 +60,111 @@
             pointer-events: none;
         }
 
-        .idmhb-interactive .image-wrapper:hover .hover-image {
+        #idmhb-frame .image-wrapper:hover .hover-image {
             opacity: 1;
         }
 
-        .idmhb-interactive .image-wrapper:hover .main-image {
+        #idmhb-frame .image-wrapper:hover .main-image {
             opacity: 0;
         }
 
-        /* Text overlays */
-        .idmhb-interactive .hover-text, .idmhb-interactive .click-text {
+        /* Text panels - both appear on click */
+        #idmhb-frame .text-panel {
             position: absolute;
+            top: 0;
+            width: 280px;
+            max-height: 400px;
             opacity: 0;
             transition: opacity 0.3s ease;
-            font-size: 14px;
-            line-height: 1.4;
-            white-space: normal; /* CHANGE from nowrap to normal */
-            max-width: 300px; /* ADD width constraint */
+            font-size: 13px;
+            line-height: 1.5;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow-y: auto;
+            overflow-x: hidden;
             pointer-events: none;
-            overflow: auto;
+            color: #f0f0f0 !important;
         }
 
-        .idmhb-interactive .image-wrapper:hover .hover-text {
+        /* Show panels when clicked */
+        #idmhb-frame .image-wrapper.clicked .text-panel {
             opacity: 1;
+            pointer-events: auto;
         }
 
-        .idmhb-interactive .image-wrapper.clicked .hover-text,
-        .idmhb-interactive .image-wrapper.clicked .click-text {
-            opacity: 1;
+        #idmhb-frame .text-left {
+            right: calc(100% + 30px);
         }
 
-        /* Position classes for text */
-        .idmhb-interactive .text-right {
-            left: calc(100% + 20px); /* CHANGE from 105% */
-            top: 50%;
-            transform: translateY(-50%);
-            max-height: 300px;
-            overflow-y: auto; /* ADD for scroll if text is too long */
+        #idmhb-frame .text-right {
+            left: calc(100% + 30px);
         }
 
-        .idmhb-interactive .text-left {
-            right: calc(100% + 20px); /* CHANGE from 105% */
-            top: 50%;
-            transform: translateY(-50%);
-                        max-height: 300px;
-            overflow-y: auto; /* ADD for scroll if text is too long */
+        /* Scrollbar styling for panels */
+        #idmhb-frame .text-panel::-webkit-scrollbar {
+            width: 6px;
         }
 
-        .idmhb-interactive .text-top {
-            bottom: calc(105% + 20px); /* CHANGE from 105% */
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center; /* ADD for better centering */
-            max-height: 400px;
-            overflow-y: scroll; /* ADD for scroll if text is too long */
+        #idmhb-frame .text-panel::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        .idmhb-interactive .text-bottom {
-            top: calc(105% + 20px); /* CHANGE from 105% */
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center; /* ADD for better centering */
-                        max-height: 400px;
-            overflow-y: scroll; /* ADD for scroll if text is too long */
+        #idmhb-frame .text-panel::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
         }
 
-        .idmhb-interactive h1 {
+        #idmhb-frame .text-panel::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        #idmhb-frame h1 {
             text-align: center;
-            margin-bottom: 80px;
+            margin-bottom: 60px;
             font-weight: normal;
             letter-spacing: 0.2em;
+            color: #f0f0f0;
+        }
+
+        /* Ensure all text stays light */
+        #idmhb-frame p,
+        #idmhb-frame span,
+        #idmhb-frame div,
+        #idmhb-frame em,
+        #idmhb-frame strong {
+            color: #f0f0f0 !important;
         }
 
         /* Clickable link styling */
-        .idmhb-interactive .clickable-link {
-            color: #4a9eff;
+        #idmhb-frame .clickable-link {
+            color: #4a9eff !important;
             text-decoration: underline;
             cursor: pointer;
-            transition: color 0.2s ease;
         }
 
-        .idmhb-interactive .clickable-link:hover {
-            color: #7bb3ff;
+        #idmhb-frame .clickable-link:hover {
+            color: #7bb3ff !important;
         }
 
         /* Hidden text styling */
-        .idmhb-interactive .hidden-text {
+        #idmhb-frame .hidden-text {
             display: none;
             margin-top: 8px;
-            padding: 8px 12px;
+            padding: 8px;
             background: rgba(255, 255, 255, 0.05);
-            border-left: 3px solid #4a9eff;
-            border-radius: 3px;
+            border-left: 2px solid #4a9eff;
             font-style: italic;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            color: #f0f0f0 !important;
         }
 
-        .idmhb-interactive .hidden-text.revealed {
+        #idmhb-frame .hidden-text.revealed {
             display: block;
-            opacity: 1;
-            transform: translateY(0);
         }
     </style>
 </head>
-<body>
-    <div class="container idmhb-interactive">
+<body id="idmhb-frame">
+    <div class="container">
         <h1>I DYED MY HAIR BLACK</h1>
 
         <!-- Image 1 -->
@@ -167,21 +172,28 @@
             <div class="image-wrapper" id="img1">
                 <img src="assets/I_DYED_MY_HAIR_BLACK-1.png" alt="i dyed my hair black 1" class="main-image">
                 <img src="assets/I_DYED_MY_HAIR_BLACK-1-hover.png" alt="i dyed my hair black 1 hover" class="hover-image">
-<div class="hover-text text-left">I dyed my hair green right before moving to California to start my PhD. My mom was appalled; she said, "You can't go to grad school with green hair! What if they don't take you seriously??"
-<br>I said, "mom, it's Berkeley, California. Everyone can have green hair there."
-<br>
-<br>Dying my hair Green has always felt like a fight. like demanding to be myself. like embracing the absolute privilege of expressive freedom with such veracity, it's only natural it should become embedded as into my features...
-<br>
-<br>This May I started to feel like something was dying…
+                
+                <div class="text-panel text-left">
+                    I dyed my hair green right before moving to California to start my PhD. My mom was appalled; she said, "You can't go to grad school with green hair! What if they don't take you seriously??"
+                    <br><br>
+                    I said, "mom, it's Berkeley, California. Everyone can have green hair there."
+                    <br><br>
+                    Dying my hair Green has always felt like a fight. like demanding to be myself. like embracing the absolute privilege of expressive freedom with such veracity, it's only natural it should become embedded as into my features...
+                    <br><br>
+                    This May I started to feel like something was dying…
                 </div>
-                <div class="click-text text-right">my lab mates are graduating... I asked us all to please come in an work near each other one last time and we did, and we debated about stupid design stuff and spinned around in our rolly office chairs  ...**
-tim once said,
-<br>
-"The good old days are right now."
-<br>
-it broke me — it still does everytime I return to it, which is frequently—
-this group of misfits has pulled me, and continues to pull me, through so many stressful and thrilling and rewarding endeavors, and it's never lost on me that so much of what I've accomplished in the past 5 years has been thanks to the strength of our metaphorical grip on one another...
-part of me really thought we'd be stuck together forever. I forgot student graduate. i’m going to be the senior phd student. then i’m going to graduate. i feel a shift. it feels like something is dying
+                
+                <div class="text-panel text-right">
+                    my lab mates are graduating... I asked us all to please come in an work near each other one last time and we did, and we debated about stupid design stuff and spinned around in our rolly office chairs ...**
+                    <br><br>
+                    tim once said,
+                    <br>
+                    "The good old days are right now."
+                    <br><br>
+                    it broke me — it still does everytime I return to it, which is frequently—
+                    this group of misfits has pulled me, and continues to pull me, through so many stressful and thrilling and rewarding endeavors, and it's never lost on me that so much of what I've accomplished in the past 5 years has been thanks to the strength of our metaphorical grip on one another...
+                    <br><br>
+                    part of me really thought we'd be stuck together forever. I forgot student graduate. i'm going to be the senior phd student. then i'm going to graduate. i feel a shift. it feels like something is dying
                 </div>
             </div>
         </div>
@@ -192,26 +204,31 @@ part of me really thought we'd be stuck together forever. I forgot student gradu
                 <img src="assets/I_DYED_MY_HAIR_BLACK-2.png" alt="i dyed my hair black 2" class="main-image">
                 <img src="assets/I_DYED_MY_HAIR_BLACK-2-hover.png" alt="i dyed my hair black 2 hover" class="hover-image">
                 
- <div class="hover-text text-left">
+                <div class="text-panel text-left">
                     I could feel my relationship dying. 
                     At the time, I thought it was because we had just gotten engaged the month before — which changed very little, and also felt like an enormous emotional transition.
+                    <br><br>
                     <span class="clickable-link" onclick="toggleHiddenText(event, 'hidden-text-1')">transition always feels ~50% like death to me.</span>
                     <div id="hidden-text-1" class="hidden-text">(A psychiatrist once told me I have "transitional anxiety" which I thought was a really really funny thing to tell a trans person)</div>
                 </div>
-                <div class="click-text text-bottom">I turned 27. 
-                  <br> I laid my "mid twenties" down to rest. 
-                   <br> I looked in the mirror and saw something shaped kind of like, <em>"an engaged woman about to get a PhD in computer science and plan a wedding and buy a house and have kids"</em>
-<br>she scared me … but I believed she would be happier than I was. 
-<br>That she could settle into it. 
-<br>I committed to her.
-<br><br>
-<br>And in this time of death and growth, the green felt strange... inappropriate... 
-<br>like, what was there to fight anymore? 
-<br>I had everything I could ask for playing out before me. I should settle into it. 
-<br>I could let my past die.
-<br>maybe it was time to be taken seriously
-</div>
-
+                
+                <div class="text-panel text-right">
+                    I turned 27. 
+                    <br>I laid my "mid twenties" down to rest. 
+                    <br><br>
+                    I looked in the mirror and saw something shaped kind of like, <em>"an engaged woman about to get a PhD in computer science and plan a wedding and buy a house and have kids"</em>
+                    <br><br>
+                    she scared me … but I believed she would be happier than I was. 
+                    <br>That she could settle into it. 
+                    <br>I committed to her.
+                    <br><br>
+                    And in this time of death and growth, the green felt strange... inappropriate... 
+                    <br>like, what was there to fight anymore? 
+                    <br><br>
+                    I had everything I could ask for playing out before me. I should settle into it. 
+                    <br>I could let my past die.
+                    <br>maybe it was time to be taken seriously
+                </div>
             </div>
         </div>
 
@@ -220,17 +237,21 @@ part of me really thought we'd be stuck together forever. I forgot student gradu
             <div class="image-wrapper" id="img3">
                 <img src="assets/I_DYED_MY_HAIR_BLACK-3.png" alt="Hair 3" class="main-image">
                 <img src="assets/I_DYED_MY_HAIR_BLACK-3-hover.png" alt="Hair 3 Hover" class="hover-image">
-               
-                <div class="hover-text text-left">
+                
+                <div class="text-panel text-left">
                     He asked to leave me in July. 
-                    I begged him to stay. 
+                    <br>I begged him to stay. 
+                    <br><br>
                     I got to learn what it's like to be with someone who is staying because you begged them to. 
-                    It is unpleasant. 
-                    </div>
-                <div class="click-text text-top">I gave the ring back. 
+                    <br><br>
+                    It is unpleasant.
+                </div>
+                
+                <div class="text-panel text-right">
+                    I gave the ring back. 
+                    <br><br>
                     I cried like something dear and promised had been taken from me, and I resented myself for having considered it so dear and promised in the first place, and I feared that this would be the thing to turn me into a hopeless desperate jaded sad pathetic animal
-</div>
-
+                </div>
             </div>
         </div>
 
@@ -239,77 +260,73 @@ part of me really thought we'd be stuck together forever. I forgot student gradu
             <div class="image-wrapper" id="img4">
                 <img src="assets/I_DYED_MY_HAIR_BLACK-4.png" alt="Hair 4" class="main-image">
                 <img src="assets/I_DYED_MY_HAIR_BLACK-4-hover.png" alt="Hair 4 Hover" class="hover-image">
-                <div class="hover-text text-left">
-It's September now.
-My hair turned green again. I didn't dye it; the black washed out and the green reemerged. It had never left... So stubborn.
-                    </div>
-                <div class="click-text text-top">
-                    <br> I stopped planning my wedding. I started planning a road trip,
-                    <br> and my post-graduation plans,  and how I'll arrange the in my shitty little 1-bedroom apartment.
-                    <br> 
-                    <br> I'm finding it so exciting and freeing and fun that I can't help but feel a little guilty, too. like, an anxious kind of relieved. 
-                    <br>
-                    <br>Maybe I dodged a bullet. But it doesn't feel good to realize how long I stood in place yearning for that bullet.
-                     <br>I want to think that I know what's best for myself. 
-                     <br>That I know when to move on, that I won't let someone else decide that for me. That I know what not to compromise
-                    <br>
+                
+                <div class="text-panel text-left">
+                    It's September now.
+                    <br><br>
+                    My hair turned green again. I didn't dye it; the black washed out and the green reemerged. It had never left... So stubborn.
+                </div>
+                
+                <div class="text-panel text-right">
+                    I stopped planning my wedding. I started planning a road trip,
+                    <br>and my post-graduation plans, and how I'll arrange the in my shitty little 1-bedroom apartment.
+                    <br><br>
+                    I'm finding it so exciting and freeing and fun that I can't help but feel a little guilty, too. like, an anxious kind of relieved. 
+                    <br><br>
+                    Maybe I dodged a bullet. But it doesn't feel good to realize how long I stood in place yearning for that bullet.
+                    <br><br>
+                    I want to think that I know what's best for myself. 
+                    <br>That I know when to move on, that I won't let someone else decide that for me. That I know what not to compromise
+                    <br><br>
                     Something to work on, I guess. 
-                    <br>
+                    <br><br>
                     I can start with dying my hair green again.
-                   </div>
+                </div>
             </div>
         </div>
-
-        <!-- Sketch at the end -->
     </div>
 
     <script>
         // Function to toggle hidden text
         function toggleHiddenText(event, textId) {
-            event.stopPropagation(); // Prevent event bubbling
+            event.stopPropagation();
             const hiddenText = document.getElementById(textId);
-            
-            if (hiddenText.classList.contains('revealed')) {
-                hiddenText.classList.remove('revealed');
-                // Hide after animation completes
-                setTimeout(() => {
-                    if (!hiddenText.classList.contains('revealed')) {
-                        hiddenText.style.display = 'none';
-                    }
-                }, 300);
-            } else {
-                hiddenText.style.display = 'block';
-                // Trigger reflow then add class for animation
-                hiddenText.offsetHeight;
-                hiddenText.classList.add('revealed');
-            }
+            hiddenText.classList.toggle('revealed');
         }
 
         // Add click functionality to all image wrappers
         document.querySelectorAll('.image-wrapper').forEach(wrapper => {
-            // Only add click handler if it has hover/click text
-            if (wrapper.querySelector('.hover-text')) {
-                wrapper.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    
-                    // Toggle clicked state
-                    if (this.classList.contains('clicked')) {
-                        this.classList.remove('clicked');
-                        this.classList.remove('askew');
-                    } else {
-                        this.classList.add('clicked');
-                        this.classList.add('askew');
-                    }
-                });
-            }
+            wrapper.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                // Toggle clicked state
+                this.classList.toggle('clicked');
+            });
         });
 
-        // Optional: Click anywhere else to reset all images
-        document.body.addEventListener('click', function(e) {
+        // Prevent scroll bubbling from text panels
+        document.querySelectorAll('.text-panel').forEach(panel => {
+            panel.addEventListener('wheel', function(e) {
+                e.stopPropagation();
+                
+                const deltaY = e.deltaY;
+                const scrollTop = this.scrollTop;
+                const scrollHeight = this.scrollHeight;
+                const clientHeight = this.clientHeight;
+                
+                // Prevent scroll from bubbling to iframe if at boundaries
+                if ((deltaY < 0 && scrollTop === 0) || 
+                    (deltaY > 0 && scrollTop + clientHeight >= scrollHeight - 1)) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Click anywhere else to reset all images
+        document.getElementById('idmhb-frame').addEventListener('click', function(e) {
             if (!e.target.closest('.image-wrapper')) {
                 document.querySelectorAll('.image-wrapper').forEach(wrapper => {
                     wrapper.classList.remove('clicked');
-                    wrapper.classList.remove('askew');
                 });
             }
         });
