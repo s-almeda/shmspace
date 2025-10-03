@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I DYED MY HAIR BLACK</title>
+    <style>
+        body {
+            background: #0a0a0a;
+            color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .image-section {
+            margin-bottom: 150px; /* Adjust spacing between images */
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-wrapper {
+            position: relative;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .image-wrapper.askew {
+            transform: rotate(-5deg) scale(1.05);
+        }
+
+        .image-wrapper img {
+            display: block;
+            max-width: 500px;
+            height: auto;
+            transition: opacity 0.2s ease;
+        }
+
+        .hover-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .image-wrapper:hover .hover-image {
+            opacity: 1;
+        }
+
+        .image-wrapper:hover .main-image {
+            opacity: 0;
+        }
+
+        /* Text overlays */
+        .hover-text, .click-text {
+            position: absolute;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-size: 14px;
+            line-height: 1.4;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        .image-wrapper:hover .hover-text {
+            opacity: 1;
+        }
+
+        .image-wrapper.clicked .hover-text,
+        .image-wrapper.clicked .click-text {
+            opacity: 1;
+        }
+
+        /* Position classes for text */
+        .text-right {
+            left: 105%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .text-left {
+            right: 105%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .text-top {
+            bottom: 105%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .text-bottom {
+            top: 105%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 80px;
+            font-weight: normal;
+            letter-spacing: 0.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>I DYED MY HAIR BLACK</h1>
+
+        <!-- Image 1 -->
+        <div class="image-section">
+            <div class="image-wrapper" id="img1">
+                <img src="assets/I_DYED_MY_HAIR_BLACK-1.png" alt="Hair 1" class="main-image">
+                <img src="assets/I_DYED_MY_HAIR_BLACK-1-hover.png" alt="Hair 1 Hover" class="hover-image">
+                <div class="hover-text text-right">memories dissolve like dye in water</div>
+                <div class="click-text text-bottom">but the stain remains</div>
+            </div>
+        </div>
+
+        <!-- Image 2 -->
+        <div class="image-section">
+            <div class="image-wrapper" id="img2">
+                <img src="assets/I_DYED_MY_HAIR_BLACK-2.png" alt="Hair 2" class="main-image">
+                <img src="assets/I_DYED_MY_HAIR_BLACK-2-hover.png" alt="Hair 2 Hover" class="hover-image">
+                <div class="hover-text text-left">test one</div>
+                <div class="click-text text-top">test two</div>
+            </div>
+        </div>
+
+        <!-- Image 3 -->
+        <div class="image-section">
+            <div class="image-wrapper" id="img3">
+                <img src="assets/I_DYED_MY_HAIR_BLACK-3.png" alt="Hair 3" class="main-image">
+                <img src="assets/I_DYED_MY_HAIR_BLACK-3-hover.png" alt="Hair 3 Hover" class="hover-image">
+                <div class="hover-text text-left">test one</div>
+                <div class="click-text text-top">test two</div>
+            </div>
+        </div>
+
+        <!-- Image 4 -->
+        <div class="image-section">
+            <div class="image-wrapper" id="img4">
+                <img src="assets/I_DYED_MY_HAIR_BLACK-4.png" alt="Hair 4" class="main-image">
+                <img src="assets/I_DYED_MY_HAIR_BLACK-4-hover.png" alt="Hair 4 Hover" class="hover-image">
+                <div class="hover-text text-left">test one</div>
+                <div class="click-text text-top">test two</div>
+            </div>
+        </div>
+
+        <!-- Sketch at the end -->
+    </div>
+
+    <script>
+        // Add click functionality to all image wrappers
+        document.querySelectorAll('.image-wrapper').forEach(wrapper => {
+            // Only add click handler if it has hover/click text
+            if (wrapper.querySelector('.hover-text')) {
+                wrapper.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    // Toggle clicked state
+                    if (this.classList.contains('clicked')) {
+                        this.classList.remove('clicked');
+                        this.classList.remove('askew');
+                    } else {
+                        this.classList.add('clicked');
+                        this.classList.add('askew');
+                    }
+                });
+            }
+        });
+
+        // Optional: Click anywhere else to reset all images
+        document.body.addEventListener('click', function(e) {
+            if (!e.target.closest('.image-wrapper')) {
+                document.querySelectorAll('.image-wrapper').forEach(wrapper => {
+                    wrapper.classList.remove('clicked');
+                    wrapper.classList.remove('askew');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
