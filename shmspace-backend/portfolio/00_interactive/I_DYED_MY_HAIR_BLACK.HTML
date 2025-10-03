@@ -11,8 +11,9 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
+            padding: 0 20px; /* Add padding to prevent edge touching */
         }
 
         .image-section {
@@ -39,7 +40,7 @@
 
         .image-wrapper img {
             display: block;
-            max-width: 500px;
+            max-width: 300px; /* CHANGE from 500px to 300px */
             height: auto;
             transition: opacity 0.2s ease;
         }
@@ -67,7 +68,8 @@
             transition: opacity 0.3s ease;
             font-size: 14px;
             line-height: 1.4;
-            white-space: nowrap;
+            white-space: normal; /* CHANGE from nowrap to normal */
+            max-width: 200px; /* ADD width constraint */
             pointer-events: none;
         }
 
@@ -82,27 +84,29 @@
 
         /* Position classes for text */
         .text-right {
-            left: 105%;
+            left: calc(100% + 20px); /* CHANGE from 105% */
             top: 50%;
             transform: translateY(-50%);
         }
 
         .text-left {
-            right: 105%;
+            right: calc(100% + 20px); /* CHANGE from 105% */
             top: 50%;
             transform: translateY(-50%);
         }
 
         .text-top {
-            bottom: 105%;
+            bottom: calc(100% + 20px); /* CHANGE from 105% */
             left: 50%;
             transform: translateX(-50%);
+            text-align: center; /* ADD for better centering */
         }
 
         .text-bottom {
-            top: 105%;
+            top: calc(100% + 20px); /* CHANGE from 105% */
             left: 50%;
             transform: translateX(-50%);
+            text-align: center; /* ADD for better centering */
         }
 
         h1 {
