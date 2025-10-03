@@ -1,0 +1,1 @@
+a (rare) lighthearted diary comic about the struggles to dress for Fall in New Jersey, featuring my beloved friend and undergraduate college roommate brit x3
