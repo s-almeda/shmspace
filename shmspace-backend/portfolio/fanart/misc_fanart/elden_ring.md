@@ -1,0 +1,1 @@
+i drew this while watching my brother play elden ring. im gonna be honest i'm not even sure i'm getting the name of the game right here

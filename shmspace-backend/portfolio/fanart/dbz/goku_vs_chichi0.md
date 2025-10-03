@@ -1,0 +1,1 @@
+spent like 3 days straight nonstop over winter break one year (c. 2018-2019) to end up with these 2 seconds of animation. it was genuinely so worth it what a wonderful time in my life

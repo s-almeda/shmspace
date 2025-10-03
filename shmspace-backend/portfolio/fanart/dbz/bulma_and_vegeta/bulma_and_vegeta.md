@@ -1,0 +1,1 @@
+bulma is a colorful-hair woman and in STEM and a MOTHER and she's MESSY and INSANE i LOVE her and her disastrous alien husband! truly the most powerful and underrated character in dragonball
