@@ -6,17 +6,17 @@
     <title>I DYED MY HAIR BLACK</title>
     <style>
         body {
-            background: #0a0a0a;
+            background: #000000;
             color: #f0f0f0;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
         .image-section {
-            margin-bottom: 150px; /* Adjust spacing between images */
+            margin-bottom: 120px; /* Adjust spacing between images */
             position: relative;
             display: flex;
             align-items: center;
@@ -29,9 +29,13 @@
             cursor: pointer;
         }
 
-        .image-wrapper.askew {
-            transform: rotate(-5deg) scale(1.05);
+        .image-wrapper.askew-left {
+            transform: rotate(-2deg) scale(1.05);
         }
+        .image-wrapper.askew-right {
+            transform: rotate(2deg) scale(1.05);
+        }
+
 
         .image-wrapper img {
             display: block;
@@ -107,6 +111,38 @@
             font-weight: normal;
             letter-spacing: 0.2em;
         }
+
+        /* Clickable link styling */
+        .clickable-link {
+            color: #4a9eff;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .clickable-link:hover {
+            color: #7bb3ff;
+        }
+
+        /* Hidden text styling */
+        .hidden-text {
+            display: none;
+            margin-top: 8px;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 3px solid #4a9eff;
+            border-radius: 3px;
+            font-style: italic;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .hidden-text.revealed {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
@@ -116,20 +152,53 @@
         <!-- Image 1 -->
         <div class="image-section">
             <div class="image-wrapper" id="img1">
-                <img src="assets/I_DYED_MY_HAIR_BLACK-1.png" alt="Hair 1" class="main-image">
-                <img src="assets/I_DYED_MY_HAIR_BLACK-1-hover.png" alt="Hair 1 Hover" class="hover-image">
-                <div class="hover-text text-right">memories dissolve like dye in water</div>
-                <div class="click-text text-bottom">but the stain remains</div>
+                <img src="assets/I_DYED_MY_HAIR_BLACK-1.png" alt="i dyed my hair black 1" class="main-image">
+                <img src="assets/I_DYED_MY_HAIR_BLACK-1-hover.png" alt="i dyed my hair black 1 hover" class="hover-image">
+<div class="hover-text text-left">I dyed my hair green right before moving to California to start my PhD. My mom was appalled; she said, "You can't go to grad school with green hair! What if they don't take you seriously??"**
+I said, "mom, it's Berkeley, California. Everyone can have green hair there."
+<br>
+Dying my hair Green has always felt like a fight. like demanding to be myself. like embracing the absolute privilege of expressive freedom with such veracity, it's only natural it should become embedded as into my features…**
+<br>
+This May I started to feel like something was dying…
+                </div>
+                <div class="click-text text-top">my lab mates are graduating... I asked us all to please come in an work near each other one last time and we did, and we debated about stupid design stuff and spinned around in our rolly office chairs  ...**
+tim once said,
+<br>
+"The good old days are right now."
+<br>
+it broke me — it still does everytime I return to it, which is frequently—
+this group of misfits has pulled me, and continues to pull me, through so many stressful and thrilling and rewarding endeavors, and it's never lost on me that so much of what I've accomplished in the past 5 years has been thanks to the strength of our metaphorical grip on one another...
+part of me really thought we'd be stuck together forever. I forgot student graduate. i’m going to be the senior phd student. then i’m going to graduate. i feel a shift. it feels like something is dying
+                </div>
             </div>
         </div>
 
         <!-- Image 2 -->
         <div class="image-section">
             <div class="image-wrapper" id="img2">
-                <img src="assets/I_DYED_MY_HAIR_BLACK-2.png" alt="Hair 2" class="main-image">
-                <img src="assets/I_DYED_MY_HAIR_BLACK-2-hover.png" alt="Hair 2 Hover" class="hover-image">
-                <div class="hover-text text-left">test one</div>
-                <div class="click-text text-top">test two</div>
+                <img src="assets/I_DYED_MY_HAIR_BLACK-2.png" alt="i dyed my hair black 2" class="main-image">
+                <img src="assets/I_DYED_MY_HAIR_BLACK-2-hover.png" alt="i dyed my hair black 2 hover" class="hover-image">
+                
+ <div class="hover-text text-left">
+                    I could feel my relationship dying. 
+                    At the time, I thought it was because we had just gotten engaged the month before — which changed very little, and also felt like an enormous emotional transition.
+                    <span class="clickable-link" onclick="toggleHiddenText(event, 'hidden-text-1')">transition always feels ~50% like death to me.</span>
+                    <div id="hidden-text-1" class="hidden-text">(A psychiatrist once told me I have "transitional anxiety" which I thought was a really really funny thing to tell a trans person)</div>
+                </div>
+                <div class="click-text text-top">I turned 27. 
+                  <br> I laid my "mid twenties" down to rest. 
+                   <br> I looked in the mirror and saw something shaped kind of like, <em>"an engaged woman about to get a PhD in computer science and plan a wedding and buy a house and have kids"</em>
+<br>she scared me … but I believed she would be happier than I was. 
+<br>That she could settle into it. 
+<br>I committed to her.
+<br><br>
+<br>And in this time of death and growth, the green felt strange... inappropriate... 
+<br>like, what was there to fight anymore? 
+<br>I had everything I could ask for playing out before me. I should settle into it. 
+<br>I could let my past die.
+<br>maybe it was time to be taken seriously
+</div>
+
             </div>
         </div>
 
@@ -138,8 +207,17 @@
             <div class="image-wrapper" id="img3">
                 <img src="assets/I_DYED_MY_HAIR_BLACK-3.png" alt="Hair 3" class="main-image">
                 <img src="assets/I_DYED_MY_HAIR_BLACK-3-hover.png" alt="Hair 3 Hover" class="hover-image">
-                <div class="hover-text text-left">test one</div>
-                <div class="click-text text-top">test two</div>
+               
+                <div class="hover-text text-left">
+                    He asked to leave me in July. 
+                    I begged him to stay. 
+                    I got to learn what it's like to be with someone who is staying because you begged them to. 
+                    It is unpleasant. 
+                    </div>
+                <div class="click-text text-top">I gave the ring back. 
+                    I cried like something dear and promised had been taken from me, and I resented myself for having considered it so dear and promised in the first place, and I feared that this would be the thing to turn me into a hopeless desperate jaded sad pathetic animal
+</div>
+
             </div>
         </div>
 
@@ -148,8 +226,24 @@
             <div class="image-wrapper" id="img4">
                 <img src="assets/I_DYED_MY_HAIR_BLACK-4.png" alt="Hair 4" class="main-image">
                 <img src="assets/I_DYED_MY_HAIR_BLACK-4-hover.png" alt="Hair 4 Hover" class="hover-image">
-                <div class="hover-text text-left">test one</div>
-                <div class="click-text text-top">test two</div>
+                <div class="hover-text text-left">
+It's September now.
+My hair turned green again. I didn't dye it; the black washed out and the green reemerged. It had never left... So stubborn.
+                    </div>
+                <div class="click-text text-top">
+                    <br> I stopped planning my wedding. I started planning a road trip,
+                    <br> and my post-graduation plans,  and how I'll arrange the in my shitty little 1-bedroom apartment.
+                    <br> 
+                    <br> I'm finding it so exciting and freeing and fun that I can't help but feel a little guilty, too. like, an anxious kind of relieved. 
+                    <br>
+                    <br>Maybe I dodged a bullet. But it doesn't feel good to realize how long I stood in place yearning for that bullet.
+                     <br>I want to think that I know what's best for myself. 
+                     <br>That I know when to move on, that I won't let someone else decide that for me. That I know what not to compromise
+                    <br>
+                    Something to work on, I guess. 
+                    <br>
+                    I can start with dying my hair green again.
+                   </div>
             </div>
         </div>
 
@@ -157,6 +251,27 @@
     </div>
 
     <script>
+        // Function to toggle hidden text
+        function toggleHiddenText(event, textId) {
+            event.stopPropagation(); // Prevent event bubbling
+            const hiddenText = document.getElementById(textId);
+            
+            if (hiddenText.classList.contains('revealed')) {
+                hiddenText.classList.remove('revealed');
+                // Hide after animation completes
+                setTimeout(() => {
+                    if (!hiddenText.classList.contains('revealed')) {
+                        hiddenText.style.display = 'none';
+                    }
+                }, 300);
+            } else {
+                hiddenText.style.display = 'block';
+                // Trigger reflow then add class for animation
+                hiddenText.offsetHeight;
+                hiddenText.classList.add('revealed');
+            }
+        }
+
         // Add click functionality to all image wrappers
         document.querySelectorAll('.image-wrapper').forEach(wrapper => {
             // Only add click handler if it has hover/click text
