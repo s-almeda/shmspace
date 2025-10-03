@@ -1,0 +1,3 @@
+From a DnD campaign I DM'd with UC Berkeley's QICSE (Queer in Computer Science & Engineering) Graduate Student group! Together with my fellow DM, dear friend, and collaborator Robbie Netzorg.
+
+We played Microscope to collaboratively build the world of **Palavedra**, its history and mythology. My players took **The Ride of the Century** — the first train ride to ever leave Palavedra, after a century of The Shifting...!

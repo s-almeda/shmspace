@@ -1,0 +1,1 @@
+these pieces aren't really comics but I think putting them here makes the most sense w.r.t. subject matter. + photos of a 20 year old shm for scale. my hair was so long and not green!

@@ -1,0 +1,3 @@
+drawing from observation is one of my favorite ways to spend time with animals and nature. shout out to the Lindsay Wildlife Center in Walnut Creek, where I felt I was able to develop a real relationship with many of the animals (including humans) there, even though I spent most of my time nonverbally hyperfixating 
+
+Lord Richard (the turkey vulture at Lindsay) is the oldest known turkey vulture in the world! He is 50 years old! The various interactions we've had while I've sat staring at him for hours have been so delightful; what a creature. 
