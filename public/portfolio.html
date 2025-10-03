@@ -138,7 +138,9 @@
     @media (max-width: 768px) {
       .window-body {
         flex-direction: column;
-        height: calc(100%);
+        height: calc(97%);
+        padding-bottom:1vh;
+
       }
 
       .file-selector {
@@ -335,6 +337,9 @@
   if (imagePath.toLowerCase().endsWith('.html')) {
     // HTML interactive piece
     container.innerHTML = `
+                <p>
+              <a href="${fullImagePath}" target="_blank" style="color: #0000EE !important; text-decoration: underline !important;">click to open in new tab</a><br>
+            </p>
       <iframe 
         src="${fullImagePath}" 
         style="width: 100%; height: 70vh; border: 2px solid #888; background: white;"
@@ -345,7 +350,7 @@
         <details>
           <summary><strong>${title}</strong></summary>
           <div style="font-size: 14px;">
-            <a href="${fullImagePath}" target="_blank">Open in new tab</a><br>
+
             ${description}
           </div>
         </details>
