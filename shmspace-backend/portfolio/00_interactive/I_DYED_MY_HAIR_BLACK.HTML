@@ -9,10 +9,11 @@
         #idmhb-frame {
             background: #000000;
             color: #f0f0f0;
-            font-family: 'Courier New', monospace;
+            font-family: 'Arial', /* monospace;*/ sans-serif;
             margin: 0;
             padding: 20px;
-            overflow-x: hidden;
+            overflow-x: auto; /* Allow horizontal scrolling */
+            min-width: 600px; /* Ensure minimum width */
         }
 
         #idmhb-frame * {
@@ -20,18 +21,19 @@
         }
 
         #idmhb-frame .container {
-            max-width: 1200px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
         #idmhb-frame .image-section {
-            margin-bottom: 100px;
+            margin-bottom: 150px;
             position: relative;
             display: flex;
-            align-items: flex-start;
+            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            min-height: 400px; /* Ensure space for text panels */
+            min-height: 800px; /* Ensure space for text above and below */
         }
 
         #idmhb-frame .image-wrapper {
@@ -39,15 +41,21 @@
             transition: transform 0.3s ease;
             cursor: pointer;
             z-index: 10;
+            margin: 100px 0; /* Space for text above and below */
         }
 
-        #idmhb-frame .image-wrapper.clicked {
+        #idmhb-frame .image-wrapper.askew-left {
             transform: rotate(-1deg) scale(1.01);
+        }
+
+        #idmhb-frame .image-wrapper.askew-right {
+            transform: rotate(1deg) scale(1.01);
         }
 
         #idmhb-frame .image-wrapper img {
             display: block;
-            max-width: 350px;
+            max-width: 500px; /* Make images bigger */
+            width: 100%;
             height: auto;
             transition: opacity 0.2s ease;
         }
@@ -71,20 +79,23 @@
         /* Text panels - both appear on click */
         #idmhb-frame .text-panel {
             position: absolute;
-            top: 0;
-            width: 280px;
-            max-height: 400px;
+            left: 50%;
+            transform: translateX(-50%); /* Center horizontally */
+            width: 100%; /* Match image width */
+            max-width: 500px; /* Match max image width */
+            max-height: 200px; /* Limit height to prevent too tall boxes */
             opacity: 0;
             transition: opacity 0.3s ease;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.5;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             overflow-y: auto;
             overflow-x: hidden;
             pointer-events: none;
             color: #f0f0f0 !important;
+            box-sizing: border-box;
         }
 
         /* Show panels when clicked */
@@ -93,12 +104,14 @@
             pointer-events: auto;
         }
 
-        #idmhb-frame .text-left {
-            right: calc(100% + 30px);
+        #idmhb-frame .text-top {
+            bottom: calc(100% + 30px); /* Position above image */
+            transform: translateX(-50%); /* Keep centered */
         }
 
-        #idmhb-frame .text-right {
-            left: calc(100% + 30px);
+        #idmhb-frame .text-bottom {
+            top: calc(100% + 30px); /* Position below image */
+            transform: translateX(-50%); /* Keep centered */
         }
 
         /* Scrollbar styling for panels */
@@ -173,7 +186,7 @@
                 <img src="assets/I_DYED_MY_HAIR_BLACK-1.png" alt="i dyed my hair black 1" class="main-image">
                 <img src="assets/I_DYED_MY_HAIR_BLACK-1-hover.png" alt="i dyed my hair black 1 hover" class="hover-image">
                 
-                <div class="text-panel text-left">
+                <div class="text-panel text-top">
                     I dyed my hair green right before moving to California to start my PhD. My mom was appalled; she said, "You can't go to grad school with green hair! What if they don't take you seriously??"
                     <br><br>
                     I said, "mom, it's Berkeley, California. Everyone can have green hair there."
@@ -183,7 +196,7 @@
                     This May I started to feel like something was dying…
                 </div>
                 
-                <div class="text-panel text-right">
+                <div class="text-panel text-bottom">
                     my lab mates are graduating... I asked us all to please come in an work near each other one last time and we did, and we debated about stupid design stuff and spinned around in our rolly office chairs ...**
                     <br><br>
                     tim once said,
@@ -204,7 +217,7 @@
                 <img src="assets/I_DYED_MY_HAIR_BLACK-2.png" alt="i dyed my hair black 2" class="main-image">
                 <img src="assets/I_DYED_MY_HAIR_BLACK-2-hover.png" alt="i dyed my hair black 2 hover" class="hover-image">
                 
-                <div class="text-panel text-left">
+                <div class="text-panel text-top">
                     I could feel my relationship dying. 
                     At the time, I thought it was because we had just gotten engaged the month before — which changed very little, and also felt like an enormous emotional transition.
                     <br><br>
@@ -212,7 +225,7 @@
                     <div id="hidden-text-1" class="hidden-text">(A psychiatrist once told me I have "transitional anxiety" which I thought was a really really funny thing to tell a trans person)</div>
                 </div>
                 
-                <div class="text-panel text-right">
+                <div class="text-panel text-bottom">
                     I turned 27. 
                     <br>I laid my "mid twenties" down to rest. 
                     <br><br>
@@ -238,7 +251,7 @@
                 <img src="assets/I_DYED_MY_HAIR_BLACK-3.png" alt="Hair 3" class="main-image">
                 <img src="assets/I_DYED_MY_HAIR_BLACK-3-hover.png" alt="Hair 3 Hover" class="hover-image">
                 
-                <div class="text-panel text-left">
+                <div class="text-panel text-top">
                     He asked to leave me in July. 
                     <br>I begged him to stay. 
                     <br><br>
@@ -247,7 +260,7 @@
                     It is unpleasant.
                 </div>
                 
-                <div class="text-panel text-right">
+                <div class="text-panel text-bottom">
                     I gave the ring back. 
                     <br><br>
                     I cried like something dear and promised had been taken from me, and I resented myself for having considered it so dear and promised in the first place, and I feared that this would be the thing to turn me into a hopeless desperate jaded sad pathetic animal
@@ -261,13 +274,13 @@
                 <img src="assets/I_DYED_MY_HAIR_BLACK-4.png" alt="Hair 4" class="main-image">
                 <img src="assets/I_DYED_MY_HAIR_BLACK-4-hover.png" alt="Hair 4 Hover" class="hover-image">
                 
-                <div class="text-panel text-left">
+                <div class="text-panel text-top">
                     It's September now.
                     <br><br>
                     My hair turned green again. I didn't dye it; the black washed out and the green reemerged. It had never left... So stubborn.
                 </div>
                 
-                <div class="text-panel text-right">
+                <div class="text-panel text-bottom">
                     I stopped planning my wedding. I started planning a road trip,
                     <br>and my post-graduation plans, and how I'll arrange the in my shitty little 1-bedroom apartment.
                     <br><br>
@@ -298,9 +311,19 @@
         document.querySelectorAll('.image-wrapper').forEach(wrapper => {
             wrapper.addEventListener('click', function(e) {
                 e.stopPropagation();
-                
+
                 // Toggle clicked state
                 this.classList.toggle('clicked');
+
+                // Remove both askew classes first
+                this.classList.remove('askew-left', 'askew-right');
+
+                // Randomly add askew-left or askew-right
+                if (Math.random() < 0.5) {
+                    this.classList.add('askew-left');
+                } else {
+                    this.classList.add('askew-right');
+                }
             });
         });
 

@@ -331,36 +331,59 @@
         
       }
   
-  // Check if the file is a PDF
-  const isPDF = imagePath.toLowerCase().endsWith('.pdf');
-  console.log('File path:', imagePath, 'Is PDF:', isPDF, 'Full path:', fullImagePath); // Debug
-  
-  let mediaContent;
-  if (isPDF) {
-    mediaContent = `
+  // Check file type and display accordingly
+  if (imagePath.toLowerCase().endsWith('.html')) {
+    // HTML interactive piece
+    container.innerHTML = `
+      <iframe 
+        src="${fullImagePath}" 
+        style="width: 100%; height: 70vh; border: 2px solid #888; background: white;"
+        sandbox="allow-scripts allow-same-origin"
+      ></iframe>
+      
+      <ul class="tree-view">
+        <details>
+          <summary><strong>${title}</strong></summary>
+          <div style="font-size: 14px;">
+            <a href="${fullImagePath}" target="_blank">Open in new tab</a><br>
+            ${description}
+          </div>
+        </details>
+      </ul>
+    `;
+  } else if (imagePath.toLowerCase().endsWith('.pdf')) {
+    // PDF handling
+    container.innerHTML = `
       <object data="${fullImagePath}" type="application/pdf" width="100%" height="80vh" style="border: 2px solid #888; min-height: 600px;">
         <p>Unable to display PDF file. <a href="${fullImagePath}" target="_blank">Download</a> instead.</p>
       </object>
+      
+      <ul class="tree-view">
+        <details>
+          <summary><strong>${title}</strong></summary>
+          <div style="font-size: 14px;">
+            ${description}
+          </div>
+        </details>
+      </ul>
     `;
   } else {
-    mediaContent = `
+    // Regular images
+    container.innerHTML = `
       <a href="${fullImagePath}" target="_blank">
         <img src="${fullImagePath}" alt="${title}" style="max-width: 100%; max-height: 70vh; width: auto; height: auto; border: 2px solid #888;">
       </a>
+      
+      <ul class="tree-view">
+        <details>
+          <summary><strong>${title}</strong></summary>
+          <div style="font-size: 14px;">
+            ${description}
+          </div>
+        </details>
+      </ul>
     `;
   }
-  
-  container.innerHTML = `
-    ${mediaContent}
-    <ul class="tree-view">
-      <details>
-        <summary><strong>${title}</strong></summary>
-        <div style="font-size: 14px;">
-          ${description}
-        </div>
-      </details>
-    </ul>
-  `;
 }
 
 
