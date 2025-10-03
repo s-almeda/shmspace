@@ -82,15 +82,18 @@
             position: absolute;
             left: 50%;
             transform: translateX(-50%); /* Center horizontally */
-            width: 100%; /* Match image width */
-            max-width: 500px; /* Match max image width */
+            width: 90%; /* Slightly narrower than image */
+            max-width: 450px; /* Slightly narrower max width */
             max-height: 200px; /* Limit height to prevent too tall boxes */
             opacity: 0;
             transition: opacity 0.3s ease;
             font-size: 14px;
             line-height: 1.5;
             padding: 20px;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95); /* More opaque for better readability over image */
+            border: 2px solid rgba(255, 255, 255, 0.3); /* More visible border */
+            border-radius: 8px; /* Rounded corners for better visual separation */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8); /* Shadow for depth */
             overflow-y: auto;
             overflow-x: hidden;
             pointer-events: none;
@@ -105,19 +108,21 @@
         }
 
         #idmhb-frame .text-top {
-            bottom: calc(100% + 30px); /* Position above image */
+            bottom: calc(100% - 40px); /* Overlap the top edge of image */
             transform: translateX(-50%); /* Keep centered */
+            z-index: 20; /* Ensure it appears above the image */
         }
 
         #idmhb-frame .text-top-left {
-            bottom: calc(95%); /* Position above image */
-            transform: translateX(-70%); /* Keep centered */
+            bottom: calc(100% - 60px); /* Overlap the top-left corner more */
+            transform: translateX(-70%); /* Offset to left */
+            z-index: 20; /* Ensure it appears above the image */
         }
 
-
         #idmhb-frame .text-bottom {
-            top: calc(100%); /* Position below image */
+            top: calc(100% - 40px); /* Overlap the bottom edge of image */
             transform: translateX(-50%); /* Keep centered */
+            z-index: 20; /* Ensure it appears above the image */
         }
 
         /* Scrollbar styling for panels */
