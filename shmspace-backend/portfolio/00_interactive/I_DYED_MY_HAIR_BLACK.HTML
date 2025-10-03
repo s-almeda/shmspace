@@ -10,13 +10,13 @@
             color: #f0f0f0;
         }
 
-        .container {
+        .idmhb-interactive.container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px; /* Add padding to prevent edge touching */
         }
 
-        .image-section {
+        .idmhb-interactive .image-section {
             margin-bottom: 120px; /* Adjust spacing between images */
             position: relative;
             display: flex;
@@ -24,28 +24,28 @@
             justify-content: center;
         }
 
-        .image-wrapper {
+        .idmhb-interactive .image-wrapper {
             position: relative;
             transition: transform 0.3s ease;
             cursor: pointer;
         }
 
-        .image-wrapper.askew-left {
+        .idmhb-interactive .image-wrapper.askew-left {
             transform: rotate(-2deg) scale(1.05);
         }
-        .image-wrapper.askew-right {
+        .idmhb-interactive .image-wrapper.askew-right {
             transform: rotate(2deg) scale(1.05);
         }
 
 
-        .image-wrapper img {
+        .idmhb-interactive .image-wrapper img {
             display: block;
             max-width: 300px; /* CHANGE from 500px to 300px */
             height: auto;
             transition: opacity 0.2s ease;
         }
 
-        .hover-image {
+        .idmhb-interactive .hover-image {
             position: absolute;
             top: 0;
             left: 0;
@@ -53,16 +53,16 @@
             pointer-events: none;
         }
 
-        .image-wrapper:hover .hover-image {
+        .idmhb-interactive .image-wrapper:hover .hover-image {
             opacity: 1;
         }
 
-        .image-wrapper:hover .main-image {
+        .idmhb-interactive .image-wrapper:hover .main-image {
             opacity: 0;
         }
 
         /* Text overlays */
-        .hover-text, .click-text {
+        .idmhb-interactive .hover-text, .idmhb-interactive .click-text {
             position: absolute;
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -73,43 +73,51 @@
             pointer-events: none;
         }
 
-        .image-wrapper:hover .hover-text {
+        .idmhb-interactive .image-wrapper:hover .hover-text {
             opacity: 1;
         }
 
-        .image-wrapper.clicked .hover-text,
-        .image-wrapper.clicked .click-text {
+        .idmhb-interactive .image-wrapper.clicked .hover-text,
+        .idmhb-interactive .image-wrapper.clicked .click-text {
             opacity: 1;
         }
 
         /* Position classes for text */
-        .text-right {
+        .idmhb-interactive .text-right {
             left: calc(100% + 20px); /* CHANGE from 105% */
             top: 50%;
             transform: translateY(-50%);
+            max-height: 300px;
+            overflow-y: auto; /* ADD for scroll if text is too long */
         }
 
-        .text-left {
+        .idmhb-interactive .text-left {
             right: calc(100% + 20px); /* CHANGE from 105% */
             top: 50%;
             transform: translateY(-50%);
+                        max-height: 300px;
+            overflow-y: auto; /* ADD for scroll if text is too long */
         }
 
-        .text-top {
+        .idmhb-interactive .text-top {
             bottom: calc(100% + 20px); /* CHANGE from 105% */
             left: 50%;
             transform: translateX(-50%);
             text-align: center; /* ADD for better centering */
+                        max-height: 300px;
+            overflow-y: auto; /* ADD for scroll if text is too long */
         }
 
-        .text-bottom {
+        .idmhb-interactive .text-bottom {
             top: calc(100% + 20px); /* CHANGE from 105% */
             left: 50%;
             transform: translateX(-50%);
             text-align: center; /* ADD for better centering */
+                        max-height: 300px;
+            overflow-y: auto; /* ADD for scroll if text is too long */
         }
 
-        h1 {
+        .idmhb-interactive h1 {
             text-align: center;
             margin-bottom: 80px;
             font-weight: normal;
@@ -117,19 +125,19 @@
         }
 
         /* Clickable link styling */
-        .clickable-link {
+        .idmhb-interactive .clickable-link {
             color: #4a9eff;
             text-decoration: underline;
             cursor: pointer;
             transition: color 0.2s ease;
         }
 
-        .clickable-link:hover {
+        .idmhb-interactive .clickable-link:hover {
             color: #7bb3ff;
         }
 
         /* Hidden text styling */
-        .hidden-text {
+        .idmhb-interactive .hidden-text {
             display: none;
             margin-top: 8px;
             padding: 8px 12px;
@@ -142,7 +150,7 @@
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
-        .hidden-text.revealed {
+        .idmhb-interactive .hidden-text.revealed {
             display: block;
             opacity: 1;
             transform: translateY(0);
@@ -150,7 +158,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container idmhb-interactive">
         <h1>I DYED MY HAIR BLACK</h1>
 
         <!-- Image 1 -->
@@ -158,12 +166,12 @@
             <div class="image-wrapper" id="img1">
                 <img src="assets/I_DYED_MY_HAIR_BLACK-1.png" alt="i dyed my hair black 1" class="main-image">
                 <img src="assets/I_DYED_MY_HAIR_BLACK-1-hover.png" alt="i dyed my hair black 1 hover" class="hover-image">
-<div class="hover-text text-left">I dyed my hair green right before moving to California to start my PhD. My mom was appalled; she said, "You can't go to grad school with green hair! What if they don't take you seriously??"**
-I said, "mom, it's Berkeley, California. Everyone can have green hair there."
+<div class="hover-text text-left">I dyed my hair green right before moving to California to start my PhD. My mom was appalled; she said, "You can't go to grad school with green hair! What if they don't take you seriously??"
+<br>I said, "mom, it's Berkeley, California. Everyone can have green hair there."
 <br>
-Dying my hair Green has always felt like a fight. like demanding to be myself. like embracing the absolute privilege of expressive freedom with such veracity, it's only natural it should become embedded as into my features…**
+<br>Dying my hair Green has always felt like a fight. like demanding to be myself. like embracing the absolute privilege of expressive freedom with such veracity, it's only natural it should become embedded as into my features...
 <br>
-This May I started to feel like something was dying…
+<br>This May I started to feel like something was dying…
                 </div>
                 <div class="click-text text-top">my lab mates are graduating... I asked us all to please come in an work near each other one last time and we did, and we debated about stupid design stuff and spinned around in our rolly office chairs  ...**
 tim once said,
