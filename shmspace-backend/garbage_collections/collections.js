@@ -1,0 +1,351 @@
+// garbage_collections/collections.js
+const db = require('./db');
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
+
+// Create uploads directory if it doesn't exist
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+// Configure multer for file uploads
+const upload = multer({
+  dest: uploadsDir,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB per file
+    files: 20 // max 20 files at once
+  },
+  fileFilter: (req, file, cb) => {
+    const allowed = [
+      'image/jpeg', 
+      'image/png', 
+      'image/gif', 
+      'image/webp',
+      'application/octet-stream' // Sometimes webp files are detected as this
+    ];
+    
+    // Extra check: if it's octet-stream, check the file extension
+    if (file.mimetype === 'application/octet-stream') {
+      const ext = file.originalname.toLowerCase().split('.').pop();
+      if (!['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {
+        return cb(new Error(`Invalid file type: ${file.mimetype} with extension .${ext}`));
+      }
+    }
+    
+    console.log('File mimetype:', file.mimetype, 'Original name:', file.originalname);
+    
+    if (allowed.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error(`Invalid file type: ${file.mimetype}. Only images allowed.`));
+    }
+  }
+});
+
+const router = express.Router();
+
+// Test route
+router.get('/', (req, res) => {
+  res.json({ message: 'Collections API' });
+});
+
+// Create a new collection from uploaded images
+router.post('/', upload.array('images'), (req, res) => {
+  try {
+    const { type = 'Stack', name, user_name } = req.body;
+    
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: 'No images uploaded' });
+    }
+
+    if (!name || !user_name) {
+      return res.status(400).json({ error: 'Collection name and user name are required' });
+    }
+
+    const collectionUid = uuidv4();
+    const pageUids = [];
+
+    // Create a page for each uploaded image
+    const insertPage = db.prepare('INSERT INTO pages (uid, type, content) VALUES (?, ?, ?)');
+    
+    for (const file of req.files) {
+      const pageUid = uuidv4();
+      const filename = `${pageUid}${path.extname(file.originalname)}`;
+      const newPath = path.join(uploadsDir, filename);
+      
+      // Move file to permanent location with UUID name
+      fs.renameSync(file.path, newPath);
+      
+      // Create page record
+      insertPage.run(pageUid, 'image', filename);
+      pageUids.push(pageUid);
+    }
+
+    // Create collection record
+    const insertCollection = db.prepare(`
+      INSERT INTO collections (uid, name, user_name, type, page_count, page_list) 
+      VALUES (?, ?, ?, ?, ?, ?)
+    `);
+    
+    insertCollection.run(
+      collectionUid, 
+      name,
+      user_name,
+      type, 
+      pageUids.length, 
+      JSON.stringify(pageUids)
+    );
+
+    res.json({
+      collection: {
+        uid: collectionUid,
+        name: name,
+        user_name: user_name,
+        type: type,
+        page_count: pageUids.length,
+        pages: pageUids
+      }
+    });
+
+  } catch (error) {
+    console.error('Upload error:', error);
+    res.status(500).json({ error: 'Upload failed' });
+  }
+});
+
+// Get a specific collection
+router.get('/:uid', (req, res) => {
+  try {
+    const collection = db.prepare('SELECT * FROM collections WHERE uid = ?').get(req.params.uid);
+    
+    if (!collection) {
+      return res.status(404).json({ error: 'Collection not found' });
+    }
+
+    // Get all pages for this collection
+    const pageUids = JSON.parse(collection.page_list || '[]');
+    const pages = db.prepare('SELECT * FROM pages WHERE uid IN (' + pageUids.map(() => '?').join(',') + ')').all(...pageUids);
+    
+    // Sort pages by the order in page_list
+    const sortedPages = pageUids.map(uid => pages.find(page => page.uid === uid)).filter(Boolean);
+
+    res.json({
+      collection: {
+        uid: collection.uid,
+        name: collection.name,
+        user_name: collection.user_name,
+        type: collection.type,
+        page_count: collection.page_count,
+        created_at: collection.created_at
+      },
+      pages: sortedPages
+    });
+
+  } catch (error) {
+    console.error('Get collection error:', error);
+    res.status(500).json({ error: 'Failed to get collection' });
+  }
+});
+
+// Serve uploaded images
+router.get('/uploads/:filename', (req, res) => {
+  const filename = req.params.filename;
+  const filePath = path.join(uploadsDir, filename);
+  
+  if (fs.existsSync(filePath)) {
+    res.sendFile(filePath);
+  } else {
+    res.status(404).json({ error: 'Image not found' });
+  }
+});
+
+// List all collections (for debugging/admin)
+router.get('/admin/list', (req, res) => {
+  try {
+    const collections = db.prepare('SELECT uid, name, user_name, type, page_count, created_at FROM collections ORDER BY created_at DESC').all();
+    res.json({ collections });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to list collections' });
+  }
+});
+
+// Add a page to an existing collection
+router.post('/:uid/pages', (req, res) => {
+  // Handle both multipart (image) and JSON (text) requests
+  const handleRequest = () => {
+    try {
+      let user_name, text_content;
+      
+      // Check if it's multipart (image upload) or JSON (text)
+      if (req.get('content-type')?.includes('multipart')) {
+        user_name = req.body.user_name;
+        text_content = req.body.text_content;
+      } else {
+        user_name = req.body.user_name;
+        text_content = req.body.text_content;
+      }
+
+      const collectionUid = req.params.uid;
+
+      if (!user_name) {
+        return res.status(400).json({ error: 'User name is required' });
+      }
+
+      // Check if collection exists and user owns it
+      const collection = db.prepare('SELECT * FROM collections WHERE uid = ?').get(collectionUid);
+      if (!collection) {
+        return res.status(404).json({ error: 'Collection not found' });
+      }
+      if (collection.user_name !== user_name) {
+        return res.status(403).json({ error: 'You can only edit your own collections' });
+      }
+
+      const pageUid = uuidv4();
+      let pageType, content;
+
+      if (req.file) {
+        // Image page
+        pageType = 'image';
+        const filename = `${pageUid}${path.extname(req.file.originalname)}`;
+        const newPath = path.join(uploadsDir, filename);
+        fs.renameSync(req.file.path, newPath);
+        content = filename;
+      } else if (text_content) {
+        // Text page
+        pageType = 'text';
+        content = text_content;
+      } else {
+        return res.status(400).json({ error: 'Either image or text content is required' });
+      }
+
+      // Create page
+      const insertPage = db.prepare('INSERT INTO pages (uid, type, content) VALUES (?, ?, ?)');
+      insertPage.run(pageUid, pageType, content);
+
+      // Update collection
+      const pageList = JSON.parse(collection.page_list || '[]');
+      pageList.push(pageUid);
+      
+      const updateCollection = db.prepare('UPDATE collections SET page_count = ?, page_list = ? WHERE uid = ?');
+      updateCollection.run(pageList.length, JSON.stringify(pageList), collectionUid);
+
+      res.json({
+        success: true,
+        page: { uid: pageUid, type: pageType, content }
+      });
+
+    } catch (error) {
+      console.error('Add page error:', error);
+      res.status(500).json({ error: 'Failed to add page' });
+    }
+  };
+
+  // Apply appropriate middleware based on content type
+  if (req.get('content-type')?.includes('multipart')) {
+    upload.single('image')(req, res, (err) => {
+      if (err) {
+        return res.status(400).json({ error: err.message });
+      }
+      handleRequest();
+    });
+  } else {
+    express.json()(req, res, (err) => {
+      if (err) {
+        return res.status(400).json({ error: err.message });
+      }
+      handleRequest();
+    });
+  }
+});
+
+// Delete a page from a collection
+router.delete('/:collection_uid/pages/:page_uid', express.json(), (req, res) => {
+  try {
+    const { collection_uid, page_uid } = req.params;
+    const { user_name } = req.body;
+
+    if (!user_name) {
+      return res.status(400).json({ error: 'User name is required' });
+    }
+
+    // Check if collection exists and user owns it
+    const collection = db.prepare('SELECT * FROM collections WHERE uid = ?').get(collection_uid);
+    if (!collection) {
+      return res.status(404).json({ error: 'Collection not found' });
+    }
+    if (collection.user_name !== user_name) {
+      return res.status(403).json({ error: 'You can only edit your own collections' });
+    }
+
+    // Check if page exists
+    const page = db.prepare('SELECT * FROM pages WHERE uid = ?').get(page_uid);
+    if (!page) {
+      return res.status(404).json({ error: 'Page not found' });
+    }
+
+    // Delete image file if it's an image page
+    if (page.type === 'image') {
+      const filePath = path.join(uploadsDir, page.content);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+    }
+
+    // Delete page from database
+    const deletePage = db.prepare('DELETE FROM pages WHERE uid = ?');
+    deletePage.run(page_uid);
+
+    // Update collection page list
+    const pageList = JSON.parse(collection.page_list || '[]');
+    const updatedPageList = pageList.filter(uid => uid !== page_uid);
+    
+    const updateCollection = db.prepare('UPDATE collections SET page_count = ?, page_list = ? WHERE uid = ?');
+    updateCollection.run(updatedPageList.length, JSON.stringify(updatedPageList), collection_uid);
+
+    res.json({ success: true, message: 'Page deleted' });
+
+  } catch (error) {
+    console.error('Delete page error:', error);
+    res.status(500).json({ error: 'Failed to delete page' });
+  }
+});
+
+// Update collection name
+router.patch('/:uid', express.json(), (req, res) => {
+  try {
+    const collectionUid = req.params.uid;
+    const { user_name, name } = req.body;
+
+    if (!user_name) {
+      return res.status(400).json({ error: 'User name is required' });
+    }
+    if (!name) {
+      return res.status(400).json({ error: 'Collection name is required' });
+    }
+
+    // Check if collection exists and user owns it
+    const collection = db.prepare('SELECT * FROM collections WHERE uid = ?').get(collectionUid);
+    if (!collection) {
+      return res.status(404).json({ error: 'Collection not found' });
+    }
+    if (collection.user_name !== user_name) {
+      return res.status(403).json({ error: 'You can only edit your own collections' });
+    }
+
+    // Update collection name
+    const updateCollection = db.prepare('UPDATE collections SET name = ? WHERE uid = ?');
+    updateCollection.run(name, collectionUid);
+
+    res.json({ success: true, message: 'Collection name updated' });
+
+  } catch (error) {
+    console.error('Update collection error:', error);
+    res.status(500).json({ error: 'Failed to update collection name' });
+  }
+});
+
+module.exports = router;

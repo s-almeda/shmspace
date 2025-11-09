@@ -1,2 +1,4 @@
 node_modules/
 .env
+garbage_collections/collections.db
+garbage_collections/uploads/

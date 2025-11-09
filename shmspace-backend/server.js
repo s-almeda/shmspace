@@ -25,6 +25,10 @@ app.use(cors({
 }));
 
 
+// add "collections" server routes
+app.use('/api/collections', require('./garbage_collections/collections'));
+
+
 app.get('/', (req, res) => {
     res.send("if you're reading this, the shmspace-backend works!");
 });
