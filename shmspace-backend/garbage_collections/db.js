@@ -10,6 +10,8 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS collections (
     uid TEXT PRIMARY KEY,
     name TEXT NOT NULL,
+    description TEXT,
+    cover_image TEXT,
     user_name TEXT NOT NULL,
     type TEXT NOT NULL CHECK (type IN ('Magazine', 'Stack')),
     page_count INTEGER DEFAULT 0,
