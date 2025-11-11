@@ -4,7 +4,12 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const { v4: uuidv4 } = require('uuid');
+const crypto = require('crypto');
+
+// Generate UUID using Node's built-in crypto
+function uuidv4() {
+  return crypto.randomUUID();
+}
 
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, 'uploads');
@@ -56,7 +61,7 @@ router.get('/', (req, res) => {
 // Create a new collection from uploaded images
 router.post('/', upload.array('images'), (req, res) => {
   try {
-    const { type = 'Stack', name, user_name } = req.body;
+    const { type = 'Stack', name, description, user_name, cover_image_index } = req.body;
     
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ error: 'No images uploaded' });
@@ -68,11 +73,13 @@ router.post('/', upload.array('images'), (req, res) => {
 
     const collectionUid = uuidv4();
     const pageUids = [];
+    let coverImageFilename = null;
 
     // Create a page for each uploaded image
     const insertPage = db.prepare('INSERT INTO pages (uid, type, content) VALUES (?, ?, ?)');
     
-    for (const file of req.files) {
+    for (let i = 0; i < req.files.length; i++) {
+      const file = req.files[i];
       const pageUid = uuidv4();
       const filename = `${pageUid}${path.extname(file.originalname)}`;
       const newPath = path.join(uploadsDir, filename);
@@ -83,17 +90,24 @@ router.post('/', upload.array('images'), (req, res) => {
       // Create page record
       insertPage.run(pageUid, 'image', filename);
       pageUids.push(pageUid);
+
+      // Set cover image (either specified index or first image)
+      if ((cover_image_index && parseInt(cover_image_index) === i) || (!cover_image_index && i === 0)) {
+        coverImageFilename = filename;
+      }
     }
 
     // Create collection record
     const insertCollection = db.prepare(`
-      INSERT INTO collections (uid, name, user_name, type, page_count, page_list) 
-      VALUES (?, ?, ?, ?, ?, ?)
+      INSERT INTO collections (uid, name, description, cover_image, user_name, type, page_count, page_list) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `);
     
     insertCollection.run(
       collectionUid, 
       name,
+      description || null,
+      coverImageFilename,
       user_name,
       type, 
       pageUids.length, 
@@ -104,6 +118,8 @@ router.post('/', upload.array('images'), (req, res) => {
       collection: {
         uid: collectionUid,
         name: name,
+        description: description,
+        cover_image: coverImageFilename,
         user_name: user_name,
         type: type,
         page_count: pageUids.length,
@@ -137,6 +153,8 @@ router.get('/:uid', (req, res) => {
       collection: {
         uid: collection.uid,
         name: collection.name,
+        description: collection.description,
+        cover_image: collection.cover_image,
         user_name: collection.user_name,
         type: collection.type,
         page_count: collection.page_count,
@@ -166,7 +184,7 @@ router.get('/uploads/:filename', (req, res) => {
 // List all collections (for debugging/admin)
 router.get('/admin/list', (req, res) => {
   try {
-    const collections = db.prepare('SELECT uid, name, user_name, type, page_count, created_at FROM collections ORDER BY created_at DESC').all();
+    const collections = db.prepare('SELECT uid, name, description, cover_image, user_name, type, page_count, created_at FROM collections ORDER BY created_at DESC').all();
     res.json({ collections });
   } catch (error) {
     res.status(500).json({ error: 'Failed to list collections' });
@@ -314,17 +332,17 @@ router.delete('/:collection_uid/pages/:page_uid', express.json(), (req, res) => 
   }
 });
 
-// Update collection name
+// Update collection name, description, and/or cover image
 router.patch('/:uid', express.json(), (req, res) => {
   try {
     const collectionUid = req.params.uid;
-    const { user_name, name } = req.body;
+    const { user_name, name, description, cover_image } = req.body;
 
     if (!user_name) {
       return res.status(400).json({ error: 'User name is required' });
     }
-    if (!name) {
-      return res.status(400).json({ error: 'Collection name is required' });
+    if (!name && description === undefined && !cover_image) {
+      return res.status(400).json({ error: 'Either name, description, or cover_image is required' });
     }
 
     // Check if collection exists and user owns it
@@ -336,15 +354,45 @@ router.patch('/:uid', express.json(), (req, res) => {
       return res.status(403).json({ error: 'You can only edit your own collections' });
     }
 
-    // Update collection name
-    const updateCollection = db.prepare('UPDATE collections SET name = ? WHERE uid = ?');
-    updateCollection.run(name, collectionUid);
+    // If setting cover_image, verify it's a valid filename in this collection
+    if (cover_image) {
+      const pageList = JSON.parse(collection.page_list || '[]');
+      const pages = db.prepare('SELECT content FROM pages WHERE uid IN (' + pageList.map(() => '?').join(',') + ') AND type = "image"').all(...pageList);
+      const validFilenames = pages.map(p => p.content);
+      
+      if (!validFilenames.includes(cover_image)) {
+        return res.status(400).json({ error: 'Cover image must be one of the images in this collection' });
+      }
+    }
 
-    res.json({ success: true, message: 'Collection name updated' });
+    // Build update query dynamically
+    const updates = [];
+    const values = [];
+    
+    if (name) {
+      updates.push('name = ?');
+      values.push(name);
+    }
+    if (description !== undefined) {
+      updates.push('description = ?');
+      values.push(description);
+    }
+    if (cover_image) {
+      updates.push('cover_image = ?');
+      values.push(cover_image);
+    }
+    
+    values.push(collectionUid);
+
+    // Update collection
+    const updateCollection = db.prepare(`UPDATE collections SET ${updates.join(', ')} WHERE uid = ?`);
+    updateCollection.run(...values);
+
+    res.json({ success: true, message: 'Collection updated' });
 
   } catch (error) {
     console.error('Update collection error:', error);
-    res.status(500).json({ error: 'Failed to update collection name' });
+    res.status(500).json({ error: 'Failed to update collection' });
   }
 });
 
