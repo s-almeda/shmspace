@@ -61,7 +61,18 @@ router.get('/', (req, res) => {
 // Create a new collection from uploaded images
 router.post('/', upload.array('images'), (req, res) => {
   try {
+    console.log('Request body:', req.body);
+    console.log('Request files:', req.files);
+    console.log('Content-Type:', req.get('content-type'));
+    
+    // Check if req.body exists
+    if (!req.body) {
+      return res.status(400).json({ error: 'Request body is missing' });
+    }
+    
     const { type = 'Stack', name, description, user_name, cover_image_index } = req.body;
+    
+    console.log('Parsed values:', { type, name, description, user_name, cover_image_index });
     
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ error: 'No images uploaded' });
