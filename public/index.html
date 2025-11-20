@@ -226,11 +226,57 @@
 
               <div id="name-pronunciation" class="tooltip" style="font-size: 14px;">pronounced: <br> <strong>shim</strong> guh<strong>rang</strong>guhnow all<strong>may</strong>duh
               </div>
-              asdf
-                            </legend>
+              </legend>
+                <span style="font-size: 0.85em; line-height: 1.4; margin: 1em;">
+                  is an HCI + AI creativity researcher, building spaces that empower human creatives to [co-]create <em><a href="#" id="inarticulate-toggle" style="text-decoration: underline; cursor: pointer;">inarticulable knowledge...</a></em>
+                  <div id="inarticulate-details" style="display: none; margin-left: 2em; margin-top: 0.5em;">
+                    ... in particular, shm's goal is to elicit & capture the kinds of knowledge
+                    <span style="white-space: nowrap;">(<select id="learnSelect" class="faves" style="width: auto; min-width: 12em; margin: 0; padding: 0.02em 0.4em; height: 1em; font-size: 0.85em; vertical-align: baseline;">
+                    </select>)</span>
+                    that can only be gained via art-making and creative activity!
+                  </div>
+
+                  <script>
+                  // Randomize dropdown options on page load
+                  (function() {
+                    const options = [
+                    { value: "ai", text: "about AI interaction" },
+                    { value: "creativity", text: "about [co-]creativity" },
+                    { value: "media", text: "about new media" },
+                    { value: "mediums", text: "about new mediums" },
+                    { value: "mediums", text: "about old media" },
+                    { value: "people", text: "about culture" }
+                    ];
+                    
+                    // Shuffle array
+                    for (let i = options.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [options[i], options[j]] = [options[j], options[i]];
+                    }
+                    
+                    // Populate select
+                    const select = document.getElementById('learnSelect');
+                    options.forEach(opt => {
+                    const option = document.createElement('option');
+                    option.value = opt.value;
+                    option.textContent = opt.text;
+                    select.appendChild(option);
+                    });
+                  })();
+
+                  document.getElementById('inarticulate-toggle').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var details = document.getElementById('inarticulate-details');
+                    if (details.style.display === 'none') {
+                    details.style.display = 'block';
+                    } else {
+                    details.style.display = 'none';
+                    }
+                  });
+                  </script>
 
                            
-              <div class="field-row">
+              <div class="field-row" style="margin-top: 1em;">
                   <ul class="tree-view" style="width:100%">
                     <details open >
                       <summary><strong>currently... </strong><span style="color: #de7e00; font-size: 12px;">(click to expand)</span></summary>
