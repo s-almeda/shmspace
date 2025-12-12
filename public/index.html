@@ -12,6 +12,14 @@
 
   <link rel="stylesheet" type="text/css" href="/css/styles.css" />
   
+  <style>
+    /* Fix checkbox alignment when label text wraps to multiple lines */
+    input[type="checkbox"] + label::before,
+    input[type="checkbox"] + label::after {
+      top: 0 !important;
+    }
+  </style>
+  
   <!-- let's also include these javascript scripts. -->
   <!--script src = "tabs.js"></script-->
 
@@ -230,29 +238,30 @@
                 <span style="font-size: 0.85em; line-height: 1.4; margin: 1em;">
                   is an HCI + AI creativity researcher, building spaces that empower human creatives to [co-]create <em><a href="#" id="inarticulate-toggle" style="text-decoration: underline; cursor: pointer;">inarticulable knowledge...</a></em>
                   <div id="inarticulate-details" style="display: none; margin-left: 2em; margin-top: 0.5em;">
-                    ... in particular, shm's goal is to elicit & capture the kind of knowledge
+                    There are questions that can only be answered through artmaking; knowledge that can only ever be attained, and retained, through creative community. <br> I build artistic support systems, and conduct rigorous, community-centered creative activity research, to elicit and capture that embodied, tacit, and inarticulable knowledge we need to better understand 
                     <span style="white-space: nowrap;">(<select id="learnSelect" class="faves" style="width: auto; min-width: 11em; margin: 0; padding: 0.01em 0.3em; height: 1em; font-size: 0.85em; vertical-align: baseline;">
-                    </select>)</span>
-                    that can only be gained via human art-making, and other creative community activities!
+                    </select>).</span>
+                    <!-- that can only be gained via human art-making, and other creative community activities! -->
                   </div>
 
                   <script>
-                  // Randomize dropdown options on page load
                   (function() {
                     const options = [
-                    { value: "ai", text: "about AI interaction" },
-                    { value: "creativity", text: "about [co-]creativity" },
-                    { value: "media", text: "about new media" },
-                    { value: "mediums", text: "about new mediums" },
-                    { value: "oldmedia", text: "about old media" },
-                    { value: "people", text: "about culture" }
-                    ];
+                    { value: "ai", text: "human-centered ai" },
+                    { value: "creativity", text: "[co-]creativity" },
+                    { value: "media", text: "new media" },
+                    { value: "oldmedia", text: "old media" },
+                    { value: "mediums", text: "media ecosystems" },
+                    { value: "people", text: "cultural shifts" },
+                    { value: "human", text: "how to be human"}
+                    ]; 
+                    
                     
                     // Shuffle array
-                    for (let i = options.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [options[i], options[j]] = [options[j], options[i]];
-                    }
+                    // for (let i = options.length - 1; i > 0; i--) {
+                    // const j = Math.floor(Math.random() * (i + 1));
+                    // [options[i], options[j]] = [options[j], options[i]];
+                    // }
                     
                     // Populate select
                     const select = document.getElementById('learnSelect');
@@ -492,19 +501,33 @@
               <div class="row" id="research-interest"> <!-- want to join me --> 
                 
                 <fieldset style="width: 100%; margin: 5px;">
-                  <legend>interested in doing research with me?</legend>
-                    <div id="research interest" style=" padding: 5px; font-size: clamp(12px, 1.5vw, 18px);">
+                  <legend>interested in collaborating?</legend>
+                    <div id="research interest" style=" padding: 5px; font-size: clamp(11px, 1.3vw, 16px);">
                       <!-- I've got a full team of lovely undergraduate mentees! The only downside is not having the space to advise more at the moment. 
                       Still, -->
-                      I am delighted to chat anytime with folks interested in HCI + creativity support, and happy to provide advice about grad school or pursuing a career in creative technology.
-                      @ potential undergraduate mentees, if you have interest in art & media history, creative communities, and can picture yourself working with such thrilling creative materials as (datasets, embedding models,frontend & backend web technologies) -- please reach out, preferably with a link to your website and some creative projects you've done!
+                      I love to collaborate with artists and researchers with experience @ art & media history, digital humanities, and cultural & artistic data work!
                       <br>
-                      For asynchronous advice, here's a ramble about how I see <a href="https://citrine-outrigger-f03.notion.site/how-to-get-into-hci-research-1fb54b0f0b1f804b9578c43d16656e2b?pvs=4">getting into hci research</a> as kinda like getting into hyperpop
+                      I am delighted to chat anytime with folks interested in HCI + creativity support! 
                       <br>
-                      here is my semi-frequently updated <a href="https://citrine-outrigger-f03.notion.site/shm-s-collection-of-cool-things-by-cool-people-designers-researchers-artists-engineers-8f7843d79ad34a3987220f9f19bfd3c3?pvs=4">collection of cool things and people</a> that I frequently share.
+                      @ undergrads and other potential mentees, do you... <br>
+                        <div style="padding: 15px; font-size: clamp(11px, 1.3vw, 16px);">
+                        <div class="field-row">
+                          <input type="checkbox" id="interest1">
+                          <label for="interest1">care about specific, real human creative commmunities?</label>
+                        </div>
+                        <div class="field-row">
+                          <input type="checkbox" id="interest2" style="vertical-align: top;">
+                          <label for="interest2">want to work with data, embedding models, web development, & more data?</label>
+                        </div>
+                      </div>
+                      please reach out, preferably with a link to your website and some of your creative work (of any medium)!
                       <br>
-                      @berkeley undergrads: take <a href="https://www2.eecs.berkeley.edu/Courses/CS160/" target="_blank">CS160</a>! 
+                      for asynchronous advice, here's a ramble about how I see <a href="https://citrine-outrigger-f03.notion.site/how-to-get-into-hci-research-1fb54b0f0b1f804b9578c43d16656e2b?pvs=4">getting into hci research</a> as kinda like getting into hyperpop
                       <br>
+                      here is my semi-frequently updated <a href="https://citrine-outrigger-f03.notion.site/shm-s-collection-of-cool-things-by-cool-people-designers-researchers-artists-engineers-8f7843d79ad34a3987220f9f19bfd3c3?pvs=4">collection of cool things and people</a>
+                      <br>
+                                            @ berkeley undergrads; I recommend taking <a href="https://www2.eecs.berkeley.edu/Courses/CS160/" target="_blank">CS160</a>! 
+
                      <!--                       <br>
                       System & artifact building is only one of the tools I use to help study the impact of technology on arts & culture, and not the main focus. My projects often demand strong web development & design skills; they always demand solid interpersonal skills, empathy, and openness. :)
                       <br> 
