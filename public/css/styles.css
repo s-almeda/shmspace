@@ -95,8 +95,8 @@ iframe{
 .window-body{
   padding: 2vw;
   padding-top:1vh;
-  margin-bottom: 100vh;
-  margin: 20px;
+  margin-bottom: 90vh;
+  margin: 15px;
 
 }
 
@@ -367,8 +367,8 @@ details[open] summary p{
 
   [role="tabpanel"] {
 
-    height: 61vh;
-    min-height: 180px;
+    height: 68vh;
+    min-height: 200px;
   }
 
   .project-img{
@@ -469,7 +469,7 @@ details[open] summary p{
 
 
     height: 65vh;
-    min-height: 300px;
+    /*min-height: 250px;*/
 
   }
 
