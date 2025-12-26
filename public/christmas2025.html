@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>shmspace - you've got a message!</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/xp.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: rgb(22, 19, 19);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    .window {
+      width: 95vw;
+      height: 95vh;
+      min-width: 320px;
+      max-width: none;
+      min-height: 300px;
+      margin: 10vh;
+    }
+
+    .window-body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: calc(100% - 30px);
+      padding: 10px;
+      box-sizing: border-box;
+      overflow: visible;
+    }
+
+    .card-container {
+      perspective: 1000px;
+      display: flex;
+      margin-top: calc(10vh + 50px);
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    .card {
+      max-height: 65vh;
+      width: auto;
+      /* min-width: 300px; */
+      filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.7));
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="window">
+    <div class="title-bar" style="height:28px;">
+      <div class="title-bar-text">
+        <img src="/images/document.ico" alt="Document Logo" style="height: 25px; vertical-align: middle; margin-right: 8px;">
+        you've got a message!
+      </div>
+      <!-- <div class="title-bar-controls">
+        <label>
+          <a href="/"><button aria-label="Minimize"></button></a>
+          <a href="/"><button aria-label="Close"></button></a>
+        </label>
+      </div> -->
+    </div>
+
+    <div class="window-body">
+      <div class="card-container">
+        <img id="messageCard" src="/images/christmascard.png" alt="Christmas Message Card" class="card">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Placeholder for future interactivity
+    console.log('Message page loaded');
+  </script>
+</body>
+</html>
