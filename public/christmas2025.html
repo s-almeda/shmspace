@@ -158,6 +158,68 @@
         transform: translateY(0) rotate(0deg);
       }
     }
+
+    /* Hide click-to-flip when card is flipped */
+    .card-flipper.flipped .click-to-flip {
+      display: none;
+    }
+
+    /* Mobile styles */
+    @media (max-width: 568px) {
+      body {
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding-top: 10px;
+      }
+
+      .window {
+        width: 98vw;
+        height: calc(100vh - 20px);
+        margin: auto;
+        min-width: unset;
+        min-height: unset;
+      }
+
+      .window-body {
+        height: calc(100% - 12px);
+      }
+
+      .title-bar {
+        height: 24px !important;
+      }
+
+      .title-bar-text {
+        font-size: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding: 0px;
+        margin: 0px;
+      }
+
+      .title-bar-text img {
+        height: 18px !important;
+        margin-right: 4px !important;
+      }
+
+      .card-container {
+        margin-top: 20px;
+      }
+
+      .card {
+        max-height: 55vh;
+      }
+
+      .click-to-flip {
+        max-height: 6vh;
+      }
+
+      .card-back {
+        padding: 12px;
+        font-size: 12px;
+        font-family: 'Comic Sans MS', 'Arial', sans-serif !important;
+      }
+    }
   </style>
 </head>
 
