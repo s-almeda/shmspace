@@ -97,7 +97,7 @@ dear nicholas jennings,
 
 HAPPY HOLIDAYS NJJ!!! 
 
-even though i'm bummed you BETRAYED us for STANFORD I'm so sososososo happy to have a dear friend at Stanford that I get to go visit, and who comes to visit me! Thanks for having me on your couch and being there for me through all of my craziest emotions this year. You are so awesome and brilliant and creative and funny. everytime I get to spend time with you, I walk away with some clever ideas, funny jokes, sci-fi book recommendations, and images of clover in my head, and my life is so much better for it. 
+even though i'm bummed you BETRAYED us for STANFORD I'm so sososososo happy to have a dear friend at Stanford that I get to go visit, and who comes to visit me! Thanks for having me on your couch and for crashing on mine, and being there for me through all of my craziest emotions this year. You are so awesome and brilliant and creative and funny. everytime I get to spend time with you, I walk away with new clever ideas, funny jokes, sci-fi book recommendations, and images of clover in my head... and my life is so much better for it!
 
 Let's hang out more in 2026! and do collaborations and go to conferences together!! maybe i'll do some dancing in the background while u play Beat Saber, or get a little better at playing Mario Kart World on ur tiny switch screen! i'm cheering for u and wishing u the best always!!!!1
 
