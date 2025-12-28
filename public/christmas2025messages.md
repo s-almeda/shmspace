@@ -111,6 +111,52 @@ your friend,
 
 shm
 
+## For melissa
+dear melissa,
+
+happy holidays!!
+
+thank you for being an amazing teammate, leader, role model, and inspiration to me and everyone who is so fortunate to get to work with you. I appreciated the opportunity to learn from you and also be your friend so much! I look forward to seeing the awesome things you do next. I hope we get to hang out more in 2026, too!
+
+wishing you a restful holiday time and all the best in the new year!!
+
+your friend,
+
+shm
+
+## For yi
+Dear Yi,
+
+happy holidays to you, Coco and Rosemary!!!
+
+I'm so so lucky and fortunate that we got to work together and become friends this year! I've loved coworking, chitchatting, walking around SF, getting colorful drinks, eating yummy food, and gossipping through all of the ups and downs hahah. Let's do all those things some more in 2026, too! I can't wait to see what awesome things you do next, and to hear about them! 
+
+Maybe we can get together again for the next Kura Sushi collab!! :D
+
+wishing you a restful holiday time and all the best in the new year!
+
+your friend,
+
+shm
+
+## For samia
+dearest samia,
+
+HAPPIEST OF HOLIDAYS ADING SAMIA!!!
+
+Samia joining b-crew has gotta be one of the greatest gifts of 2025... no, of all time, really... we are SO fortunate! ESPECIALLY ME, I'M SO FORTUNATE, to get to be your friend! to get to be in the, hands-down, best lab group EVER?! YAHOOOOO!!!
+
+ok for real for real for real though. thank you for teaching us all so so much just by doing you and being so awesome at what you do. i hope in 2026 you keep doing more of that, because my life, and the world, is so much better thanks to Samia being Samia in it! I'm so excited, and privileged, to get to see what you do next. 
+tl;dr: in 2026 u and i will still be iconic and slay, period 💅
+
+wishing you a restful holiday time and all the best in the new year!
+
+shm
+
+
+
+
+
 
 ## For Default
 happy holidays!!
