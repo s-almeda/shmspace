@@ -165,8 +165,8 @@
   <div class="window">
     <div class="title-bar" style="height:28px;">
       <div class="title-bar-text">
-        <img src="/images/document.ico" alt="Document Logo" style="height: 25px; vertical-align: middle; margin-right: 8px;">
-        you've got a message!
+        <img src="/images/mail.webp" alt="mail Logo" style="height: 25px; vertical-align: middle; margin-right: 8px;">
+        <span id="titleText">you've got a message!</span>
       </div>
       <!-- <div class="title-bar-controls">
         <label>
@@ -183,7 +183,7 @@
             <img src="/images/christmascard.png" alt="Christmas Message Card" class="card">
             <img src="/images/clicktoflip.png" alt="Click to flip" class="click-to-flip">
           </div>
-          <div class="card-back" id="messageContent" style="text-align: center; font-family: 'Comic Sans MS', cursive; font-size: 14px; line-height: 1.4; white-space: pre-wrap;"></div>
+          <div class="card-back" id="messageContent" style="text-align: left; font-family: 'Comic Sans MS', cursive; font-size: 14px; line-height: 1.4; white-space: pre-wrap;"></div>
         </div>
       </div>
     </div>
@@ -206,6 +206,12 @@
         const text = await response.text();
         
         const recipient = getMessageRecipient();
+        const titleText = document.getElementById('titleText');
+        
+        // Update title if we have a specific person
+        if (recipient !== 'Default') {
+          titleText.textContent = `hey ${recipient}! you've got a message!`;
+        }
         
         // Parse markdown to find the message for this person
         const lines = text.split('\n');
