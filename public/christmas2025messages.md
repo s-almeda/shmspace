@@ -84,7 +84,7 @@ dear kuya james,
 
 HAPPY HOLIDAYS!!!! 
 
-it often feels like I can't even begin to adequately treasure your friendship. Thank you for being there for b-crew, all the time, but especially this year, and especially for me. Thanks for taking me and tim to the arcade and moving me into my new apartment and teaching me how a fuse box works and for all of the gossiping + arguing seshes we got to have about beehives and design and more. 
+it often feels like I can't even begin to adequately treasure your friendship. Thank you for being there for b-crew, all the time, but especially for me, especially this year. Thanks for taking me and tim to the arcade and moving me into my new apartment and teaching me how a fuse box works and for all of the gossiping + arguing seshes we got to have about beehives and design and more. 
 
 Thanks for helping me prepare for my roadtrip and camping! chilling in the rocker chair, eating snacks, and watching the sun set over a vineyard... that's my new happy place I'll go to whenever I'm stressed lol
 
