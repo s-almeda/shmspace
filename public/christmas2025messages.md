@@ -23,13 +23,19 @@ shm
 
 ## For yuqian
 dear yuqian,
-happy holidays yuqian!!!
-you are such a huge inspiration to me, and it has been such an honor to get to work with you, let alone hang out with you and be your friend!!!
-I look back fondly on the offsite week where we got to hang out in person and I was also able to admire your awesome outfits...
-Looking forward to seeing the awesome creative work you make in 2026 and hopefully getting to hang out in person too. I 
+happy holidays!!!! 🧀🧀🧀 ♥️
 
-Your friend,
-Shm
+Thank you for the awesome creativity you put into the world. 
+you are such a huge inspiration to me, and it has been such an honor to get to work with you, let alone hang out with you and be your friend!!! 
+
+I often look back fondly on the offsite week, when we got to hang out in person and I was also able to admire your awesome outfits...
+
+Looking forward to seeing the awesome creative work you make in 2026 and hopefully getting to hang out in person again, too. 
+
+Wishing you a restful holiday time and a happy happy new year!
+
+your friend,
+shm
 
 ## For max
 dearest max,
