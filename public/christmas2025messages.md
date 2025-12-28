@@ -23,6 +23,10 @@ shm
 
 ## For yuqian
 dear yuqian,
+happy holidays yuqian!!!
+you are such a huge inspiration to me, and it has been such an honor to get to work with you, let alone hang out with you and be your friend!!!
+I look back fondly on the offsite week where we got to hang out in person and I was also able to admire your awesome outfits...
+Looking forward to seeing the awesome creative work you make in 2026 and hopefully getting to hang out in person too. I 
 
 Your friend,
 Shm
@@ -41,7 +45,7 @@ dear timbo,
 
 HIIII TIM thank you for being my lab / Berkeley / grad school bestie and the person I turn to when I need to send a URL to someone and ask, "hey does this work?"
 
-my life (and my ability to write typescript) is so much better because you are a recurring character. 
+my life (and my ability to write typescript) is so much better because you are a recurring character in my world, and I'm so so grateful. 
 Thank you for always reminding me that the good ol' days are right now -- and making those good ol' memories there with me. 
 
 I hope the rest of your holiday time is as restful and awesome as can be, and that you have a happy new year. I can't wait until you're back so we can hang out again!!!
@@ -64,6 +68,24 @@ Thank you for being an awesome source of inspiration, joy, laughter, and tifflue
 and thanks for trusting me to take care of your plants! we all await your safe return from """ohio"""
 
 wishing you a restful holiday time and a happy happy new year,
+your pal,
+shm
+
+
+## For james
+dear kuya james,
+
+HAPPY HOLIDAYS!!!! 
+
+it often feels like I can't even begin to adequately treasure your friendship. Thank you for being there for b-crew, all the time, but especially this year, and especially for me. Thanks for taking me and tim to the arcade and moving me into my new apartment and teaching me how a fuse box works and for all of the gossiping + arguing seshes we get to have about beehives and design and more. Thanks for helping me prepare for my roadtrip and camping! chilling in your rocker chair eating charcuterie while watching the sun set over a vineyard has is my new go-to happy place whenever I'm stressed lol
+
+Thanks for letting me do NoisePilot with you. I've never felt so much mututal trust to collaborate on something really difficult and really rewarding together with someone and getting to experience that really helped me grow in my confidence so so much. 
+
+I'm so lucky I got to do grad school with you. I couldn't have done it without you. Thank you for being a hero, a kuya, a legend, a really really really good friend. 
+
+I really liked sitting on the floor of my apartment with you and yapping. Now that I have actual seating (also thanks to u and fauna), I hope you'll shlep over to East Bay to come sit in my apartment again. and I want to come over to SF and go to the mall or to get bbq with you again!!! let's do it!!!!!
+
+wishing you a restful holiday time and a happy new year. I'm cheering for you always. 
 your pal,
 shm
 
