@@ -127,7 +127,7 @@ your friend,
 shm
 
 ## For yi
-Dear Yi,
+dear yi,
 
 happy holidays to you, Coco and Rosemary!!!
 
@@ -154,6 +154,60 @@ tl;dr: in 2026 u and i will still be iconic and slay, period 💅
 wishing you a restful holiday time and all the best in the new year! I can't wait to hang out and do more creative stuff together and to keep being inspired by youuuu <3 
 
 shm
+
+
+## For jeremy
+dear kuya dr. bleremy, (blonde jeremy)
+
+happy holidays to u and wally!!
+I'm so lucky i get to be your friend!! 
+Thank you for helping me move and learn how to play the guitar and also being there for me while i cried about my very big emotions hehehe
+
+Thank you for being so supportive and a wonderful role model for me and for b-crew. and for making AWESOME MUSIC! 
+
+Looking forward to the music and memories that we'll make in 2026. 
+wishing you a restful holiday time and all the best in the new year! 
+
+your friend,
+
+shm
+
+
+## For isbee
+dearest isabel,
+
+HAPPY HOLIDAYS MY CHILD WHO IS ALSO MY PARENT AND ALSO A SECRET 3RD KIND OF FAMILY MEMBER THAT WE DON'T HAVE A NAME FOR
+
+you have written to me before, something like, "so much of who I am is thanks to you" -- I just caught myself about to write the same thing, and then thinking, ah, that sounds familiar for some reason... 
+
+another familiar quote I have read before, but not quite sure where, "your purpose is not what you do, but how what you do impacts other people"
+
+when I used to think about my purpose, I would think very abstractly --- about myself as a lonely little artsy queer kid, and how many others there must be like me, turning to the internet and fanart and fandom in search of community. I'd hope that one day we could all find each other in the physical world, and work together to support each other and the things we believe in; that we could form something creative, lasting, meaningful, joyful, and I could have a role in it...
+
+when I think about my purpose now, I think concretely. about your Zoom profile picture holding that great big teddy bear, before your webcam activates, and I get to talk to the brilliant adorable image of you on my screen about your amazing ideas. I think about you and ace's cursors in the Figma, of the colorful events you organize popping up on my Google Calendar, i think of how awesome it is to watch recordings of you conducting interviews and to be so consistently impressed and amazed by your insightfulness; the immense, but gentle, power you wield as you move about the world. of sleepover at ace place and crying to u on video call. I think of you and ace driving me to stanford, or to get rabbit rabbit cream. of your wedding as the happiest day of my life and how unbelievably wealthy I am. So wealthy with love and community and purpose. 
+
+I love you in ways that the world has yet to help me find words for. let's keep hanging out in 2026 and maybe I'll find them! I can't wait for all the cake and tea and art we'll make and consume, too!! 
+
+love,
+your shm
+
+
+## For ace
+dearest ace,
+
+HAPPY HOLIDAYS MY CHILD WHO IS ALSO MY PARENT AND ALSO A SECRET 3RD KIND OF FAMILY MEMBER THAT WE DON'T HAVE A NAME FOR
+
+thank you, thank you, thank you for being my family. it is such an honor and a privilege. what an honor to get to work with you, to have had your wedding as the happiest day of my life, to crash (and crash out) on your couch,  to have you drive me around to Stanford and let me nap in the backseat hahahah... what an honor to think of my awesome friend ace everytime i see anything vaguely kirby or waddledee like.... 
+
+I learn so much from you all the time. not just because you are a brilliant, brilliant researcher, educator, and creative (which you are) but also because you are such a fucking awesome person. I think everyone who is so fortunate to be loved and cared for by you walks away learning something new about just how loved and cared for they *can* be. Just from the way you carry yourself and move about in the world, the way you are so good to the people in your community, you teach people about new depths of kindness they could not have previously imagined. Certainly, you've done this for me. and my life is so much better for it. 
+
+u r also very dorky and funny lol hehe thanks for making me laugh and playing mario party jamboree with me hehe
+AND AMAZING AT MAKING PIE!!! HOLY CRAP... ACE I'M STILL THINKING ABOUT THAT THANKSGIVING PIE........  
+
+I'm so looking forward to hanging out more in 2026!! Let's have a tetris tournament!! (I WILL TRAIN TO BE A WORTHY CONTENDER!!) Let's make more art and collaborations and soup and pie and cake and memories together!! 
+
+love,
+your shm
 
 
 
