@@ -151,7 +151,7 @@ Samia joining b-crew has gotta be one of the greatest gifts of 2025... no, of al
 ok for real for real for real though. thank you for teaching us all so so much just by doing you and being so awesome at what you do. i hope in 2026 you keep doing more of that, because my life, and the world, is so much better thanks to Samia being Samia in it! I'm so excited, and privileged, to get to see what you do next. 
 tl;dr: in 2026 u and i will still be iconic and slay, period 💅
 
-wishing you a restful holiday time and all the best in the new year!
+wishing you a restful holiday time and all the best in the new year! I can't wait to hang out and do more creative stuff together and to keep being inspired by youuuu <3 
 
 shm
 
