@@ -214,9 +214,15 @@ your shm
 ## For jingyi
 dearest jingyi li,
 
-WIP 
-what r u doing reading this im not done yet asdkfjp
+how privileged and lucky and blessed i am to live in the same universe as jingyi li!!! my cst twin flame! my nearest neighbor on many axes in embedding space! my falling-disastrously-in-love-with-ur-coworkers normalizer and enabler!!!!1 
 
+getting to stay with you in your beautiful pokemon plush filled home, I found this feeling of being safe at home for the first time in a long long time... i found parts of my self that I thought I had lost... i found comfort and kinship... i went from dreading the isolating feeling of crashing out to treasuring the ways crashing-out brought us together...!!! i also found cute cats, arts, so many excellent plushies and frogs, and memories with my senpai i will treasure forever...!! and I found out I like PILATES!! :D 
+
+thank you for being you, for caring for me, for all the love and art and creativity and chaos energy you put out into the world. I'm so grateful for the ways you have made space for me to be myself, and so grateful that in the spaces we make... we get to hang out!!! and make more space for our community, together!! in 2026, let's keep nurturing our communities and making art and memories and meals and more, together! 
+
+wishing you a restful holiday time and all the best in the new year <3 everything we want and deserve will come true, i know it!!! <3 
+
+your loving kohai,
 shm
 
 
