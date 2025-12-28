@@ -88,9 +88,9 @@ it often feels like I can't even begin to adequately treasure your friendship. T
 
 Thanks for helping me prepare for my roadtrip and camping! chilling in the rocker chair, eating snacks, and watching the sun set over a vineyard... that's my new happy place I'll go to whenever I'm stressed lol
 
-Thanks for letting me do NoisePilot with you. I've never felt so much mututal trust and respect collaborating on something so difficult, and so rewarding, together with someone. Getting to experience that really helped me grow in my confidence so so much. 
+Thanks for letting me do NoisePilot with you. I've never felt so much mutual trust and respect collaborating on something so difficult, and so so rewarding, together with someone. Getting to experience that really helped me grow in my confidence so so much...
 
-I'm so lucky I got to do this crazy PhD thing beside you. There's so much of it I couldn't and wouldn't have done without you. Thank you for being a hero, a kuya, a legend, a really really really good friend. 
+I'm so lucky I got to do this crazy PhD thing beside you. There's so much of it I couldn't and wouldn't have done without you. Thank you for being a hero, a kuya, a legend, and a really really really good friend. 
 
 I really liked sitting on the floor of my apartment with you and yapping. Now that I have actual seating (also thanks to u and fauna), I hope you'll shlep over to East Bay to come sit in my apartment again. and I want to come over to SF and go to the arcade or seafood city or to get bbq with you again!!! let's do it!!!!!
 
