@@ -174,25 +174,26 @@
 
       .window {
         width: 98vw;
-        height: calc(100vh - 20px);
+        height: auto;
+        max-height: 85vh;
         margin: auto;
         min-width: unset;
         min-height: unset;
       }
 
       .window-body {
-        height: calc(100% - 12px);
+        height: auto;
       }
 
       .title-bar {
-        height: 24px !important;
+        height: 20px !important;
       }
 
       .title-bar-text {
         font-size: 12px;
         overflow: hidden;
         text-overflow: ellipsis;
-        white-space: nowrap;
+        white-space: wrap;
         padding: 0px;
         margin: 0px;
       }
@@ -204,6 +205,7 @@
 
       .card-container {
         margin-top: 20px;
+        height: auto;
       }
 
       .card {
