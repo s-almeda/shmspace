@@ -69,8 +69,9 @@ dear tiff,
 HAPPY HOLIDAYS TIFFANY!!!! 
 I know 2025 was an awesome year because it was the year I got to become good friends with The Great Tiffany Wang.... I'm so lucky...
 
-Thank you for being an awesome source of inspiration, joy, laughter, and tiffluencer content. My life has improved significantly thanks to your tiffluence! I will miss getting to work alongside you so much... I look forward to finding other ways to hang out in 2026! Let's consume more sweet colorful drinks together and play more tetris and look at cute little guys and GOSSIP!! 
+Thank you for being an awesome source of inspiration, joy, laughter, and tiffluencer content. My life has improved significantly thanks to your tiffluence! I will miss getting to work alongside you so much... I look forward to finding other ways to hang out in 2026! Let's cowork and consume more sweet colorful drinks together and play more tetris and look at cute little gacha guys and GOSSIP!! 
 
+maybe next time ur in berkeley we can go to Fun Park!! :D 
 and thanks for trusting me to take care of your plants! we all await your safe return from """ohio"""
 
 wishing you a restful holiday time and a happy happy new year,
@@ -209,6 +210,13 @@ I'm so looking forward to hanging out more in 2026!! Let's have a tetris tournam
 love,
 your shm
 
+
+## For jingyi
+dearest jingyi li,
+
+WIP ily
+
+shm
 
 
 
