@@ -77,13 +77,15 @@ dear kuya james,
 
 HAPPY HOLIDAYS!!!! 
 
-it often feels like I can't even begin to adequately treasure your friendship. Thank you for being there for b-crew, all the time, but especially this year, and especially for me. Thanks for taking me and tim to the arcade and moving me into my new apartment and teaching me how a fuse box works and for all of the gossiping + arguing seshes we get to have about beehives and design and more. Thanks for helping me prepare for my roadtrip and camping! chilling in your rocker chair eating charcuterie while watching the sun set over a vineyard has is my new go-to happy place whenever I'm stressed lol
+it often feels like I can't even begin to adequately treasure your friendship. Thank you for being there for b-crew, all the time, but especially this year, and especially for me. Thanks for taking me and tim to the arcade and moving me into my new apartment and teaching me how a fuse box works and for all of the gossiping + arguing seshes we got to have about beehives and design and more. 
 
-Thanks for letting me do NoisePilot with you. I've never felt so much mututal trust to collaborate on something really difficult and really rewarding together with someone and getting to experience that really helped me grow in my confidence so so much. 
+Thanks for helping me prepare for my roadtrip and camping! chilling in the rocker chair, eating snacks, and watching the sun set over a vineyard... that's my new happy place I'll go to whenever I'm stressed lol
 
-I'm so lucky I got to do grad school with you. I couldn't have done it without you. Thank you for being a hero, a kuya, a legend, a really really really good friend. 
+Thanks for letting me do NoisePilot with you. I've never felt so much mututal trust and respect collaborating on something so difficult, and so rewarding, together with someone. Getting to experience that really helped me grow in my confidence so so much. 
 
-I really liked sitting on the floor of my apartment with you and yapping. Now that I have actual seating (also thanks to u and fauna), I hope you'll shlep over to East Bay to come sit in my apartment again. and I want to come over to SF and go to the mall or to get bbq with you again!!! let's do it!!!!!
+I'm so lucky I got to do this crazy PhD thing beside you. There's so much of it I couldn't and wouldn't have done without you. Thank you for being a hero, a kuya, a legend, a really really really good friend. 
+
+I really liked sitting on the floor of my apartment with you and yapping. Now that I have actual seating (also thanks to u and fauna), I hope you'll shlep over to East Bay to come sit in my apartment again. and I want to come over to SF and go to the arcade or seafood city or to get bbq with you again!!! let's do it!!!!!
 
 wishing you a restful holiday time and a happy new year. I'm cheering for you always. 
 your pal,
