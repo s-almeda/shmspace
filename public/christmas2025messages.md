@@ -103,7 +103,7 @@ dear nicholas jennings,
 
 HAPPY HOLIDAYS NJJ!!! 
 
-even though i'm bummed you BETRAYED us for STANFORD I'm so sososososo happy to have a dear friend at Stanford that I get to go visit, and who comes to visit me! Thanks for having me on your couch and for crashing on mine, and being there for me through all of my craziest emotions this year. Thanks for driving me around and giving me opportunities to say "FUCK YOU I WILL AI GENERATE UR FAVORITE STUFFED ANIMAL HAVING A MISCARRIAGE" out loud LOLOLOL god thats so fucking funny it's like a laughter spell i'm laughing so hard typing this right now asdfjkl;g
+even though i'm DEVASTATED that you BETRAYED us for THE RED TREE PEOPLE I'm so sososososo happy to have a dear friend at Stanford that I get to go visit, and who comes to visit me! Thanks for having me on your couch and for crashing on mine, and being there for me through all of my craziest emotions this year. Thanks for driving me around and giving me opportunities to say "FUCK YOU I WILL AI GENERATE UR FAVORITE STUFFED ANIMAL HAVING A MISCARRIAGE" out loud LOLOLOL god thats so fucking funny it's like a laughter spell i'm laughing so hard typing this right now asdfjkl;g
 
 You are so awesome and brilliant and creative and funny. everytime I get to spend time with you, I walk away with new clever ideas, funny jokes, sci-fi book recommendations, and images of clover in my head... and my life is so much better for it!
 
