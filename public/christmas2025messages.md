@@ -14,9 +14,9 @@ shm
 ## For joel
 dear joel,
 
-I know 2025 was an AWESOME year because it's the year I got to befriend Joel Simon!! It has been so fun to hang out and chat about cool creative technology and ! I'm so fortunate!
+I know 2025 was an AWESOME year because it's the year I got to meet and befriend Joel Simon!!!! It has been so fun to hang out and chat about cool creative technology and get to see and test out your awesome creations firsthand and brag to people about knowing you heheheheh I'm so fortunate!!!
 
-I hope you have a happy and restful holiday time. Looking forward to more chatting, coworking, eating good food, and shlepping across Berkeley and SF 
+I hope you have a happy and restful holiday time. In 2026 I look forward to more chatting, coworking, eating good food, shlepping across Berkeley and SF, making art, and making technology that makes art and is also art, together!!
 
 your friend,
 shm
