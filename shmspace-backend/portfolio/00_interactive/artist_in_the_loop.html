@@ -241,6 +241,7 @@
         background: transparent !important;
         padding: 0 !important;
         margin: 0 !important;
+        box-sizing: border-box !important;
       }
 
       html.aitl-iframe-mode #app {
@@ -248,6 +249,16 @@
         width: auto !important;
         display: block !important;
         max-width: 100%;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+      }
+
+      html.aitl-iframe-mode fieldset {
+        width: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        background: transparent !important;
       }
     </style>
   </head>
