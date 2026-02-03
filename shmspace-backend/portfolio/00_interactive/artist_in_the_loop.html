@@ -124,7 +124,7 @@
 
       .main-window {
         width: calc(100vw - 40px);
-        height: 85vh;
+        height: 90vh;
         margin: auto;
         margin-top: 20px;
         max-width: 95vw;
@@ -132,10 +132,10 @@
       }
 
       .window-body {
-        height: calc(85vh - 50px);
+        height: calc(90vh - 50px);
         display: flex;
         flex-direction: column;
-        padding: 10px;
+        padding: 20px;
         font-size: 1.1em;
         overflow-y: auto;
       }
@@ -333,7 +333,23 @@
             </div>
           </div>
           <div class="window-body" style="overflow: none;">
-            <fieldset style="overflow-y: scroll; margin: 5px; max-height: 90%;">
+            <fieldset style="overflow-y: scroll; margin: 5px; max-height: 85%;">
+              <!-- Video Player Fieldset -->
+                <h3 style="text-align: center;">artist-in-the-loop</h3>
+                <p style="text-align: center;">entries #0, #1, and (planned) #2 in the <em>recursive self portrait series</em>
+                  <br>
+                  by shm garanganao almeda</p>
+
+              <fieldset>
+                <legend>video</legend>
+                <div style="text-align: center; padding: 15px 0;">
+                  <video width="800" height="600" controls style="max-width: 100%; height: auto;">
+                    <source src="assets/AitL.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </fieldset>
+
               <!-- About the Piece Fieldset -->
               <fieldset>
                 <legend>original text description of the piece</legend>
@@ -384,7 +400,7 @@
                     <button id="prevBtn" class="nav-button" style="width: 60px;">← prev</button>
                     <fieldset id="responseFieldset" style="overflow-y: scroll; margin: 0px; padding: 15px; font-family: 'Courier New', monospace; font-size: 0.9em; flex: 1; overflow-x: hidden !important;">
                       <legend id="responseLegend">Response</legend>
-                      <p id="responseLoading" style="margin: 10px 0; font-size: 16px;">Loading responses...</p>
+                        <p id="responseLoading" style="margin: 10px 0; font-size: 16px; font-weight: normal; font-style: normal;">Loading responses...</p>
                       <div style="overflow: none;" id="responseContent"></div>
                     </fieldset>
                     <button id="nextBtn" class="nav-button" style="width: 60px;">next →</button>
@@ -664,7 +680,7 @@
         // Right column: Free Response
         html += '<div style="padding: 20px; border-left: 1px solid #ccc; display: flex; flex-direction: column;">';
         html += '<p style="margin: 5px 0; font-weight: bold;">6. you are invited to use this space to write a free-form response or elaboration on your responses:</p>';
-        html += '<div style="background-color: #f0f0f0; padding: 10px; border: 1px solid #999; height: 50%; white-space: pre-wrap; word-wrap: break-word; font-size: ' + (freeResponse !== '(no response provided)' ? '15px; font-weight: bold; font-style: italic;' : '0.9em;') + '">' + freeResponse + '</div>';
+        html += '<div style="background-color: #f0f0f0; padding: 10px; border: 1px solid #999; height: 50%; white-space: pre-wrap; word-wrap: break-word; font-weight: normal; font-style: normal; font-size: ' + (freeResponse !== '(no response provided)' ? '16px; font-family: Arial, sans-serif; font-weight: normal; font-style: normal;' : '0.9em;') + '">' + freeResponse + '</div>';
         html += '</div>';
         
         html += '</div>';
