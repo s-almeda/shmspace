@@ -7,16 +7,6 @@
     <script>
       // Detect iframe BEFORE anything renders
       const isIframe = window.self !== window.top;
-      if (isIframe) {
-        document.documentElement.classList.add('aitl-iframe-mode');
-      }
-    </script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xp.css" id="xp-css" media="screen" />
-    <script>
-      // Remove xp.css immediately if in iframe to prevent style leakage
-      if (window.self !== window.top) {
-        document.getElementById('xp-css').remove();
-      }
     </script>
     <style>
       body {
@@ -257,7 +247,12 @@
   <body>
     <div id="app"></div>
     <script>
-      document.querySelector('#app').innerHTML = `
+      if (isIframe) {
+        // Iframe mode: just show the image
+        document.querySelector('#app').innerHTML = `<img src="assets/fig1.jpg" alt="Figure 1" style="max-width: 100%; height: auto; display: block;">`;
+      } else {
+        // Standalone mode: full webpage
+        document.querySelector('#app').innerHTML = `
         <div class="window main-window">
           <div class="title-bar">
             <div class="title-bar-text">artist in the loop [RECURSIVE SELF PORTRAITS #0-2]</div>
@@ -331,13 +326,15 @@
           </div>
         </div>
       `;
+      }
 
-      // Questionnaire viewer logic
-      let responses = [];
-      let currentIndex = 0;
+      // Only run questionnaire logic in standalone mode
+      if (!isIframe) {
+        let responses = [];
+        let currentIndex = 0;
 
-      // Parse CSV
-      async function loadResponses() {
+        // Parse CSV
+        async function loadResponses() {
         try {
           const response = await fetch('assets/questionnaire_responses_combined.csv');
           const csv = await response.text();
@@ -628,6 +625,7 @@
         setupTooltips();
         loadResponses();
       }, 0);
+      }
     </script>
   </body>
 </html>
