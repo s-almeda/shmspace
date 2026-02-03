@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Artist in the Loop [RECURSIVE SELF PORTRAITS]</title>
+    <script>
+      // Detect iframe BEFORE anything renders and remove conflicting stylesheet
+      if (window.self !== window.top) {
+        document.documentElement.classList.add('aitl-iframe-mode');
+      }
+    </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xp.css" />
     <style>
       body {
@@ -216,21 +222,21 @@
       }
 
       /* IFRAME-SPECIFIC OVERRIDES */
-      body.aitl-iframe {
+      html.aitl-iframe-mode body {
         min-height: auto !important;
       }
 
-      body.aitl-iframe #app {
+      html.aitl-iframe-mode #app {
         height: 100% !important;
       }
 
-      body.aitl-iframe .main-window {
+      html.aitl-iframe-mode .main-window {
         width: calc(100% - 40px) !important;
         height: 85% !important;
         max-width: 95% !important;
       }
 
-      body.aitl-iframe .window-body {
+      html.aitl-iframe-mode .window-body {
         height: calc(100% - 50px) !important;
       }
     </style>
@@ -618,15 +624,6 @@
         setupTooltips();
         loadResponses();
       }, 0);
-    </script>
-    <script>
-      // Only load xp.css if NOT in an iframe (standalone view)
-      if (window.self === window.top) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = 'https://cdn.jsdelivr.net/npm/xp.css';
-        document.head.appendChild(link);
-      }
     </script>
   </body>
 </html>
