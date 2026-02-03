@@ -7,13 +7,12 @@
     <script>
       // Detect iframe BEFORE anything renders
       const isIframe = window.self !== window.top;
-    </script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xp.css" />
-    <script>
-      // Remove xp.css immediately if in iframe to prevent style leakage
-      if (window.self !== window.top) {
-        const xpLink = document.querySelector('link[href*="xp.css"]');
-        if (xpLink) xpLink.remove();
+      // Only load xp.css if NOT in iframe
+      if (!isIframe) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://cdn.jsdelivr.net/npm/xp.css';
+        document.head.appendChild(link);
       }
     </script>
     <style>
