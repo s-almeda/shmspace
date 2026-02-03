@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/895.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Artist in the Loop [RECURSIVE SELF PORTRAITS]</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xp.css" />
@@ -198,7 +199,7 @@
         box-shadow: 2px 2px 0 rgba(0,0,0,0.2);
       }
 
-      /* Disabled checkbox styling */
+      /* Disabled checkbox styling - look like normal checkboxes but non-editable */
       input[type="checkbox"][disabled] + label {
         display: flex;
         align-items: flex-start;
@@ -214,47 +215,19 @@
         background: svg-load("./icon/checkmark.svg") !important;
         top: 3px !important;
       }
-
-      /* IFRAME-SPECIFIC OVERRIDES */
-      body.aitl-iframe {
-        min-height: auto !important;
-      }
-
-      body.aitl-iframe #app {
-        height: 100% !important;
-      }
-
-      body.aitl-iframe .main-window {
-        width: calc(100% - 40px) !important;
-        height: 85% !important;
-        max-width: 95% !important;
-      }
-
-      body.aitl-iframe .window-body {
-        height: calc(100% - 50px) !important;
-      }
     </style>
   </head>
   <body>
     <div id="app"></div>
-    <script>
-      // Detect if in iframe and apply iframe-specific styles + remove xp.css
-      if (window.self !== window.top) {
-        document.body.classList.add('aitl-iframe');
-        // Remove xp.css to prevent conflicts
-        const xpLink = document.querySelector('link[href*="xp.css"]');
-        if (xpLink) xpLink.remove();
-      }
-    </script>
     <script>
       document.querySelector('#app').innerHTML = `
         <div class="window main-window">
           <div class="title-bar">
             <div class="title-bar-text">artist in the loop [RECURSIVE SELF PORTRAITS #0-2]</div>
             <div class="title-bar-controls">
-                <a href="/" aria-label="Minimize"><button aria-label="Minimize"></button></a>
-
-                <a href="/" aria-label="Close"><button aria-label="Close"></button></a>
+              <button aria-label="Minimize"></button>
+              <button aria-label="Maximize"></button>
+              <button aria-label="Close"></button>
             </div>
           </div>
           <div class="window-body" style="overflow: none;">
@@ -266,7 +239,7 @@
                 <!-- Overview Section -->
                 <section style="overflow: none;">
                   <figure>
-                    <img src="assets/fig1.jpg" alt="Figure 1" />
+                    <img src="/fig1.jpg" alt="Figure 1" />
                     <figcaption>fig. 1</figcaption>
                   </figure>
 
@@ -329,7 +302,7 @@
       // Parse CSV
       async function loadResponses() {
         try {
-          const response = await fetch('assets/questionnaire_responses_combined.csv');
+          const response = await fetch('/questionnaire_responses_combined.csv');
           const csv = await response.text();
           const lines = csv.split('\n');
           const headers = lines[0].split(',').map(h => h.trim());
@@ -618,15 +591,6 @@
         setupTooltips();
         loadResponses();
       }, 0);
-    </script>
-    <script>
-      // Only load xp.css if NOT in an iframe (standalone view)
-      if (window.self === window.top) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = 'https://cdn.jsdelivr.net/npm/xp.css';
-        document.head.appendChild(link);
-      }
     </script>
   </body>
 </html>
