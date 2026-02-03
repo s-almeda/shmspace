@@ -16,6 +16,7 @@
         margin: 0;
         padding: 0;
         display: flex;
+        flex-direction: column;
         place-items: center;
         min-width: 320px;
         min-height: 100vh;
@@ -23,6 +24,8 @@
         color: #000;
         overflow: hidden;
         overflow-x: hidden !important;
+        width: 100%;
+        height: 100%;
       }
 
       #app {
@@ -30,6 +33,9 @@
         height: 100vh;
         padding: 0;
         margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       button, select, label {
@@ -222,36 +228,42 @@
       }
 
       /* IFRAME-SPECIFIC OVERRIDES */
+      html.aitl-iframe-mode {
+        height: 100%;
+      }
+
       html.aitl-iframe-mode body {
-        min-height: auto !important;
+        min-height: 100% !important;
+        height: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        flex-direction: column !important;
+        place-items: center !important;
       }
 
       html.aitl-iframe-mode #app {
         height: 100% !important;
+        width: 100% !important;
+        max-height: 100% !important;
       }
 
       html.aitl-iframe-mode .main-window {
         width: calc(100% - 40px) !important;
         height: 85% !important;
         max-width: 95% !important;
+        margin: auto !important;
+        margin-top: 20px !important;
       }
 
       html.aitl-iframe-mode .window-body {
         height: calc(100% - 50px) !important;
+        max-height: calc(100% - 50px) !important;
       }
     </style>
   </head>
   <body>
     <div id="app"></div>
-    <script>
-      // Detect if in iframe and apply iframe-specific styles + remove xp.css
-      if (window.self !== window.top) {
-        document.body.classList.add('aitl-iframe');
-        // Remove xp.css to prevent conflicts
-        const xpLink = document.querySelector('link[href*="xp.css"]');
-        if (xpLink) xpLink.remove();
-      }
-    </script>
     <script>
       document.querySelector('#app').innerHTML = `
         <div class="window main-window">
