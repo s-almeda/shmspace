@@ -64,7 +64,7 @@ app.get('/api/portfolio-files', (req, res) => {
       
       if (stat.isDirectory()) {
         result[item] = readDirRecursive(fullPath);
-      } else if (/\.(jpg|jpeg|png|gif|webp|pdf|html)$/i.test(item)) {
+      } else if (/\.(jpg|jpeg|png|gif|webp|pdf|html|mp4)$/i.test(item)) {
         result.files.push(item);
       }
     });

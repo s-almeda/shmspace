@@ -300,11 +300,11 @@
       const fullImagePath = `https://art.snailbunny.site/portfolio/${imagePath}`;
       
       let description = "<br> i haven't written a description for this one. thanks for looking at my art. <br><br> - shm";
-      let title = imagePath.split('/').pop().replace(/\.(jpg|png|jpeg|gif|pdf)$/i, '');
+      let title = imagePath.split('/').pop().replace(/\.(jpg|png|jpeg|gif|pdf|mp4)$/i, '');
       
       try {
         // Check for specific description file (e.g., image.md or document.md)
-        const specificDescPath = imagePath.replace(/\.(jpg|png|jpeg|gif|pdf)$/i, '.md');
+        const specificDescPath = imagePath.replace(/\.(jpg|png|jpeg|gif|pdf|mp4)$/i, '.md');
         const response = await fetch(`https://art.snailbunny.site/api/description/${specificDescPath}`);
         
         if (response.ok) {
@@ -363,6 +363,23 @@
           </div>
         </div>
       </div>
+      
+      <ul class="tree-view">
+        <details>
+          <summary><strong>${title}</strong></summary>
+          <div style="font-size: 14px;">
+            ${description}
+          </div>
+        </details>
+      </ul>
+    `;
+  } else if (imagePath.toLowerCase().endsWith('.mp4')) {
+    // MP4 video handling
+    container.innerHTML = `
+      <video controls style="max-width: 100%; max-height: 70vh; width: auto; height: auto; border: 2px solid #888; background: black;">
+        <source src="${fullImagePath}" type="video/mp4">
+        Your browser does not support the video tag. <a href="${fullImagePath}" target="_blank">Open video</a> instead.
+      </video>
       
       <ul class="tree-view">
         <details>
