@@ -1040,7 +1040,7 @@ button[aria-disabled="true"] {
 .news-list {
   list-style-type: none;
   padding: 0.5em;
-  max-height: 6.5em;
+  max-height: 9em;
   overflow-y: auto;
   margin: 0px;
 }
@@ -1048,9 +1048,9 @@ button[aria-disabled="true"] {
 .news-item {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 1em;
+  gap: 0.5em;
   align-items: start;
-  padding: 0.5em 0;
+  padding: 0.25em 0;
 }
 
 @media (max-width: 1000px) {
@@ -1061,6 +1061,7 @@ button[aria-disabled="true"] {
   
   .news-date {
     text-align: center;
+    font-size: 10px;
   }
 }
 
@@ -1072,6 +1073,8 @@ button[aria-disabled="true"] {
   
   .news-date {
     text-align: right;
+    font-size: 10px;
+  
   }
 }
 
@@ -1081,6 +1084,7 @@ button[aria-disabled="true"] {
   /* text-decoration: underline; */
   text-align: right;
   white-space: nowrap;
+      font-size: 10px;
 }
 
 .news-text {
