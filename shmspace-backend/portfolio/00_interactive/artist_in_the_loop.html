@@ -239,7 +239,7 @@
                 <!-- Overview Section -->
                 <section style="overflow: none;">
                   <figure>
-                    <img src="/assets/fig1.jpg" alt="Figure 1" />
+                    <img src="assets/fig1.jpg" alt="Figure 1" />
                     <figcaption>fig. 1</figcaption>
                   </figure>
 
@@ -302,7 +302,7 @@
       // Parse CSV
       async function loadResponses() {
         try {
-          const response = await fetch('/assets/questionnaire_responses_combined.csv');
+          const response = await fetch('assets/questionnaire_responses_combined.csv');
           const csv = await response.text();
           const lines = csv.split('\n');
           const headers = lines[0].split(',').map(h => h.trim());
