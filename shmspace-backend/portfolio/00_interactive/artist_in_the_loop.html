@@ -5,21 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Artist in the Loop [RECURSIVE SELF PORTRAITS]</title>
     <script>
-      // Detect iframe BEFORE anything renders
-      const isIframe = window.self !== window.top;
+      // Detect iframe BEFORE anything renders - use multiple detection methods
+      let isIframe = window.self !== window.top;
+      
+      // Fallback detection methods
+      if (!isIframe) {
+        try {
+          isIframe = window.frameElement !== null;
+        } catch (e) {
+          isIframe = true; // If we can't access frameElement, assume iframe
+        }
+      }
+      
+      // Add mode indicator and class
       if (isIframe) {
         document.documentElement.classList.add('aitl-iframe-mode');
+        document.documentElement.setAttribute('data-aitl-mode', 'iframe');
+        console.log('[AITL] Running in IFRAME mode');
+      } else {
+        document.documentElement.setAttribute('data-aitl-mode', 'standalone');
+        console.log('[AITL] Running in STANDALONE mode');
       }
+      
       // Only load xp.css if NOT in iframe
       if (!isIframe) {
+        console.log('[AITL] Loading xp.css...');
         const link = document.createElement('link');
         link.rel = 'stylesheet';
         link.href = 'https://cdn.jsdelivr.net/npm/xp.css';
         document.head.appendChild(link);
+      } else {
+        console.log('[AITL] Skipping xp.css in iframe mode');
       }
     </script>
     <style>
-      body {
+      /* ALWAYS apply these if in iframe mode - before any other styles */
+      html[data-aitl-mode="iframe"],
+      html[data-aitl-mode="iframe"] * {
+        all: revert !important;
+      }
+
+      html[data-aitl-mode="iframe"] body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        overflow: visible !important;
+        background: transparent !important;
+        font-family: inherit !important;
+        font-size: inherit !important;
+      }
+
+      html[data-aitl-mode="iframe"] #app {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        overflow: hidden !important;
+        background: transparent !important;
+      }
+
+      html[data-aitl-mode="iframe"] img {
+        max-width: 100% !important;
+        width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        box-sizing: border-box !important;
+      }
+
+      html[data-aitl-mode="iframe"] fieldset,
+      html[data-aitl-mode="iframe"] form,
+      html[data-aitl-mode="iframe"] figure,
+      html[data-aitl-mode="iframe"] legend {
+        all: revert !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        background: transparent !important;
+        width: auto !important;
+        display: block !important;
+      }
+    </style>
+
+    <!-- Existing body/app/element styles for standalone mode -->
+    <style>
         margin: 0;
         padding: 0;
         display: flex;
@@ -232,43 +306,21 @@
         background: svg-load("./icon/checkmark.svg") !important;
         top: 3px !important;
       }
-
-      /* IFRAME-SPECIFIC OVERRIDES */
-      html.aitl-iframe-mode body {
-        height: auto !important;
-        width: auto !important;
-        overflow: visible !important;
-        background: transparent !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        box-sizing: border-box !important;
-      }
-
-      html.aitl-iframe-mode #app {
-        height: auto !important;
-        width: auto !important;
-        display: block !important;
-        max-width: 100%;
-        box-sizing: border-box !important;
-        overflow: hidden !important;
-      }
-
-      html.aitl-iframe-mode fieldset {
-        width: auto !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: none !important;
-        background: transparent !important;
-      }
     </style>
   </head>
   <body>
     <div id="app"></div>
     <script>
-      if (window.self !== window.top) {
+      // Check the data attribute set in HEAD
+      const modeAttr = document.documentElement.getAttribute('data-aitl-mode');
+      console.log('[AITL-BODY] Mode detected as:', modeAttr);
+      
+      if (modeAttr === 'iframe') {
         // IFRAME MODE: Just show image
+        console.log('[AITL-BODY] Rendering iframe mode (image only)');
         document.querySelector('#app').innerHTML = '<img src="assets/fig1.jpg" alt="Figure 1" style="max-width: 100%; width: 100%; height: auto; display: block; box-sizing: border-box;">';
       } else {
+        console.log('[AITL-BODY] Rendering standalone mode (full webpage)');
         // STANDALONE MODE: Full webpage
         document.querySelector('#app').innerHTML = `
         <div class="window main-window">
