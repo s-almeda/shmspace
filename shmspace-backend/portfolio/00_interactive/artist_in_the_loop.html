@@ -7,6 +7,9 @@
     <script>
       // Detect iframe BEFORE anything renders
       const isIframe = window.self !== window.top;
+      if (isIframe) {
+        document.documentElement.classList.add('aitl-iframe-mode');
+      }
       // Only load xp.css if NOT in iframe
       if (!isIframe) {
         const link = document.createElement('link');
@@ -233,21 +236,12 @@
       /* IFRAME-SPECIFIC OVERRIDES */
       html.aitl-iframe-mode body {
         height: 100% !important;
-        min-height: auto !important;
+        width: 100% !important;
       }
 
       html.aitl-iframe-mode #app {
         height: 100% !important;
-      }
-
-      html.aitl-iframe-mode .main-window {
-        width: calc(100% - 40px) !important;
-        height: 85% !important;
-        max-width: 95% !important;
-      }
-
-      html.aitl-iframe-mode .window-body {
-        height: calc(85% - 50px) !important;
+        width: 100% !important;
       }
     </style>
   </head>
