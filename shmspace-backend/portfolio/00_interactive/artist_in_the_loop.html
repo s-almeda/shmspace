@@ -6,11 +6,18 @@
     <title>Artist in the Loop [RECURSIVE SELF PORTRAITS]</title>
     <script>
       // Detect iframe BEFORE anything renders
-      if (window.self !== window.top) {
+      const isIframe = window.self !== window.top;
+      if (isIframe) {
         document.documentElement.classList.add('aitl-iframe-mode');
       }
     </script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xp.css" id="xp-css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xp.css" id="xp-css" media="screen" />
+    <script>
+      // Remove xp.css immediately if in iframe to prevent style leakage
+      if (window.self !== window.top) {
+        document.getElementById('xp-css').remove();
+      }
+    </script>
     <style>
       body {
         margin: 0;
@@ -245,16 +252,32 @@
       html.aitl-iframe-mode .window-body {
         height: calc(85% - 50px) !important;
       }
+
+      /* Ensure window styling applies when xp.css IS loaded */
+      .window {
+        border: 2px solid;
+        border-color: #dfdfdf #808080 #808080 #dfdfdf;
+        padding: 0;
+        background-color: #c0c0c0;
+      }
+
+      .title-bar {
+        background: linear-gradient(90deg, #000080, #1084d7);
+        padding: 2px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .title-bar-text {
+        color: white;
+        font-weight: bold;
+        font-size: 11px;
+        user-select: none;
+      }
     </style>
   </head>
   <body>
-    <script>
-      // If in iframe, remove xp.css to prevent style leaks to parent
-      if (window.self !== window.top) {
-        const xpLink = document.getElementById('xp-css');
-        if (xpLink) xpLink.remove();
-      }
-    </script>
     <div id="app"></div>
     <script>
       document.querySelector('#app').innerHTML = `
