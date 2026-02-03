@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Artist in the Loop [RECURSIVE SELF PORTRAITS]</title>
+    <script>
+      // Only load xp.css if NOT in an iframe (standalone view)
+      if (window.self === window.top) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://cdn.jsdelivr.net/npm/xp.css';
+        document.head.appendChild(link);
+      }
+    </script>
     <style>
       #aitl-frame {
         margin: 0;
