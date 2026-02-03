@@ -8,6 +8,14 @@
       // Detect iframe BEFORE anything renders
       const isIframe = window.self !== window.top;
     </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xp.css" />
+    <script>
+      // Remove xp.css immediately if in iframe to prevent style leakage
+      if (window.self !== window.top) {
+        const xpLink = document.querySelector('link[href*="xp.css"]');
+        if (xpLink) xpLink.remove();
+      }
+    </script>
     <style>
       body {
         margin: 0;
