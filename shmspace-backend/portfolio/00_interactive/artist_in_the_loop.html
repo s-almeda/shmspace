@@ -7,7 +7,7 @@
     <title>Artist in the Loop [RECURSIVE SELF PORTRAITS]</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xp.css" />
     <style>
-      body {
+      #aitl-frame {
         margin: 0;
         padding: 0;
         display: flex;
@@ -20,18 +20,18 @@
         overflow-x: hidden !important;
       }
 
-      #app {
+      #aitl-frame #app {
         width: 100%;
         height: 100vh;
         padding: 0;
         margin: 0;
       }
 
-      button, select, label {
+      #aitl-frame button, #aitl-frame select, #aitl-frame label {
         color: #000;
       }
 
-      .main-window {
+      #aitl-frame .main-window {
         width: calc(100% - 40px);
         height: 85vh;
         margin: auto;
@@ -40,7 +40,7 @@
         box-sizing: border-box;
       }
 
-      .window-body {
+      #aitl-frame .window-body {
         height: calc(85vh - 50px);
         display: flex;
         flex-direction: column;
@@ -49,13 +49,13 @@
         overflow-y: auto;
       }
 
-      fieldset {
+      #aitl-frame fieldset {
         margin: 0;
         padding: 25px;
         font-family: 'Courier New', monospace;
       }
 
-      figure {
+      #aitl-frame figure {
         text-align: center;
         margin: 15px 0;
         max-width: 70%;
@@ -63,94 +63,94 @@
         margin-right: auto;
       }
 
-      figure img {
+      #aitl-frame figure img {
         max-width: 100%;
         height: auto;
         border: 2px solid #000;
       }
 
-      figure figcaption {
+      #aitl-frame figure figcaption {
         font-size: 0.8em;
         margin-top: 5px;
         font-weight: bold;
       }
 
-      p {
+      #aitl-frame p {
         margin: 10px 0;
         line-height: 1.3;
         font-size: 14px;
       }
 
-      ol {
+      #aitl-frame ol {
         margin: 10px 0;
         padding-left: 25px;
       }
 
-      li {
+      #aitl-frame li {
         margin: 5px 0;
       }
 
-      .nested-list {
+      #aitl-frame .nested-list {
         margin: 5px 0 5px 20px;
         padding-left: 20px;
       }
 
-      .nested-list li {
+      #aitl-frame .nested-list li {
         margin: 3px 0;
       }
 
-      h2 {
+      #aitl-frame h2 {
         margin-top: 20px;
         margin-bottom: 15px;
         border-bottom: 2px solid #000;
         padding-bottom: 5px;
       }
 
-      section {
+      #aitl-frame section {
         margin-bottom: 30px;
       }
 
-      #resultsGrid {
+      #aitl-frame #resultsGrid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 20px;
         width: 100%;
       }
 
-      .question-block {
+      #aitl-frame .question-block {
         margin-bottom: 15px;
       }
 
-      .question-block p {
+      #aitl-frame .question-block p {
         margin: 5px 0 10px 0;
         font-weight: bold;
         font-size: 13px;
       }
 
-      .option-row {
+      #aitl-frame .option-row {
         margin: 8px 0;
       }
 
-      .option-row-content {
+      #aitl-frame .option-row-content {
         display: grid;
         grid-template-columns: 70px 1fr 50px;
         gap: 3px;
         align-items: center;
       }
 
-      .option-row label {
+      #aitl-frame .option-row label {
         font-size: 0.8em;
         white-space: normal;
         word-break: break-word;
       }
 
-      .option-row progress {
+      #aitl-frame .option-row progress {
         width: 100%;
         height: 12px;
         cursor: pointer;
       }
 
-      .option-row span {
+      #aitl-frame .option-row span {
         font-size: 0.75em;
         color: #666;
         white-space: nowrap;
@@ -158,12 +158,12 @@
       }
 
       @media (max-width: 768px) {
-        #resultsGrid {
+        #aitl-frame #resultsGrid {
           grid-template-columns: 1fr;
         }
       }
 
-      .response-grid {
+      #aitl-frame .response-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 20px;
@@ -171,13 +171,13 @@
       }
 
       @media (max-width: 900px) {
-        .response-grid {
+        #aitl-frame .response-grid {
           grid-template-columns: 1fr;
           height: auto;
         }
       }
 
-      .nav-button {
+      #aitl-frame .nav-button {
         position: sticky;
         top: 50%;
         transform: translateY(-50%);
@@ -185,7 +185,7 @@
         height: fit-content;
       }
 
-      #customTooltip {
+      #aitl-frame #customTooltip {
         position: fixed;
         background-color: rgb(255, 255, 228);
         border: 1px solid #000;
@@ -200,24 +200,24 @@
       }
 
       /* Disabled checkbox styling - look like normal checkboxes but non-editable */
-      input[type="checkbox"][disabled] + label {
+      #aitl-frame input[type="checkbox"][disabled] + label {
         display: flex;
         align-items: flex-start;
       }
 
-      input[type="checkbox"][disabled] + label::before {
+      #aitl-frame input[type="checkbox"][disabled] + label::before {
         background: var(--button-highlight) !important;
         flex-shrink: 0;
         margin-top: 2px;
       }
 
-      input[type="checkbox"][disabled]:checked + label::after {
+      #aitl-frame input[type="checkbox"][disabled]:checked + label::after {
         background: svg-load("./icon/checkmark.svg") !important;
         top: 3px !important;
       }
     </style>
   </head>
-  <body>
+  <body id="aitl-frame">
     <div id="app"></div>
     <script>
       document.querySelector('#app').innerHTML = `
