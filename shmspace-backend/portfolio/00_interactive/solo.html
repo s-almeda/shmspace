@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/895.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Artist in the Loop [RECURSIVE SELF PORTRAITS]</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xp.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        place-items: center;
+        min-width: 320px;
+        min-height: 100vh;
+        background: #1b1b1a;
+        color: #000;
+        overflow: hidden;
+        overflow-x: hidden !important;
+      }
+
+      #app {
+        width: 100%;
+        height: 100vh;
+        padding: 0;
+        margin: 0;
+      }
+
+      button, select, label {
+        color: #000;
+      }
+
+      .main-window {
+        width: calc(100vw - 40px);
+        height: 85vh;
+        margin: auto;
+        margin-top: 50px;
+        max-width: 95vw;
+        box-sizing: border-box;
+      }
+
+      .window-body {
+        height: calc(85vh - 50px);
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        font-size: 1.1em;
+        overflow-y: auto;
+      }
+
+      fieldset {
+        margin: 0;
+        padding: 25px;
+        font-family: 'Courier New', monospace;
+      }
+
+      figure {
+        text-align: center;
+        margin: 15px 0;
+        max-width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      figure img {
+        max-width: 100%;
+        height: auto;
+        border: 2px solid #000;
+      }
+
+      figure figcaption {
+        font-size: 0.8em;
+        margin-top: 5px;
+        font-weight: bold;
+      }
+
+      p {
+        margin: 10px 0;
+        line-height: 1.3;
+        font-size: 14px;
+      }
+
+      ol {
+        margin: 10px 0;
+        padding-left: 25px;
+      }
+
+      li {
+        margin: 5px 0;
+      }
+
+      .nested-list {
+        margin: 5px 0 5px 20px;
+        padding-left: 20px;
+      }
+
+      .nested-list li {
+        margin: 3px 0;
+      }
+
+      h2 {
+        margin-top: 20px;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #000;
+        padding-bottom: 5px;
+      }
+
+      section {
+        margin-bottom: 30px;
+      }
+
+      #resultsGrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        width: 100%;
+      }
+
+      .question-block {
+        margin-bottom: 15px;
+      }
+
+      .question-block p {
+        margin: 5px 0 10px 0;
+        font-weight: bold;
+        font-size: 13px;
+      }
+
+      .option-row {
+        margin: 8px 0;
+      }
+
+      .option-row-content {
+        display: grid;
+        grid-template-columns: 70px 1fr 50px;
+        gap: 3px;
+        align-items: center;
+      }
+
+      .option-row label {
+        font-size: 0.8em;
+        white-space: normal;
+        word-break: break-word;
+      }
+
+      .option-row progress {
+        width: 100%;
+        height: 12px;
+        cursor: pointer;
+      }
+
+      .option-row span {
+        font-size: 0.75em;
+        color: #666;
+        white-space: nowrap;
+        text-align: right;
+      }
+
+      @media (max-width: 768px) {
+        #resultsGrid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .response-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        height: 500px;
+      }
+
+      @media (max-width: 900px) {
+        .response-grid {
+          grid-template-columns: 1fr;
+          height: auto;
+        }
+      }
+
+      .nav-button {
+        position: sticky;
+        top: 50%;
+        transform: translateY(-50%);
+        flex-shrink: 0;
+        height: fit-content;
+      }
+
+      #customTooltip {
+        position: fixed;
+        background-color: rgb(255, 255, 228);
+        border: 1px solid #000;
+        padding: 5px 7px;
+        font-family: Arial, sans-serif;
+        font-size: 0.85em;
+        pointer-events: none;
+        z-index: 9999;
+        display: none;
+        white-space: nowrap;
+        box-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+      }
+
+      /* Disabled checkbox styling - look like normal checkboxes but non-editable */
+      input[type="checkbox"][disabled] + label {
+        display: flex;
+        align-items: flex-start;
+      }
+
+      input[type="checkbox"][disabled] + label::before {
+        background: var(--button-highlight) !important;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+
+      input[type="checkbox"][disabled]:checked + label::after {
+        background: svg-load("./icon/checkmark.svg") !important;
+        top: 3px !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      document.querySelector('#app').innerHTML = `
+        <div class="window main-window">
+          <div class="title-bar">
+            <div class="title-bar-text">artist in the loop [RECURSIVE SELF PORTRAITS #0-2]</div>
+            <div class="title-bar-controls">
+                <a href="/" aria-label="Minimize"><button aria-label="Minimize"></button></a>
+
+                <a href="/" aria-label="Close"><button aria-label="Close"></button></a>
+            </div>
+          </div>
+          <div class="window-body" style="overflow: none;">
+            <fieldset style="overflow-y: scroll; margin: 5px; max-height: 90%;">
+              <!-- About the Piece Fieldset -->
+              <fieldset>
+                <legend>original text description of the piece</legend>
+                
+                <!-- Overview Section -->
+                <section style="overflow: none;">
+                  <figure>
+                    <img src="/assets/fig1.jpg" alt="Figure 1" />
+                    <figcaption>fig. 1</figcaption>
+                  </figure>
+
+                  <p>this is a performance art piece, wherein a human artist performs the following:</p>
+
+                  <ol>
+                    <li>look at your self, and produce a painting of what you see.</li>
+                    <li>
+                      <strong><em>WHILE YOU COMPLETE STEP 1:</em></strong>
+                      <ol class="nested-list">
+                        <li>have a vision machine look at your self, and produce an image representation of what it sees.</li>
+                        <li>give the image to an image-to-text machine, and ask it to produce a text representation of what it sees</li>
+                        <li>give that text to a text-to-image machine, and ask it to produce an image of what it describes.</li>
+                        <li>repeat</li>
+                      </ol>
+                    </li>
+                  </ol>
+
+                  <p>this instance of the piece is complete when step 1 is complete.</p>
+                </section>
+              </fieldset>
+
+              <!-- Responses Fieldset -->
+              <fieldset>
+                <legend>responses</legend>
+                <p>During the performance, we made a questionnaire available (as physical paper cards that participants could fill out, and as a digital form they could submit from the gallery page.) It had the following multiple choice questions, and a free response section. Here are the results.</p>
+
+                <!-- Questionnaire Aggregate Results Section -->
+                <section id="resultsSection" style="overflow: none; display: none;">
+
+                  <div id="resultsGrid" style="font-size: 0.9em;">Loading...</div>
+                </section>
+
+                <!-- Questionnaire Section -->
+                <section id="questionnaireSection" style="overflow: none;">
+                  <div style="overflow: none; display: flex; gap: 10px; margin-bottom: 15px; align-items: center; justify-content: center;">
+                    <div id="responseCounter" style="flex: 1; text-align: center; font-weight: bold;">Loading...</div>
+                  </div>
+                  <div style="display: flex; gap: 10px; align-items: stretch; position: relative; overflow-x: hidden !important;">
+                    <button id="prevBtn" class="nav-button" style="width: 60px;">← prev</button>
+                    <fieldset id="responseFieldset" style="overflow-y: scroll; margin: 0px; padding: 15px; font-family: 'Courier New', monospace; font-size: 0.9em; flex: 1; overflow-x: hidden !important;">
+                      <legend id="responseLegend">Response</legend>
+                      <p id="responseLoading" style="margin: 10px 0; font-size: 16px;">Loading responses...</p>
+                      <div style="overflow: none;" id="responseContent"></div>
+                    </fieldset>
+                    <button id="nextBtn" class="nav-button" style="width: 60px;">next →</button>
+                  </div>
+                </section>
+              </fieldset>
+
+            </fieldset>
+          </div>
+        </div>
+      `;
+
+      // Questionnaire viewer logic
+      let responses = [];
+      let currentIndex = 0;
+
+      // Parse CSV
+      async function loadResponses() {
+        try {
+          const response = await fetch('/assets/questionnaire_responses_combined.csv');
+          const csv = await response.text();
+          const lines = csv.split('\n');
+          const headers = lines[0].split(',').map(h => h.trim());
+          
+          for (let i = 1; i < lines.length; i++) {
+            if (lines[i].trim() === '') continue;
+            
+            // Simple CSV parser (handles quoted fields)
+            const row = {};
+            let field = '';
+            let inQuotes = false;
+            let colIndex = 0;
+            
+            for (let j = 0; j < lines[i].length; j++) {
+              const char = lines[i][j];
+              const nextChar = lines[i][j + 1];
+              
+              if (char === '"') {
+                if (inQuotes && nextChar === '"') {
+                  field += '"';
+                  j++;
+                } else {
+                  inQuotes = !inQuotes;
+                }
+              } else if (char === ',' && !inQuotes) {
+                row[headers[colIndex]] = field.trim();
+                field = '';
+                colIndex++;
+              } else {
+                field += char;
+              }
+            }
+            row[headers[colIndex]] = field.trim();
+            responses.push(row);
+          }
+          
+          calculateAggregates();
+          displayResponse(Math.floor(Math.random() * responses.length));
+          updateButtons();
+        } catch (error) {
+          console.error('Error loading responses:', error);
+          document.getElementById('responseLoading').textContent = 'Error loading responses';
+        }
+      }
+
+      function parseJsonField(field) {
+        try {
+          return JSON.parse(field);
+        } catch {
+          return [];
+        }
+      }
+
+      function calculateAggregates() {
+        const totals = responses.length;
+        
+        const stats = {
+          ai_role: { artist: 0, medium: 0, system: 0, other: 0 },
+          camera_role: { artist: 0, medium: 0, system: 0, other: 0 },
+          human_role: { artist: 0, medium: 0, system: 0, other: 0 },
+          painting_role: { artist: 0, medium: 0, system: 0, other: 0 },
+          obsolete_systems: { AI: 0, camera: 0, human: 0, painting: 0, other: 0 }
+        };
+        
+        responses.forEach(response => {
+          const aiRole = parseJsonField(response.ai_role);
+          const cameraRole = parseJsonField(response.camera_role);
+          const humanRole = parseJsonField(response.human_role);
+          const paintingRole = parseJsonField(response.painting_role);
+          const obsoleteSystems = parseJsonField(response.obsolete_systems);
+          
+          if (aiRole.includes('artist')) stats.ai_role.artist++;
+          if (aiRole.includes('medium')) stats.ai_role.medium++;
+          if (aiRole.includes('system')) stats.ai_role.system++;
+          if (aiRole.includes('other')) stats.ai_role.other++;
+          
+          if (cameraRole.includes('artist')) stats.camera_role.artist++;
+          if (cameraRole.includes('medium')) stats.camera_role.medium++;
+          if (cameraRole.includes('system')) stats.camera_role.system++;
+          if (cameraRole.includes('other')) stats.camera_role.other++;
+          
+          if (humanRole.includes('artist')) stats.human_role.artist++;
+          if (humanRole.includes('medium')) stats.human_role.medium++;
+          if (humanRole.includes('system')) stats.human_role.system++;
+          if (humanRole.includes('other')) stats.human_role.other++;
+          
+          if (paintingRole.includes('artist')) stats.painting_role.artist++;
+          if (paintingRole.includes('medium')) stats.painting_role.medium++;
+          if (paintingRole.includes('system')) stats.painting_role.system++;
+          if (paintingRole.includes('other')) stats.painting_role.other++;
+          
+          if (obsoleteSystems.includes('AI')) stats.obsolete_systems.AI++;
+          if (obsoleteSystems.includes('camera')) stats.obsolete_systems.camera++;
+          if (obsoleteSystems.includes('human')) stats.obsolete_systems.human++;
+          if (obsoleteSystems.includes('painting')) stats.obsolete_systems.painting++;
+          if (obsoleteSystems.includes('other')) stats.obsolete_systems.other++;
+        });
+        
+        displayAggregates(stats, totals);
+      }
+
+      function displayAggregates(stats, totals) {
+        let html = '';
+        
+        const displayMap = {
+          'an artist': 'artist',
+          'a medium': 'medium',
+          'a system for generating images': 'system',
+          'other': 'other',
+          'AI': 'AI',
+          'camera': 'camera',
+          'human': 'human',
+          'painting': 'painting'
+        };
+        
+        const questions = [
+          { title: '1. the AI is...', field: 'ai_role', options: ['an artist', 'a medium', 'a system for generating images', 'other'] },
+          { title: '2. the camera is...', field: 'camera_role', options: ['an artist', 'a medium', 'a system for generating images', 'other'] },
+          { title: '3. the human is...', field: 'human_role', options: ['an artist', 'a medium', 'a system for generating images', 'other'] },
+          { title: '4. painting is...', field: 'painting_role', options: ['an artist', 'a medium', 'a system for generating images', 'other'] },
+          { title: '5. which systems are (or are at risk of) becoming obsolete?', field: 'obsolete_systems', options: ['AI', 'camera', 'human', 'painting', 'other'] }
+        ];
+        
+        questions.forEach(q => {
+          html += '<div class="question-block">';
+          html += '<p>' + q.title + '</p>';
+          
+          q.options.forEach(option => {
+            const statsKey = displayMap[option];
+            const count = stats[q.field][statsKey] || 0;
+            const percentage = (count / totals * 100).toFixed(1);
+            const tooltip = count + '/' + totals + ' participants selected this response';
+            
+            html += '<div class="option-row">';
+            html += '<div class="option-row-content">';
+            html += '<label>' + option + '</label>';
+            html += '<progress max="100" value="' + percentage + '" data-tooltip="' + tooltip + '"></progress>';
+            html += '<span>' + count + '/' + totals + '</span>';
+            html += '</div>';
+            html += '</div>';
+          });
+          
+          html += '</div>';
+        });
+        
+        document.getElementById('resultsGrid').innerHTML = html;
+        document.getElementById('resultsSection').style.display = 'block';
+      }
+
+      function setupTooltips() {
+        const tooltip = document.createElement('div');
+        tooltip.id = 'customTooltip';
+        document.body.appendChild(tooltip);
+
+        document.addEventListener('mousemove', (e) => {
+          tooltip.style.left = (e.clientX + 10) + 'px';
+          tooltip.style.top = (e.clientY + 10) + 'px';
+        });
+
+        document.addEventListener('mouseover', (e) => {
+          if (e.target.tagName === 'PROGRESS' && e.target.dataset.tooltip) {
+            tooltip.textContent = e.target.dataset.tooltip;
+            tooltip.style.display = 'block';
+          }
+        });
+
+        document.addEventListener('mouseout', (e) => {
+          if (e.target.tagName === 'PROGRESS') {
+            tooltip.style.display = 'none';
+          }
+        });
+      }
+
+      function formatTimestamp(dateString) {
+        return dateString;
+      }
+
+      function displayResponse(index) {
+        if (responses.length === 0) return;
+        
+        currentIndex = Math.max(0, Math.min(index, responses.length - 1));
+        const data = responses[currentIndex];
+        
+        // Update counter and timestamp
+        document.getElementById('responseCounter').textContent = 'Response ' + (currentIndex + 1) + ' of ' + responses.length;
+        document.getElementById('responseLegend').textContent = 'submission ' + formatTimestamp(data.submitted_at);
+        
+        // Parse checkbox fields
+        const aiRole = parseJsonField(data.ai_role);
+        const cameraRole = parseJsonField(data.camera_role);
+        const humanRole = parseJsonField(data.human_role);
+        const paintingRole = parseJsonField(data.painting_role);
+        const obsoleteSystems = parseJsonField(data.obsolete_systems);
+        
+        const aiOther = data.ai_role_other ? data.ai_role_other : '(none)';
+        const cameraOther = data.camera_role_other ? data.camera_role_other : '(none)';
+        const humanOther = data.human_role_other ? data.human_role_other : '(none)';
+        const paintingOther = data.painting_role_other ? data.painting_role_other : '(none)';
+        const obsoleteOther = data.obsolete_other ? data.obsolete_other : '(none)';
+        const freeResponse = data.free_response ? data.free_response : '(no response provided)';
+        
+        // Build response content with 2-column layout
+        let html = '<div class="response-grid">';
+        
+        // Left column: Questions 1-5
+        html += '<div style="padding-right: 10px;">';
+        // html += '<p style="margin: 10px 0;"><em>Thank you for visiting. Here is a submitted response.</em></p>';
+        
+        // Question 1: AI
+        html += '<div style="margin: 15px 0;">';
+        html += '<p style="margin: 5px 0; font-weight: bold;">1. the AI is...</p>';
+        html += '<div class="field-row"><input type="checkbox" ' + (aiRole.includes('artist') ? 'checked' : '') + ' disabled><label>an artist</label></div>';
+        html += '<div class="field-row"><input type="checkbox" ' + (aiRole.includes('medium') ? 'checked' : '') + ' disabled><label>a medium</label></div>';
+        html += '<div class="field-row"><input type="checkbox" ' + (aiRole.includes('system') ? 'checked' : '') + ' disabled><label>a system for generating images</label></div>';
+        html += '<div class="field-row"><input type="checkbox" ' + (aiRole.includes('other') ? 'checked' : '') + ' disabled><label>other: ' + (aiOther !== '(none)' ? '<span style="font-size: 15px; font-weight: bold; font-style: italic; margin-left: 8px;">' + aiOther + '</span>' : aiOther) + '</label></div>';
+        html += '</div>';
+        
+        // Question 2: Camera
+        html += '<div style="margin: 15px 0;">';
+        html += '<p style="margin: 5px 0; font-weight: bold;">2. the camera is...</p>';
+        html += '<div class="field-row"><input type="checkbox" ' + (cameraRole.includes('artist') ? 'checked' : '') + ' disabled><label>an artist</label></div>';
+        html += '<div class="field-row"><input type="checkbox" ' + (cameraRole.includes('medium') ? 'checked' : '') + ' disabled><label>a medium</label></div>';
+        html += '<div class="field-row"><input type="checkbox" ' + (cameraRole.includes('system') ? 'checked' : '') + ' disabled><label>a system for generating images</label></div>';
+        html += '<div class="field-row"><input type="checkbox" ' + (cameraRole.includes('other') ? 'checked' : '') + ' disabled><label>other: ' + (cameraOther !== '(none)' ? '<span style="font-size: 15px; font-weight: bold; font-style: italic; margin-left: 8px;">' + cameraOther + '</span>' : cameraOther) + '</label></div>';
+        html += '</div>';
+        
+        // Question 3: Human
+        html += '<div style="margin: 15px 0;">';
+        html += '<p style="margin: 5px 0; font-weight: bold;">3. the human is...</p>';
+        html += '<div class="field-row"><input type="checkbox" ' + (humanRole.includes('artist') ? 'checked' : '') + ' disabled><label>an artist</label></div>';
+        html += '<div class="field-row"><input type="checkbox" ' + (humanRole.includes('medium') ? 'checked' : '') + ' disabled><label>a medium</label></div>';
+        html += '<div class="field-row"><input type="checkbox" ' + (humanRole.includes('system') ? 'checked' : '') + ' disabled><label>a system for generating images</label></div>';
+        html += '<div class="field-row"><input type="checkbox" ' + (humanRole.includes('other') ? 'checked' : '') + ' disabled><label>other: ' + (humanOther !== '(none)' ? '<span style="font-size: 15px; font-weight: bold; font-style: italic; margin-left: 8px;">' + humanOther + '</span>' : humanOther) + '</label></div>';
+        html += '</div>';
+        
+        // Question 4: Painting
+        html += '<div style="margin: 15px 0;">';
+        html += '<p style="margin: 5px 0; font-weight: bold;">4. painting is...</p>';
+        html += '<div class="field-row"><input type="checkbox" ' + (paintingRole.includes('artist') ? 'checked' : '') + ' disabled><label>an artist</label></div>';
+        html += '<div class="field-row"><input type="checkbox" ' + (paintingRole.includes('medium') ? 'checked' : '') + ' disabled><label>a medium</label></div>';
+        html += '<div class="field-row"><input type="checkbox" ' + (paintingRole.includes('system') ? 'checked' : '') + ' disabled><label>a system for generating images</label></div>';
+        html += '<div class="field-row"><input type="checkbox" ' + (paintingRole.includes('other') ? 'checked' : '') + ' disabled><label>other: ' + (paintingOther !== '(none)' ? '<span style="font-size: 15px; font-weight: bold; font-style: italic; margin-left: 8px;">' + paintingOther + '</span>' : paintingOther) + '</label></div>';
+        html += '</div>';
+        
+        // Question 5: Obsolete Systems
+        html += '<div style="margin: 15px 0;">';
+        html += '<p style="margin: 5px 0; font-weight: bold;">5. which systems are (or are <em>at risk of</em>) becoming obsolete? select all that apply.</p>';
+        html += '<div class="field-row"><input type="checkbox" ' + (obsoleteSystems.includes('AI') ? 'checked' : '') + ' disabled><label>AI</label></div>';
+        html += '<div class="field-row"><input type="checkbox" ' + (obsoleteSystems.includes('camera') ? 'checked' : '') + ' disabled><label>camera</label></div>';
+        html += '<div class="field-row"><input type="checkbox" ' + (obsoleteSystems.includes('human') ? 'checked' : '') + ' disabled><label>human</label></div>';
+        html += '<div class="field-row"><input type="checkbox" ' + (obsoleteSystems.includes('painting') ? 'checked' : '') + ' disabled><label>painting</label></div>';
+        html += '<div class="field-row"><input type="checkbox" ' + (obsoleteSystems.includes('other') ? 'checked' : '') + ' disabled><label>other: ' + (obsoleteOther !== '(none)' ? '<span style="font-size: 15px; font-weight: bold; font-style: italic; margin-left: 8px;">' + obsoleteOther + '</span>' : obsoleteOther) + '</label></div>';
+        html += '</div>';
+        
+        html += '</div>';
+        
+        // Right column: Free Response
+        html += '<div style="padding: 20px; border-left: 1px solid #ccc; display: flex; flex-direction: column;">';
+        html += '<p style="margin: 5px 0; font-weight: bold;">6. you are invited to use this space to write a free-form response or elaboration on your responses:</p>';
+        html += '<div style="background-color: #f0f0f0; padding: 10px; border: 1px solid #999; height: 50%; white-space: pre-wrap; word-wrap: break-word; font-size: ' + (freeResponse !== '(no response provided)' ? '15px; font-weight: bold; font-style: italic;' : '0.9em;') + '">' + freeResponse + '</div>';
+        html += '</div>';
+        
+        html += '</div>';
+        
+        document.getElementById('responseContent').innerHTML = html;
+        document.getElementById('responseLoading').style.display = 'none';
+      }
+
+      function updateButtons() {
+        document.getElementById('prevBtn').disabled = currentIndex === 0;
+        document.getElementById('nextBtn').disabled = currentIndex === responses.length - 1;
+      }
+
+      // Event listeners for navigation
+      setTimeout(() => {
+        document.getElementById('prevBtn').addEventListener('click', () => {
+          displayResponse(currentIndex - 1);
+          updateButtons();
+        });
+        
+        document.getElementById('nextBtn').addEventListener('click', () => {
+          displayResponse(currentIndex + 1);
+          updateButtons();
+        });
+        
+        setupTooltips();
+        loadResponses();
+      }, 0);
+    </script>
+  </body>
+</html>
