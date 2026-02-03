@@ -247,11 +247,11 @@
   <body>
     <div id="app"></div>
     <script>
-      if (isIframe) {
-        // Iframe mode: just show the image
-        document.querySelector('#app').innerHTML = `<img src="assets/fig1.jpg" alt="Figure 1" style="max-width: 100%; height: auto; display: block;">`;
+      if (window.self !== window.top) {
+        // IFRAME MODE: Just show image
+        document.querySelector('#app').innerHTML = '<img src="assets/fig1.jpg" alt="Figure 1" style="max-width: 100%; height: auto; display: block;">';
       } else {
-        // Standalone mode: full webpage
+        // STANDALONE MODE: Full webpage
         document.querySelector('#app').innerHTML = `
         <div class="window main-window">
           <div class="title-bar">
@@ -326,10 +326,8 @@
           </div>
         </div>
       `;
-      }
 
-      // Only run questionnaire logic in standalone mode
-      if (!isIframe) {
+        // Questionnaire viewer logic
         let responses = [];
         let currentIndex = 0;
 
