@@ -213,7 +213,7 @@ details[closed] summary p{
   display: none;
 }
 details[open] summary p{
-  display: inline-flex;
+  display: block;
 }
 
 #files_moving_bottom{
