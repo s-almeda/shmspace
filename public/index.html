@@ -521,6 +521,7 @@
                       <div class="select-description-child select" id="sem_list_parent">
 
                         <ul id="sem_list" tabindex="0" role="listbox" aria-labelledby="ss_sems">
+                          <li id="sem_sp26" role="option">DESINV23 - Spring 2026</li>
                           <li id="sem_sp25" role="option">DESINV23 - Spring 2025</li>
                           <li id="sem_fa24" role="option">CS61A + DATAC88C - Fall 2024</li>
                           <li id="sem_sp24" role="option">DESINV23 - Spring 2024</li>
@@ -1347,12 +1348,16 @@ aria.Listbox = function (listboxNode) {
 
       case('sem_sp24'):
           heading.innerHTML = 'DESINV 23: Creative Programming & Electronics @ UC Berkeley';
-          description.innerHTML = 'Head TA for Dr. Sudhu Tewari. robotic instruments, kinetic sculptures, and interactive installations - teaching foundational programming, electronics, and design skills through art practice with a diverse (no prerequisites) class of amazing student makers collaborating in a studio environment <br>🔗<a href="https://sites.google.com/berkeley.edu/desinv23spring24/home" target="_blank"> Course Site</a>';
+          description.innerHTML = 'Head TA for Dr. Sudhu Tewari. robotic instruments, kinetic sculptures, and interactive art installations - teaching foundational programming, electronics, and design skills through artistic practice with a diverse (no prerequisites) class of amazing student makers collaborating in a studio environment. <br>🔗<a href="https://sites.google.com/berkeley.edu/desinv23spring24/home" target="_blank"> Course Site</a>';
         break;
       case('sem_sp25'):
           heading.innerHTML = 'DESINV 23: Creative Programming & Electronics @ UC Berkeley';
-          description.innerHTML = 'Co-Instructor with Dr. Sudhu Tewari. robotic instruments, kinetic sculptures, and interactive installations - teaching foundational programming, electronics, and design skills through art practice with a diverse (no prerequisites) class of amazing student makers collaborating in a studio environment <br>🔗<a href="https://sites.google.com/berkeley.edu/desinv-23-spring-25/home" target="_blank"> Course Site</a>';
+          description.innerHTML = 'Co-Instructor with Dr. Sudhu Tewari. robotic instruments, kinetic sculptures, and interactive art installations - teaching foundational programming, electronics, and design skills through artistic practice with a diverse (no prerequisites) class of amazing student makers collaborating in a studio environment. <br>🔗<a href="https://sites.google.com/berkeley.edu/desinv-23-spring-25/home" target="_blank"> Course Site</a>';
         break;
+      case('sem_sp26'):
+          heading.innerHTML = 'DESINV 23: Creative Programming & Electronics @ UC Berkeley';
+            description.innerHTML = 'Co-Instructor with Dr. Sudhu Tewari. robotic instruments, kinetic sculptures, and interactive art installations - teaching foundational programming, electronics, and design skills through artistic practice with a diverse (no prerequisites) class of amazing student makers collaborating in a studio environment. <br>🔗<a href="https://sites.google.com/berkeley.edu/desinv23spring26/home" target="_blank"> Course Site</a>';
+      break;
     }
   };
   this.handleItemChange = function () {};
