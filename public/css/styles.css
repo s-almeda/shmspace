@@ -260,8 +260,8 @@ details[open] summary p{
 [role="tabpanel"] {
     border-top-outline: 1px;
     z-index:2;
-    margin-bottom: 15vh;
-    height: 64vh;
+    margin-bottom: 10vh;
+    height: 68vh;
     min-height: 250px;
 
 
@@ -464,13 +464,15 @@ details[open] summary p{
   }
 
   [role="tabpanel"] {
-    border-top-outline: 1px;
+    border-top: 1px solid;
     z-index:2;
-
-
-    height: 65vh;
-    /*min-height: 250px;*/
-
+    max-height: calc(90vh - 120px); /* Ensures it stays smaller than window */
+    height: 70vh;
+    overflow-y: auto; /* Allows scrolling if content exceeds height */
+  }
+  .window{
+    height: 90vh;
+    min-height: 400px;
   }
 
   .faves{
