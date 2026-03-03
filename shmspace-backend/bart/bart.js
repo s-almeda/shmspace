@@ -155,16 +155,16 @@ router.get('/', (req, res) => {
 <body>
   <h1>shm's live BART departures API</h1>
   <div class="station">Powell Street BART</div>
-  <div class="test-bar" style="display:flex; align-items:center; gap:1rem; margin-bottom:2rem; padding:0.75rem 1rem; background:#111; border:1px solid #222; border-radius:6px;">
+  <div class="test-bar" style="position:relative; z-index:2; display:flex; align-items:center; gap:1rem; margin-bottom:2rem; padding:0.75rem 1rem; background:#111; border:1px solid #222; border-radius:6px;">
     <label style="font-size:0.8rem; color:#666; display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
       <span style="position:relative; display:inline-block; width:36px; height:20px;">
-        <input type="checkbox" id="testToggle" style="opacity:0; width:0; height:0;">
-        <span id="sliderTrack" style="position:absolute; cursor:pointer; inset:0; background:#333; border-radius:20px; transition:0.3s; z-index:-1;"></span>
-        <span id="sliderThumb" style="position:absolute; width:14px; height:14px; left:3px; bottom:3px; background:#888; border-radius:50%; transition:0.3s;"></span>
+        <input type="checkbox" id="testToggle" style="position:absolute; inset:0; width:100%; height:100%; margin:0; opacity:0; cursor:pointer; z-index:2;">
+        <span id="sliderTrack" style="position:absolute; inset:0; background:#333; border-radius:20px; transition:0.3s; pointer-events:none;"></span>
+        <span id="sliderThumb" style="position:absolute; width:14px; height:14px; left:3px; bottom:3px; background:#888; border-radius:50%; transition:0.3s; pointer-events:none;"></span>
       </span>
       Test mode
     </label>
-    <button onclick="pushTestMode()" style="padding:0.4rem 1rem; background:#222; border:1px solid #444; color:#f0f0f0; font-family:'Courier New',monospace; font-size:0.8rem; border-radius:4px; cursor:pointer;" id="testBtn">Push</button>
+    <button type="button" onclick="pushTestMode()" style="position:relative; z-index:3; padding:0.4rem 1rem; background:#222; border:1px solid #444; color:#f0f0f0; font-family:'Courier New',monospace; font-size:0.8rem; border-radius:4px; cursor:pointer;" id="testBtn">Push</button>
     <span id="testBadge" style="display:none; font-size:0.7rem; background:#ff4444; color:white; padding:0.2rem 0.5rem; border-radius:3px;">TEST MODE</span>
   </div>
   <div id="testEditor" style="display:none; margin-bottom:2rem;">
@@ -286,9 +286,10 @@ router.get('/', (req, res) => {
     // tick every second to keep countdowns live
     function tick() {
       renderTrains();
-      if (lastPollAt) {
+      const nextRefreshEl = document.getElementById('nextRefresh');
+      if (lastPollAt && nextRefreshEl) {
         const nextIn = Math.max(0, Math.round((lastPollAt + POLL_INTERVAL - Date.now()) / 1000));
-        document.getElementById('nextRefresh').textContent = nextIn + 's';
+        nextRefreshEl.textContent = nextIn + 's';
       }
     }
 
