@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+require('dotenv').config();
 
 const app = express();
 const allowedOrigins = [
@@ -76,18 +77,7 @@ app.get('/api/portfolio-files', (req, res) => {
   res.json(structure);
 });
 
-// BART dummy data endpoint
-const BART_DATA = `Platform 1
-Daly City 18 min (6 car), 38 min (6 car), 58 min (6 car)
-Millbrae 97 min (9 car), 8 min (9 car), 28 min (9 car)
-
-Platform 2
-Antioch 5 min (9 car), 24 min (9 car), 42 min (9 car)
-Dublin/Pleasanton 11 min (6 car), 31 min (6 car), 50 min (6 car)`;
-
-app.get('/api/bart', (req, res) => {
-  res.send(BART_DATA);
-});
+app.use('/api/bart', require('./bart/bart'));
 
 app.listen(3001, () => {
   console.log('Server running on port 3001');
