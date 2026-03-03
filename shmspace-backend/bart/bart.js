@@ -1,4 +1,6 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const router = express.Router();
 
 const API_KEY = process.env.BART_API_KEY;
@@ -10,6 +12,46 @@ let testTrains = [
   { line: 'Green', minutes: 12 },
   { line: 'Blue', minutes: 18 },
 ];
+
+const TEST_STATE_PATH = path.join(__dirname, 'testmode-state.json');
+
+function normalizeTestTrains(trains) {
+  if (!Array.isArray(trains)) return testTrains;
+  const normalized = trains
+    .filter(t => t && typeof t === 'object')
+    .map(t => ({
+      line: String(t.line || '').trim(),
+      minutes: Number(t.minutes),
+    }))
+    .filter(t => t.line && Number.isFinite(t.minutes));
+
+  return normalized.length ? normalized : testTrains;
+}
+
+function loadTestState() {
+  try {
+    if (!fs.existsSync(TEST_STATE_PATH)) return;
+    const raw = fs.readFileSync(TEST_STATE_PATH, 'utf8');
+    const parsed = JSON.parse(raw);
+    testMode = Boolean(parsed.testMode);
+    if (Array.isArray(parsed.testTrains)) {
+      testTrains = normalizeTestTrains(parsed.testTrains);
+    }
+  } catch (error) {
+    console.error('Failed to load BART test state:', error.message);
+  }
+}
+
+function saveTestState() {
+  try {
+    const payload = JSON.stringify({ testMode, testTrains }, null, 2);
+    fs.writeFileSync(TEST_STATE_PATH, payload, 'utf8');
+  } catch (error) {
+    console.error('Failed to save BART test state:', error.message);
+  }
+}
+
+loadTestState();
 
 async function fetchBart() {
   if (testMode) return; // don't overwrite cache in test mode
@@ -45,13 +87,18 @@ setInterval(() => fetchBart().catch(console.error), 3 * 60 * 1000);
 
 // toggle test mode
 router.post('/testmode', express.json(), (req, res) => {
-  testMode = req.body.enabled;
-  if (req.body.trains) testTrains = req.body.trains;
+  loadTestState();
+  testMode = Boolean(req.body && req.body.enabled);
+  if (req.body && Array.isArray(req.body.trains)) {
+    testTrains = normalizeTestTrains(req.body.trains);
+  }
+  saveTestState();
   res.json({ testMode, testTrains });
 });
 
 // next trains — used by ESP32
 router.get('/next', (req, res) => {
+  loadTestState();
   if (testMode) {
     return res.json(testTrains);
   }
@@ -71,6 +118,7 @@ router.get('/next', (req, res) => {
 
 // data endpoint for frontend
 router.get('/data', (req, res) => {
+  loadTestState();
   res.json({ ...cache, testMode, testTrains });
 });
 
