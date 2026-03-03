@@ -123,7 +123,7 @@ router.get('/', (req, res) => {
   </style>
 </head>
 <body>
-  <h1>Live Departures</h1>
+  <h1>shm's live BART departures API</h1>
   <div class="station">Powell Street BART</div>
   <div id="platforms"><span class="error">Loading...</span></div>
   <div class="footer">
