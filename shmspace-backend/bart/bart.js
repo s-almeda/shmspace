@@ -78,20 +78,9 @@ router.get('/', (req, res) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Powell St BART</title>
+  <title>shm's bart api</title>
 
-  <div class="test-bar" style="display:flex; align-items:center; gap:1rem; margin-bottom:2rem; padding:0.75rem 1rem; background:#111; border:1px solid #222; border-radius:6px;">
-    <label style="font-size:0.8rem; color:#666; display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
-      <span style="position:relative; display:inline-block; width:36px; height:20px;">
-        <input type="checkbox" id="testToggle" style="opacity:0; width:0; height:0;">
-        <span id="sliderTrack" style="position:absolute; cursor:pointer; inset:0; background:#333; border-radius:20px; transition:0.3s;"></span>
-        <span id="sliderThumb" style="position:absolute; width:14px; height:14px; left:3px; bottom:3px; background:#888; border-radius:50%; transition:0.3s;"></span>
-      </span>
-      Test mode
-    </label>
-    <button onclick="pushTestMode()" style="padding:0.4rem 1rem; background:#222; border:1px solid #444; color:#f0f0f0; font-family:'Courier New',monospace; font-size:0.8rem; border-radius:4px; cursor:pointer;" id="testBtn">Push</button>
-    <span id="testBadge" style="display:none; font-size:0.7rem; background:#ff4444; color:white; padding:0.2rem 0.5rem; border-radius:3px;">TEST MODE</span>
-  </div>
+
 
   <div id="testEditor" style="display:none; margin-bottom:2rem;">
     <div style="font-size:0.75rem; color:#666; margin-bottom:0.5rem;">Editing what ESP32 receives:</div>
@@ -173,6 +162,19 @@ router.get('/', (req, res) => {
 <body>
   <h1>shm's live BART departures API</h1>
   <div class="station">Powell Street BART</div>
+  <div class="test-bar" style="display:flex; align-items:center; gap:1rem; margin-bottom:2rem; padding:0.75rem 1rem; background:#111; border:1px solid #222; border-radius:6px;">
+    <label style="font-size:0.8rem; color:#666; display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+      <span style="position:relative; display:inline-block; width:36px; height:20px;">
+        <input type="checkbox" id="testToggle" style="opacity:0; width:0; height:0;">
+        <span id="sliderTrack" style="position:absolute; cursor:pointer; inset:0; background:#333; border-radius:20px; transition:0.3s;"></span>
+        <span id="sliderThumb" style="position:absolute; width:14px; height:14px; left:3px; bottom:3px; background:#888; border-radius:50%; transition:0.3s;"></span>
+      </span>
+      Test mode
+    </label>
+    <button onclick="pushTestMode()" style="padding:0.4rem 1rem; background:#222; border:1px solid #444; color:#f0f0f0; font-family:'Courier New',monospace; font-size:0.8rem; border-radius:4px; cursor:pointer;" id="testBtn">Push</button>
+    <span id="testBadge" style="display:none; font-size:0.7rem; background:#ff4444; color:white; padding:0.2rem 0.5rem; border-radius:3px;">TEST MODE</span>
+  </div>
+  
   <div id="platforms"><span class="error">Loading...</span></div>
   <div class="footer">
     Last updated by transit agency: <span id="fetchedAt">—</span><br>
@@ -276,7 +278,7 @@ router.get('/', (req, res) => {
         document.getElementById('sliderTrack').style.background = isTest ? '#ff4444' : '#333';
         document.getElementById('sliderThumb').style.transform = isTest ? 'translateX(16px)' : '';
         document.getElementById('sliderThumb').style.background = isTest ? 'white' : '#888';
-        
+
         document.getElementById('fetchedAt').textContent = new Date(lastFetchedAt).toLocaleTimeString();
         document.getElementById('rawJson').textContent = JSON.stringify(data.raw, null, 2);
       } catch (e) {
