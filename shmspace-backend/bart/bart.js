@@ -4,6 +4,20 @@ const router = express.Router();
 const API_KEY = '276d1e95-15ba-481a-9bf0-6a312e4fae49';
 let cache = { trains: [], raw: null, fetchedAt: null };
 
+let testMode = false;
+let testTrains = [
+  { line: 'Red',    minutes: 2  },
+  { line: 'Yellow', minutes: 7  },
+  { line: 'Green',  minutes: 12 },
+  { line: 'Blue',   minutes: 18 },
+];
+
+router.post('/testmode', express.json(), (req, res) => {
+  testMode = Boolean(req.body.enabled);
+  if (Array.isArray(req.body.trains)) testTrains = req.body.trains;
+  res.json({ testMode, testTrains });
+});
+
 async function fetchBart() {
   console.log('Fetching BART data...');
   const response = await fetch(
@@ -39,12 +53,12 @@ setInterval(() => fetchBart().catch(console.error), 5 * 60 * 1000);
 
 // API endpoint for frontend to poll
 router.get('/data', (req, res) => {
-  res.json(cache);
+  res.json({ ...cache, testMode, testTrains });
 });
 
 router.get('/next', (req, res) => {
+  if (testMode) return res.json(testTrains);
   if (!cache.trains.length) return res.json([]);
-  
   const now = new Date();
   const next = cache.trains
     .filter(t => new Date(t.arrivalTime) > now)
@@ -54,7 +68,6 @@ router.get('/next', (req, res) => {
       line: t.line.split('-')[0],
       minutes: Math.round((new Date(t.arrivalTime) - now) / 60000)
     }));
-
   res.json(next);
 });
 
@@ -66,6 +79,25 @@ router.get('/', (req, res) => {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Powell St BART</title>
+
+  <div class="test-bar" style="display:flex; align-items:center; gap:1rem; margin-bottom:2rem; padding:0.75rem 1rem; background:#111; border:1px solid #222; border-radius:6px;">
+    <label style="font-size:0.8rem; color:#666; display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+      <span style="position:relative; display:inline-block; width:36px; height:20px;">
+        <input type="checkbox" id="testToggle" style="opacity:0; width:0; height:0;">
+        <span id="sliderTrack" style="position:absolute; cursor:pointer; inset:0; background:#333; border-radius:20px; transition:0.3s;"></span>
+        <span id="sliderThumb" style="position:absolute; width:14px; height:14px; left:3px; bottom:3px; background:#888; border-radius:50%; transition:0.3s;"></span>
+      </span>
+      Test mode
+    </label>
+    <button onclick="pushTestMode()" style="padding:0.4rem 1rem; background:#222; border:1px solid #444; color:#f0f0f0; font-family:'Courier New',monospace; font-size:0.8rem; border-radius:4px; cursor:pointer;" id="testBtn">Push</button>
+    <span id="testBadge" style="display:none; font-size:0.7rem; background:#ff4444; color:white; padding:0.2rem 0.5rem; border-radius:3px;">TEST MODE</span>
+  </div>
+
+  <div id="testEditor" style="display:none; margin-bottom:2rem;">
+    <div style="font-size:0.75rem; color:#666; margin-bottom:0.5rem;">Editing what ESP32 receives:</div>
+    <textarea id="testJson" style="width:100%; height:160px; background:#111; border:1px solid #333; border-radius:4px; color:#f0f0f0; font-family:'Courier New',monospace; font-size:0.8rem; padding:0.75rem; resize:vertical;"></textarea>
+  </div>
+
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -198,6 +230,33 @@ router.get('/', (req, res) => {
       document.getElementById('platforms').innerHTML = html || '<span class="error">No trains found</span>';
     }
 
+    async function pushTestMode() {
+      const enabled = document.getElementById('testToggle').checked;
+      let trains = testTrainsCache;
+      try { trains = JSON.parse(document.getElementById('testJson').value); } catch(e) {}
+
+      const res = await fetch('/api/bart/testmode', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ enabled, trains })
+      });
+      const data = await res.json();
+
+      const btn = document.getElementById('testBtn');
+      btn.textContent = 'Pushed!';
+      btn.style.color = '#44ff88';
+      btn.style.borderColor = '#44ff88';
+      setTimeout(() => { btn.textContent = 'Push'; btn.style.color = ''; btn.style.borderColor = ''; }, 2000);
+
+      document.getElementById('testBadge').style.display = enabled ? 'inline' : 'none';
+      document.getElementById('testEditor').style.display = enabled ? 'block' : 'none';
+      document.getElementById('sliderTrack').style.background = enabled ? '#ff4444' : '#333';
+      document.getElementById('sliderThumb').style.transform = enabled ? 'translateX(16px)' : '';
+      document.getElementById('sliderThumb').style.background = enabled ? 'white' : '#888';
+    }
+
+    let testTrainsCache = [];
+
     async function pollServer() {
       try {
         const res = await fetch('/api/bart/data');
@@ -205,6 +264,19 @@ router.get('/', (req, res) => {
         trainData = data.trains || [];
         lastFetchedAt = data.fetchedAt;
         lastPollAt = Date.now();
+
+        testTrainsCache = data.testTrains || [];
+        if (!document.getElementById('testJson').value) {
+          document.getElementById('testJson').value = JSON.stringify(data.testTrains, null, 2);
+        }
+        const isTest = data.testMode;
+        document.getElementById('testBadge').style.display = isTest ? 'inline' : 'none';
+        document.getElementById('testEditor').style.display = isTest ? 'block' : 'none';
+        document.getElementById('testToggle').checked = isTest;
+        document.getElementById('sliderTrack').style.background = isTest ? '#ff4444' : '#333';
+        document.getElementById('sliderThumb').style.transform = isTest ? 'translateX(16px)' : '';
+        document.getElementById('sliderThumb').style.background = isTest ? 'white' : '#888';
+        
         document.getElementById('fetchedAt').textContent = new Date(lastFetchedAt).toLocaleTimeString();
         document.getElementById('rawJson').textContent = JSON.stringify(data.raw, null, 2);
       } catch (e) {
