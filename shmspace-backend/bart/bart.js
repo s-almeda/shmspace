@@ -43,20 +43,19 @@ router.get('/data', (req, res) => {
 });
 
 router.get('/next', (req, res) => {
-  if (!cache.trains.length) return res.json({ line: null, minutes: null });
+  if (!cache.trains.length) return res.json([]);
   
-  // find the soonest arriving train
   const now = new Date();
   const next = cache.trains
     .filter(t => new Date(t.arrivalTime) > now)
-    .sort((a, b) => new Date(a.arrivalTime) - new Date(b.arrivalTime))[0];
+    .sort((a, b) => new Date(a.arrivalTime) - new Date(b.arrivalTime))
+    .slice(0, 5)
+    .map(t => ({
+      line: t.line.split('-')[0],
+      minutes: Math.round((new Date(t.arrivalTime) - now) / 60000)
+    }));
 
-  if (!next) return res.json({ line: null, minutes: null });
-
-  res.json({
-    line: next.line.split('-')[0],  // "Yellow-S" → "Yellow"
-    minutes: Math.round((new Date(next.arrivalTime) - now) / 60000)
-  });
+  res.json(next);
 });
 
 // the webpage itself
