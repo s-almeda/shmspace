@@ -221,6 +221,7 @@ router.get('/', (req, res) => {
     }
     .btn:hover { background: #333; }
     .btn.success { border-color: #44ff88; color: #44ff88; }
+    .test-bar .btn { margin-top: 0; }
     .error { color: #ff4444; font-size: 0.9rem; }
     .toggle { position: relative; display: inline-block; width: 36px; height: 20px; }
     .toggle input { opacity: 0; width: 0; height: 0; }
@@ -237,11 +238,12 @@ router.get('/', (req, res) => {
   <div class="test-bar">
     <label>
       <span class="toggle">
-        <input type="checkbox" id="testToggle" onchange="toggleTestMode()">
+        <input type="checkbox" id="testToggle" onchange="previewTestMode()">
         <span class="slider"></span>
       </span>
       Test mode
     </label>
+    <button class="btn" onclick="pushModeAndReload()">Push mode + reload</button>
   </div>
 
   <div class="test-editor" id="testEditor">
@@ -324,15 +326,25 @@ router.get('/', (req, res) => {
       document.getElementById('platforms').innerHTML = html || '<span class="error">No trains found</span>';
     }
 
-    async function toggleTestMode() {
+    function previewTestMode() {
       const enabled = document.getElementById('testToggle').checked;
       isTestMode = enabled;
       document.getElementById('testBadge').classList.toggle('visible', enabled);
       document.getElementById('testEditor').classList.toggle('visible', enabled);
 
+      renderTrains();
+    }
+
+    async function pushModeAndReload() {
+      const enabled = document.getElementById('testToggle').checked;
       let trains = null;
       if (enabled) {
-        try { trains = JSON.parse(document.getElementById('testJson').value); } catch (e) {}
+        try {
+          trains = JSON.parse(document.getElementById('testJson').value);
+        } catch (e) {
+          alert('Invalid JSON — fix it and try again');
+          return;
+        }
       }
 
       await fetch('/api/bart/testmode', {
@@ -341,7 +353,7 @@ router.get('/', (req, res) => {
         body: JSON.stringify({ enabled, trains }),
       });
 
-      renderTrains();
+      location.reload();
     }
 
     async function saveTestTrains() {
