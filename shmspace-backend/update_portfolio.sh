@@ -16,8 +16,7 @@ echo "🚀 Updating server..."
 ssh root@45.79.81.173 << 'ENDSSH'
 cd /root/shmspace/shmspace-backend
 git pull
-screen -S shmspace_backend -X quit 2>/dev/null
-screen -dmS shmspace_backend npm start
+pm2 restart my-app
 echo "✅ Server updated and restarted"
 ENDSSH
 
