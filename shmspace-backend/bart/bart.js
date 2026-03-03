@@ -53,12 +53,12 @@ setInterval(() => fetchBart().catch(console.error), 5 * 60 * 1000);
 
 // API endpoint for frontend to poll
 router.get('/data', (req, res) => {
-  res.json({ ...cache, testMode, testTrains });
+  res.json(cache);
 });
 
 router.get('/next', (req, res) => {
-  if (testMode) return res.json(testTrains);
   if (!cache.trains.length) return res.json([]);
+  
   const now = new Date();
   const next = cache.trains
     .filter(t => new Date(t.arrivalTime) > now)
@@ -68,6 +68,7 @@ router.get('/next', (req, res) => {
       line: t.line.split('-')[0],
       minutes: Math.round((new Date(t.arrivalTime) - now) / 60000)
     }));
+
   res.json(next);
 });
 
@@ -78,9 +79,7 @@ router.get('/', (req, res) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>shm's bart api</title>
-
-
+  <title>Powell St BART</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -213,33 +212,6 @@ router.get('/', (req, res) => {
       document.getElementById('platforms').innerHTML = html || '<span class="error">No trains found</span>';
     }
 
-    async function pushTestMode() {
-      const enabled = document.getElementById('testToggle').checked;
-      let trains = testTrainsCache;
-      try { trains = JSON.parse(document.getElementById('testJson').value); } catch(e) {}
-
-      const res = await fetch('/api/bart/testmode', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ enabled, trains })
-      });
-      const data = await res.json();
-
-      const btn = document.getElementById('testBtn');
-      btn.textContent = 'Pushed!';
-      btn.style.color = '#44ff88';
-      btn.style.borderColor = '#44ff88';
-      setTimeout(() => { btn.textContent = 'Push'; btn.style.color = ''; btn.style.borderColor = ''; }, 2000);
-
-      document.getElementById('testBadge').style.display = enabled ? 'inline' : 'none';
-      document.getElementById('testEditor').style.display = enabled ? 'block' : 'none';
-      document.getElementById('sliderTrack').style.background = enabled ? '#ff4444' : '#333';
-      document.getElementById('sliderThumb').style.transform = enabled ? 'translateX(16px)' : '';
-      document.getElementById('sliderThumb').style.background = enabled ? 'white' : '#888';
-    }
-
-    let testTrainsCache = [];
-
     async function pollServer() {
       try {
         const res = await fetch('/api/bart/data');
@@ -247,19 +219,6 @@ router.get('/', (req, res) => {
         trainData = data.trains || [];
         lastFetchedAt = data.fetchedAt;
         lastPollAt = Date.now();
-
-        testTrainsCache = data.testTrains || [];
-        if (!document.getElementById('testJson').value) {
-          document.getElementById('testJson').value = JSON.stringify(data.testTrains, null, 2);
-        }
-        const isTest = data.testMode;
-        document.getElementById('testBadge').style.display = isTest ? 'inline' : 'none';
-        document.getElementById('testEditor').style.display = isTest ? 'block' : 'none';
-        document.getElementById('testToggle').checked = isTest;
-        document.getElementById('sliderTrack').style.background = isTest ? '#ff4444' : '#333';
-        document.getElementById('sliderThumb').style.transform = isTest ? 'translateX(16px)' : '';
-        document.getElementById('sliderThumb').style.background = isTest ? 'white' : '#888';
-
         document.getElementById('fetchedAt').textContent = new Date(lastFetchedAt).toLocaleTimeString();
         document.getElementById('rawJson').textContent = JSON.stringify(data.raw, null, 2);
       } catch (e) {
