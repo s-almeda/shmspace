@@ -113,10 +113,10 @@ router.get('/', (req, res) => {
       border: 1px solid #222;
       border-radius: 4px;
       padding: 1rem;
-      height: 200px;
+      height: 500px;
       overflow-y: scroll;
-      font-size: 0.7rem;
-      color: #555;
+      font-size: 1.1rem;
+      color: #bcbcbc;
       white-space: pre;
     }
     .error { color: #ff4444; font-size: 0.9rem; }
@@ -128,7 +128,6 @@ router.get('/', (req, res) => {
   <div id="platforms"><span class="error">Loading...</span></div>
   <div class="footer">
     Last updated by transit agency: <span id="fetchedAt">—</span><br>
-    Next API refresh in: <span id="nextRefresh">—</span>
   </div>
   <div class="json-box" id="rawJson"></div>
 
