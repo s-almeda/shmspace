@@ -781,6 +781,11 @@ fieldset{
   left: 0.1em;
   content: "🎏";
 }
+#adv_9::before { /*kate*/
+  position: absolute;
+  left: 0.1em;
+  content: "🎐";
+}
 
 #adv_2::before {
   position: absolute;

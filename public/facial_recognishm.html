@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>facial recognishm</title>
+    <script>
+      // Detect iframe before anything renders
+      let isIframe = window.self !== window.top;
+      if (!isIframe) {
+        try { isIframe = window.frameElement !== null; }
+        catch (e) { isIframe = true; }
+      }
+
+      if (isIframe) {
+        document.documentElement.classList.add('fr-iframe-mode');
+      } else {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://cdn.jsdelivr.net/npm/xp.css';
+        document.head.appendChild(link);
+      }
+    </script>
+
+    <!-- p5.js + TensorFlow + BlazeFace -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface@0.0.7/dist/blazeface.min.js"></script>
+
+    <style>
+      /* iframe mode resets */
+      html.fr-iframe-mode,
+      html.fr-iframe-mode * { all: revert !important; }
+      html.fr-iframe-mode body {
+        margin: 0 !important; padding: 0 !important;
+        width: 100% !important; background: transparent !important;
+      }
+
+      /* standalone styles */
+      body {
+        margin: 0;
+        padding: 20px;
+        background: #1b1b1a;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box;
+        min-height: 100vh;
+      }
+
+      .main-window {
+        width: 100%;
+        max-width: 760px;
+        box-sizing: border-box;
+      }
+
+      .window-body {
+        padding: 20px 28px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.95em;
+        line-height: 1.7;
+        overflow-x: hidden;
+        text-align: center;
+      }
+
+      p {
+        margin: 14px 0;
+      }
+
+      #sketch-container {
+        margin: 16px 0;
+        text-align: center;
+      }
+
+      #sketch-container canvas {
+        max-width: 100%;
+        height: auto !important;
+        display: inline-block;
+      }
+
+      @media (max-width: 500px) {
+        body { padding: 8px; }
+        .window-body { padding: 12px 16px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="window main-window">
+      <div class="title-bar">
+        <div class="title-bar-text">facial recognishm</div>
+        <div class="title-bar-controls">
+          <a href="/" aria-label="Minimize"><button aria-label="Minimize"></button></a>
+          <a href="/" aria-label="Close"><button aria-label="Close"></button></a>
+        </div>
+      </div>
+
+      <div class="window-body">
+        <div id="sketch-container"></div>
+      </div>
+    </div>
+
+    <script src="p5js_sketches/p5jsFacialRecognitionExample.js"></script>
+    <script>
+      // p5 appends canvas to body by default — move it into our container
+      document.getElementById('sketch-container').appendChild(document.querySelector('canvas'));
+    </script>
+  </body>
+</html>
