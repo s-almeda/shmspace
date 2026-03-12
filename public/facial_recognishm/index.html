@@ -76,6 +76,24 @@
               <input id="check-bbox" type="checkbox" checked>
               <label for="check-bbox">put face in "<u> B</u>ox?"</label>
             </div>
+            <div class="field-row disabled">
+              <input id="check-hands" type="checkbox">
+              <label for="check-hands">"<u>H</u>ands"?</label>
+            </div>
+            <div id="hands-controls" class="hands-controls" style="display:none;">
+              <div class="field-row hands-sub-row">
+                <label for="puppet-size">puppetSize</label>
+                <input type="range" id="puppet-size" min="0.1" max="2" step="0.1" value="0.7">
+              </div>
+              <div class="field-row hands-sub-row">
+                <label>puppetNumber&nbsp:</label>
+                <div class="puppet-nav-row">
+                  <button id="puppet-prev">&lt;</button>
+                  <input type="text" id="puppet-number" value="1" readonly style="width: 30px; padding: 2px;">
+                  <button id="puppet-next">&gt;</button>
+                </div>
+              </div>
+            </div>
           </div>
           <!-- <div class="field-row">
             <div class="inner-scroll">
@@ -103,33 +121,11 @@
   </div>
 
   <script type="module">
-    import { encode, decode } from 'https://esm.sh/blurhash@2.0.5';
     import { HandLandmarker, FilesetResolver } from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.mjs';
+    import { RACE_CLASSES, FACE_TRIANGLES, LERP, FADE_IN, FADE_OUT } from '/facial_recognishm/js/constants.js';
+    import { detectWink } from '/facial_recognishm/js/winkDetection.js';
+    import { createBlurhashRenderer } from '/facial_recognishm/js/blurhash.js';
     /* tf and faceapi are globals loaded via <script defer> in <head> */
-
-    // ── Constants ────────────────────────────────────────────────────
-    const RACE_CLASSES = ['White', 'Black', 'Asian', 'Hispanic_Latino', 'Middle_Eastern'];
-
-    const FACE_TRIANGLES = [
-      [36,37,41],[37,38,41],[38,40,41],[38,39,40],
-      [42,43,47],[43,44,47],[44,46,47],[44,45,46],
-      [17,18,36],[18,19,37],[18,36,37],[19,20,37],[20,21,27],[20,37,27],
-      [22,23,27],[23,24,27],[24,25,44],[24,43,44],[25,26,44],[26,45,44],
-      [21,22,27],
-      [27,36,39],[27,37,36],[37,42,27],[27,42,35],[17,36,27],[26,27,42],
-      [27,28,31],[28,29,31],[29,30,31],[30,31,32],[30,32,33],[30,33,34],[30,34,35],[27,28,35],[28,29,35],[29,30,35],
-      [31,48,51],[31,32,51],[32,33,51],[33,34,51],[34,35,51],[35,51,54],
-      [48,49,60],[49,61,60],[49,50,61],[50,62,61],[50,51,62],[51,62,52],
-      [52,63,62],[52,53,63],[53,64,63],[53,54,64],[54,64,55],[55,65,64],
-      [55,56,65],[56,66,65],[56,57,66],[57,67,66],[57,58,67],[58,59,67],[59,60,67],[59,48,60],
-      [60,61,67],[61,66,67],[61,62,66],[62,65,66],[62,63,65],[63,64,65],
-      [0,1,36],[0,17,36],[1,2,31],[1,36,31],[2,3,31],[3,4,31],[4,5,31],[5,48,31],
-      [5,6,48],[6,7,48],[7,57,48],[7,8,57],[8,9,57],
-      [9,10,57],[10,11,54],[10,57,54],[11,12,54],[12,13,54],[13,42,54],
-      [13,14,46],[14,15,46],[15,16,45],[15,45,46],[16,26,45],
-      [36,31,39],[39,31,40],[40,31,48],[40,48,7],[41,36,1],[41,1,0],
-      [47,42,46],[46,42,54],[16,47,46],
-    ];
 
     // ── Load models ──────────────────────────────────────────────────
     await Promise.all([
@@ -166,33 +162,6 @@
     let raceInferInterval  = null;
     let raceFlickerInterval = null;
 
-    // ── Wink detection ───────────────────────────────────────────────
-    const LEFT_EYE  = [36, 37, 38, 39, 40, 41];
-    const RIGHT_EYE = [42, 43, 44, 45, 46, 47];
-    const EAR_THRESHOLD = 0.2;
-    const WINK_COOLDOWN = 1500;
-    let lastWinkTime = 0;
-
-    function eyeAspectRatio(points) {
-      const v1 = Math.hypot(points[1].x - points[5].x, points[1].y - points[5].y);
-      const v2 = Math.hypot(points[2].x - points[4].x, points[2].y - points[4].y);
-      const h  = Math.hypot(points[0].x - points[3].x, points[0].y - points[3].y);
-      return (v1 + v2) / (2.0 * h);
-    }
-
-    function detectWink(landmarks) {
-      const pts = landmarks.positions;
-      const leftEAR  = eyeAspectRatio(LEFT_EYE.map(i => pts[i]));
-      const rightEAR = eyeAspectRatio(RIGHT_EYE.map(i => pts[i]));
-      const now = Date.now();
-      if (now - lastWinkTime < WINK_COOLDOWN) return null;
-      const leftClosed  = leftEAR  < EAR_THRESHOLD;
-      const rightClosed = rightEAR < EAR_THRESHOLD;
-      if (leftClosed && !rightClosed) { lastWinkTime = now; return 'left'; }
-      if (rightClosed && !leftClosed) { lastWinkTime = now; return 'right'; }
-      return null;
-    }
-
     // ── Hand image slideshow ─────────────────────────────────────────
     // Auto-populated from /facial_recognishm/puppets/ — just drop images in that folder
     const puppetFiles = await fetch('/facial_recognishm/puppets-list').then(r => r.json());
@@ -203,7 +172,7 @@
     });
     let currentSlide = 0;
     function advanceSlide() {
-      if (loadedImages.length) currentSlide = (currentSlide + 1) % loadedImages.length;
+      if (loadedImages.length) { currentSlide = (currentSlide + 1) % loadedImages.length; updatePuppetDisplay(); }
     }
 
     // ── Face canvas + smooth lerp state ──────────────────────────────
@@ -211,9 +180,6 @@
     let faceTarget  = null;
     let faceDisplay = null;
     let faceOpacity = 0;
-    const LERP     = 0.18;
-    const FADE_IN  = 0.3;
-    const FADE_OUT = 1/2;
     function lv(a, b) { return a + (b - a) * LERP; }
 
     function faceDrawLoop() {
@@ -464,7 +430,13 @@
     const handCtx    = handCanvas.getContext('2d');
     let lastHandTime = -1;
 
-    function detectHands(handSlider = 1.0) {
+    function updatePuppetDisplay() {
+      const el = document.getElementById('puppet-number');
+      if (el) el.value = loadedImages.length ? currentSlide + 1 : 0;
+    }
+
+    function detectHands() {
+      if (!document.getElementById('check-hands')?.checked) return;
       if (video.readyState < 2) return;
       const { width, height } = video.getBoundingClientRect();
       handCanvas.width  = width;
@@ -478,6 +450,7 @@
       if (!loadedImages.length) return;
       const img = loadedImages[currentSlide];
       if (!img || !img.complete) return;
+      const handSlider = parseFloat(document.getElementById('puppet-size')?.value ?? 1.5);
       handResults.landmarks.forEach(hand => {
         const wrist   = hand[0];
         const midBase = hand[9];
@@ -500,47 +473,7 @@
     const dialogueOverlay = document.getElementById('dialogueOverlay');
     const analysisPanel   = document.getElementById('analysisPanel');
 
-    const encodeCanvas = document.createElement('canvas');
-    encodeCanvas.width = 64; encodeCanvas.height = 36;
-    const encodeCtx = encodeCanvas.getContext('2d', { willReadFrequently: true });
-
-    const ENCODE_INTERVAL = 150;
-    let lastEncodeTime = 0;
-    let rafId = null;
-
-    function sizeBgCanvas() {
-      bgCanvas.width  = window.innerWidth;
-      bgCanvas.height = window.innerHeight;
-    }
-    sizeBgCanvas();
-    window.addEventListener('resize', sizeBgCanvas);
-
-    function renderBlurhash(hash) {
-      const w = bgCanvas.width, h = bgCanvas.height;
-      const decodeW = 128, decodeH = Math.round(128 * (h / w));
-      const pixels = decode(hash, decodeW, decodeH, 1);
-      const ctx = bgCanvas.getContext('2d');
-      const imageData = ctx.createImageData(decodeW, decodeH);
-      imageData.data.set(pixels);
-      const tmp = document.createElement('canvas');
-      tmp.width = decodeW; tmp.height = decodeH;
-      tmp.getContext('2d').putImageData(imageData, 0, 0);
-      ctx.drawImage(tmp, 0, 0, w, h);
-    }
-
-    function loop(timestamp) {
-      rafId = requestAnimationFrame(loop);
-      if (video.readyState < 2) return;
-      if (timestamp - lastEncodeTime < ENCODE_INTERVAL) return;
-      lastEncodeTime = timestamp;
-      encodeCtx.drawImage(video, 0, 0, 64, 36);
-      const pixels = encodeCtx.getImageData(0, 0, 64, 36);
-      try {
-        const hash = encode(pixels.data, 64, 36, 4, 3);
-        renderBlurhash(hash);
-        if (!bgCanvas.classList.contains('visible')) bgCanvas.classList.add('visible');
-      } catch (e) { /* ignore encode errors */ }
-    }
+    const blurhash = createBlurhashRenderer(bgCanvas, video);
 
     async function startCamera() {
       try {
@@ -557,8 +490,7 @@
         dialogueOverlay.classList.add('visible');
         analysisPanel.classList.add('visible');
 
-        if (rafId) cancelAnimationFrame(rafId);
-        requestAnimationFrame(loop);
+        blurhash.start();
         requestAnimationFrame(faceDrawLoop);
         setInterval(detectFace, 100);
         setInterval(detectHands, 33);
@@ -599,10 +531,54 @@
       });
     });
 
-    const keyMap = { r: 'check-race', a: 'check-age', g: 'check-gender', e: 'check-emotion', f: 'check-facemesh', b: 'check-bbox' };
+    // Hands checkbox: show/hide controls
+    document.getElementById('check-hands').addEventListener('change', function() {
+      this.closest('.field-row').classList.toggle('disabled', !this.checked);
+      document.getElementById('hands-controls').style.display = this.checked ? 'block' : 'none';
+      if (this.checked) {
+        updatePuppetDisplay();
+        if (!loadedImages.length) {
+          const handCanvas = document.getElementById('handCanvas');
+          handCanvas.getContext('2d').clearRect(0, 0, handCanvas.width, handCanvas.height);
+        }
+      } else {
+        const hc = document.getElementById('handCanvas');
+        hc.getContext('2d').clearRect(0, 0, hc.width, hc.height);
+      }
+    });
+
+    // Puppet nav buttons
+    document.getElementById('puppet-prev').addEventListener('click', () => {
+      if (!loadedImages.length) return;
+      currentSlide = (currentSlide - 1 + loadedImages.length) % loadedImages.length;
+      updatePuppetDisplay();
+    });
+    document.getElementById('puppet-next').addEventListener('click', () => {
+      if (!loadedImages.length) return;
+      currentSlide = (currentSlide + 1) % loadedImages.length;
+      updatePuppetDisplay();
+    });
+
+    const keyMap = { r: 'check-race', a: 'check-age', g: 'check-gender', e: 'check-emotion', f: 'check-facemesh', b: 'check-bbox', h: 'check-hands' };
     document.addEventListener('keydown', ev => {
+      // Toggle checkboxes
       const id = keyMap[ev.key.toLowerCase()];
       if (id) { const cb = document.getElementById(id); if (cb) { cb.checked = !cb.checked; cb.dispatchEvent(new Event('change')); } }
+
+      // Puppet size: [ to decrease, ] to increase
+      if (ev.key === '[' || ev.key === ']') {
+        const slider = document.getElementById('puppet-size');
+        if (slider) {
+          slider.value = Math.max(parseFloat(slider.min), Math.min(parseFloat(slider.max),
+            parseFloat(slider.value) + (ev.key === ']' ? 0.1 : -0.1)));
+        }
+      }
+
+      // Puppet number: ; to decrease, ' to increase
+      if ((ev.key === ';' || ev.key === "'") && loadedImages.length) {
+        currentSlide = (currentSlide + (ev.key === "'" ? 1 : -1) + loadedImages.length) % loadedImages.length;
+        updatePuppetDisplay();
+      }
     });
 </script>
 
