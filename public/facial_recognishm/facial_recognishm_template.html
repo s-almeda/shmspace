@@ -17,8 +17,7 @@
     <div class="title-bar">
       <div class="title-bar-text">
         <!-- <img src="./images/question_mark.ico" alt="question mark Logo" style="height: 25px; vertical-align: middle; margin-right: 8px;"> -->
-        <span id="titleText">recognizing my self&nbsp;</span>
-        by shm garanganao almeda
+        <span id="titleText">recognizing my self</span>
       </div>
 
       <div class="title-bar-controls">
@@ -77,12 +76,12 @@
               <span class="result-value" id="result-emotion"></span>
             </div>
             <div class="field-row">
-              <input id="check-facemesh" type="checkbox">
+              <input id="check-facemesh" type="checkbox" checked>
               <label for="check-facemesh">"<u>F</u>ace"?</label>
               <span class="result-value" id="result-face"></span>
             </div>
             <div class="field-row">
-              <input id="check-bbox" type="checkbox">
+              <input id="check-bbox" type="checkbox" checked>
               <label for="check-bbox">put face in "<u> B</u>ox?"</label>
             </div>
             <div class="field-row disabled">
@@ -108,9 +107,8 @@
         </fieldset>
       </div>
 
-      <div id="spacebarHint">press spacebar to continue</div>
-
       <div id="dialogueOverlay">
+            <div id="spacebarHint">press spacebar to continue</div>
             <menu role="tablist">
                 <button role="tab" aria-selected="true" aria-controls="dialogue-panel" contenteditable="true">
                 character name
@@ -484,13 +482,14 @@
         startScreen.classList.add('hidden');
         errorScreen.classList.remove('visible');
         video.classList.add('visible');
+        dialogueOverlay.classList.add('visible');
+        document.getElementById('spacebarHint').classList.add('visible');
+        analysisPanel.classList.add('visible');
 
         blurhash.start();
         requestAnimationFrame(faceDrawLoop);
         setInterval(detectFace, 100);
         setInterval(detectHands, 33);
-
-        cameraReady = true;
 
       } catch (err) {
         console.error('Camera error:', err);
@@ -564,27 +563,8 @@
       updatePuppetDisplay();
     });
 
-    // ── Game state ────────────────────────────────────────────────────
-    let cameraReady = false;
-    let gameStarted = false;
-
     const keyMap = { r: 'check-race', a: 'check-age', g: 'check-gender', e: 'check-emotion', f: 'check-facemesh', b: 'check-bbox', h: 'check-hands' };
     document.addEventListener('keydown', ev => {
-      // Spacebar: start game on first press, scene advancement later
-      if (ev.code === 'Space') {
-        ev.preventDefault();
-        if (!cameraReady) return;
-        if (!gameStarted) {
-          gameStarted = true;
-          dialogueOverlay.classList.add('visible');
-          setTimeout(() => document.getElementById('spacebarHint').classList.add('visible'), 1400);
-          setTimeout(() => analysisPanel.classList.add('visible'), 1800);
-          return;
-        }
-        // subsequent spacebar presses: scene advancement (todo 4)
-        return;
-      }
-
       // Toggle checkboxes
       const id = keyMap[ev.key.toLowerCase()];
       if (id) { const cb = document.getElementById(id); if (cb) { cb.checked = !cb.checked; cb.dispatchEvent(new Event('change')); } }
