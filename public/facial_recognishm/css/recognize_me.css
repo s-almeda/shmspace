@@ -161,13 +161,34 @@ body {
   background: transparent;
   padding: 0 8px 8px 8px;
   opacity: 0;
+  transform: translateY(12px);
   pointer-events: none;
-  transition: opacity 0.6s ease;
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 #dialogueOverlay.visible {
   opacity: 1;
+  transform: translateY(0);
   pointer-events: auto;
+}
+
+/* blinking cursor during typewriter */
+#dialogue-panel::after {
+  content: '|';
+  display: inline;
+  font-weight: 100;
+  margin-left: 1px;
+  opacity: 0;
+}
+
+#dialogue-panel.typing::after {
+  opacity: 1;
+  animation: blink 0.6s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
 }
 
 #dialogueOverlay menu[role="tablist"] {
