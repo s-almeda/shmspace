@@ -59,6 +59,16 @@ app.get('/recognize_me', function (req, res) {
     res.sendFile(publicPath + '/facial_recognishm/index.html');
 });
 
+// Returns sorted list of image filenames from the puppets folder
+app.get('/facial_recognishm/puppets-list', function (_req, res) {
+    const fs = require('fs');
+    const puppetsDir = path.join(publicPath, 'facial_recognishm', 'puppets');
+    const files = fs.readdirSync(puppetsDir)
+        .filter(f => /\.(png|jpg|jpeg|gif|webp)$/i.test(f))
+        .sort();
+    res.json(files);
+});
+
 
 //run this server by entering "node App.js" using your command line. 
    app.listen(port, () => {
