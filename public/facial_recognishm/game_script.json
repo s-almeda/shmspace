@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "toggles": { "bbox": false, "facemesh": false, "race": false, "age": false, "gender": false, "emotion": false, "hands": false },
+    "dialogue": { "show": true, "characterName": "shm", "text": "..." },
+    "actionRequired": null
+  },
+  {
+    "id": 2,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "what's up chat" },
+    "actionRequired": null
+  },
+  {
+    "id": 3,
+    "toggles": { "bbox": true },
+    "dialogue": { "show": true, "characterName": "shm", "text": "i don't really know what my face looks like. and I've been trying to figure this out for a very long time." },
+    "actionRequired": null
+  },
+  {
+    "id": 4,
+    "toggles": { "hands": true, "puppetNum": 1 },
+    "dialogue": { "show": true, "characterName": "shm", "text": "i used to spend a lot of time staring at mirrors as a kid" },
+    "actionRequired": null
+  },
+  {
+    "id": 5,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "like, a lot" },
+    "actionRequired": null
+  },
+  {
+    "id": 6,
+    "toggles": { "hands": false, "facemesh": true },
+    "dialogue": { "show": true, "characterName": "shm", "text": "maybe i'm just like, obsessed with myself and my appearance." },
+    "actionRequired": null
+  },
+  {
+    "id": 7,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "this is a reasonable assumption. after all, I'm..." },
+    "actionRequired": null
+  },
+  {
+    "id": 8,
+    "toggles": { "detectPrettyCute": true },
+    "dialogue": null,
+    "actionRequired": "prettyCute"
+  },
+  {
+    "id": 9,
+    "toggles": { "detectPrettyCute": false, "facemesh": false },
+    "dialogue": { "show": true, "characterName": "shm", "text": "but processing faces, especially my own, has always felt... weirdly unintuitive." },
+    "actionRequired": null
+  }
+]
