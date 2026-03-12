@@ -21,11 +21,6 @@ export const FACE_TRIANGLES = [
   [47,42,46],[46,42,54],[16,47,46],
 ];
 
-export const LEFT_EYE  = [36, 37, 38, 39, 40, 41];
-export const RIGHT_EYE = [42, 43, 44, 45, 46, 47];
-export const EAR_THRESHOLD = 0.2;
-export const WINK_COOLDOWN = 1500;
-
 export const LERP     = 0.18;
 export const FADE_IN  = 0.3;
 export const FADE_OUT = 1 / 2;
