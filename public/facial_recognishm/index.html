@@ -43,25 +43,25 @@
         <fieldset>
           <!-- <legend style="font-style: italic;">what is seen</legend> -->
           <div id="checkboxGroup">
-            <div class="field-row">
+            <div class="field-row disabled">
               <input id="check-race" type="checkbox">
               <label for="check-race">[R]ace</label>
-              <span class="result-value" id="result-race"><b>Asian</b> (0.98)</span>
+              <span class="result-value" id="result-race"></span>
             </div>
-            <div class="field-row">
+            <div class="field-row disabled">
               <input id="check-age" type="checkbox">
               <label for="check-age">[A]ge</label>
-              <span class="result-value" id="result-age"><b>20-29 y.o.</b> (0.53)</span>
+              <span class="result-value" id="result-age"></span>
             </div>
-            <div class="field-row">
+            <div class="field-row disabled">
               <input id="check-gender" type="checkbox">
               <label for="check-gender">[G]ender</label>
-              <span class="result-value" id="result-gender"><b>Female</b> (0.81)</span>
+              <span class="result-value" id="result-gender"></span>
             </div>
-            <div class="field-row">
+            <div class="field-row disabled">
               <input id="check-emotion" type="checkbox">
               <label for="check-emotion">[E]motion</label>
-              <span class="result-value" id="result-emotion"><b>Neutral</b> (0.44)</span>
+              <span class="result-value" id="result-emotion"></span>
             </div>
           </div>
           <div class="field-row">
@@ -91,9 +91,43 @@
 
   <script type="module">
     import { encode, decode } from 'https://esm.sh/blurhash@2.0.5';
-
     import * as tf from 'https://esm.sh/@tensorflow/tfjs';
 
+      const RACE_CLASSES = ['White', 'Black', 'Asian', 'Hispanic_Latino', 'Middle_Eastern'];
+
+      const raceModel = await tf.loadGraphModel('/facial_recognishm/face_model/model.json');
+
+      const inferCanvas = document.createElement('canvas');
+      inferCanvas.width  = 224;
+      inferCanvas.height = 224;
+      const inferCtx = inferCanvas.getContext('2d');
+
+      let raceInterval = null;
+
+      async function predictRace() {
+        if (video.readyState < 2) return;
+        inferCtx.drawImage(video, 0, 0, 224, 224);
+
+        const tensor = tf.browser.fromPixels(inferCanvas)
+          .toFloat()
+          .div(255.0)
+          .expandDims(0);
+
+        const preds = await raceModel.predict(tensor).data();
+        tensor.dispose();
+
+        const sorted = [...preds]
+          .map((score, i) => ({ cls: RACE_CLASSES[i], score }))
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 3);
+
+        const parts = sorted.map((p, i) => {
+            const label = `${p.cls}&nbsp;(${p.score.toFixed(2)})`;
+          return i === 0 ? `<span class="pred-top">${label}</span>` : label;
+        });
+
+        document.getElementById('result-race').innerHTML = parts.join(', ');
+      }
 
 
     const video      = document.getElementById('webcam');
@@ -169,7 +203,6 @@
     }
 
     async function startCamera() {
-    
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
@@ -202,15 +235,39 @@
       startScreen.classList.remove('hidden');
     });
 
+    // Race checkbox: start/stop prediction interval
+    document.getElementById('check-race').addEventListener('change', function() {
+      const row = this.closest('.field-row');
+      if (this.checked) {
+        row.classList.remove('disabled');
+        predictRace();
+        raceInterval = setInterval(predictRace, 1000);
+      } else {
+        row.classList.add('disabled');
+        clearInterval(raceInterval);
+        document.getElementById('result-race').innerHTML = '';
+      }
+    });
+
+    // Other checkboxes: just toggle disabled state (no model yet)
+    ['check-age', 'check-gender', 'check-emotion'].forEach(id => {
+      document.getElementById(id).addEventListener('change', function() {
+        this.closest('.field-row').classList.toggle('disabled', !this.checked);
+      });
+    });
+
     const keyMap = { r: 'check-race', a: 'check-age', g: 'check-gender', e: 'check-emotion' };
     document.addEventListener('keydown', (ev) => {
       const id = keyMap[ev.key.toLowerCase()];
       if (id) {
         const cb = document.getElementById(id);
-        if (cb) cb.checked = !cb.checked;
+        if (cb) {
+          cb.checked = !cb.checked;
+          cb.dispatchEvent(new Event('change'));
+        }
       }
     });
-  </script>
+</script>
 
 </body>
 </html>
