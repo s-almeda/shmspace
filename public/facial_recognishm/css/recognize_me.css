@@ -85,6 +85,10 @@ body {
   opacity: 1;
 }
 
+#webcam, #faceCanvas {
+  transform: scaleX(-1);
+}
+
 #faceCanvas {
   position: absolute;
   top: 0;
@@ -209,15 +213,17 @@ body {
 #checkboxGroup {
   overflow-y: auto;
   min-height: 0;
-  max-height: 70%;
+  max-height: 90%;
   flex-shrink: 1;
 }
 
 /* checkbox rows */
 #analysisPanel .field-row {
-  margin-top: 5px;
+  margin-top: 7px;
   zoom: 1.5;
   flex-wrap: wrap;
+  overflow: visible;
+  padding-bottom: 4px;
 }
 
 /* detected output row — no zoom, fills remaining space */
@@ -270,7 +276,7 @@ body {
 #analysisPanel .result-value {
   width: 100%;
   margin-left: var(--checkbox-total-width);
-  margin-top: 2px;
+  margin-top: 7px;
   /* font-weight: bold; */
   color: #333;
 }
