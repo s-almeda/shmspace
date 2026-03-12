@@ -104,6 +104,10 @@
               </div>
             </div>
           </div>
+          <div style="padding: 4px 0 2px 0; flex-shrink: 0; display: flex; gap: 4px;">
+            <button id="copy-scene-btn" style="flex: 1; font-size: 11px;">copy scene</button>
+            <button id="copy-toggles-btn" style="flex: 1; font-size: 11px;">copy toggles</button>
+          </div>
 
         </fieldset>
       </div>
@@ -120,6 +124,22 @@
                ...
             </article>
         </div>
+
+      <!-- popup overlay -->
+      <div id="popupOverlay" style="display:none; position:absolute; inset:0; z-index:20; align-items:center; justify-content:center; pointer-events:none;">
+        <div class="window" style="width:70%; min-width:230px; max-width:420px; height:auto; background:#ede9d8; pointer-events:auto; border: 2px solid rgb(1, 97, 221); box-shadow: none;">
+          <div class="title-bar">
+            <div class="title-bar-text">
+              <img id="popup-icon" src="/images/error.ico" alt="" style="width:14px; height:14px; vertical-align:middle; margin-right:3px;">
+              <span id="popup-title">error</span>
+            </div>
+          </div>
+          <div style="text-align:center; padding:12px 10px 8px; background:#ede9d8;">
+            <p id="popup-body" style="font-style:italic; margin:0 0 10px; font-size:13px;">you have been yapping for... <span id="titleTimer"></span></p>
+            <button id="popup-ok" style="font-size:12px; padding:4px 10px;">oops</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -186,8 +206,10 @@
     let faceOpacity = 0;
     let detect_prettyCute = false;  // master switch for pretty cute mode
     let prettyCute        = false; // true when detection is on AND smiling
+    let detect_shm        = false; // shows green bbox + "shm" label
     let winkDetected      = false; // one-shot flag, reset after checkConditions reads it
     let lastDetections    = [];    // raw face-api results from last detectFace() run
+    let popupDismissed    = false; // set true when popup ok is clicked
 
     // ── Condition registry ────────────────────────────────────────────
     const CONDITIONS = {
@@ -203,12 +225,29 @@
         active: false,
         check: () => winkDetected,
       },
+      popup: {
+        active: false,
+        check: () => popupDismissed,
+      },
+      happyAsianWoman: {
+        active: false,
+        check: () => {
+          if (!lastDetections.length) return false;
+          const r = lastDetections[0];
+          return r.expressions.happy > 0.7
+              && r.gender === 'female'
+              && r.genderProbability > 0.7
+              && lastRaceClass === 'Asian';
+        },
+      },
     };
 
     const CONDITION_HINTS = {
-      prettyCute: 'be cute to continue',
-      smile:      'smile to continue',
-      wink:       'wink to continue',
+      prettyCute:      'be cute to continue',
+      smile:           'smile to continue',
+      wink:            'wink to continue',
+      popup:           'dismiss alert to continue',
+      happyAsianWoman: 'be a pleasant adult asian woman in the bay area to continue',
     };
 
     function lv(a, b) { return a + (b - a) * LERP; }
@@ -303,14 +342,16 @@
       }
 
       if (document.getElementById('check-bbox').checked) {
-        const boxColor  = prettyCute ? 'rgba(255, 182, 193, 0.9)' : 'rgba(144, 189, 66, 0.9)';
+        const boxColor  = prettyCute ? 'rgba(255, 182, 193, 0.9)'
+                        : detect_shm ? 'rgba(144, 189, 66, 0.9)'
+                        : 'rgba(255, 255, 255, 0.85)';
         const textColor = 'rgba(0, 0, 0, 1.0)';
         const fontSize  = prettyCute ? 45 : 42;
         faceDisplay.boxes.forEach(box => {
           ctx.strokeStyle = boxColor;
           ctx.lineWidth = 3.5;
           ctx.strokeRect(box.x, box.y, box.w, box.h);
-          const label = prettyCute ? 'pretty cute!' : box.label;
+          const label = prettyCute ? 'pretty cute!' : detect_shm ? 'shm' : box.label;
           if (label) {
             ctx.save();
             ctx.scale(-1, 1);
@@ -525,8 +566,12 @@
         const palmY = ((wrist.y + midBase.y) / 2) * height;
         const tip = hand[12];
         const handSize = Math.hypot((tip.x - wrist.x) * width, (tip.y - wrist.y) * height);
-        const imgSize = handSize * handSlider;
-        handCtx.drawImage(img, palmX - imgSize / 2, palmY - imgSize / 2, imgSize, imgSize);
+        const imgW = handSize * handSlider;
+        const imgH = imgW * (img.naturalHeight / img.naturalWidth);
+        handCtx.save();
+        handCtx.scale(-1, 1);
+        handCtx.drawImage(img, -(palmX + imgW / 2), palmY - imgH / 2, imgW, imgH);
+        handCtx.restore();
       });
     }
 
@@ -540,6 +585,7 @@
       Object.entries(toggles).forEach(([key, val]) => {
         if (key === 'puppetNum') { currentSlide = val - 1; updatePuppetDisplay(); return; }
         if (key === 'detectPrettyCute') { detect_prettyCute = val; if (CONDITIONS.prettyCute) CONDITIONS.prettyCute.active = val; return; }
+        if (key === 'detectShm') { detect_shm = val; return; }
         const cb = document.getElementById(checkMap[key]);
         if (cb && cb.checked !== val) { cb.checked = val; cb.dispatchEvent(new Event('change')); }
       });
@@ -548,6 +594,7 @@
     const TYPEWRITER_SPEEDS = {
       fast:   [8,  6],   // base ± jitter ms
       normal: [12, 8],
+      medium: [25, 10],
       slow:   [45, 35],
     };
 
@@ -602,7 +649,7 @@
         hint.style.fontSize = size;
         hint.style.background = '';
       } else if (currentActionRequired && actionConditionMet) {
-        hint.textContent = 'press spacebar to continue';
+        hint.textContent = 'thank you. press spacebar to continue';
         hint.style.fontSize = size;  // stay at whatever size it grew to
         hint.style.background = 'rgba(60, 180, 80, 0.75)';
       } else {
@@ -633,6 +680,23 @@
       winkDetected = false; // reset one-shot flag after reading
     }
 
+    function showPopup(config = {}) {
+      popupDismissed = false;
+      document.getElementById('popup-title').textContent = config.title ?? 'alert';
+      const icon = document.getElementById('popup-icon');
+      icon.src = config.icon ?? '/images/error.ico';
+      icon.style.display = 'inline';
+      // body is hard-coded in HTML with the live timer span — don't overwrite
+      document.getElementById('popup-ok').textContent  = config.okLabel ?? 'oops';
+      // document.getElementById('popup-no').textContent  = config.noLabel ?? 'no';
+      const overlay = document.getElementById('popupOverlay');
+      overlay.style.display = 'flex';
+    }
+
+    function hidePopup() {
+      document.getElementById('popupOverlay').style.display = 'none';
+    }
+
     function loadScene(index, instant = false) {
       const scene = gameScript[index];
       if (!scene) return;
@@ -641,6 +705,8 @@
       applyToggles(scene.toggles);
       applyDialogue(scene.dialogue, instant);
       setActionRequired(scene.actionRequired);
+      if (scene.actionRequired === 'popup') showPopup(scene.popupConfig);
+      else hidePopup();
       console.log(`scene ${scene.id} loaded`);
     }
 
@@ -698,10 +764,29 @@
       }
     }
 
+    // title bar timer — starts immediately on page load, resets on refresh
+    (() => {
+      const timerEl = document.getElementById('titleTimer');
+      const timerStart = Date.now();
+      setInterval(() => {
+        const ms = Date.now() - timerStart;
+        const h  = String(Math.floor(ms / 3600000)).padStart(2, '0');
+        const m  = String(Math.floor((ms % 3600000) / 60000)).padStart(2, '0');
+        const s  = String(Math.floor((ms % 60000) / 1000)).padStart(2, '0');
+        const cs = String(Math.floor((ms % 1000) / 10)).padStart(2, '0');
+        timerEl.textContent = `(${h}:${m}:${s}:${cs})`;
+      }, 10);
+    })();
+
     startBtn.addEventListener('click', startCamera);
     retryBtn.addEventListener('click', () => {
       errorScreen.classList.remove('visible');
       startScreen.classList.remove('hidden');
+    });
+    document.getElementById('popup-ok').addEventListener('click', () => {
+      popupDismissed = true;
+      hidePopup();
+      checkConditions();
     });
 
     // Race checkbox: flicker every 150ms, real inference every 3s
@@ -741,6 +826,36 @@
         const hc = document.getElementById('handCanvas');
         hc.getContext('2d').clearRect(0, 0, hc.width, hc.height);
       }
+    });
+
+    // Copy scene JSON helpers
+    function buildCurrentToggles() {
+      const checkMap = { bbox: 'check-bbox', facemesh: 'check-facemesh', race: 'check-race', age: 'check-age', gender: 'check-gender', emotion: 'check-emotion', hands: 'check-hands' };
+      const toggles = {};
+      Object.entries(checkMap).forEach(([key, id]) => { toggles[key] = document.getElementById(id).checked; });
+      if (toggles.hands) toggles.puppetNum = currentSlide + 1;
+      if (detect_prettyCute) toggles.detectPrettyCute = true;
+      if (detect_shm) toggles.detectShm = true;
+      return toggles;
+    }
+    function flashBtn(btn, label) {
+      btn.textContent = 'copied!';
+      setTimeout(() => btn.textContent = label, 1500);
+    }
+
+    document.getElementById('copy-scene-btn').addEventListener('click', () => {
+      const overlay = document.getElementById('dialogueOverlay');
+      const panel   = document.getElementById('dialogue-panel');
+      const tab     = overlay.querySelector('[role="tab"]');
+      const dialogue = overlay.classList.contains('visible')
+        ? { show: true, characterName: tab.textContent.trim(), text: panel.textContent.trim() }
+        : { show: false };
+      const scene = { id: currentScene + 1, toggles: buildCurrentToggles(), dialogue, actionRequired: currentActionRequired };
+      navigator.clipboard.writeText(JSON.stringify(scene, null, 2)).then(() => flashBtn(document.getElementById('copy-scene-btn'), 'copy scene'));
+    });
+
+    document.getElementById('copy-toggles-btn').addEventListener('click', () => {
+      navigator.clipboard.writeText(JSON.stringify(buildCurrentToggles(), null, 2)).then(() => flashBtn(document.getElementById('copy-toggles-btn'), 'copy toggles'));
     });
 
     // Scene nav buttons (director override — bypasses action gates)
