@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>recognizing my self</title>
+  <link rel="stylesheet" href="https://unpkg.com/xp.css" />
+  <link rel="stylesheet" href="/facial_recognishm/css/recognize_me.css" />
+</head>
+<body>
+
+  <canvas id="bgCanvas"></canvas>
+
+  <div class="window main-window">
+    <div class="title-bar">
+      <div class="title-bar-text">
+        <!-- <img src="./images/question_mark.ico" alt="question mark Logo" style="height: 25px; vertical-align: middle; margin-right: 8px;"> -->
+        <span id="titleText">recognizing my self</span>
+      </div>
+
+      <div class="title-bar-controls">
+        <a href="/"><button aria-label="Close"></button></a>
+      </div>
+    </div>
+
+    <div class="window-body">
+      <!-- always-visible start state -->
+      <div id="startScreen">
+        <button id="startBtn"> let them see you </button>
+      </div>
+
+      <!-- error state -->
+      <div id="errorScreen">
+        <p>camera access was denied.</p>
+        <button id="retryBtn">try again</button>
+      </div>
+
+      <!-- webcam feed -->
+      <video id="webcam" autoplay playsinline muted></video>
+
+      <!-- analysis panel (right side, hidden until camera starts) -->
+      <div id="analysisPanel">
+        <fieldset>
+          <!-- <legend style="font-style: italic;">what is seen</legend> -->
+          <div id="checkboxGroup">
+            <div class="field-row">
+              <input id="check-race" type="checkbox">
+              <label for="check-race">[R]ace</label>
+              <span class="result-value" id="result-race"><b>Asian</b> (0.98)</span>
+            </div>
+            <div class="field-row">
+              <input id="check-age" type="checkbox">
+              <label for="check-age">[A]ge</label>
+              <span class="result-value" id="result-age"><b>20-29 y.o.</b> (0.53)</span>
+            </div>
+            <div class="field-row">
+              <input id="check-gender" type="checkbox">
+              <label for="check-gender">[G]ender</label>
+              <span class="result-value" id="result-gender"><b>Female</b> (0.81)</span>
+            </div>
+            <div class="field-row">
+              <input id="check-emotion" type="checkbox">
+              <label for="check-emotion">[E]motion</label>
+              <span class="result-value" id="result-emotion"><b>Neutral</b> (0.44)</span>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="inner-scroll">
+              <fieldset>
+                  <legend>detected:</legend>
+                  <textarea id="detectionOutput">...</textarea>
+              </fieldset>
+            </div>
+          </div>
+
+        </fieldset>
+      </div>
+
+      <div id="dialogueOverlay">
+            <menu role="tablist">
+                <button role="tab" aria-selected="true" aria-controls="dialogue-panel" contenteditable="true">
+                character name
+                </button>
+            </menu>
+            <article role="tabpanel" id="dialogue-panel" contenteditable="true">
+                dialogue text goes here...
+            </article>
+        </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { encode, decode } from 'https://esm.sh/blurhash@2.0.5';
+
+    import * as tf from 'https://esm.sh/@tensorflow/tfjs';
+
+
+
+    const video      = document.getElementById('webcam');
+    const bgCanvas   = document.getElementById('bgCanvas');
+    const startScreen = document.getElementById('startScreen');
+    const errorScreen = document.getElementById('errorScreen');
+    const startBtn   = document.getElementById('startBtn');
+    const retryBtn   = document.getElementById('retryBtn');
+    const dialogueOverlay = document.getElementById('dialogueOverlay');
+    const analysisPanel   = document.getElementById('analysisPanel');
+
+    // Small offscreen canvas for encoding (kept tiny — blurhash doesn't need more)
+    const encodeCanvas = document.createElement('canvas');
+    encodeCanvas.width  = 64;
+    encodeCanvas.height = 36;
+    const encodeCtx = encodeCanvas.getContext('2d', { willReadFrequently: true });
+
+    // Throttle: re-encode every N ms
+    const ENCODE_INTERVAL = 150; // ms
+    let lastEncodeTime = 0;
+    let rafId = null;
+
+    // Size the bg canvas to fill the screen
+    function sizeBgCanvas() {
+      bgCanvas.width  = window.innerWidth;
+      bgCanvas.height = window.innerHeight;
+    }
+    sizeBgCanvas();
+    window.addEventListener('resize', sizeBgCanvas);
+
+    function renderBlurhash(hash) {
+      const w = bgCanvas.width;
+      const h = bgCanvas.height;
+      // Decode to a small intermediate size, then stretch via canvas drawImage
+      const decodeW = 128;
+      const decodeH = Math.round(128 * (h / w));
+      const pixels = decode(hash, decodeW, decodeH, 1);
+
+      const ctx = bgCanvas.getContext('2d');
+      const imageData = ctx.createImageData(decodeW, decodeH);
+      imageData.data.set(pixels);
+
+      // Draw decoded pixels to a temp canvas, then stretch to full bg
+      const tmp = document.createElement('canvas');
+      tmp.width  = decodeW;
+      tmp.height = decodeH;
+      tmp.getContext('2d').putImageData(imageData, 0, 0);
+
+      ctx.drawImage(tmp, 0, 0, w, h);
+    }
+
+    function loop(timestamp) {
+      rafId = requestAnimationFrame(loop);
+
+      if (video.readyState < 2) return;
+
+      if (timestamp - lastEncodeTime < ENCODE_INTERVAL) return;
+      lastEncodeTime = timestamp;
+
+      // Sample webcam into tiny encode canvas
+      encodeCtx.drawImage(video, 0, 0, 64, 36);
+      const pixels = encodeCtx.getImageData(0, 0, 64, 36);
+
+      try {
+        const hash = encode(pixels.data, 64, 36, 4, 3);
+        renderBlurhash(hash);
+        if (!bgCanvas.classList.contains('visible')) {
+          bgCanvas.classList.add('visible');
+        }
+      } catch (e) {
+        // ignore encode errors on edge frames
+      }
+    }
+
+    async function startCamera() {
+    
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
+          audio: false
+        });
+        video.srcObject = stream;
+        await video.play();
+
+        // Hide start screen, show video + overlays
+        startScreen.classList.add('hidden');
+        errorScreen.classList.remove('visible');
+        video.classList.add('visible');
+        dialogueOverlay.classList.add('visible');
+        analysisPanel.classList.add('visible');
+
+        // Start the blurhash loop
+        if (rafId) cancelAnimationFrame(rafId);
+        requestAnimationFrame(loop);
+
+      } catch (err) {
+        console.error('Camera error:', err);
+        startScreen.classList.add('hidden');
+        errorScreen.classList.add('visible');
+      }
+    }
+
+    startBtn.addEventListener('click', startCamera);
+    retryBtn.addEventListener('click', () => {
+      errorScreen.classList.remove('visible');
+      startScreen.classList.remove('hidden');
+    });
+
+    const keyMap = { r: 'check-race', a: 'check-age', g: 'check-gender', e: 'check-emotion' };
+    document.addEventListener('keydown', (ev) => {
+      const id = keyMap[ev.key.toLowerCase()];
+      if (id) {
+        const cb = document.getElementById(id);
+        if (cb) cb.checked = !cb.checked;
+      }
+    });
+  </script>
+
+</body>
+</html>
