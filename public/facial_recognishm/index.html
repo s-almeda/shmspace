@@ -112,12 +112,12 @@
 
       <div id="dialogueOverlay">
             <menu role="tablist">
-                <button role="tab" aria-selected="true" aria-controls="dialogue-panel" contenteditable="true">
-                character name
+                <button role="tab" aria-selected="true" aria-controls="dialogue-panel">
+                shm
                 </button>
             </menu>
-            <article role="tabpanel" id="dialogue-panel" contenteditable="true">
-                dialogue text goes here...
+            <article role="tabpanel" id="dialogue-panel">
+               ...
             </article>
         </div>
     </div>
@@ -138,6 +138,8 @@
     ]);
 
     const raceModel = await tf.loadGraphModel('/facial_recognishm/face_model/model.json');
+    const gameScript = await fetch('/facial_recognishm/game_script.json').then(r => r.json());
+    let currentScene = 0;
 
     // ── MediaPipe hand landmarker ─────────────────────────────────────
     const filesetResolver = await FilesetResolver.forVisionTasks(
@@ -182,7 +184,7 @@
     let faceTarget  = null;
     let faceDisplay = null;
     let faceOpacity = 0;
-    let detect_prettyCute = true;  // master switch for pretty cute mode
+    let detect_prettyCute = false;  // master switch for pretty cute mode
     let prettyCute        = false; // true when detection is on AND smiling
     function lv(a, b) { return a + (b - a) * LERP; }
 
@@ -362,6 +364,10 @@
 
       // Pretty cute mode: active while primary face looks happy
       prettyCute = detect_prettyCute && primary.expressions.happy > 0.7;
+      if (currentActionRequired === 'prettyCute') {
+        actionConditionMet = prettyCute;
+        updateHintText();
+      }
 
       faceTarget = {
         width: elemW, height: elemH,
@@ -460,6 +466,86 @@
       });
     }
 
+    // ── Scene system ─────────────────────────────────────────────────
+    function applyToggles(toggles) {
+      if (!toggles) return;
+      const checkMap = {
+        bbox: 'check-bbox', facemesh: 'check-facemesh', race: 'check-race',
+        age: 'check-age', gender: 'check-gender', emotion: 'check-emotion', hands: 'check-hands',
+      };
+      Object.entries(toggles).forEach(([key, val]) => {
+        if (key === 'puppetNum') { currentSlide = val - 1; updatePuppetDisplay(); return; }
+        if (key === 'detectPrettyCute') { detect_prettyCute = val; return; }
+        const cb = document.getElementById(checkMap[key]);
+        if (cb && cb.checked !== val) { cb.checked = val; cb.dispatchEvent(new Event('change')); }
+      });
+    }
+
+    function typewriterEffect(el, text) {
+      if (currentTypewriterInterval) clearInterval(currentTypewriterInterval);
+      el.textContent = '';
+      let i = 0;
+      currentTypewriterFull = text;
+      currentTypewriterEl = el;
+      currentTypewriterInterval = setInterval(() => {
+        el.textContent += text[i++];
+        if (i >= text.length) { clearInterval(currentTypewriterInterval); currentTypewriterInterval = null; }
+      }, 30);
+    }
+
+    function applyDialogue(dialogue) {
+      if (!dialogue) return;
+      const overlay = document.getElementById('dialogueOverlay');
+      const tab = overlay.querySelector('[role="tab"]');
+      const panel = document.getElementById('dialogue-panel');
+      if (dialogue.show) {
+        overlay.classList.add('visible');
+        tab.textContent = dialogue.characterName;
+        typewriterEffect(panel, dialogue.text);
+      } else {
+        overlay.classList.remove('visible');
+      }
+    }
+
+    function updateHintText() {
+      const hint = document.getElementById('spacebarHint');
+      if (currentActionRequired === 'prettyCute') {
+        hint.textContent = actionConditionMet ? 'press spacebar to continue' : 'be cute to continue';
+      } else {
+        hint.textContent = 'press spacebar to continue';
+      }
+    }
+
+    function setActionRequired(action) {
+      currentActionRequired = action;
+      actionConditionMet = false;
+      updateHintText();
+    }
+
+    function loadScene(index) {
+      const scene = gameScript[index];
+      if (!scene) return;
+      currentScene = index;
+      updateSceneDisplay();
+      applyToggles(scene.toggles);
+      applyDialogue(scene.dialogue);
+      setActionRequired(scene.actionRequired);
+      console.log(`scene ${scene.id} loaded`);
+    }
+
+    function tryAdvance() {
+      if (currentTypewriterInterval) {
+        clearInterval(currentTypewriterInterval);
+        currentTypewriterInterval = null;
+        currentTypewriterEl.textContent = currentTypewriterFull;
+        return;
+      }
+      if (currentActionRequired && !actionConditionMet) return;
+      const next = currentScene + 1;
+      if (next < gameScript.length) loadScene(next);
+      else console.log('end of script');
+    }
+
     // ── DOM elements ─────────────────────────────────────────────────
     const video           = document.getElementById('webcam');
     const bgCanvas        = document.getElementById('bgCanvas');
@@ -544,13 +630,12 @@
       }
     });
 
-    // Scene nav buttons
-    let sceneNumber = 1;
+    // Scene nav buttons (director override — bypasses action gates)
     function updateSceneDisplay() {
-      document.getElementById('scene-number').value = sceneNumber;
+      document.getElementById('scene-number').value = currentScene + 1;
     }
-    document.getElementById('scene-prev').addEventListener('click', () => { sceneNumber = Math.max(1, sceneNumber - 1); updateSceneDisplay(); });
-    document.getElementById('scene-next').addEventListener('click', () => { sceneNumber++; updateSceneDisplay(); });
+    document.getElementById('scene-prev').addEventListener('click', () => loadScene(Math.max(0, currentScene - 1)));
+    document.getElementById('scene-next').addEventListener('click', () => loadScene(Math.min(gameScript.length - 1, currentScene + 1)));
 
     // Puppet nav buttons
     document.getElementById('puppet-prev').addEventListener('click', () => {
@@ -567,6 +652,11 @@
     // ── Game state ────────────────────────────────────────────────────
     let cameraReady = false;
     let gameStarted = false;
+    let currentTypewriterInterval = null;
+    let currentTypewriterFull = null;
+    let currentTypewriterEl = null;
+    let currentActionRequired = null;
+    let actionConditionMet = false;
 
     const keyMap = { r: 'check-race', a: 'check-age', g: 'check-gender', e: 'check-emotion', f: 'check-facemesh', b: 'check-bbox', h: 'check-hands' };
     document.addEventListener('keydown', ev => {
@@ -578,10 +668,10 @@
           gameStarted = true;
           dialogueOverlay.classList.add('visible');
           setTimeout(() => document.getElementById('spacebarHint').classList.add('visible'), 1400);
-          setTimeout(() => analysisPanel.classList.add('visible'), 1800);
+          setTimeout(() => { analysisPanel.classList.add('visible'); loadScene(0); }, 1800);
           return;
         }
-        // subsequent spacebar presses: scene advancement (todo 4)
+        tryAdvance();
         return;
       }
 
@@ -604,9 +694,9 @@
         updatePuppetDisplay();
       }
 
-      // Scene number: ArrowLeft / ArrowRight
-      if (ev.key === 'ArrowLeft') { sceneNumber = Math.max(1, sceneNumber - 1); updateSceneDisplay(); }
-      if (ev.key === 'ArrowRight') { sceneNumber++; updateSceneDisplay(); }
+      // Scene nav: ArrowLeft / ArrowRight (director override)
+      if (ev.key === 'ArrowLeft') loadScene(Math.max(0, currentScene - 1));
+      if (ev.key === 'ArrowRight') loadScene(Math.min(gameScript.length - 1, currentScene + 1));
     });
 </script>
 
