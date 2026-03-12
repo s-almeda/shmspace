@@ -229,11 +229,11 @@ body {
 
 /* checkbox rows */
 #analysisPanel .field-row {
-  margin-top: 7px;
-  zoom: 1.5;
+  margin-top: 3px;
+  zoom: 1.4;
   flex-wrap: wrap;
   overflow: visible;
-  padding-bottom: 4px;
+  padding-bottom: 3px;
 }
 
 /* detected output row — no zoom, fills remaining space */

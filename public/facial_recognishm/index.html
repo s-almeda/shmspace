@@ -123,7 +123,6 @@
   <script type="module">
     import { HandLandmarker, FilesetResolver } from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.mjs';
     import { RACE_CLASSES, FACE_TRIANGLES, LERP, FADE_IN, FADE_OUT } from '/facial_recognishm/js/constants.js';
-    import { detectWink } from '/facial_recognishm/js/winkDetection.js';
     import { createBlurhashRenderer } from '/facial_recognishm/js/blurhash.js';
     /* tf and faceapi are globals loaded via <script defer> in <head> */
 
@@ -180,6 +179,7 @@
     let faceTarget  = null;
     let faceDisplay = null;
     let faceOpacity = 0;
+    let winkActive  = false;
     function lv(a, b) { return a + (b - a) * LERP; }
 
     function faceDrawLoop() {
@@ -272,19 +272,23 @@
       }
 
       if (document.getElementById('check-bbox').checked) {
+        const boxColor  = winkActive ? 'rgba(255, 182, 193, 0.9)' : 'rgba(144, 189, 66, 0.9)';
+        const textColor = 'rgba(0, 0, 0, 1.0)';
+        const fontSize  = winkActive ? 42 : 30;
         faceDisplay.boxes.forEach(box => {
-          ctx.strokeStyle = 'rgba(144, 189, 66, 0.9)';
+          ctx.strokeStyle = boxColor;
           ctx.lineWidth = 1.5;
           ctx.strokeRect(box.x, box.y, box.w, box.h);
-          if (box.label) {
+          const label = winkActive ? 'pretty cute!' : box.label;
+          if (label) {
             ctx.save();
             ctx.scale(-1, 1);
-            ctx.font = '30px Arial';
-            const tw = ctx.measureText(box.label).width;
-            ctx.fillStyle = 'rgba(144, 189, 66, 0.9)';
-            ctx.fillRect(-(box.x + tw + 8), box.y - 30, tw + 8, 30);
-            ctx.fillStyle = 'rgba(0, 0, 0, 1.0)';
-            ctx.fillText(box.label, -(box.x + tw + 4), box.y - 6);
+            ctx.font = `${fontSize}px Arial`;
+            const tw = ctx.measureText(label).width;
+            ctx.fillStyle = boxColor;
+            ctx.fillRect(-(box.x + tw + 8), box.y - fontSize, tw + 8, fontSize);
+            ctx.fillStyle = textColor;
+            ctx.fillText(label, -(box.x + tw + 4), box.y - 6);
             ctx.restore();
           }
         });
@@ -352,11 +356,8 @@
         document.getElementById('result-emotion').innerHTML = '';
       }
 
-      // Wink detection → advance slide
-      results.forEach(r => {
-        const wink = detectWink(r.landmarks);
-        if (wink) advanceSlide();
-      });
+      // Pretty cute mode: active while primary face looks happy
+      winkActive = primary.expressions.happy > 0.7;
 
       faceTarget = {
         width: elemW, height: elemH,
