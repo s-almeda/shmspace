@@ -324,6 +324,32 @@
           }
         });
       }
+      // Smile condition: highlight just the mouth landmarks
+      if (currentActionRequired === 'smile' && faceDisplay) {
+        const met = CONDITIONS.smile.check();
+        const mouthColor = met ? 'rgba(100, 255, 120, 0.55)' : 'rgba(255, 255, 255, 0.5)';
+        // outer lip: 48–59 (closed), inner lip: 60–67 (closed)
+        const outerLip = [48,49,50,51,52,53,54,55,56,57,58,59];
+        const innerLip = [60,61,62,63,64,65,66,67];
+        faceDisplay.landmarks.forEach(pts => {
+          ctx.strokeStyle = mouthColor;
+          ctx.lineWidth = 2.5;
+          ctx.lineJoin = 'round';
+          [outerLip, innerLip].forEach(ring => {
+            ctx.beginPath();
+            ring.forEach((idx, i) => i === 0 ? ctx.moveTo(pts[idx].x, pts[idx].y) : ctx.lineTo(pts[idx].x, pts[idx].y));
+            ctx.closePath();
+            ctx.stroke();
+          });
+          ctx.fillStyle = mouthColor;
+          outerLip.concat(innerLip).forEach(idx => {
+            ctx.beginPath();
+            ctx.arc(pts[idx].x, pts[idx].y, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+          });
+        });
+      }
+
       ctx.globalAlpha = 1;
     }
 
@@ -570,12 +596,19 @@
 
     function updateHintText() {
       const hint = document.getElementById('spacebarHint');
+      const size = `${26 + hintPressCount * 5}px`;
       if (currentActionRequired && !actionConditionMet) {
         hint.textContent = CONDITION_HINTS[currentActionRequired] ?? 'complete action to continue';
-        hint.style.fontSize = `${26 + hintPressCount * 5}px`;
+        hint.style.fontSize = size;
+        hint.style.background = '';
+      } else if (currentActionRequired && actionConditionMet) {
+        hint.textContent = 'press spacebar to continue';
+        hint.style.fontSize = size;  // stay at whatever size it grew to
+        hint.style.background = 'rgba(60, 180, 80, 0.75)';
       } else {
         hint.textContent = 'press spacebar to continue';
         hint.style.fontSize = '';
+        hint.style.background = '';
       }
     }
 
