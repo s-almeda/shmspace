@@ -51,7 +51,7 @@
             <label>scene&nbsp;:</label>
             <div class="puppet-nav-row">
               <button id="scene-prev">&lt;</button>
-              <input type="text" id="scene-number" value="1" readonly style="width: 30px; padding: 2px;">
+              <input type="text" id="scene-number" value="1" style="width: 30px; padding: 2px;">
               <button id="scene-next">&gt;</button>
             </div>
           </div>
@@ -388,7 +388,7 @@
             ? (age < 20 ? (isFem ? 'girl' : 'boy') : (isFem ? 'woman' : 'man')) : '';
           const personDesc = [raceWord, personNoun].filter(Boolean).join(' ');
           if (personDesc) parts.push(personDesc);
-          if (showAge) parts.push(`${age} years old`);
+          if (showAge) parts.push(`${age} y.o.`);
           return { x, y, w, h, label: parts.join(' ') || 'face' };
         }),
         landmarks: results.map(r => r.landmarks.positions.map(p => toElem(p.x, p.y)))
@@ -481,29 +481,46 @@
       });
     }
 
-    function typewriterEffect(el, text) {
-      if (currentTypewriterInterval) clearInterval(currentTypewriterInterval);
+    function typewriterEffect(el, text, slow = false) {
+      if (currentTypewriterInterval) { clearTimeout(currentTypewriterInterval); currentTypewriterInterval = null; }
       el.textContent = '';
-      let i = 0;
+      el.classList.add('typing');
       currentTypewriterFull = text;
       currentTypewriterEl = el;
-      currentTypewriterInterval = setInterval(() => {
+      let i = 0;
+      function typeNext() {
         el.textContent += text[i++];
-        if (i >= text.length) { clearInterval(currentTypewriterInterval); currentTypewriterInterval = null; }
-      }, 30);
+        if (i >= text.length) {
+          currentTypewriterInterval = null;
+          // keep .typing so cursor stays visible after text finishes
+        } else {
+          const delay = slow ? 45 + Math.random() * 35 : 12 + Math.random() * 8;
+          currentTypewriterInterval = setTimeout(typeNext, delay);
+        }
+      }
+      currentTypewriterInterval = setTimeout(typeNext, slow ? 45 : 12);
     }
 
-    function applyDialogue(dialogue) {
+    function applyDialogue(dialogue, instant = false) {
       if (!dialogue) return;
       const overlay = document.getElementById('dialogueOverlay');
       const tab = overlay.querySelector('[role="tab"]');
       const panel = document.getElementById('dialogue-panel');
       if (dialogue.show) {
-        overlay.classList.add('visible');
         tab.textContent = dialogue.characterName;
-        typewriterEffect(panel, dialogue.text);
+        if (instant) {
+          overlay.style.transition = 'none';
+          overlay.classList.add('visible');
+          requestAnimationFrame(() => overlay.style.transition = '');
+          panel.classList.remove('typing');
+          panel.textContent = dialogue.text;
+        } else {
+          overlay.classList.add('visible');
+          typewriterEffect(panel, dialogue.text, dialogue.speed === 'slow');
+        }
       } else {
         overlay.classList.remove('visible');
+        panel.classList.remove('typing');
       }
     }
 
@@ -522,22 +539,23 @@
       updateHintText();
     }
 
-    function loadScene(index) {
+    function loadScene(index, instant = false) {
       const scene = gameScript[index];
       if (!scene) return;
       currentScene = index;
       updateSceneDisplay();
       applyToggles(scene.toggles);
-      applyDialogue(scene.dialogue);
+      applyDialogue(scene.dialogue, instant);
       setActionRequired(scene.actionRequired);
       console.log(`scene ${scene.id} loaded`);
     }
 
     function tryAdvance() {
       if (currentTypewriterInterval) {
-        clearInterval(currentTypewriterInterval);
+        clearTimeout(currentTypewriterInterval);
         currentTypewriterInterval = null;
         currentTypewriterEl.textContent = currentTypewriterFull;
+        currentTypewriterEl.classList.remove('typing');
         return;
       }
       if (currentActionRequired && !actionConditionMet) return;
@@ -634,8 +652,21 @@
     function updateSceneDisplay() {
       document.getElementById('scene-number').value = currentScene + 1;
     }
-    document.getElementById('scene-prev').addEventListener('click', () => loadScene(Math.max(0, currentScene - 1)));
-    document.getElementById('scene-next').addEventListener('click', () => loadScene(Math.min(gameScript.length - 1, currentScene + 1)));
+    document.getElementById('scene-prev').addEventListener('click', () => loadScene(Math.max(0, currentScene - 1), true));
+    document.getElementById('scene-next').addEventListener('click', () => loadScene(Math.min(gameScript.length - 1, currentScene + 1), true));
+    document.getElementById('scene-number').addEventListener('keydown', ev => {
+      if (ev.key === 'Enter') {
+        ev.preventDefault();
+        const n = parseInt(ev.target.value, 10);
+        if (!isNaN(n)) loadScene(Math.max(0, Math.min(gameScript.length - 1, n - 1)), true);
+        ev.target.blur();
+      }
+    });
+    document.getElementById('scene-number').addEventListener('blur', ev => {
+      const n = parseInt(ev.target.value, 10);
+      if (!isNaN(n)) loadScene(Math.max(0, Math.min(gameScript.length - 1, n - 1)), true);
+      else updateSceneDisplay();
+    });
 
     // Puppet nav buttons
     document.getElementById('puppet-prev').addEventListener('click', () => {
@@ -660,6 +691,8 @@
 
     const keyMap = { r: 'check-race', a: 'check-age', g: 'check-gender', e: 'check-emotion', f: 'check-facemesh', b: 'check-bbox', h: 'check-hands' };
     document.addEventListener('keydown', ev => {
+      if (ev.target.tagName === 'INPUT' && ev.target.type === 'text') return;
+
       // Spacebar: start game on first press, scene advancement later
       if (ev.code === 'Space') {
         ev.preventDefault();
@@ -695,8 +728,8 @@
       }
 
       // Scene nav: ArrowLeft / ArrowRight (director override)
-      if (ev.key === 'ArrowLeft') loadScene(Math.max(0, currentScene - 1));
-      if (ev.key === 'ArrowRight') loadScene(Math.min(gameScript.length - 1, currentScene + 1));
+      if (ev.key === 'ArrowLeft') loadScene(Math.max(0, currentScene - 1), true);
+      if (ev.key === 'ArrowRight') loadScene(Math.min(gameScript.length - 1, currentScene + 1), true);
     });
 </script>
 
