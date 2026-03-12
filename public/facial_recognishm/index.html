@@ -48,41 +48,42 @@
           <div id="checkboxGroup">
             <div class="field-row disabled">
               <input id="check-race" type="checkbox">
-              <label for="check-race">[R]ace</label>
+              <label for="check-race">"<u>R</u>ace"?</label>
               <span class="result-value" id="result-race"></span>
             </div>
             <div class="field-row disabled">
               <input id="check-age" type="checkbox">
-              <label for="check-age">[A]ge</label>
+              <label for="check-age">"<u>A</u>ge"?</label>
               <span class="result-value" id="result-age"></span>
             </div>
             <div class="field-row disabled">
               <input id="check-gender" type="checkbox">
-              <label for="check-gender">[G]ender</label>
+              <label for="check-gender">"<u>G</u>ender"?</label>
               <span class="result-value" id="result-gender"></span>
             </div>
             <div class="field-row disabled">
               <input id="check-emotion" type="checkbox">
-              <label for="check-emotion">[E]motion</label>
+              <label for="check-emotion">"<u>E</u>xpression"?</label>
               <span class="result-value" id="result-emotion"></span>
             </div>
             <div class="field-row">
               <input id="check-facemesh" type="checkbox" checked>
-              <label for="check-facemesh">[F]acemesh</label>
+              <label for="check-facemesh">"<u>F</u>ace"?</label>
+              <span class="result-value" id="result-face"></span>
             </div>
             <div class="field-row">
               <input id="check-bbox" type="checkbox" checked>
-              <label for="check-bbox">[B]ounding box</label>
+              <label for="check-bbox">put face in "<u> B</u>ox?"</label>
             </div>
           </div>
-          <div class="field-row">
+          <!-- <div class="field-row">
             <div class="inner-scroll">
               <fieldset>
                   <legend>detected:</legend>
                   <textarea id="detectionOutput">...</textarea>
               </fieldset>
             </div>
-          </div>
+          </div> -->
 
         </fieldset>
       </div>
@@ -106,6 +107,41 @@
 
       const RACE_CLASSES = ['White', 'Black', 'Asian', 'Hispanic_Latino', 'Middle_Eastern'];
 
+      // Triangle index triplets for 68-landmark face mesh
+      const FACE_TRIANGLES = [
+        // Left eye
+        [36,37,41],[37,38,41],[38,40,41],[38,39,40],
+        // Right eye
+        [42,43,47],[43,44,47],[44,46,47],[44,45,46],
+        // Left brow → eye
+        [17,18,36],[18,19,37],[18,36,37],[19,20,37],[20,21,27],[20,37,27],
+        // Right brow → eye
+        [22,23,27],[23,24,27],[24,25,44],[24,43,44],[25,26,44],[26,45,44],
+        // Between brows
+        [21,22,27],
+        // Eye ↔ nose bridge
+        [27,36,39],[27,37,36],[37,42,27],[27,42,35],[17,36,27],[26,27,42],
+        // Nose
+        [27,28,31],[28,29,31],[29,30,31],[30,31,32],[30,32,33],[30,33,34],[30,34,35],[27,28,35],[28,29,35],[29,30,35],
+        // Nose → mouth
+        [31,48,51],[31,32,51],[32,33,51],[33,34,51],[34,35,51],[35,51,54],
+        // Outer mouth
+        [48,49,60],[49,61,60],[49,50,61],[50,62,61],[50,51,62],[51,62,52],
+        [52,63,62],[52,53,63],[53,64,63],[53,54,64],[54,64,55],[55,65,64],
+        [55,56,65],[56,66,65],[56,57,66],[57,67,66],[57,58,67],[58,59,67],[59,60,67],[59,48,60],
+        // Inner mouth
+        [60,61,67],[61,66,67],[61,62,66],[62,65,66],[62,63,65],[63,64,65],
+        // Left cheek / jaw
+        [0,1,36],[0,17,36],[1,2,31],[1,36,31],[2,3,31],[3,4,31],[4,5,31],[5,48,31],
+        [5,6,48],[6,7,48],[7,57,48],[7,8,57],[8,9,57],
+        // Right cheek / jaw
+        [9,10,57],[10,11,54],[10,57,54],[11,12,54],[12,13,54],[13,42,54],
+        [13,14,46],[14,15,46],[15,16,45],[15,45,46],[16,26,45],
+        // Eye corners → jaw fill
+        [36,31,39],[39,31,40],[40,31,48],[40,48,7],[41,36,1],[41,1,0],
+        [47,42,46],[46,42,54],[16,47,46],
+      ];
+
       await Promise.all([
         faceapi.nets.tinyFaceDetector.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights'),
         faceapi.nets.faceLandmark68TinyNet.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights'),
@@ -121,13 +157,17 @@
       const inferCtx = inferCanvas.getContext('2d');
 
       let raceInterval = null;
+      let lastRaceClass = '';
 
       const faceCanvas = document.getElementById('faceCanvas');
 
       // ── Smooth face-overlay (lerp between detections) ──────────────
       let faceTarget  = null;  // latest geometry from detectFace
       let faceDisplay = null;  // currently-interpolated geometry
-      const LERP = 0.18;
+      let faceOpacity = 0;
+      const LERP         = 0.18;
+      const FADE_IN      = 0.3;   // fast appear
+      const FADE_OUT     = 1/2;   // ~0.1s at 60fps
       function lv(a, b) { return a + (b - a) * LERP; }
 
       function faceDrawLoop() {
@@ -135,39 +175,95 @@
         const ctx = faceCanvas.getContext('2d');
 
         if (!faceTarget) {
-          ctx.clearRect(0, 0, faceCanvas.width, faceCanvas.height);
-          faceDisplay = null;
-          return;
+          faceOpacity = Math.max(0, faceOpacity - FADE_OUT);
+          if (faceOpacity === 0) {
+            ctx.clearRect(0, 0, faceCanvas.width, faceCanvas.height);
+            faceDisplay = null;
+            return;
+          }
+          // fall through to draw faceDisplay at reduced opacity
+        } else {
+          faceOpacity = Math.min(1, faceOpacity + FADE_IN);
         }
 
-        const { width, height, boxes, landmarks } = faceTarget;
-        if (faceCanvas.width !== width)  faceCanvas.width  = width;
-        if (faceCanvas.height !== height) faceCanvas.height = height;
-
-        // reset on face-count change
-        if (!faceDisplay || faceDisplay.boxes.length !== boxes.length) {
+        // only update lerp targets when we have fresh detection
+        if (faceTarget && faceDisplay) {
+          const { boxes, landmarks } = faceTarget;
+          if (faceDisplay.boxes.length !== boxes.length) {
+            faceDisplay = {
+              boxes:     boxes.map(b => ({ ...b })),
+              landmarks: landmarks.map(pts => pts.map(p => ({ ...p })))
+            };
+          } else {
+            faceDisplay.boxes = faceDisplay.boxes.map((d, i) => ({
+              x: lv(d.x, boxes[i].x), y: lv(d.y, boxes[i].y),
+              w: lv(d.w, boxes[i].w), h: lv(d.h, boxes[i].h),
+              label: boxes[i].label
+            }));
+            faceDisplay.landmarks = faceDisplay.landmarks.map((dPts, i) =>
+              dPts.map((dp, j) => ({
+                x: lv(dp.x, landmarks[i][j].x),
+                y: lv(dp.y, landmarks[i][j].y)
+              }))
+            );
+          }
+        } else if (faceTarget && !faceDisplay) {
+          const { boxes, landmarks } = faceTarget;
           faceDisplay = {
             boxes:     boxes.map(b => ({ ...b })),
             landmarks: landmarks.map(pts => pts.map(p => ({ ...p })))
           };
-        } else {
-          faceDisplay.boxes = faceDisplay.boxes.map((d, i) => ({
-            x: lv(d.x, boxes[i].x), y: lv(d.y, boxes[i].y),
-            w: lv(d.w, boxes[i].w), h: lv(d.h, boxes[i].h),
-            label: boxes[i].label
-          }));
-          faceDisplay.landmarks = faceDisplay.landmarks.map((dPts, i) =>
-            dPts.map((dp, j) => ({
-              x: lv(dp.x, landmarks[i][j].x),
-              y: lv(dp.y, landmarks[i][j].y)
-            }))
-          );
         }
 
+        if (!faceDisplay) return;
+        const { width, height } = faceTarget || { width: faceCanvas.width, height: faceCanvas.height };
+        if (faceCanvas.width !== width)  faceCanvas.width  = width;
+        if (faceCanvas.height !== height) faceCanvas.height = height;
+
         ctx.clearRect(0, 0, width, height);
+        ctx.globalAlpha = faceOpacity;
 
         if (document.getElementById('check-facemesh').checked) {
-          ctx.fillStyle = 'rgba(0, 220, 0, 0.85)';
+          // Draw triangulation lines
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
+          ctx.lineWidth = 0.8;
+          faceDisplay.landmarks.forEach(pts => {
+            FACE_TRIANGLES.forEach(([a, b, c]) => {
+              if (!pts[a] || !pts[b] || !pts[c]) return;
+              ctx.beginPath();
+              ctx.moveTo(pts[a].x, pts[a].y);
+              ctx.lineTo(pts[b].x, pts[b].y);
+              ctx.lineTo(pts[c].x, pts[c].y);
+              ctx.closePath();
+              ctx.stroke();
+            });
+          });
+          // Draw face outline (jaw contour 0–16 + brow arcs)
+          ctx.strokeStyle = 'rgba(225, 225, 225, 0.7)';
+          ctx.lineWidth = 1.0;
+          ctx.lineJoin = 'round';
+          faceDisplay.landmarks.forEach(pts => {
+            // Jaw line
+            ctx.beginPath();
+            for (let i = 0; i <= 16; i++) {
+              i === 0 ? ctx.moveTo(pts[i].x, pts[i].y) : ctx.lineTo(pts[i].x, pts[i].y);
+            }
+            ctx.stroke();
+            // Left brow
+            ctx.beginPath();
+            for (let i = 17; i <= 21; i++) {
+              i === 17 ? ctx.moveTo(pts[i].x, pts[i].y) : ctx.lineTo(pts[i].x, pts[i].y);
+            }
+            ctx.stroke();
+            // Right brow
+            ctx.beginPath();
+            for (let i = 22; i <= 26; i++) {
+              i === 22 ? ctx.moveTo(pts[i].x, pts[i].y) : ctx.lineTo(pts[i].x, pts[i].y);
+            }
+            ctx.stroke();
+          });
+          // Draw landmark dots on top
+          ctx.fillStyle = 'rgba(225, 225, 225, 0.85)';
           faceDisplay.landmarks.forEach(pts => {
             pts.forEach(p => {
               ctx.beginPath();
@@ -179,74 +275,147 @@
 
         if (document.getElementById('check-bbox').checked) {
           faceDisplay.boxes.forEach(box => {
-            ctx.strokeStyle = 'lime';
+            ctx.strokeStyle = 'rgba(144, 189, 66, 0.9)';
             ctx.lineWidth = 1.5;
             ctx.strokeRect(box.x, box.y, box.w, box.h);
             if (box.label) {
-              ctx.font = '12px Tahoma';
+              // un-flip context just for text so it reads left-to-right
+             
+              ctx.save();
+              ctx.scale(-1, 1);
+              ctx.font = '30px Arial';
               const tw = ctx.measureText(box.label).width;
-              ctx.fillStyle = 'rgba(0,0,0,0.6)';
-              ctx.fillRect(box.x, box.y - 20, tw + 8, 18);
-              ctx.fillStyle = 'lime';
-              ctx.fillText(box.label, box.x + 4, box.y - 6);
+                ctx.fillStyle = 'rgba(144, 189, 66, 0.9)';
+                ctx.fillRect(-(box.x + tw + 8), box.y -30, tw + 8, 30);
+                ctx.fillStyle = 'rgba(0, 0, 0, 1.0)';
+              ctx.fillText(box.label, -(box.x + tw + 4), box.y - 6);
+              ctx.restore();
             }
           });
         }
+        ctx.globalAlpha = 1;
       }
 
       // detectFace: runs on interval, updates faceTarget — never touches canvas
       async function detectFace() {
         if (video.readyState < 2) return;
 
-        const { width, height } = video.getBoundingClientRect();
+        const { width: elemW, height: elemH } = video.getBoundingClientRect();
+        const vidW = video.videoWidth  || elemW;
+        const vidH = video.videoHeight || elemH;
+
+        // object-fit:cover maps the video stream into the element with scale+crop.
+        // face-api detects in video-intrinsic pixels; we must map those coords into
+        // element-display space ourselves instead of using resizeResults.
+        const coverScale = Math.max(elemW / vidW, elemH / vidH);
+        const cropX = (vidW * coverScale - elemW) / 2;
+        const cropY = (vidH * coverScale - elemH) / 2;
+        const toElem = (x, y) => ({ x: x * coverScale - cropX, y: y * coverScale - cropY });
+
         const results = await faceapi
           .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
           .withFaceLandmarks(true)
           .withAgeAndGender()
           .withFaceExpressions();
 
-        if (!results.length) { faceTarget = null; return; }
-
-        const resized = faceapi.resizeResults(results, { width, height });
-
+        const showFace    = document.getElementById('check-facemesh').checked;
         const showRace    = document.getElementById('check-race').checked;
         const showAge     = document.getElementById('check-age').checked;
         const showGender  = document.getElementById('check-gender').checked;
         const showEmotion = document.getElementById('check-emotion').checked;
 
-        const primary = results[0];
-        document.getElementById('result-age').innerHTML    = showAge    ? `<b>${Math.round(primary.age)} y.o.</b>` : '';
-        document.getElementById('result-gender').innerHTML = showGender ? `<b>${primary.gender}</b> (${primary.genderProbability.toFixed(2)})` : '';
-        const topEmotion = Object.entries(primary.expressions).sort((a, b) => b[1] - a[1])[0];
-        document.getElementById('result-emotion').innerHTML = showEmotion ? `<b>${topEmotion[0]}</b> (${topEmotion[1].toFixed(2)})` : '';
+        if (!results.length) {
+          faceTarget = null;
+          document.getElementById('result-face').innerHTML = showFace ? 'no' : '';
+          return;
+        }
 
-        const raceText = showRace
-          ? (document.getElementById('result-race').textContent.trim().split(' ')[0] || '')
+        document.getElementById('result-face').innerHTML = showFace ? '<span class="pred-top">yes</span>' : '';
+
+        const width = elemW, height = elemH;
+        const primary = results[0];
+
+        // Age: single blue pill
+        document.getElementById('result-age').innerHTML = showAge
+          ? `<span class="pred-top">${Math.round(primary.age)}</span>`
           : '';
+
+        // Gender: both options, top one highlighted
+        if (showGender) {
+          const genders = [
+            { cls: primary.gender,                                       score: primary.genderProbability },
+            { cls: primary.gender === 'male' ? 'female' : 'male',       score: 1 - primary.genderProbability }
+          ].sort((a, b) => b.score - a.score);
+          document.getElementById('result-gender').innerHTML = genders.map((g, i) => {
+            const label = `${g.cls}\u00a0(${g.score.toFixed(2)})`;
+            return i === 0 ? `<span class="pred-top">${label}</span>` : label;
+          }).join(', ');
+        } else {
+          document.getElementById('result-gender').innerHTML = '';
+        }
+
+        // Expression: top 3
+        if (showEmotion) {
+          const sortedExp = Object.entries(primary.expressions)
+            .sort((a, b) => b[1] - a[1]).slice(0, 3);
+          document.getElementById('result-emotion').innerHTML = sortedExp.map(([name, score], i) => {
+            const label = `${name}\u00a0(${score.toFixed(2)})`;
+            return i === 0 ? `<span class="pred-top">${label}</span>` : label;
+          }).join(', ');
+        } else {
+          document.getElementById('result-emotion').innerHTML = '';
+        }
 
         faceTarget = {
           width, height,
-          boxes: resized.map((r, i) => {
-            const { x, y, width: w, height: h } = r.detection.box;
+          boxes: results.map((r, i) => {
+            const b = r.detection.box;
+            const tl = toElem(b.x, b.y);
+            const br = toElem(b.x + b.width, b.y + b.height);
+            const { x, y } = tl;
+            const w = br.x - tl.x, h = br.y - tl.y;
             const emotion = Object.entries(r.expressions).sort((a, b) => b[1] - a[1])[0][0];
-            const age = Math.round(r.age);
-            const ageLabel = age < 13 ? 'a child' : age < 20 ? 'a teenager' :
-                             age < 30 ? 'in their mid-twenties' : age < 40 ? 'in their thirties' :
-                             age < 50 ? 'in their forties' : age < 65 ? 'in their fifties or sixties' : 'elderly';
+            const age     = Math.round(r.age);
+            const isFem   = r.gender === 'female';
+            const pronoun = isFem ? 'her' : 'his';
+
             const parts = [];
-            if (showEmotion && emotion) parts.push(emotion);
-            if (showRace && i === 0 && raceText) parts.push(raceText.toLowerCase());
-            if (showGender) parts.push(r.gender);
-            if (showAge)    parts.push(ageLabel);
-            return { x, y, w, h, label: parts.join(' ') || 'person' };
+
+            // expression — skip "neutral"
+            if (showEmotion && emotion && emotion !== 'neutral') parts.push(emotion);
+
+            // race word + gendered person noun
+            const raceWord   = (showRace && i === 0 && lastRaceClass) ? lastRaceClass.toLowerCase() : '';
+            const personNoun = showGender
+              ? (age < 20 ? (isFem ? 'girl' : 'boy') : (isFem ? 'woman' : 'man'))
+              : '';
+            const personDesc = [raceWord, personNoun].filter(Boolean).join(' ');
+            if (personDesc) parts.push(personDesc);
+
+            // age phrase with correct pronoun
+            if (showAge) {
+              const agePhrase = age < 13 ? '' :
+                                age < 20 ? 'teenager' :
+                                age < 30 ? `in ${pronoun} mid-twenties` :
+                                age < 40 ? `in ${pronoun} thirties` :
+                                age < 50 ? `in ${pronoun} forties` :
+                                age < 65 ? `in ${pronoun} fifties or sixties` : 'elderly';
+              if (agePhrase) parts.push(agePhrase);
+            }
+
+            return { x, y, w, h, label: parts.join(' ') || 'face' };
           }),
-          landmarks: resized.map(r => r.landmarks.positions.map(p => ({ x: p.x, y: p.y })))
+          landmarks: results.map(r => r.landmarks.positions.map(p => toElem(p.x, p.y)))
         };
       }
 
       async function predictRace() {
         if (video.readyState < 2) return;
+        inferCtx.save();
+        inferCtx.translate(224, 0);
+        inferCtx.scale(-1, 1);
         inferCtx.drawImage(video, 0, 0, 224, 224);
+        inferCtx.restore();
 
         const tensor = tf.browser.fromPixels(inferCanvas)
           .toFloat()
@@ -260,6 +429,7 @@
           .map((score, i) => ({ cls: RACE_CLASSES[i], score }))
           .sort((a, b) => b.score - a.score)
           .slice(0, 3);
+        lastRaceClass = sorted[0].cls;
 
         const parts = sorted.map((p, i) => {
             const label = `${p.cls}&nbsp;(${p.score.toFixed(2)})`;
@@ -363,7 +533,7 @@
         requestAnimationFrame(loop);
 
         requestAnimationFrame(faceDrawLoop);
-        setInterval(detectFace, 200);
+        setInterval(detectFace, 100);
 
       } catch (err) {
         console.error('Camera error:', err);
