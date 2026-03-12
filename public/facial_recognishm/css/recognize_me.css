@@ -158,7 +158,7 @@ body {
 }
 
 #dialogueOverlay menu[role="tablist"] button {
-  font-size: 35px;
+  font-size: 32px;
   padding: 6px 18px;
   
 }
@@ -170,8 +170,8 @@ body {
   padding: 20px 20px;
   overflow-y: auto;
   margin-bottom: 0;
-  font-size: 45px;
-  line-height: 1.5;
+  font-size: 35px;
+  line-height: 1.1;
   display: block;
 }
 
@@ -206,7 +206,7 @@ body {
 }
 
 #analysisPanel.visible {
-  opacity: 1;
+  opacity: 0.8;
   pointer-events: auto;
 }
 
@@ -223,7 +223,7 @@ body {
 #checkboxGroup {
   overflow-y: auto;
   min-height: 0;
-  max-height: 90%;
+  max-height: 100%;
   flex-shrink: 1;
 }
 
@@ -298,6 +298,50 @@ body {
 /* disabled row: grey out the label, not the result */
 #analysisPanel .field-row.disabled label {
   color: #666;
+}
+
+/* Hands sub-controls */
+.hands-controls {
+  padding-left: 6px;
+  border-left: 2px solid #bbb;
+  margin-left: 4px;
+  margin-top: 2px;
+}
+
+.hands-sub-row {
+  zoom: 0.9;
+  flex-direction: column;
+  align-items: flex-start !important;
+  gap: 4px;
+  margin-top: 2px !important;
+}
+
+.hands-sub-row label {
+  font-size: 10px;
+  color: #555;
+}
+
+.hands-sub-row input[type="range"] {
+  width: 80px;
+  max-width: 100%;
+}
+
+.puppet-nav-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 24px;
+}
+
+.puppet-nav-row button {
+  width: 18px;
+  min-width: unset;
+  padding: 0;
+}
+
+.puppet-nav-row input[type="text"] {
+  width: 32px;
+  text-align: center;
 }
 
 /* top prediction pill */
