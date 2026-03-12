@@ -68,19 +68,295 @@
   {
     "id": 12,
     "toggles": { "bbox": true, "facemesh": true, "race": true, "age": true, "gender": true, "emotion": true, "hands": false },
-    "dialogue": { "show": true, "characterName": "shm", "text": "maybe they have better models than me loaded in?" },
+    "dialogue": { "show": true, "characterName": "shm", "text": "maybe they have a better model loaded in?" },
     "actionRequired": null
   },
   {
     "id": 13,
-    "toggles": { "bbox": true, "facemesh": true, "race": true, "age": true, "gender": true, "emotion": true },
-    "dialogue": { "slow":"true", "show": true, "characterName": "shm", "text": "and i have some sh*tty one that my developer only trained for like 5 epochs but then their gpu fan started making weird noises so they stopped" },
+    "toggles": {},
+    "dialogue": { "speed": "slow", "show": true, "characterName": "shm", "text": "....and maybe i have some sh*tty one that was only trained for like 5 epochs but then the gpu fan started making weird noises so they stopped trying" },
     "actionRequired": null
   },
   {
     "id": 14,
-    "toggles": { "bbox": true, "facemesh": true, "race": true, "age": true, "gender": true, "emotion": true, "hands": true, "puppetNum": 11 },
-    "dialogue": { "slow":"true", "show": true, "characterName": "shm", "text": "and maybe the dataset was mostly tumblr and deviantart... and now im like ...overfit to anime faces and hedgehogs" },
+    "toggles": { "hands": true, "puppetNum": 13 },
+    "dialogue": { "speed": "slow", "show": true, "characterName": "shm", "text": "...and maybe my initial dataset was mostly tumblr and deviantart... and now im like ...overfit to anime faces..." },
+    "actionRequired": null
+  },
+  {
+    "id": 15,
+    "toggles": { "hands": true, "puppetNum": 14 },
+    "dialogue": { "speed": "slow", "show": true, "characterName": "shm", "text": "and hedgehogs" },
+    "actionRequired": null
+  },
+  {
+    "id": 16,
+    "toggles": { "bbox": true, "facemesh": false, "race": false, "age": false, "gender": false, "emotion": false, "hands": false },
+    "dialogue": { "show": true, "characterName": "shm", "text": "i think this is what drew me to become so obsessive about portraiture, and learning to depict likeness in my art" },
+    "actionRequired": null
+  },
+  {
+    "id": 17,
+    "toggles": { "facemesh": true },
+    "dialogue": { "show": true, "characterName": "shm", "text": "i thought that if i could accurately perceive and record every salient feature of a face i could manually force myself to understand what maybe everyone else is seeing when they..." },
+    "actionRequired": null
+  },
+  {
+    "id": 17,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "look at each other" },
+    "actionRequired": null
+  },
+  {
+    "id": 18,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "when they look at me" },
+    "actionRequired": null
+  },
+  {
+    "id": 19,
+    "toggles": {},
+    "dialogue": { "speed": "slow", "show": true, "characterName": "shm", "text": "and maybe if i understood how i was being perceived, i could control that." },
+    "actionRequired": null
+  },
+  {
+    "id": 20,
+    "toggles": {},
+    "dialogue": { "speed": "slow", "show": true, "characterName": "shm", "text": "or i could.... i could explain." },
+    "actionRequired": null
+  },
+  {
+    "id": 22,
+    "toggles": { "race": true, "gender": true, "age": true },
+    "dialogue": { "show": true, "characterName": "shm", "text": "years before i had the words to articulate why, it bothered me that when people looked at me, they were perceiving things that i didn't realize were... there" },
+    "actionRequired": null
+  },
+  {
+    "id": 23,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "and i uh, i grew up in a very white community. and i love that community." },
+    "actionRequired": null
+  },
+  {
+    "id": 24,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "and to be clear i am something like a...." },
+    "actionRequired": null
+  },
+  {
+    "id": 25,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "like, i'm speaking from a place of immense privilege here. i never had to deal with anything that bad." },
+    "actionRequired": null
+  },
+  {
+    "id": 26,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "like, the worst was people trying to be nice and relatable and getting kinda ...awkward about it." },
+    "actionRequired": null
+  },
+  {
+    "id": 27,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "you know, stuff like" },
+    "actionRequired": null
+  },
+  {
+    "id": 28,
+    "toggles": { "hands": true, "puppetNum": 14 },
+    "dialogue": { "show": true, "characterName": "random adult white man", "text": "so..." },
+    "actionRequired": null
+  },
+  {
+    "id": 28,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "random adult white man", "text": "what kind of asian are you?" },
+    "actionRequired": null
+  },
+  {
+    "id": 29,
+    "toggles": { "emotion": true },
+    "dialogue": { "show": true, "characterName": "shm", "text": "oh! i'm filipino" },
+    "actionRequired": null
+  },
+  {
+    "id": 30,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "random adult white man", "text": "ah, nice." },
+    "actionRequired": null
+  },
+  {
+    "id": 31,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "random adult white man", "text": "I love Filipino food." },
+    "actionRequired": null
+  },
+  {
+    "id": 32,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "m... me too!" },
+    "actionRequired": null
+  },
+  {
+    "id": 33,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "random adult white man", "text": "..." },
+    "actionRequired": null
+  },
+  {
+    "id": 34,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "random adult white man", "text": "What's your favorite place?" },
+    "actionRequired": null
+  },
+  {
+    "id": 35,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "w Ha" },
+    "actionRequired": null
+  },
+  {
+    "id": 36,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "random adult white man", "text": "For Filipino food." },
+    "actionRequired": null
+  },
+  {
+    "id": 37,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "oh! uhhhhhhhh.................................................................................................................................. ...........my mom." },
+    "actionRequired": null
+  },
+  {
+    "id": 38,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "random adult white man", "text": "Ah..." },
+    "actionRequired": null
+  },
+  {
+    "id": 39,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "random adult white man", "text": "..." },
+    "actionRequired": null
+  },
+  {
+    "id": 40,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "..." },
+    "actionRequired": null
+  },
+  {
+    "id": 41,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "random adult white man", "text": "I dated a Chinese girl once." },
+    "actionRequired": null
+  },
+  {
+    "id": 43,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "..." },
+    "actionRequired": "smile"
+  },
+  {
+    "id": 44,
+    "toggles": { "hands": false, "bbox": true, "emotion": true, "facemesh": false, "race": false, "age": false, "gender": false },
+    "dialogue": { "show": true, "characterName": "Smiley", "text": "in the 4th grade my gym teacher gave me the nickname 'Smiley'." },
+    "actionRequired":  "smile"
+  },
+  {
+    "id": 45,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "Smiley", "text": "it was not uncommon for adults to tell me in this time," },
+    "actionRequired":  "smile"
+  },
+  {
+    "id": 46,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "Smiley", "text": "try not to lose that big smile of yours!" },
+    "actionRequired": "smile"
+  },
+  {
+    "id": 47,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "Smiley", "text": "and then people started calling me 'Smiley Miley'." },
+    "actionRequired":  "smile"
+  },
+  {
+    "id": 48,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "Smiley Miley", "text": "and then Smiley Miley Stewart." },
+    "actionRequired":  "smile"
+  },
+  {
+    "id": 49,
+    "toggles": { "hands": true, "puppetNum": 15 },
+    "dialogue": { "show": true, "characterName": "Smiley Miley Stewart", "text": "you know, like the character from hit disney channel original series Hannah Montana." },
+    "actionRequired":  "smile"
+  },
+  {
+    "id": 50,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "Smiley Miley Stewart", "text": "and i had trouble with this because although i really liked the show i did not really feel like i had much in common with this character. for..." },
+    "actionRequired":  "smile"
+  },
+  {
+    "id": 51,
+    "toggles": { "race": true, "age": true, "gender": true },
+    "dialogue": null,
+    "actionRequired":  "smile"
+  },
+  {
+    "id": 52,
+    "toggles": {"hands": true, "puppetNum": 16 },
+    "dialogue": { "show": true, "characterName": "Smiley Miley Stewart", "text": "reasons." },
+    "actionRequired":  "smile"
+  },
+  {
+    "id": 53,
+    "toggles": { "race": false, "age": false, "gender": false },
+    "dialogue": null,
+    "actionRequired":  "smile"
+  },
+  {
+    "id": 54,
+    "toggles": {"hands": true, "puppetNum": 16},
+    "dialogue": { "show": true, "characterName": "Smiley Miley Stewart", "text": "now, this guy. i relate to this guy." },
+    "actionRequired": null
+  },
+  {
+    "id": 55,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "Smiley Miley Stewart", "text": "and i think i look exactly like this guy." },
+    "actionRequired": null
+  },
+  {
+    "id": 56,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "Smiley Miley Stewart", "text": "anyway, in an attempt to mitigate the proliferation of 'Smiley Miley Stewart' across the entire elementary school i started leaning pretty heavily into my other nickname at the time." },
+    "actionRequired": null
+  },
+  {
+    "id": 57,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shmarah", "text": "and over the years my friends gradually like..." },
+    "actionRequired": null
+  },
+  {
+    "id": 58,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shmar", "text": "...truncated, and..." },
+    "actionRequired": null
+  },
+  {
+    "id": 59,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shmuh", "text": "...lovingly bastardized it..." },
+    "actionRequired": null
+  },
+  {
+    "id": 60,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "until only 3 letters were left." },
     "actionRequired": null
   }
 ]

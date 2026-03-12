@@ -186,6 +186,31 @@
     let faceOpacity = 0;
     let detect_prettyCute = false;  // master switch for pretty cute mode
     let prettyCute        = false; // true when detection is on AND smiling
+    let winkDetected      = false; // one-shot flag, reset after checkConditions reads it
+    let lastDetections    = [];    // raw face-api results from last detectFace() run
+
+    // ── Condition registry ────────────────────────────────────────────
+    const CONDITIONS = {
+      prettyCute: {
+        active: false,
+        check: () => prettyCute,
+      },
+      smile: {
+        active: false,
+        check: () => lastDetections.length > 0 && lastDetections[0].expressions.happy > 0.7,
+      },
+      wink: {
+        active: false,
+        check: () => winkDetected,
+      },
+    };
+
+    const CONDITION_HINTS = {
+      prettyCute: 'be cute to continue',
+      smile:      'smile to continue',
+      wink:       'wink to continue',
+    };
+
     function lv(a, b) { return a + (b - a) * LERP; }
 
     function faceDrawLoop() {
@@ -240,8 +265,8 @@
       ctx.globalAlpha = faceOpacity;
 
       if (document.getElementById('check-facemesh').checked) {
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
-        ctx.lineWidth = 0.8;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+        ctx.lineWidth = 1.5;
         faceDisplay.landmarks.forEach(pts => {
           FACE_TRIANGLES.forEach(([a, b, c]) => {
             if (!pts[a] || !pts[b] || !pts[c]) return;
@@ -254,7 +279,7 @@
           });
         });
         ctx.strokeStyle = 'rgba(225, 225, 225, 0.7)';
-        ctx.lineWidth = 1.0;
+        ctx.lineWidth = 3.5;
         ctx.lineJoin = 'round';
         faceDisplay.landmarks.forEach(pts => {
           ctx.beginPath();
@@ -283,7 +308,7 @@
         const fontSize  = prettyCute ? 45 : 42;
         faceDisplay.boxes.forEach(box => {
           ctx.strokeStyle = boxColor;
-          ctx.lineWidth = 1.5;
+          ctx.lineWidth = 3.5;
           ctx.strokeRect(box.x, box.y, box.w, box.h);
           const label = prettyCute ? 'pretty cute!' : box.label;
           if (label) {
@@ -319,6 +344,7 @@
         .withFaceLandmarks(true)
         .withAgeAndGender()
         .withFaceExpressions();
+      lastDetections = results;
 
       const showFace    = document.getElementById('check-facemesh').checked;
       const showRace    = document.getElementById('check-race').checked;
@@ -364,10 +390,6 @@
 
       // Pretty cute mode: active while primary face looks happy
       prettyCute = detect_prettyCute && primary.expressions.happy > 0.7;
-      if (currentActionRequired === 'prettyCute') {
-        actionConditionMet = prettyCute;
-        updateHintText();
-      }
 
       faceTarget = {
         width: elemW, height: elemH,
@@ -380,15 +402,31 @@
           const emotion = Object.entries(r.expressions).sort((a, b) => b[1] - a[1])[0][0];
           const age     = Math.round(r.age);
           const isFem   = r.gender === 'female';
-          const pronoun = isFem ? 'her' : 'his';
           const parts   = [];
           if (showEmotion && emotion && emotion !== 'neutral') parts.push(emotion);
-          const raceWord   = (showRace && i === 0 && lastRaceClass) ? lastRaceClass.toLowerCase() : '';
-          const personNoun = showGender
-            ? (age < 20 ? (isFem ? 'girl' : 'boy') : (isFem ? 'woman' : 'man')) : '';
+          const raceWord = (showRace && i === 0 && lastRaceClass) ? lastRaceClass.toLowerCase() : '';
+
+          // Age display: numeric only when Age is the sole active label;
+          // otherwise fold into the gender noun implicitly.
+          const ageAlone = showAge && !showGender && !showRace && !showEmotion;
+          let personNoun = '';
+          if (showGender) {
+            if (showAge) {
+              // implicit age via descriptive noun
+              if      (age < 13) personNoun = isFem ? 'girl'                    : 'boy';
+              else if (age < 20) personNoun = isFem ? 'teenage girl'            : 'teenage boy';
+              else if (age < 30) personNoun = isFem ? 'woman in her twenties'   : 'man in his twenties';
+              else if (age < 40) personNoun = isFem ? 'woman in her thirties'   : 'man in his thirties';
+              else if (age < 50) personNoun = isFem ? 'woman in her forties'    : 'man in his forties';
+              else if (age < 60) personNoun = isFem ? 'woman in her fifties'    : 'man in his fifties';
+              else               personNoun = isFem ? 'older woman'             : 'older man';
+            } else {
+              personNoun = age < 20 ? (isFem ? 'girl' : 'boy') : (isFem ? 'woman' : 'man');
+            }
+          }
           const personDesc = [raceWord, personNoun].filter(Boolean).join(' ');
           if (personDesc) parts.push(personDesc);
-          if (showAge) parts.push(`${age} y.o.`);
+          if (ageAlone) parts.push(`${age} y.o.`);
           return { x, y, w, h, label: parts.join(' ') || 'face' };
         }),
         landmarks: results.map(r => r.landmarks.positions.map(p => toElem(p.x, p.y)))
@@ -475,18 +513,25 @@
       };
       Object.entries(toggles).forEach(([key, val]) => {
         if (key === 'puppetNum') { currentSlide = val - 1; updatePuppetDisplay(); return; }
-        if (key === 'detectPrettyCute') { detect_prettyCute = val; return; }
+        if (key === 'detectPrettyCute') { detect_prettyCute = val; if (CONDITIONS.prettyCute) CONDITIONS.prettyCute.active = val; return; }
         const cb = document.getElementById(checkMap[key]);
         if (cb && cb.checked !== val) { cb.checked = val; cb.dispatchEvent(new Event('change')); }
       });
     }
 
-    function typewriterEffect(el, text, slow = false) {
+    const TYPEWRITER_SPEEDS = {
+      fast:   [8,  6],   // base ± jitter ms
+      normal: [12, 8],
+      slow:   [45, 35],
+    };
+
+    function typewriterEffect(el, text, speed = 'normal') {
       if (currentTypewriterInterval) { clearTimeout(currentTypewriterInterval); currentTypewriterInterval = null; }
       el.textContent = '';
       el.classList.add('typing');
       currentTypewriterFull = text;
       currentTypewriterEl = el;
+      const [base, jitter] = TYPEWRITER_SPEEDS[speed] ?? TYPEWRITER_SPEEDS.normal;
       let i = 0;
       function typeNext() {
         el.textContent += text[i++];
@@ -494,11 +539,10 @@
           currentTypewriterInterval = null;
           // keep .typing so cursor stays visible after text finishes
         } else {
-          const delay = slow ? 45 + Math.random() * 35 : 12 + Math.random() * 8;
-          currentTypewriterInterval = setTimeout(typeNext, delay);
+          currentTypewriterInterval = setTimeout(typeNext, base + Math.random() * jitter);
         }
       }
-      currentTypewriterInterval = setTimeout(typeNext, slow ? 45 : 12);
+      currentTypewriterInterval = setTimeout(typeNext, base);
     }
 
     function applyDialogue(dialogue, instant = false) {
@@ -516,7 +560,7 @@
           panel.textContent = dialogue.text;
         } else {
           overlay.classList.add('visible');
-          typewriterEffect(panel, dialogue.text, dialogue.speed === 'slow');
+          typewriterEffect(panel, dialogue.text, dialogue.speed ?? 'normal');
         }
       } else {
         overlay.classList.remove('visible');
@@ -526,17 +570,34 @@
 
     function updateHintText() {
       const hint = document.getElementById('spacebarHint');
-      if (currentActionRequired === 'prettyCute') {
-        hint.textContent = actionConditionMet ? 'press spacebar to continue' : 'be cute to continue';
+      if (currentActionRequired && !actionConditionMet) {
+        hint.textContent = CONDITION_HINTS[currentActionRequired] ?? 'complete action to continue';
+        hint.style.fontSize = `${26 + hintPressCount * 5}px`;
       } else {
         hint.textContent = 'press spacebar to continue';
+        hint.style.fontSize = '';
       }
     }
 
     function setActionRequired(action) {
       currentActionRequired = action;
       actionConditionMet = false;
+      hintPressCount = 0;
+      Object.keys(CONDITIONS).forEach(k => CONDITIONS[k].active = false);
+      if (action && CONDITIONS[action]) CONDITIONS[action].active = true;
       updateHintText();
+    }
+
+    function checkConditions() {
+      if (!currentActionRequired) return;
+      const condition = CONDITIONS[currentActionRequired];
+      if (!condition || !condition.active) return;
+      const met = condition.check();
+      if (met !== actionConditionMet) {
+        actionConditionMet = met;
+        updateHintText();
+      }
+      winkDetected = false; // reset one-shot flag after reading
     }
 
     function loadScene(index, instant = false) {
@@ -558,7 +619,7 @@
         currentTypewriterEl.classList.remove('typing');
         return;
       }
-      if (currentActionRequired && !actionConditionMet) return;
+      if (currentActionRequired && !actionConditionMet) { hintPressCount++; updateHintText(); return; }
       const next = currentScene + 1;
       if (next < gameScript.length) loadScene(next);
       else console.log('end of script');
@@ -593,6 +654,7 @@
         requestAnimationFrame(faceDrawLoop);
         setInterval(detectFace, 100);
         setInterval(detectHands, 33);
+        setInterval(checkConditions, 100);
 
         cameraReady = true;
 
@@ -688,6 +750,7 @@
     let currentTypewriterEl = null;
     let currentActionRequired = null;
     let actionConditionMet = false;
+    let hintPressCount = 0;
 
     const keyMap = { r: 'check-race', a: 'check-age', g: 'check-gender', e: 'check-emotion', f: 'check-facemesh', b: 'check-bbox', h: 'check-hands' };
     document.addEventListener('keydown', ev => {
