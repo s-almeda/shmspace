@@ -55,6 +55,9 @@ app.get('/c', function (req, res) {
 app.get('/portfolio', function (req, res) {
     res.sendFile(publicPath + '/portfolio.html');
 });
+app.get('/recognize_me', function (req, res) {
+    res.sendFile(publicPath + '/facial_recognishm/index.html');
+});
 
 
 //run this server by entering "node App.js" using your command line. 
