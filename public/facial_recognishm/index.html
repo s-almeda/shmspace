@@ -6,6 +6,8 @@
   <title>recognizing my self</title>
   <link rel="stylesheet" href="https://unpkg.com/xp.css" />
   <link rel="stylesheet" href="/facial_recognishm/css/recognize_me.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.7.4/dist/tf.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 </head>
 <body>
 
@@ -37,6 +39,7 @@
 
       <!-- webcam feed -->
       <video id="webcam" autoplay playsinline muted></video>
+      <canvas id="faceCanvas"></canvas>
 
       <!-- analysis panel (right side, hidden until camera starts) -->
       <div id="analysisPanel">
@@ -62,6 +65,14 @@
               <input id="check-emotion" type="checkbox">
               <label for="check-emotion">[E]motion</label>
               <span class="result-value" id="result-emotion"></span>
+            </div>
+            <div class="field-row">
+              <input id="check-facemesh" type="checkbox" checked>
+              <label for="check-facemesh">[F]acemesh</label>
+            </div>
+            <div class="field-row">
+              <input id="check-bbox" type="checkbox" checked>
+              <label for="check-bbox">[B]ounding box</label>
             </div>
           </div>
           <div class="field-row">
@@ -91,9 +102,16 @@
 
   <script type="module">
     import { encode, decode } from 'https://esm.sh/blurhash@2.0.5';
-    import * as tf from 'https://esm.sh/@tensorflow/tfjs';
+    /* tf and faceapi are globals loaded via <script defer> in <head> */
 
       const RACE_CLASSES = ['White', 'Black', 'Asian', 'Hispanic_Latino', 'Middle_Eastern'];
+
+      await Promise.all([
+        faceapi.nets.tinyFaceDetector.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights'),
+        faceapi.nets.faceLandmark68TinyNet.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights'),
+        faceapi.nets.ageGenderNet.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights'),
+        faceapi.nets.faceExpressionNet.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights'),
+      ]);
 
       const raceModel = await tf.loadGraphModel('/facial_recognishm/face_model/model.json');
 
@@ -103,6 +121,128 @@
       const inferCtx = inferCanvas.getContext('2d');
 
       let raceInterval = null;
+
+      const faceCanvas = document.getElementById('faceCanvas');
+
+      // ── Smooth face-overlay (lerp between detections) ──────────────
+      let faceTarget  = null;  // latest geometry from detectFace
+      let faceDisplay = null;  // currently-interpolated geometry
+      const LERP = 0.18;
+      function lv(a, b) { return a + (b - a) * LERP; }
+
+      function faceDrawLoop() {
+        requestAnimationFrame(faceDrawLoop);
+        const ctx = faceCanvas.getContext('2d');
+
+        if (!faceTarget) {
+          ctx.clearRect(0, 0, faceCanvas.width, faceCanvas.height);
+          faceDisplay = null;
+          return;
+        }
+
+        const { width, height, boxes, landmarks } = faceTarget;
+        if (faceCanvas.width !== width)  faceCanvas.width  = width;
+        if (faceCanvas.height !== height) faceCanvas.height = height;
+
+        // reset on face-count change
+        if (!faceDisplay || faceDisplay.boxes.length !== boxes.length) {
+          faceDisplay = {
+            boxes:     boxes.map(b => ({ ...b })),
+            landmarks: landmarks.map(pts => pts.map(p => ({ ...p })))
+          };
+        } else {
+          faceDisplay.boxes = faceDisplay.boxes.map((d, i) => ({
+            x: lv(d.x, boxes[i].x), y: lv(d.y, boxes[i].y),
+            w: lv(d.w, boxes[i].w), h: lv(d.h, boxes[i].h),
+            label: boxes[i].label
+          }));
+          faceDisplay.landmarks = faceDisplay.landmarks.map((dPts, i) =>
+            dPts.map((dp, j) => ({
+              x: lv(dp.x, landmarks[i][j].x),
+              y: lv(dp.y, landmarks[i][j].y)
+            }))
+          );
+        }
+
+        ctx.clearRect(0, 0, width, height);
+
+        if (document.getElementById('check-facemesh').checked) {
+          ctx.fillStyle = 'rgba(0, 220, 0, 0.85)';
+          faceDisplay.landmarks.forEach(pts => {
+            pts.forEach(p => {
+              ctx.beginPath();
+              ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
+              ctx.fill();
+            });
+          });
+        }
+
+        if (document.getElementById('check-bbox').checked) {
+          faceDisplay.boxes.forEach(box => {
+            ctx.strokeStyle = 'lime';
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(box.x, box.y, box.w, box.h);
+            if (box.label) {
+              ctx.font = '12px Tahoma';
+              const tw = ctx.measureText(box.label).width;
+              ctx.fillStyle = 'rgba(0,0,0,0.6)';
+              ctx.fillRect(box.x, box.y - 20, tw + 8, 18);
+              ctx.fillStyle = 'lime';
+              ctx.fillText(box.label, box.x + 4, box.y - 6);
+            }
+          });
+        }
+      }
+
+      // detectFace: runs on interval, updates faceTarget — never touches canvas
+      async function detectFace() {
+        if (video.readyState < 2) return;
+
+        const { width, height } = video.getBoundingClientRect();
+        const results = await faceapi
+          .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+          .withFaceLandmarks(true)
+          .withAgeAndGender()
+          .withFaceExpressions();
+
+        if (!results.length) { faceTarget = null; return; }
+
+        const resized = faceapi.resizeResults(results, { width, height });
+
+        const showRace    = document.getElementById('check-race').checked;
+        const showAge     = document.getElementById('check-age').checked;
+        const showGender  = document.getElementById('check-gender').checked;
+        const showEmotion = document.getElementById('check-emotion').checked;
+
+        const primary = results[0];
+        document.getElementById('result-age').innerHTML    = showAge    ? `<b>${Math.round(primary.age)} y.o.</b>` : '';
+        document.getElementById('result-gender').innerHTML = showGender ? `<b>${primary.gender}</b> (${primary.genderProbability.toFixed(2)})` : '';
+        const topEmotion = Object.entries(primary.expressions).sort((a, b) => b[1] - a[1])[0];
+        document.getElementById('result-emotion').innerHTML = showEmotion ? `<b>${topEmotion[0]}</b> (${topEmotion[1].toFixed(2)})` : '';
+
+        const raceText = showRace
+          ? (document.getElementById('result-race').textContent.trim().split(' ')[0] || '')
+          : '';
+
+        faceTarget = {
+          width, height,
+          boxes: resized.map((r, i) => {
+            const { x, y, width: w, height: h } = r.detection.box;
+            const emotion = Object.entries(r.expressions).sort((a, b) => b[1] - a[1])[0][0];
+            const age = Math.round(r.age);
+            const ageLabel = age < 13 ? 'a child' : age < 20 ? 'a teenager' :
+                             age < 30 ? 'in their mid-twenties' : age < 40 ? 'in their thirties' :
+                             age < 50 ? 'in their forties' : age < 65 ? 'in their fifties or sixties' : 'elderly';
+            const parts = [];
+            if (showEmotion && emotion) parts.push(emotion);
+            if (showRace && i === 0 && raceText) parts.push(raceText.toLowerCase());
+            if (showGender) parts.push(r.gender);
+            if (showAge)    parts.push(ageLabel);
+            return { x, y, w, h, label: parts.join(' ') || 'person' };
+          }),
+          landmarks: resized.map(r => r.landmarks.positions.map(p => ({ x: p.x, y: p.y })))
+        };
+      }
 
       async function predictRace() {
         if (video.readyState < 2) return;
@@ -222,6 +362,9 @@
         if (rafId) cancelAnimationFrame(rafId);
         requestAnimationFrame(loop);
 
+        requestAnimationFrame(faceDrawLoop);
+        setInterval(detectFace, 200);
+
       } catch (err) {
         console.error('Camera error:', err);
         startScreen.classList.add('hidden');
@@ -256,7 +399,7 @@
       });
     });
 
-    const keyMap = { r: 'check-race', a: 'check-age', g: 'check-gender', e: 'check-emotion' };
+    const keyMap = { r: 'check-race', a: 'check-age', g: 'check-gender', e: 'check-emotion', f: 'check-facemesh', b: 'check-bbox' };
     document.addEventListener('keydown', (ev) => {
       const id = keyMap[ev.key.toLowerCase()];
       if (id) {
