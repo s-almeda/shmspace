@@ -121,7 +121,7 @@
                 </button>
             </menu>
             <article role="tabpanel" id="dialogue-panel">
-               ...
+               ...shm is loading...
             </article>
         </div>
 
@@ -139,6 +139,19 @@
             <button id="popup-ok" style="font-size:12px; padding:4px 10px;">oops</button>
           </div>
         </div>
+      </div>
+      <!-- credits overlay -->
+      <div id="creditsOverlay" style="display:none; position:absolute; inset:15% 15%; z-index:50; background:rgba(237,233,216,0.88); color:#000; padding:28px 32px; overflow-y:auto; font-size:16px; line-height:2; transform:translateZ(0);">
+        <div id="creditsContent" style="text-align:center;">
+          <p>recognizing my self</p>
+          <p>by shm garanganao almeda</p>
+          <p>for <a href="https://luma.com/allchat?tk=EswoBu">ALL CHAT</a></p>
+          <p>march 12 2026 @ the intersection of art & technology gallery in sf</p>
+          <p><a href="https://shmuh.co">visit me on the web: shmuh.co</a></p>
+          <br>
+          <p><a href="#" onclick="location.reload(); return false;">play it again?</a></p>
+        </div>
+      </div>
       </div>
     </div>
   </div>
@@ -247,7 +260,7 @@
       smile:           'smile to continue',
       wink:            'wink to continue',
       popup:           'dismiss alert to continue',
-      happyAsianWoman: 'be a pleasant adult asian woman in the bay area to continue',
+      happyAsianWoman: 'be a happy asian woman to continue',
     };
 
     function lv(a, b) { return a + (b - a) * LERP; }
@@ -586,6 +599,11 @@
         if (key === 'puppetNum') { currentSlide = val - 1; updatePuppetDisplay(); return; }
         if (key === 'detectPrettyCute') { detect_prettyCute = val; if (CONDITIONS.prettyCute) CONDITIONS.prettyCute.active = val; return; }
         if (key === 'detectShm') { detect_shm = val; return; }
+        if (key === 'credits') {
+          document.getElementById('creditsOverlay').style.display = val ? 'block' : 'none';
+          document.getElementById('dialogueOverlay').style.display = val ? 'none' : '';
+          return;
+        }
         const cb = document.getElementById(checkMap[key]);
         if (cb && cb.checked !== val) { cb.checked = val; cb.dispatchEvent(new Event('change')); }
       });
