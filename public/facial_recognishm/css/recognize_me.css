@@ -1,0 +1,407 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a1a1a;
+}
+
+/* Blurhash background canvas — full bleed behind window */
+#bgCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  /* scale up slightly so decoded low-res edges don't show */
+  transform: scale(1.05);
+  image-rendering: pixelated;
+  transition: opacity 1.2s ease;
+  opacity: 0;
+}
+
+#bgCanvas.visible {
+  opacity: 1;
+}
+
+.main-window {
+  position: relative;
+  z-index: 10;
+  width: min(98vw, 1200px);
+  height: min(96vh, 900px);
+  display: flex;
+  flex-direction: column;
+}
+
+#startBtn {
+  font-size: 24px;
+  padding: 12px 16px;
+}
+
+.window-body {
+  flex: 1;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #ede9d8;
+  position: relative;
+}
+
+/* ── Pre-camera state: centered button ── */
+#startScreen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ede9d8;
+  z-index: 2;
+  transition: opacity 0.6s ease;
+}
+
+#startScreen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Webcam ── */
+#webcam {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+#webcam.visible {
+  opacity: 1;
+}
+
+#webcam, #faceCanvas, #handCanvas {
+  transform: scaleX(-1);
+}
+
+#faceCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+#handCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── Error state ── */
+#errorScreen {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  background: #ede9d8;
+  color: #aaa;
+  font-size: 12px;
+  text-align: center;
+  padding: 20px;
+  z-index: 3;
+}
+
+#errorScreen.visible {
+  display: flex;
+}
+
+#spacebarHint {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 20px;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 4px 14px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+#spacebarHint.visible {
+  opacity: 1;
+}
+
+#dialogueOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  /* top right bottom left */
+  margin: 0 20px 50px 20px;
+  height: 30%;
+  z-index: 5;
+  background: transparent;
+  padding: 0 8px 8px 8px;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+#dialogueOverlay.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* blinking cursor during typewriter */
+#dialogue-panel::after {
+  content: '|';
+  display: inline;
+  font-weight: 100;
+  margin-left: 1px;
+  opacity: 0;
+}
+
+#dialogue-panel.typing::after {
+  opacity: 1;
+  animation: blink 0.6s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+#dialogueOverlay menu[role="tablist"] {
+  padding-left: 3px;
+  margin-bottom: -2px;
+  display: block;
+}
+
+#dialogueOverlay menu[role="tablist"] button {
+  font-size: 32px;
+  padding: 6px 18px;
+  
+}
+
+#dialogueOverlay [role="tabpanel"] {
+  background: rgba(236, 233, 216, 0.85);
+  border: 1px solid #888;
+  height: calc(100% - 22px);
+  padding: 20px 20px;
+  overflow-y: auto;
+  margin-bottom: 0;
+  font-size: 35px;
+  line-height: 1.1;
+  display: block;
+}
+
+/* ── Title bar ── */
+.main-window .title-bar {
+  height: 50px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+#titleText {
+  font-size: 18px;
+  font-style: italic;
+}
+
+/* ── Analysis panel (right side) ── */
+#analysisPanel {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 22%;
+  height: calc(70% - 50px);
+  z-index: 5;
+  padding: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+
+}
+
+#analysisPanel.visible {
+  opacity: 0.8;
+  pointer-events: auto;
+}
+
+/* outer fieldset: fills the panel, no overflow here */
+#analysisPanel > fieldset {
+  background: rgba(237, 233, 216, 0.85);
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ONLY the checkbox group scrolls — nothing else */
+#checkboxGroup {
+  overflow-y: auto;
+  min-height: 0;
+  max-height: 100%;
+  flex-shrink: 1;
+}
+
+/* checkbox rows */
+#analysisPanel .field-row {
+  margin-top: 3px;
+  zoom: 1.4;
+  flex-wrap: wrap;
+  overflow: visible;
+  padding-bottom: 3px;
+}
+
+/* detected output row — no zoom, fills remaining space */
+#analysisPanel > fieldset > .field-row {
+  zoom: 1;
+  flex: 1;
+  /* min-height: 80px; */
+  margin-top: 5px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.inner-scroll {
+  flex: 1;
+  min-height: 120px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#analysisPanel > fieldset > .field-row fieldset {
+  flex: 1;
+  min-height: 0;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+#analysisPanel > fieldset > .field-row legend {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+#analysisPanel > fieldset > .field-row textarea {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  resize: none;
+}
+
+#detectionOutput {
+  font-size: 24px;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  padding: 3px;
+  background: none;
+}
+
+#analysisPanel .result-value {
+  width: 100%;
+  margin-left: var(--checkbox-total-width);
+  margin-top: 7px;
+  /* font-weight: bold; */
+  color: #333;
+}
+
+#analysisPanel input[type="checkbox"]:checked + label::after {
+  margin-left: -1px;
+}
+
+/* disabled row: grey out the label, not the result */
+#analysisPanel .field-row.disabled label {
+  color: #666;
+}
+
+/* Hands sub-controls */
+.scene-nav-row {
+  flex: none !important;
+  zoom: 1.4;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 2px;
+}
+
+.hands-controls {
+  padding-left: 6px;
+  border-left: 2px solid #bbb;
+  margin-left: 4px;
+  margin-top: 2px;
+}
+
+.hands-sub-row {
+  zoom: 0.9;
+  flex-direction: column;
+  align-items: flex-start !important;
+  gap: 4px;
+  margin-top: 2px !important;
+}
+
+.hands-sub-row label {
+  font-size: 10px;
+  color: #555;
+}
+
+.hands-sub-row input[type="range"] {
+  width: 80px;
+  max-width: 100%;
+}
+
+.puppet-nav-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 24px;
+}
+
+.puppet-nav-row button {
+  width: 18px;
+  min-width: unset;
+  padding: 0;
+}
+
+.puppet-nav-row input[type="text"] {
+  width: 32px;
+  text-align: center;
+}
+
+/* top prediction pill */
+.pred-top {
+  background: #005ca7;
+  color: #fff;
+  border: 1px dotted #999;
+  padding: 1px 5px;
+  border-radius: 2px;
+  font-weight: bold;
+}
