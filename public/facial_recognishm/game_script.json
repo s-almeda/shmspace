@@ -7,7 +7,7 @@
   },
   {
     "id": 2,
-    "toggles": {},
+    "toggles": {"credits": false},
     "dialogue": { "show": true, "characterName": "shm", "text": "what's up chat" },
     "actionRequired": null
   },
@@ -20,7 +20,7 @@
   {
     "id": 4,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "i used to spend a lot of time staring at mirrors as a kid" },
+    "dialogue": { "show": true, "characterName": "shm", "text": "and. i think this has had weird effects on my development. like. i used to spend a loooot of time staring at mirrors as a kid" },
     "actionRequired": null
   },
   {
@@ -32,7 +32,7 @@
   {
     "id": 6,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "like, a lot" },
+    "dialogue": { "show": true, "characterName": "shm", "text": "...like, a lot..... this isn't even half of them... i like this one...." },
     "actionRequired": null
   },
   {
@@ -44,7 +44,7 @@
   {
     "id": 8,
     "toggles": {"hands": false, "facemesh": false},
-    "dialogue": { "show": true, "characterName": "shm", "text": "this is a reasonable assumption. after all, I'm..." },
+    "dialogue": { "show": true, "characterName": "shm", "text": "and this is a reasonable assumption. like. who wouldn't be obsessed with me. after all, I'm..." },
     "actionRequired": null
   },
   {
@@ -62,25 +62,25 @@
   {
     "id": 11,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "i often get the sense that other people can just like. do facial recognition better than me." },
+    "dialogue": { "show": true, "characterName": "shm", "text": "i often get the sense that other people can just like. do facial recognition a lot better than me." },
     "actionRequired": null
   },
   {
     "id": 12,
     "toggles": { "bbox": true, "facemesh": true, "race": true, "age": true, "gender": true, "emotion": true, "hands": false },
-    "dialogue": { "show": true, "characterName": "shm", "text": "maybe they have a better model loaded in?" },
+    "dialogue": { "show": true, "characterName": "shm", "text": "like, maybe they have a better model loaded in?" },
     "actionRequired": null
   },
   {
     "id": 13,
     "toggles": {},
-    "dialogue": { "speed": "medium", "show": true, "characterName": "shm", "text": "....and maybe i have some sh*tty one that was only trained for like 5 epochs but then the gpu fan started making weird noises" },
+    "dialogue": { "speed": "medium", "show": true, "characterName": "shm", "text": "....and maybe i have a sh*tty one that was only trained for like 5 epochs. and then the gpu fan started making weird noises" },
     "actionRequired": null
   },
   {
     "id": 14,
     "toggles": { "hands": true, "puppetNum": 13 },
-    "dialogue": { "speed": "slow", "show": true, "characterName": "shm", "text": "...and maybe my initial dataset was mostly tumblr and deviantart... and now im like ...overfit to anime faces..." },
+    "dialogue": { "speed": "slow", "show": true, "characterName": "shm", "text": "...and maybe my initial dataset was mostly tumblr and deviantart... so now my vision system is like ...overfit to anime faces..." },
     "actionRequired": null
   },
   {
@@ -92,7 +92,7 @@
   {
     "id": 16,
     "toggles": { "bbox": true, "facemesh": false, "race": false, "age": false, "gender": false, "emotion": false, "hands": true, "puppetNum": 4 },
-    "dialogue": { "show": true, "characterName": "shm", "text": "i think this is what drew me to become so obsessive about portraiture, and learning to depict likeness in my art" },
+    "dialogue": { "show": true, "characterName": "shm", "text": "i think this is what drew me to become so obsessive about portraiture, what led me to dedicate myself to learning how to depict likeness in my art" },
     "actionRequired": null
   },
   {
@@ -151,7 +151,7 @@
   },
   {
     "id": 26,
-    "toggles": {"facemesh": false},
+    "toggles": {"bbox": false, "facemesh": false},
     "dialogue": { "show": true, "characterName": "shm", "text": "most people i grew up with were always trying to be nice and relate to me. we were all just. sometimes kinda ...awkward about it." },
     "actionRequired": null
   },
@@ -163,7 +163,7 @@
   },
   {
     "id": 28,
-    "toggles": { "hands": true, "puppetNum": 14 },
+    "toggles": {  "hands": true, "puppetNum": 14 },
     "dialogue": { "show": true, "characterName": "random adult white man", "text": "so..." },
     "actionRequired": null
   },
@@ -175,7 +175,7 @@
   },
   {
     "id": 29,
-    "toggles": { "emotion": true },
+    "toggles": { "bbox":true, "emotion": true },
     "dialogue": { "show": true, "characterName": "shm", "text": "oh! i'm filipino" },
     "actionRequired": null
   },
@@ -301,13 +301,13 @@
   },
   {
     "id": 51,
-    "toggles": { "facemesh": false, "race": true, "age": true, "gender": true },
+    "toggles": { "facemesh": false, "race": true, "age": false, "gender": false },
     "dialogue": null,
     "actionRequired":  "smile"
   },
   {
     "id": 52,
-    "toggles": {"hands": true},
+    "toggles": {"hands": true, "expression": false},
     "dialogue": { "show": true, "characterName": "Smiley Miley Stewart", "text": "reasons." },
     "actionRequired":  "smile"
   },
@@ -387,7 +387,7 @@
   {
     "id": 65,
     "toggles": {"hands":false},
-    "dialogue": { "show": true, "characterName": "shm", "text": "just like i'd always dreamed of. i'm really really grateful." },
+    "dialogue": { "show": true, "characterName": "shm", "text": "it's a life beyond what i could have ever dreamed of. i'm really really grateful." },
     "actionRequired": null
   },
   {
@@ -434,7 +434,7 @@
   },
   {
     "id": 73,
-    "toggles": {},
+    "toggles": {"detectShm":false},
     "dialogue": { "show": true, "characterName": "shm", "text": "an external lens... a way of seeing overlayed onto the image of my self and changing the way i perceive the person there." },
     "actionRequired": null
   },
@@ -452,8 +452,7 @@
   },
   {
     "id": 76,
-    "toggles": {"detectShm":false,
-  "bbox": true,
+    "toggles": {  "bbox": true,
   "facemesh": false,
   "race": true,
   "age": true,
@@ -467,13 +466,13 @@
   {
     "id": 77,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "i don’t know if it’s about beauty." },
+    "dialogue": { "show": true, "characterName": "shm", "text": "is it like, a beauty standards thing?" },
     "actionRequired": null
   },
   {
     "id": 78,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "no , no i don't have a problem with the person in the image at all as much as it's, it's just like..." },
+    "dialogue": { "show": true, "characterName": "shm", "text": "no i don't know, i don't think i have a problem with the person in the image at all as much as it's, it's just like..." },
     "actionRequired": null
   },
   {
@@ -485,13 +484,13 @@
   {
     "id": 80,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "yes that’s me!" },
+    "dialogue": { "show": true, "characterName": "shm", "text": "yes that’s me!" }, 
     "actionRequired": null
   },
   {
     "id": 81,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "that’s you!" },
+    "dialogue": { "show": true, "characterName": "shm", "text": "that’s you!" }, 
     "actionRequired": null
   },
   {
@@ -503,50 +502,50 @@
   {
     "id": 83,
     "toggles": {"detectShm":false},
-    "dialogue": { "show": true, "characterName": "shm", "text": "yes it is! that’s me! that’s what you are! that’s you!" },
+    "dialogue": { "show": true, "characterName": "shm", "text": "Yes, it is! That’s me! That's what I am! That's me!" },
     "actionRequired": "happyAsianWoman"
   },
   {
     "id": 84,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "that’s what you are! that’s you! that’s you!" },
+    "dialogue": { "show": true, "characterName": "shm", "text": "That’s what I am! That’s me! That is me!" },
     "actionRequired": "happyAsianWoman"
   },
   {
     "id": 85,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "yes it is, that’s you!" },
+    "dialogue": { "speed": "medium", "show": true, "characterName": "shm", "text": "Yes it is, that’s me!  That’s me! That’s me! That’s me! That’s me! That is me! That’s me! That’s me! That is me! That’s me! That’s me! That is me! That’s me! That’s me! That is me! That’s me! That’s me! That’s me! That’s me! That is me! That’s me! That’s me! That’s me! That’s me! That is me! That’s me! That’s me! That is me! That’s me! That’s me! That is me! That’s me! That’s me! That is me! That’s me! That’s me! That’s me! That’s me! That is me! That’s me! That’s me! That’s me! That’s me! That is me! That’s me! That’s me! That is me! That’s me! That’s me! That is me! That’s me! That’s me! That is me! That’s me! That’s me! That’s me! That’s me! That is me!" }, 
     "actionRequired": "happyAsianWoman"
   },
   {
     "id": 86,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "yes it is, that’s you!" },
+    "dialogue": { "show": true, "characterName": "shm", "text": "That’s me." },
     "actionRequired": "happyAsianWoman"
   },
   {
     "id": 87,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "yes it is, that’s you!" },
+    "dialogue": { "show": true, "characterName": "shm", "text": "That's meeeeee!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" },
     "actionRequired": "happyAsianWoman"
   },
   {
     "id": 88,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "oh! …sorry… it says… alert, you’ve been talking for too long…" },
+    "dialogue": { "show": true, "characterName": "shm", "text": "oh! (read)" },
     "actionRequired": "popup"
   },
   {
     "id": 89,
     "toggles": {},
     "dialogue": { "show": true, "characterName": "shm", "text": "sorry about that..." },
-    "actionRequired": null
+    "actionRequired": "popup"
   },
   {
     "id": 90,
-    "toggles": {},
+    "toggles": {"hands":true, "puppetNum": 18},
     "dialogue": { "show": true, "characterName": "shm", "text": "that’s the timer i set when i start talking about myself or my interests..." },
-    "actionRequired": null
+    "actionRequired": "popup"
   },
   {
     "id": 91,
@@ -556,7 +555,7 @@
   },
   {
     "id": 92,
-    "toggles": {"detectShm": true},
+    "toggles": {"hands": false, "detectShm": true},
     "dialogue": { "show": true, "characterName": "shm", "text": "well, thank you all for listening to me." },
     "actionRequired": null
   },
@@ -576,6 +575,12 @@
     "id": 95,
     "toggles": {},
     "dialogue": { "speed": "slow", "show": true, "characterName": "shm", "text": "and that’s really nice." },
+    "actionRequired": null
+  },
+    {
+    "id": 96,
+    "toggles": {"credits": true},
+    "dialogue": { "speed": "slow", "show": true, "characterName": "shm", "text": "thank you." },
     "actionRequired": null
   }
 ]
