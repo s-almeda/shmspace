@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>recognizing my self</title>
+  <link rel="stylesheet" href="https://unpkg.com/xp.css" />
+  <link rel="stylesheet" href="/facial_recognishm/css/recognize_me.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.7.4/dist/tf.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+</head>
+<body>
+
+  <canvas id="bgCanvas"></canvas>
+
+  <div class="window main-window">
+    <div class="title-bar">
+      <div class="title-bar-text">
+        <!-- <img src="./images/question_mark.ico" alt="question mark Logo" style="height: 25px; vertical-align: middle; margin-right: 8px;"> -->
+        <span id="titleText">recognizing my self</span>
+      </div>
+
+      <div class="title-bar-controls">
+        <a href="/"><button aria-label="Close"></button></a>
+      </div>
+    </div>
+
+    <div class="window-body">
+      <!-- always-visible start state -->
+      <div id="startScreen">
+        <button id="startBtn"> let them see you </button>
+      </div>
+
+      <!-- error state -->
+      <div id="errorScreen">
+        <p>camera access was denied.</p>
+        <button id="retryBtn">try again</button>
+      </div>
+
+      <!-- webcam feed -->
+      <video id="webcam" autoplay playsinline muted></video>
+      <canvas id="faceCanvas"></canvas>
+      <canvas id="handCanvas"></canvas>
+
+      <!-- analysis panel (right side, hidden until camera starts) -->
+      <div id="analysisPanel">
+        <fieldset>
+          <!-- <legend style="font-style: italic;">what is seen</legend> -->
+          <div class="field-row scene-nav-row">
+            <label>scene&nbsp;:</label>
+            <div class="puppet-nav-row">
+              <button id="scene-prev">&lt;</button>
+              <input type="text" id="scene-number" value="1" readonly style="width: 30px; padding: 2px;">
+              <button id="scene-next">&gt;</button>
+            </div>
+          </div>
+          <div id="checkboxGroup">
+            <div class="field-row disabled">
+              <input id="check-race" type="checkbox">
+              <label for="check-race">"<u>R</u>ace"?</label>
+              <span class="result-value" id="result-race"></span>
+            </div>
+            <div class="field-row disabled">
+              <input id="check-age" type="checkbox">
+              <label for="check-age">"<u>A</u>ge"?</label>
+              <span class="result-value" id="result-age"></span>
+            </div>
+            <div class="field-row disabled">
+              <input id="check-gender" type="checkbox">
+              <label for="check-gender">"<u>G</u>ender"?</label>
+              <span class="result-value" id="result-gender"></span>
+            </div>
+            <div class="field-row disabled">
+              <input id="check-emotion" type="checkbox">
+              <label for="check-emotion">"<u>E</u>xpression"?</label>
+              <span class="result-value" id="result-emotion"></span>
+            </div>
+            <div class="field-row">
+              <input id="check-facemesh" type="checkbox" checked>
+              <label for="check-facemesh">"<u>F</u>ace"?</label>
+              <span class="result-value" id="result-face"></span>
+            </div>
+            <div class="field-row">
+              <input id="check-bbox" type="checkbox" checked>
+              <label for="check-bbox">put face in "<u> B</u>ox?"</label>
+            </div>
+            <div class="field-row disabled">
+              <input id="check-hands" type="checkbox">
+              <label for="check-hands">"<u>H</u>ands"?</label>
+            </div>
+            <div id="hands-controls" class="hands-controls" style="display:none;">
+              <div class="field-row hands-sub-row">
+                <label for="puppet-size">puppetSize</label>
+                <input type="range" id="puppet-size" min="0.1" max="2" step="0.1" value="0.7">
+              </div>
+              <div class="field-row hands-sub-row">
+                <label>puppetNumber&nbsp:</label>
+                <div class="puppet-nav-row">
+                  <button id="puppet-prev">&lt;</button>
+                  <input type="text" id="puppet-number" value="1" readonly style="width: 30px; padding: 2px;">
+                  <button id="puppet-next">&gt;</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </fieldset>
+      </div>
+
+      <div id="dialogueOverlay">
+            <div id="spacebarHint">press spacebar to continue</div>
+            <menu role="tablist">
+                <button role="tab" aria-selected="true" aria-controls="dialogue-panel" contenteditable="true">
+                character name
+                </button>
+            </menu>
+            <article role="tabpanel" id="dialogue-panel" contenteditable="true">
+                dialogue text goes here...
+            </article>
+        </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { HandLandmarker, FilesetResolver } from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.mjs';
+    import { RACE_CLASSES, FACE_TRIANGLES, LERP, FADE_IN, FADE_OUT } from '/facial_recognishm/js/constants.js';
+    import { createBlurhashRenderer } from '/facial_recognishm/js/blurhash.js';
+    /* tf and faceapi are globals loaded via <script defer> in <head> */
+
+    // ── Load models ──────────────────────────────────────────────────
+    await Promise.all([
+      faceapi.nets.tinyFaceDetector.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights'),
+      faceapi.nets.faceLandmark68TinyNet.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights'),
+      faceapi.nets.ageGenderNet.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights'),
+      faceapi.nets.faceExpressionNet.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights'),
+    ]);
+
+    const raceModel = await tf.loadGraphModel('/facial_recognishm/face_model/model.json');
+
+    // ── MediaPipe hand landmarker ─────────────────────────────────────
+    const filesetResolver = await FilesetResolver.forVisionTasks(
+      'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm'
+    );
+    const handLandmarker = await HandLandmarker.createFromOptions(filesetResolver, {
+      baseOptions: {
+        modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
+        delegate: 'GPU'
+      },
+      numHands: 2,
+      runningMode: 'VIDEO'
+    });
+
+    // ── Inference canvas (race model) ────────────────────────────────
+    const inferCanvas = document.createElement('canvas');
+    inferCanvas.width = inferCanvas.height = 224;
+    const inferCtx = inferCanvas.getContext('2d');
+
+    // ── Race state ───────────────────────────────────────────────────
+    let lastRaceClass    = '';
+    let lastRealScores   = null;
+    let simulatedScores  = null;
+    let raceInferInterval  = null;
+    let raceFlickerInterval = null;
+
+    // ── Hand image slideshow ─────────────────────────────────────────
+    // Auto-populated from /facial_recognishm/puppets/ — just drop images in that folder
+    const puppetFiles = await fetch('/facial_recognishm/puppets-list').then(r => r.json());
+    const loadedImages = puppetFiles.map(f => {
+      const img = new Image();
+      img.src = `/facial_recognishm/puppets/${f}`;
+      return img;
+    });
+    let currentSlide = 0;
+    function advanceSlide() {
+      if (loadedImages.length) { currentSlide = (currentSlide + 1) % loadedImages.length; updatePuppetDisplay(); }
+    }
+
+    // ── Face canvas + smooth lerp state ──────────────────────────────
+    const faceCanvas = document.getElementById('faceCanvas');
+    let faceTarget  = null;
+    let faceDisplay = null;
+    let faceOpacity = 0;
+    let detect_prettyCute = true;  // master switch for pretty cute mode
+    let prettyCute        = false; // true when detection is on AND smiling
+    function lv(a, b) { return a + (b - a) * LERP; }
+
+    function faceDrawLoop() {
+      requestAnimationFrame(faceDrawLoop);
+      const ctx = faceCanvas.getContext('2d');
+
+      if (!faceTarget) {
+        faceOpacity = Math.max(0, faceOpacity - FADE_OUT);
+        if (faceOpacity === 0) {
+          ctx.clearRect(0, 0, faceCanvas.width, faceCanvas.height);
+          faceDisplay = null;
+          return;
+        }
+      } else {
+        faceOpacity = Math.min(1, faceOpacity + FADE_IN);
+      }
+
+      if (faceTarget && faceDisplay) {
+        const { boxes, landmarks } = faceTarget;
+        if (faceDisplay.boxes.length !== boxes.length) {
+          faceDisplay = {
+            boxes:     boxes.map(b => ({ ...b })),
+            landmarks: landmarks.map(pts => pts.map(p => ({ ...p })))
+          };
+        } else {
+          faceDisplay.boxes = faceDisplay.boxes.map((d, i) => ({
+            x: lv(d.x, boxes[i].x), y: lv(d.y, boxes[i].y),
+            w: lv(d.w, boxes[i].w), h: lv(d.h, boxes[i].h),
+            label: boxes[i].label
+          }));
+          faceDisplay.landmarks = faceDisplay.landmarks.map((dPts, i) =>
+            dPts.map((dp, j) => ({
+              x: lv(dp.x, landmarks[i][j].x),
+              y: lv(dp.y, landmarks[i][j].y)
+            }))
+          );
+        }
+      } else if (faceTarget && !faceDisplay) {
+        const { boxes, landmarks } = faceTarget;
+        faceDisplay = {
+          boxes:     boxes.map(b => ({ ...b })),
+          landmarks: landmarks.map(pts => pts.map(p => ({ ...p })))
+        };
+      }
+
+      if (!faceDisplay) return;
+      const { width, height } = faceTarget || { width: faceCanvas.width, height: faceCanvas.height };
+      if (faceCanvas.width  !== width)  faceCanvas.width  = width;
+      if (faceCanvas.height !== height) faceCanvas.height = height;
+
+      ctx.clearRect(0, 0, width, height);
+      ctx.globalAlpha = faceOpacity;
+
+      if (document.getElementById('check-facemesh').checked) {
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
+        ctx.lineWidth = 0.8;
+        faceDisplay.landmarks.forEach(pts => {
+          FACE_TRIANGLES.forEach(([a, b, c]) => {
+            if (!pts[a] || !pts[b] || !pts[c]) return;
+            ctx.beginPath();
+            ctx.moveTo(pts[a].x, pts[a].y);
+            ctx.lineTo(pts[b].x, pts[b].y);
+            ctx.lineTo(pts[c].x, pts[c].y);
+            ctx.closePath();
+            ctx.stroke();
+          });
+        });
+        ctx.strokeStyle = 'rgba(225, 225, 225, 0.7)';
+        ctx.lineWidth = 1.0;
+        ctx.lineJoin = 'round';
+        faceDisplay.landmarks.forEach(pts => {
+          ctx.beginPath();
+          for (let i = 0; i <= 16; i++) i === 0 ? ctx.moveTo(pts[i].x, pts[i].y) : ctx.lineTo(pts[i].x, pts[i].y);
+          ctx.stroke();
+          ctx.beginPath();
+          for (let i = 17; i <= 21; i++) i === 17 ? ctx.moveTo(pts[i].x, pts[i].y) : ctx.lineTo(pts[i].x, pts[i].y);
+          ctx.stroke();
+          ctx.beginPath();
+          for (let i = 22; i <= 26; i++) i === 22 ? ctx.moveTo(pts[i].x, pts[i].y) : ctx.lineTo(pts[i].x, pts[i].y);
+          ctx.stroke();
+        });
+        ctx.fillStyle = 'rgba(225, 225, 225, 0.85)';
+        faceDisplay.landmarks.forEach(pts => {
+          pts.forEach(p => {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+          });
+        });
+      }
+
+      if (document.getElementById('check-bbox').checked) {
+        const boxColor  = prettyCute ? 'rgba(255, 182, 193, 0.9)' : 'rgba(144, 189, 66, 0.9)';
+        const textColor = 'rgba(0, 0, 0, 1.0)';
+        const fontSize  = prettyCute ? 45 : 42;
+        faceDisplay.boxes.forEach(box => {
+          ctx.strokeStyle = boxColor;
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(box.x, box.y, box.w, box.h);
+          const label = prettyCute ? 'pretty cute!' : box.label;
+          if (label) {
+            ctx.save();
+            ctx.scale(-1, 1);
+            ctx.font = `${fontSize}px Arial`;
+            const tw = ctx.measureText(label).width;
+            ctx.fillStyle = boxColor;
+            ctx.fillRect(-(box.x + tw + 8), box.y - fontSize, tw + 8, fontSize);
+            ctx.fillStyle = textColor;
+            ctx.fillText(label, -(box.x + tw + 4), box.y - 6);
+            ctx.restore();
+          }
+        });
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    // ── detectFace: interval, updates faceTarget ──────────────────────
+    async function detectFace() {
+      if (video.readyState < 2) return;
+
+      const { width: elemW, height: elemH } = video.getBoundingClientRect();
+      const vidW = video.videoWidth  || elemW;
+      const vidH = video.videoHeight || elemH;
+      const coverScale = Math.max(elemW / vidW, elemH / vidH);
+      const cropX = (vidW * coverScale - elemW) / 2;
+      const cropY = (vidH * coverScale - elemH) / 2;
+      const toElem = (x, y) => ({ x: x * coverScale - cropX, y: y * coverScale - cropY });
+
+      const results = await faceapi
+        .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks(true)
+        .withAgeAndGender()
+        .withFaceExpressions();
+
+      const showFace    = document.getElementById('check-facemesh').checked;
+      const showRace    = document.getElementById('check-race').checked;
+      const showAge     = document.getElementById('check-age').checked;
+      const showGender  = document.getElementById('check-gender').checked;
+      const showEmotion = document.getElementById('check-emotion').checked;
+
+      if (!results.length) {
+        faceTarget = null;
+        document.getElementById('result-face').innerHTML = showFace ? 'no' : '';
+        return;
+      }
+
+      document.getElementById('result-face').innerHTML = showFace ? '<span class="pred-top">yes</span>' : '';
+
+      const primary = results[0];
+
+      document.getElementById('result-age').innerHTML = showAge
+        ? `<span class="pred-top">${Math.round(primary.age)}</span>` : '';
+
+      if (showGender) {
+        const genders = [
+          { cls: primary.gender, score: primary.genderProbability },
+          { cls: primary.gender === 'male' ? 'female' : 'male', score: 1 - primary.genderProbability }
+        ].sort((a, b) => b.score - a.score);
+        document.getElementById('result-gender').innerHTML = genders.map((g, i) => {
+          const label = `${g.cls}\u00a0(${g.score.toFixed(2)})`;
+          return i === 0 ? `<span class="pred-top">${label}</span>` : label;
+        }).join(', ');
+      } else {
+        document.getElementById('result-gender').innerHTML = '';
+      }
+
+      if (showEmotion) {
+        const sortedExp = Object.entries(primary.expressions).sort((a, b) => b[1] - a[1]).slice(0, 3);
+        document.getElementById('result-emotion').innerHTML = sortedExp.map(([name, score], i) => {
+          const label = `${name}\u00a0(${score.toFixed(2)})`;
+          return i === 0 ? `<span class="pred-top">${label}</span>` : label;
+        }).join(', ');
+      } else {
+        document.getElementById('result-emotion').innerHTML = '';
+      }
+
+      // Pretty cute mode: active while primary face looks happy
+      prettyCute = detect_prettyCute && primary.expressions.happy > 0.7;
+
+      faceTarget = {
+        width: elemW, height: elemH,
+        boxes: results.map((r, i) => {
+          const b = r.detection.box;
+          const tl = toElem(b.x, b.y);
+          const br = toElem(b.x + b.width, b.y + b.height);
+          const { x, y } = tl;
+          const w = br.x - tl.x, h = br.y - tl.y;
+          const emotion = Object.entries(r.expressions).sort((a, b) => b[1] - a[1])[0][0];
+          const age     = Math.round(r.age);
+          const isFem   = r.gender === 'female';
+          const pronoun = isFem ? 'her' : 'his';
+          const parts   = [];
+          if (showEmotion && emotion && emotion !== 'neutral') parts.push(emotion);
+          const raceWord   = (showRace && i === 0 && lastRaceClass) ? lastRaceClass.toLowerCase() : '';
+          const personNoun = showGender
+            ? (age < 20 ? (isFem ? 'girl' : 'boy') : (isFem ? 'woman' : 'man')) : '';
+          const personDesc = [raceWord, personNoun].filter(Boolean).join(' ');
+          if (personDesc) parts.push(personDesc);
+          if (showAge) parts.push(`${age} years old`);
+          return { x, y, w, h, label: parts.join(' ') || 'face' };
+        }),
+        landmarks: results.map(r => r.landmarks.positions.map(p => toElem(p.x, p.y)))
+      };
+    }
+
+    // ── predictRace: real inference every ~3s ─────────────────────────
+    async function predictRace() {
+      if (video.readyState < 2) return;
+      inferCtx.save();
+      inferCtx.translate(224, 0);
+      inferCtx.scale(-1, 1);
+      inferCtx.drawImage(video, 0, 0, 224, 224);
+      inferCtx.restore();
+      const tensor = tf.browser.fromPixels(inferCanvas).toFloat().div(255.0).expandDims(0);
+      const preds = await raceModel.predict(tensor).data();
+      tensor.dispose();
+      lastRealScores  = Array.from(preds);
+      simulatedScores = [...lastRealScores];
+      // update lastRaceClass from real scores
+      const topIdx = lastRealScores.indexOf(Math.max(...lastRealScores));
+      lastRaceClass = RACE_CLASSES[topIdx];
+    }
+
+    // ── flickerRaceDisplay: nudge scores every 150ms for a "thinking" effect ──
+    function flickerRaceDisplay() {
+      if (!simulatedScores || !document.getElementById('check-race').checked) return;
+      simulatedScores = simulatedScores.map(s => Math.max(0, Math.min(1, s + (Math.random() - 0.5) * 0.04)));
+      const sum = simulatedScores.reduce((a, b) => a + b, 0);
+      const norm = simulatedScores.map(s => s / sum);
+      const sorted = norm.map((score, i) => ({ cls: RACE_CLASSES[i], score }))
+        .sort((a, b) => b.score - a.score).slice(0, 3);
+      lastRaceClass = sorted[0].cls;
+      document.getElementById('result-race').innerHTML = sorted.map((p, i) => {
+        const label = `${p.cls}&nbsp;(${p.score.toFixed(2)})`;
+        return i === 0 ? `<span class="pred-top">${label}</span>` : label;
+      }).join(', ');
+    }
+
+    // ── Hand tracking ─────────────────────────────────────────────────
+    const handCanvas = document.getElementById('handCanvas');
+    const handCtx    = handCanvas.getContext('2d');
+    let lastHandTime = -1;
+
+    function updatePuppetDisplay() {
+      const el = document.getElementById('puppet-number');
+      if (el) el.value = loadedImages.length ? currentSlide + 1 : 0;
+    }
+
+    function detectHands() {
+      if (!document.getElementById('check-hands')?.checked) return;
+      if (video.readyState < 2) return;
+      const { width, height } = video.getBoundingClientRect();
+      handCanvas.width  = width;
+      handCanvas.height = height;
+      handCtx.clearRect(0, 0, width, height);
+      const now = performance.now();
+      if (now === lastHandTime) return;
+      lastHandTime = now;
+      const handResults = handLandmarker.detectForVideo(video, now);
+      if (!handResults.landmarks || !handResults.landmarks.length) return;
+      if (!loadedImages.length) return;
+      const img = loadedImages[currentSlide];
+      if (!img || !img.complete) return;
+      const handSlider = parseFloat(document.getElementById('puppet-size')?.value ?? 1.5);
+      handResults.landmarks.forEach(hand => {
+        const wrist   = hand[0];
+        const midBase = hand[9];
+        const palmX = ((wrist.x + midBase.x) / 2) * width;
+        const palmY = ((wrist.y + midBase.y) / 2) * height;
+        const tip = hand[12];
+        const handSize = Math.hypot((tip.x - wrist.x) * width, (tip.y - wrist.y) * height);
+        const imgSize = handSize * handSlider;
+        handCtx.drawImage(img, palmX - imgSize / 2, palmY - imgSize / 2, imgSize, imgSize);
+      });
+    }
+
+    // ── DOM elements ─────────────────────────────────────────────────
+    const video           = document.getElementById('webcam');
+    const bgCanvas        = document.getElementById('bgCanvas');
+    const startScreen     = document.getElementById('startScreen');
+    const errorScreen     = document.getElementById('errorScreen');
+    const startBtn        = document.getElementById('startBtn');
+    const retryBtn        = document.getElementById('retryBtn');
+    const dialogueOverlay = document.getElementById('dialogueOverlay');
+    const analysisPanel   = document.getElementById('analysisPanel');
+
+    const blurhash = createBlurhashRenderer(bgCanvas, video);
+
+    async function startCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
+          audio: false
+        });
+        video.srcObject = stream;
+        await video.play();
+
+        startScreen.classList.add('hidden');
+        errorScreen.classList.remove('visible');
+        video.classList.add('visible');
+        dialogueOverlay.classList.add('visible');
+        document.getElementById('spacebarHint').classList.add('visible');
+        analysisPanel.classList.add('visible');
+
+        blurhash.start();
+        requestAnimationFrame(faceDrawLoop);
+        setInterval(detectFace, 100);
+        setInterval(detectHands, 33);
+
+      } catch (err) {
+        console.error('Camera error:', err);
+        startScreen.classList.add('hidden');
+        errorScreen.classList.add('visible');
+      }
+    }
+
+    startBtn.addEventListener('click', startCamera);
+    retryBtn.addEventListener('click', () => {
+      errorScreen.classList.remove('visible');
+      startScreen.classList.remove('hidden');
+    });
+
+    // Race checkbox: flicker every 150ms, real inference every 3s
+    document.getElementById('check-race').addEventListener('change', function() {
+      const row = this.closest('.field-row');
+      if (this.checked) {
+        row.classList.remove('disabled');
+        predictRace();
+        raceInferInterval   = setInterval(predictRace, 3000);
+        raceFlickerInterval = setInterval(flickerRaceDisplay, 150);
+      } else {
+        row.classList.add('disabled');
+        clearInterval(raceInferInterval);
+        clearInterval(raceFlickerInterval);
+        simulatedScores = null;
+        document.getElementById('result-race').innerHTML = '';
+      }
+    });
+
+    ['check-age', 'check-gender', 'check-emotion'].forEach(id => {
+      document.getElementById(id).addEventListener('change', function() {
+        this.closest('.field-row').classList.toggle('disabled', !this.checked);
+      });
+    });
+
+    // Hands checkbox: show/hide controls
+    document.getElementById('check-hands').addEventListener('change', function() {
+      this.closest('.field-row').classList.toggle('disabled', !this.checked);
+      document.getElementById('hands-controls').style.display = this.checked ? 'block' : 'none';
+      if (this.checked) {
+        updatePuppetDisplay();
+        if (!loadedImages.length) {
+          const handCanvas = document.getElementById('handCanvas');
+          handCanvas.getContext('2d').clearRect(0, 0, handCanvas.width, handCanvas.height);
+        }
+      } else {
+        const hc = document.getElementById('handCanvas');
+        hc.getContext('2d').clearRect(0, 0, hc.width, hc.height);
+      }
+    });
+
+    // Scene nav buttons
+    let sceneNumber = 1;
+    function updateSceneDisplay() {
+      document.getElementById('scene-number').value = sceneNumber;
+    }
+    document.getElementById('scene-prev').addEventListener('click', () => { sceneNumber = Math.max(1, sceneNumber - 1); updateSceneDisplay(); });
+    document.getElementById('scene-next').addEventListener('click', () => { sceneNumber++; updateSceneDisplay(); });
+
+    // Puppet nav buttons
+    document.getElementById('puppet-prev').addEventListener('click', () => {
+      if (!loadedImages.length) return;
+      currentSlide = (currentSlide - 1 + loadedImages.length) % loadedImages.length;
+      updatePuppetDisplay();
+    });
+    document.getElementById('puppet-next').addEventListener('click', () => {
+      if (!loadedImages.length) return;
+      currentSlide = (currentSlide + 1) % loadedImages.length;
+      updatePuppetDisplay();
+    });
+
+    const keyMap = { r: 'check-race', a: 'check-age', g: 'check-gender', e: 'check-emotion', f: 'check-facemesh', b: 'check-bbox', h: 'check-hands' };
+    document.addEventListener('keydown', ev => {
+      // Toggle checkboxes
+      const id = keyMap[ev.key.toLowerCase()];
+      if (id) { const cb = document.getElementById(id); if (cb) { cb.checked = !cb.checked; cb.dispatchEvent(new Event('change')); } }
+
+      // Puppet size: [ to decrease, ] to increase
+      if (ev.key === '[' || ev.key === ']') {
+        const slider = document.getElementById('puppet-size');
+        if (slider) {
+          slider.value = Math.max(parseFloat(slider.min), Math.min(parseFloat(slider.max),
+            parseFloat(slider.value) + (ev.key === ']' ? 0.1 : -0.1)));
+        }
+      }
+
+      // Puppet number: ; to decrease, ' to increase
+      if ((ev.key === ';' || ev.key === "'") && loadedImages.length) {
+        currentSlide = (currentSlide + (ev.key === "'" ? 1 : -1) + loadedImages.length) % loadedImages.length;
+        updatePuppetDisplay();
+      }
+
+      // Scene number: ArrowLeft / ArrowRight
+      if (ev.key === 'ArrowLeft') { sceneNumber = Math.max(1, sceneNumber - 1); updateSceneDisplay(); }
+      if (ev.key === 'ArrowRight') { sceneNumber++; updateSceneDisplay(); }
+    });
+</script>
+
+</body>
+</html>

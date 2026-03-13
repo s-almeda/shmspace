@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>recognizing my self</title>
+  <link rel="stylesheet" href="https://unpkg.com/xp.css" />
+  <link rel="stylesheet" href="/facial_recognishm/css/recognize_me.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.7.4/dist/tf.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+</head>
+<body>
+
+  <canvas id="bgCanvas"></canvas>
+
+  <div class="window main-window">
+    <div class="title-bar">
+      <div class="title-bar-text">
+        <!-- <img src="./images/question_mark.ico" alt="question mark Logo" style="height: 25px; vertical-align: middle; margin-right: 8px;"> -->
+        <span id="titleText">recognizing my self&nbsp;</span>
+        by shm garanganao almeda
+      </div>
+
+      <div class="title-bar-controls">
+        <a href="/"><button aria-label="Close"></button></a>
+      </div>
+    </div>
+
+    <div class="window-body">
+      <!-- always-visible start state -->
+      <div id="startScreen">
+        <button id="startBtn"> let them see you </button>
+      </div>
+
+      <!-- error state -->
+      <div id="errorScreen">
+        <p>camera access was denied.</p>
+        <button id="retryBtn">try again</button>
+      </div>
+
+      <!-- webcam feed -->
+      <video id="webcam" autoplay playsinline muted></video>
+      <canvas id="faceCanvas"></canvas>
+      <canvas id="handCanvas"></canvas>
+
+      <!-- analysis panel (right side, hidden until camera starts) -->
+      <div id="analysisPanel">
+        <fieldset>
+          <!-- <legend style="font-style: italic;">what is seen</legend> -->
+          <div class="field-row scene-nav-row">
+            <label>scene&nbsp;:</label>
+            <div class="puppet-nav-row">
+              <button id="scene-prev">&lt;</button>
+              <input type="text" id="scene-number" value="1" style="width: 30px; padding: 2px;">
+              <button id="scene-next">&gt;</button>
+            </div>
+          </div>
+          <div id="checkboxGroup">
+            <div class="field-row disabled">
+              <input id="check-race" type="checkbox">
+              <label for="check-race">"<u>R</u>ace"?</label>
+              <span class="result-value" id="result-race"></span>
+            </div>
+            <div class="field-row disabled">
+              <input id="check-age" type="checkbox">
+              <label for="check-age">"<u>A</u>ge"?</label>
+              <span class="result-value" id="result-age"></span>
+            </div>
+            <div class="field-row disabled">
+              <input id="check-gender" type="checkbox">
+              <label for="check-gender">"<u>G</u>ender"?</label>
+              <span class="result-value" id="result-gender"></span>
+            </div>
+            <div class="field-row disabled">
+              <input id="check-emotion" type="checkbox">
+              <label for="check-emotion">"<u>E</u>xpression"?</label>
+              <span class="result-value" id="result-emotion"></span>
+            </div>
+            <div class="field-row">
+              <input id="check-facemesh" type="checkbox">
+              <label for="check-facemesh">"<u>F</u>ace"?</label>
+              <span class="result-value" id="result-face"></span>
+            </div>
+            <div class="field-row">
+              <input id="check-bbox" type="checkbox">
+              <label for="check-bbox">put face in "<u> B</u>ox?"</label>
+            </div>
+            <div class="field-row disabled">
+              <input id="check-hands" type="checkbox">
+              <label for="check-hands">"<u>H</u>ands"?</label>
+            </div>
+            <div id="hands-controls" class="hands-controls" style="display:none;">
+              <div class="field-row hands-sub-row">
+                <label for="puppet-size">puppetSize</label>
+                <input type="range" id="puppet-size" min="0.1" max="2" step="0.1" value="0.7">
+              </div>
+              <div class="field-row hands-sub-row">
+                <label>puppetNumber&nbsp:</label>
+                <div class="puppet-nav-row">
+                  <button id="puppet-prev">&lt;</button>
+                  <input type="text" id="puppet-number" value="1" readonly style="width: 30px; padding: 2px;">
+                  <button id="puppet-next">&gt;</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="padding: 4px 0 2px 0; flex-shrink: 0; display: flex; gap: 4px;">
+            <button id="copy-scene-btn" style="flex: 1; font-size: 11px;">copy scene</button>
+            <button id="copy-toggles-btn" style="flex: 1; font-size: 11px;">copy toggles</button>
+          </div>
+
+        </fieldset>
+      </div>
+
+      <div id="spacebarHint">press spacebar to continue</div>
+
+      <div id="dialogueOverlay">
+            <menu role="tablist">
+                <button role="tab" aria-selected="true" aria-controls="dialogue-panel">
+                shm
+                </button>
+            </menu>
+            <article role="tabpanel" id="dialogue-panel">
+               ...shm is loading...
+            </article>
+        </div>
+
+      <!-- popup overlay -->
+      <div id="popupOverlay" style="display:none; position:absolute; inset:0; z-index:20; align-items:center; justify-content:center; pointer-events:none;">
+        <div class="window" style="width:70%; min-width:230px; max-width:420px; height:auto; background:#ede9d8; pointer-events:auto; border: 2px solid rgb(1, 97, 221); box-shadow: none;">
+          <div class="title-bar">
+            <div class="title-bar-text">
+              <img id="popup-icon" src="/images/error.ico" alt="" style="width:14px; height:14px; vertical-align:middle; margin-right:3px;">
+              <span id="popup-title">error</span>
+            </div>
+          </div>
+          <div style="text-align:center; padding:12px 10px 8px; background:#ede9d8;">
+            <p id="popup-body" style="font-style:italic; margin:0 0 10px; font-size:13px;">you have been yapping for... <span id="titleTimer"></span></p>
+            <button id="popup-ok" style="font-size:12px; padding:4px 10px;">oops</button>
+          </div>
+        </div>
+      </div>
+      <!-- credits overlay -->
+      <div id="creditsOverlay" style="display:none; position:absolute; inset:15% 15%; z-index:50; background:rgba(237,233,216,0.88); color:#000; padding:28px 32px; overflow-y:auto; font-size:16px; line-height:2; transform:translateZ(0);">
+        <div id="creditsContent" style="text-align:center;">
+          <p>recognizing my self</p>
+          <p>by shm garanganao almeda</p>
+          <p>for <a href="https://luma.com/allchat?tk=EswoBu">ALL CHAT</a></p>
+          <p>march 12 2026 @ the intersection of art & technology gallery in sf</p>
+          <p><a href="https://shmuh.co">visit me on the web: shmuh.co</a></p>
+          <br>
+          <p><a href="#" onclick="location.reload(); return false;">play it again?</a></p>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { HandLandmarker, FilesetResolver } from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.mjs';
+    const RACE_CLASSES = ['White', 'Black', 'Asian', 'Hispanic_Latino', 'Middle_Eastern'];
+    const FACE_TRIANGLES = [
+      [36,37,41],[37,38,41],[38,40,41],[38,39,40],
+      [42,43,47],[43,44,47],[44,46,47],[44,45,46],
+      [17,18,36],[18,19,37],[18,36,37],[19,20,37],[20,21,27],[20,37,27],
+      [22,23,27],[23,24,27],[24,25,44],[24,43,44],[25,26,44],[26,45,44],
+      [21,22,27],
+      [27,36,39],[27,37,36],[37,42,27],[27,42,35],[17,36,27],[26,27,42],
+      [27,28,31],[28,29,31],[29,30,31],[30,31,32],[30,32,33],[30,33,34],[30,34,35],[27,28,35],[28,29,35],[29,30,35],
+      [31,48,51],[31,32,51],[32,33,51],[33,34,51],[34,35,51],[35,51,54],
+      [48,49,60],[49,61,60],[49,50,61],[50,62,61],[50,51,62],[51,62,52],
+      [52,63,62],[52,53,63],[53,64,63],[53,54,64],[54,64,55],[55,65,64],
+      [55,56,65],[56,66,65],[56,57,66],[57,67,66],[57,58,67],[58,59,67],[59,60,67],[59,48,60],
+      [60,61,67],[61,66,67],[61,62,66],[62,65,66],[62,63,65],[63,64,65],
+      [0,1,36],[0,17,36],[1,2,31],[1,36,31],[2,3,31],[3,4,31],[4,5,31],[5,48,31],
+      [5,6,48],[6,7,48],[7,57,48],[7,8,57],[8,9,57],
+      [9,10,57],[10,11,54],[10,57,54],[11,12,54],[12,13,54],[13,42,54],
+      [13,14,46],[14,15,46],[15,16,45],[15,45,46],[16,26,45],
+      [36,31,39],[39,31,40],[40,31,48],[40,48,7],[41,36,1],[41,1,0],
+      [47,42,46],[46,42,54],[16,47,46],
+    ];
+    const LERP     = 0.18;
+    const FADE_IN  = 0.3;
+    const FADE_OUT = 1 / 2;
+    import { createBlurhashRenderer } from '/facial_recognishm/js/blurhash.js';
+    /* tf and faceapi are globals loaded via <script defer> in <head> */
+
+    // ── Load models ──────────────────────────────────────────────────
+    await Promise.all([
+      faceapi.nets.tinyFaceDetector.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights'),
+      faceapi.nets.faceLandmark68TinyNet.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights'),
+      faceapi.nets.ageGenderNet.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights'),
+      faceapi.nets.faceExpressionNet.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights'),
+    ]);
+
+    const raceModel = await tf.loadGraphModel('/facial_recognishm/face_model/model.json');
+    const gameScript = await fetch('/facial_recognishm/game_script.json').then(r => r.json());
+    let currentScene = 0;
+
+    // ── MediaPipe hand landmarker ─────────────────────────────────────
+    const filesetResolver = await FilesetResolver.forVisionTasks(
+      'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm'
+    );
+    const handLandmarker = await HandLandmarker.createFromOptions(filesetResolver, {
+      baseOptions: {
+        modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
+        delegate: 'GPU'
+      },
+      numHands: 2,
+      runningMode: 'VIDEO'
+    });
+
+    // ── Inference canvas (race model) ────────────────────────────────
+    const inferCanvas = document.createElement('canvas');
+    inferCanvas.width = inferCanvas.height = 224;
+    const inferCtx = inferCanvas.getContext('2d');
+
+    // ── Race state ───────────────────────────────────────────────────
+    let lastRaceClass    = '';
+    let lastRealScores   = null;
+    let simulatedScores  = null;
+    let raceInferInterval  = null;
+    let raceFlickerInterval = null;
+
+    // ── Hand image slideshow ─────────────────────────────────────────
+    // Auto-populated from /facial_recognishm/puppets/ — just drop images in that folder
+    const puppetFiles = await fetch('/facial_recognishm/puppets-list').then(r => r.json());
+    const loadedImages = puppetFiles.map(f => {
+      const img = new Image();
+      img.src = `/facial_recognishm/puppets/${f}`;
+      return img;
+    });
+    let currentSlide = 0;
+    function advanceSlide() {
+      if (loadedImages.length) { currentSlide = (currentSlide + 1) % loadedImages.length; updatePuppetDisplay(); }
+    }
+
+    // ── Face canvas + smooth lerp state ──────────────────────────────
+    const faceCanvas = document.getElementById('faceCanvas');
+    let faceTarget  = null;
+    let faceDisplay = null;
+    let faceOpacity = 0;
+    let detect_prettyCute = false;  // master switch for pretty cute mode
+    let prettyCute        = false; // true when detection is on AND smiling
+    let detect_shm        = false; // shows green bbox + "shm" label
+    let winkDetected      = false; // one-shot flag, reset after checkConditions reads it
+    let lastDetections    = [];    // raw face-api results from last detectFace() run
+    let popupDismissed    = false; // set true when popup ok is clicked
+
+    // ── Condition registry ────────────────────────────────────────────
+    const CONDITIONS = {
+      prettyCute: {
+        active: false,
+        check: () => prettyCute,
+      },
+      smile: {
+        active: false,
+        check: () => lastDetections.length > 0 && lastDetections[0].expressions.happy > 0.7,
+      },
+      wink: {
+        active: false,
+        check: () => winkDetected,
+      },
+      popup: {
+        active: false,
+        check: () => popupDismissed,
+      },
+      happyAsianWoman: {
+        active: false,
+        check: () => {
+          if (!lastDetections.length) return false;
+          const r = lastDetections[0];
+          return r.expressions.happy > 0.7
+              && r.gender === 'female'
+              && r.genderProbability > 0.7
+              && lastRaceClass === 'Asian';
+        },
+      },
+    };
+
+    const CONDITION_HINTS = {
+      prettyCute:      'be cute to continue',
+      smile:           'smile to continue',
+      wink:            'wink to continue',
+      popup:           'dismiss alert to continue',
+      happyAsianWoman: 'be a happy asian woman to continue',
+    };
+
+    function lv(a, b) { return a + (b - a) * LERP; }
+
+    function faceDrawLoop() {
+      requestAnimationFrame(faceDrawLoop);
+      const ctx = faceCanvas.getContext('2d');
+
+      if (!faceTarget) {
+        faceOpacity = Math.max(0, faceOpacity - FADE_OUT);
+        if (faceOpacity === 0) {
+          ctx.clearRect(0, 0, faceCanvas.width, faceCanvas.height);
+          faceDisplay = null;
+          return;
+        }
+      } else {
+        faceOpacity = Math.min(1, faceOpacity + FADE_IN);
+      }
+
+      if (faceTarget && faceDisplay) {
+        const { boxes, landmarks } = faceTarget;
+        if (faceDisplay.boxes.length !== boxes.length) {
+          faceDisplay = {
+            boxes:     boxes.map(b => ({ ...b })),
+            landmarks: landmarks.map(pts => pts.map(p => ({ ...p })))
+          };
+        } else {
+          faceDisplay.boxes = faceDisplay.boxes.map((d, i) => ({
+            x: lv(d.x, boxes[i].x), y: lv(d.y, boxes[i].y),
+            w: lv(d.w, boxes[i].w), h: lv(d.h, boxes[i].h),
+            label: boxes[i].label
+          }));
+          faceDisplay.landmarks = faceDisplay.landmarks.map((dPts, i) =>
+            dPts.map((dp, j) => ({
+              x: lv(dp.x, landmarks[i][j].x),
+              y: lv(dp.y, landmarks[i][j].y)
+            }))
+          );
+        }
+      } else if (faceTarget && !faceDisplay) {
+        const { boxes, landmarks } = faceTarget;
+        faceDisplay = {
+          boxes:     boxes.map(b => ({ ...b })),
+          landmarks: landmarks.map(pts => pts.map(p => ({ ...p })))
+        };
+      }
+
+      if (!faceDisplay) return;
+      const { width, height } = faceTarget || { width: faceCanvas.width, height: faceCanvas.height };
+      if (faceCanvas.width  !== width)  faceCanvas.width  = width;
+      if (faceCanvas.height !== height) faceCanvas.height = height;
+
+      ctx.clearRect(0, 0, width, height);
+      ctx.globalAlpha = faceOpacity;
+
+      if (document.getElementById('check-facemesh').checked) {
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+        ctx.lineWidth = 1.5;
+        faceDisplay.landmarks.forEach(pts => {
+          FACE_TRIANGLES.forEach(([a, b, c]) => {
+            if (!pts[a] || !pts[b] || !pts[c]) return;
+            ctx.beginPath();
+            ctx.moveTo(pts[a].x, pts[a].y);
+            ctx.lineTo(pts[b].x, pts[b].y);
+            ctx.lineTo(pts[c].x, pts[c].y);
+            ctx.closePath();
+            ctx.stroke();
+          });
+        });
+        ctx.strokeStyle = 'rgba(225, 225, 225, 0.7)';
+        ctx.lineWidth = 3.5;
+        ctx.lineJoin = 'round';
+        faceDisplay.landmarks.forEach(pts => {
+          ctx.beginPath();
+          for (let i = 0; i <= 16; i++) i === 0 ? ctx.moveTo(pts[i].x, pts[i].y) : ctx.lineTo(pts[i].x, pts[i].y);
+          ctx.stroke();
+          ctx.beginPath();
+          for (let i = 17; i <= 21; i++) i === 17 ? ctx.moveTo(pts[i].x, pts[i].y) : ctx.lineTo(pts[i].x, pts[i].y);
+          ctx.stroke();
+          ctx.beginPath();
+          for (let i = 22; i <= 26; i++) i === 22 ? ctx.moveTo(pts[i].x, pts[i].y) : ctx.lineTo(pts[i].x, pts[i].y);
+          ctx.stroke();
+        });
+        ctx.fillStyle = 'rgba(225, 225, 225, 0.85)';
+        faceDisplay.landmarks.forEach(pts => {
+          pts.forEach(p => {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+          });
+        });
+      }
+
+      if (document.getElementById('check-bbox').checked) {
+        const boxColor  = prettyCute ? 'rgba(255, 182, 193, 0.9)'
+                        : detect_shm ? 'rgba(144, 189, 66, 0.9)'
+                        : 'rgba(255, 255, 255, 0.85)';
+        const textColor = 'rgba(0, 0, 0, 1.0)';
+        const fontSize  = prettyCute ? 45 : 42;
+        faceDisplay.boxes.forEach(box => {
+          ctx.strokeStyle = boxColor;
+          ctx.lineWidth = 3.5;
+          ctx.strokeRect(box.x, box.y, box.w, box.h);
+          const label = prettyCute ? 'pretty cute!' : detect_shm ? 'shm' : box.label;
+          if (label) {
+            ctx.save();
+            ctx.scale(-1, 1);
+            ctx.font = `${fontSize}px Arial`;
+            const tw = ctx.measureText(label).width;
+            ctx.fillStyle = boxColor;
+            ctx.fillRect(-(box.x + tw + 8), box.y - fontSize, tw + 8, fontSize);
+            ctx.fillStyle = textColor;
+            ctx.fillText(label, -(box.x + tw + 4), box.y - 6);
+            ctx.restore();
+          }
+        });
+      }
+      // Smile condition: highlight just the mouth landmarks
+      if (currentActionRequired === 'smile' && faceDisplay) {
+        const met = CONDITIONS.smile.check();
+        const mouthColor = met ? 'rgba(100, 255, 120, 0.55)' : 'rgba(255, 255, 255, 0.5)';
+        // outer lip: 48–59 (closed), inner lip: 60–67 (closed)
+        const outerLip = [48,49,50,51,52,53,54,55,56,57,58,59];
+        const innerLip = [60,61,62,63,64,65,66,67];
+        faceDisplay.landmarks.forEach(pts => {
+          ctx.strokeStyle = mouthColor;
+          ctx.lineWidth = 2.5;
+          ctx.lineJoin = 'round';
+          [outerLip, innerLip].forEach(ring => {
+            ctx.beginPath();
+            ring.forEach((idx, i) => i === 0 ? ctx.moveTo(pts[idx].x, pts[idx].y) : ctx.lineTo(pts[idx].x, pts[idx].y));
+            ctx.closePath();
+            ctx.stroke();
+          });
+          ctx.fillStyle = mouthColor;
+          outerLip.concat(innerLip).forEach(idx => {
+            ctx.beginPath();
+            ctx.arc(pts[idx].x, pts[idx].y, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+          });
+        });
+      }
+
+      ctx.globalAlpha = 1;
+    }
+
+    // ── detectFace: interval, updates faceTarget ──────────────────────
+    async function detectFace() {
+      if (video.readyState < 2) return;
+
+      const { width: elemW, height: elemH } = video.getBoundingClientRect();
+      const vidW = video.videoWidth  || elemW;
+      const vidH = video.videoHeight || elemH;
+      const coverScale = Math.max(elemW / vidW, elemH / vidH);
+      const cropX = (vidW * coverScale - elemW) / 2;
+      const cropY = (vidH * coverScale - elemH) / 2;
+      const toElem = (x, y) => ({ x: x * coverScale - cropX, y: y * coverScale - cropY });
+
+      const results = await faceapi
+        .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks(true)
+        .withAgeAndGender()
+        .withFaceExpressions();
+      lastDetections = results;
+
+      const showFace    = document.getElementById('check-facemesh').checked;
+      const showRace    = document.getElementById('check-race').checked;
+      const showAge     = document.getElementById('check-age').checked;
+      const showGender  = document.getElementById('check-gender').checked;
+      const showEmotion = document.getElementById('check-emotion').checked;
+
+      if (!results.length) {
+        faceTarget = null;
+        document.getElementById('result-face').innerHTML = showFace ? 'no' : '';
+        return;
+      }
+
+      document.getElementById('result-face').innerHTML = showFace ? '<span class="pred-top">yes</span>' : '';
+
+      const primary = results[0];
+
+      document.getElementById('result-age').innerHTML = showAge
+        ? `<span class="pred-top">${Math.round(primary.age)}</span>` : '';
+
+      if (showGender) {
+        const genders = [
+          { cls: primary.gender, score: primary.genderProbability },
+          { cls: primary.gender === 'male' ? 'female' : 'male', score: 1 - primary.genderProbability }
+        ].sort((a, b) => b.score - a.score);
+        document.getElementById('result-gender').innerHTML = genders.map((g, i) => {
+          const label = `${g.cls}\u00a0(${g.score.toFixed(2)})`;
+          return i === 0 ? `<span class="pred-top">${label}</span>` : label;
+        }).join(', ');
+      } else {
+        document.getElementById('result-gender').innerHTML = '';
+      }
+
+      if (showEmotion) {
+        const sortedExp = Object.entries(primary.expressions).sort((a, b) => b[1] - a[1]).slice(0, 3);
+        document.getElementById('result-emotion').innerHTML = sortedExp.map(([name, score], i) => {
+          const label = `${name}\u00a0(${score.toFixed(2)})`;
+          return i === 0 ? `<span class="pred-top">${label}</span>` : label;
+        }).join(', ');
+      } else {
+        document.getElementById('result-emotion').innerHTML = '';
+      }
+
+      // Pretty cute mode: active while primary face looks happy
+      prettyCute = detect_prettyCute && primary.expressions.happy > 0.7;
+
+      faceTarget = {
+        width: elemW, height: elemH,
+        boxes: results.map((r, i) => {
+          const b = r.detection.box;
+          const tl = toElem(b.x, b.y);
+          const br = toElem(b.x + b.width, b.y + b.height);
+          const { x, y } = tl;
+          const w = br.x - tl.x, h = br.y - tl.y;
+          const emotion = Object.entries(r.expressions).sort((a, b) => b[1] - a[1])[0][0];
+          const age     = Math.round(r.age);
+          const isFem   = r.gender === 'female';
+          const parts   = [];
+          if (showEmotion && emotion && emotion !== 'neutral') parts.push(emotion);
+          const raceWord = (showRace && i === 0 && lastRaceClass) ? lastRaceClass.toLowerCase() : '';
+
+          // Age display: numeric only when Age is the sole active label;
+          // otherwise fold into the gender noun implicitly.
+          const ageAlone = showAge && !showGender && !showRace && !showEmotion;
+          let personNoun = '';
+          if (showGender) {
+            if (showAge) {
+              // implicit age via descriptive noun
+              if      (age < 13) personNoun = isFem ? 'girl'                    : 'boy';
+              else if (age < 20) personNoun = isFem ? 'teenage girl'            : 'teenage boy';
+              else if (age < 30) personNoun = isFem ? 'woman in her twenties'   : 'man in his twenties';
+              else if (age < 40) personNoun = isFem ? 'woman in her thirties'   : 'man in his thirties';
+              else if (age < 50) personNoun = isFem ? 'woman in her forties'    : 'man in his forties';
+              else if (age < 60) personNoun = isFem ? 'woman in her fifties'    : 'man in his fifties';
+              else               personNoun = isFem ? 'older woman'             : 'older man';
+            } else {
+              personNoun = age < 20 ? (isFem ? 'girl' : 'boy') : (isFem ? 'woman' : 'man');
+            }
+          }
+          const personDesc = [raceWord, personNoun].filter(Boolean).join(' ');
+          if (personDesc) parts.push(personDesc);
+          if (ageAlone) parts.push(`${age} y.o.`);
+          return { x, y, w, h, label: parts.join(' ') || 'face' };
+        }),
+        landmarks: results.map(r => r.landmarks.positions.map(p => toElem(p.x, p.y)))
+      };
+    }
+
+    // ── predictRace: real inference every ~3s ─────────────────────────
+    async function predictRace() {
+      if (video.readyState < 2) return;
+      inferCtx.save();
+      inferCtx.translate(224, 0);
+      inferCtx.scale(-1, 1);
+      inferCtx.drawImage(video, 0, 0, 224, 224);
+      inferCtx.restore();
+      const tensor = tf.browser.fromPixels(inferCanvas).toFloat().div(255.0).expandDims(0);
+      const preds = await raceModel.predict(tensor).data();
+      tensor.dispose();
+      lastRealScores  = Array.from(preds);
+      simulatedScores = [...lastRealScores];
+      // update lastRaceClass from real scores
+      const topIdx = lastRealScores.indexOf(Math.max(...lastRealScores));
+      lastRaceClass = RACE_CLASSES[topIdx];
+    }
+
+    // ── flickerRaceDisplay: nudge scores every 150ms for a "thinking" effect ──
+    function flickerRaceDisplay() {
+      if (!simulatedScores || !document.getElementById('check-race').checked) return;
+      simulatedScores = simulatedScores.map(s => Math.max(0, Math.min(1, s + (Math.random() - 0.5) * 0.04)));
+      const sum = simulatedScores.reduce((a, b) => a + b, 0);
+      const norm = simulatedScores.map(s => s / sum);
+      const sorted = norm.map((score, i) => ({ cls: RACE_CLASSES[i], score }))
+        .sort((a, b) => b.score - a.score).slice(0, 3);
+      lastRaceClass = sorted[0].cls;
+      document.getElementById('result-race').innerHTML = sorted.map((p, i) => {
+        const label = `${p.cls}&nbsp;(${p.score.toFixed(2)})`;
+        return i === 0 ? `<span class="pred-top">${label}</span>` : label;
+      }).join(', ');
+    }
+
+    // ── Hand tracking ─────────────────────────────────────────────────
+    const handCanvas = document.getElementById('handCanvas');
+    const handCtx    = handCanvas.getContext('2d');
+    let lastHandTime = -1;
+
+    function updatePuppetDisplay() {
+      const el = document.getElementById('puppet-number');
+      if (el) el.value = loadedImages.length ? currentSlide + 1 : 0;
+    }
+
+    function detectHands() {
+      if (!document.getElementById('check-hands')?.checked) return;
+      if (video.readyState < 2) return;
+      const { width, height } = video.getBoundingClientRect();
+      handCanvas.width  = width;
+      handCanvas.height = height;
+      handCtx.clearRect(0, 0, width, height);
+      const now = performance.now();
+      if (now === lastHandTime) return;
+      lastHandTime = now;
+      const handResults = handLandmarker.detectForVideo(video, now);
+      if (!handResults.landmarks || !handResults.landmarks.length) return;
+      if (!loadedImages.length) return;
+      const img = loadedImages[currentSlide];
+      if (!img || !img.complete) return;
+      const handSlider = parseFloat(document.getElementById('puppet-size')?.value ?? 1.5);
+      handResults.landmarks.forEach(hand => {
+        const wrist   = hand[0];
+        const midBase = hand[9];
+        const palmX = ((wrist.x + midBase.x) / 2) * width;
+        const palmY = ((wrist.y + midBase.y) / 2) * height;
+        const tip = hand[12];
+        const handSize = Math.hypot((tip.x - wrist.x) * width, (tip.y - wrist.y) * height);
+        const imgW = handSize * handSlider;
+        const imgH = imgW * (img.naturalHeight / img.naturalWidth);
+        handCtx.save();
+        handCtx.scale(-1, 1);
+        handCtx.drawImage(img, -(palmX + imgW / 2), palmY - imgH / 2, imgW, imgH);
+        handCtx.restore();
+      });
+    }
+
+    // ── Scene system ─────────────────────────────────────────────────
+    function applyToggles(toggles) {
+      if (!toggles) return;
+      const checkMap = {
+        bbox: 'check-bbox', facemesh: 'check-facemesh', race: 'check-race',
+        age: 'check-age', gender: 'check-gender', emotion: 'check-emotion', hands: 'check-hands',
+      };
+      Object.entries(toggles).forEach(([key, val]) => {
+        if (key === 'puppetNum') { currentSlide = val - 1; updatePuppetDisplay(); return; }
+        if (key === 'detectPrettyCute') { detect_prettyCute = val; if (CONDITIONS.prettyCute) CONDITIONS.prettyCute.active = val; return; }
+        if (key === 'detectShm') { detect_shm = val; return; }
+        if (key === 'credits') {
+          document.getElementById('creditsOverlay').style.display = val ? 'block' : 'none';
+          document.getElementById('dialogueOverlay').style.display = val ? 'none' : '';
+          return;
+        }
+        const cb = document.getElementById(checkMap[key]);
+        if (cb && cb.checked !== val) { cb.checked = val; cb.dispatchEvent(new Event('change')); }
+      });
+    }
+
+    const TYPEWRITER_SPEEDS = {
+      fast:   [8,  6],   // base ± jitter ms
+      normal: [12, 8],
+      medium: [25, 10],
+      slow:   [45, 35],
+    };
+
+    function typewriterEffect(el, text, speed = 'normal') {
+      if (currentTypewriterInterval) { clearTimeout(currentTypewriterInterval); currentTypewriterInterval = null; }
+      el.textContent = '';
+      el.classList.add('typing');
+      currentTypewriterFull = text;
+      currentTypewriterEl = el;
+      const [base, jitter] = TYPEWRITER_SPEEDS[speed] ?? TYPEWRITER_SPEEDS.normal;
+      let i = 0;
+      function typeNext() {
+        el.textContent += text[i++];
+        if (i >= text.length) {
+          currentTypewriterInterval = null;
+          // keep .typing so cursor stays visible after text finishes
+        } else {
+          currentTypewriterInterval = setTimeout(typeNext, base + Math.random() * jitter);
+        }
+      }
+      currentTypewriterInterval = setTimeout(typeNext, base);
+    }
+
+    function applyDialogue(dialogue, instant = false) {
+      if (!dialogue) return;
+      const overlay = document.getElementById('dialogueOverlay');
+      const tab = overlay.querySelector('[role="tab"]');
+      const panel = document.getElementById('dialogue-panel');
+      if (dialogue.show) {
+        tab.textContent = dialogue.characterName;
+        if (instant) {
+          overlay.style.transition = 'none';
+          overlay.classList.add('visible');
+          requestAnimationFrame(() => overlay.style.transition = '');
+          panel.classList.remove('typing');
+          panel.textContent = dialogue.text;
+        } else {
+          overlay.classList.add('visible');
+          typewriterEffect(panel, dialogue.text, dialogue.speed ?? 'normal');
+        }
+      } else {
+        overlay.classList.remove('visible');
+        panel.classList.remove('typing');
+      }
+    }
+
+    function updateHintText() {
+      const hint = document.getElementById('spacebarHint');
+      const size = `${26 + hintPressCount * 5}px`;
+      if (currentActionRequired && !actionConditionMet) {
+        hint.textContent = CONDITION_HINTS[currentActionRequired] ?? 'complete action to continue';
+        hint.style.fontSize = size;
+        hint.style.background = '';
+      } else if (currentActionRequired && actionConditionMet) {
+        hint.textContent = 'thank you. press spacebar to continue';
+        hint.style.fontSize = size;  // stay at whatever size it grew to
+        hint.style.background = 'rgba(60, 180, 80, 0.75)';
+      } else {
+        hint.textContent = 'press spacebar to continue';
+        hint.style.fontSize = '';
+        hint.style.background = '';
+      }
+    }
+
+    function setActionRequired(action) {
+      currentActionRequired = action;
+      actionConditionMet = false;
+      hintPressCount = 0;
+      Object.keys(CONDITIONS).forEach(k => CONDITIONS[k].active = false);
+      if (action && CONDITIONS[action]) CONDITIONS[action].active = true;
+      updateHintText();
+    }
+
+    function checkConditions() {
+      if (!currentActionRequired) return;
+      const condition = CONDITIONS[currentActionRequired];
+      if (!condition || !condition.active) return;
+      const met = condition.check();
+      if (met !== actionConditionMet) {
+        actionConditionMet = met;
+        updateHintText();
+      }
+      winkDetected = false; // reset one-shot flag after reading
+    }
+
+    function showPopup(config = {}) {
+      popupDismissed = false;
+      document.getElementById('popup-title').textContent = config.title ?? 'alert';
+      const icon = document.getElementById('popup-icon');
+      icon.src = config.icon ?? '/images/error.ico';
+      icon.style.display = 'inline';
+      // body is hard-coded in HTML with the live timer span — don't overwrite
+      document.getElementById('popup-ok').textContent  = config.okLabel ?? 'oops';
+      // document.getElementById('popup-no').textContent  = config.noLabel ?? 'no';
+      const overlay = document.getElementById('popupOverlay');
+      overlay.style.display = 'flex';
+    }
+
+    function hidePopup() {
+      document.getElementById('popupOverlay').style.display = 'none';
+    }
+
+    function loadScene(index, instant = false) {
+      const scene = gameScript[index];
+      if (!scene) return;
+      currentScene = index;
+      updateSceneDisplay();
+      applyToggles(scene.toggles);
+      applyDialogue(scene.dialogue, instant);
+      setActionRequired(scene.actionRequired);
+      if (scene.actionRequired === 'popup') showPopup(scene.popupConfig);
+      else hidePopup();
+      console.log(`scene ${scene.id} loaded`);
+    }
+
+    function tryAdvance() {
+      if (currentTypewriterInterval) {
+        clearTimeout(currentTypewriterInterval);
+        currentTypewriterInterval = null;
+        currentTypewriterEl.textContent = currentTypewriterFull;
+        currentTypewriterEl.classList.remove('typing');
+        return;
+      }
+      if (currentActionRequired && !actionConditionMet) { hintPressCount++; updateHintText(); return; }
+      const next = currentScene + 1;
+      if (next < gameScript.length) loadScene(next);
+      else console.log('end of script');
+    }
+
+    // ── DOM elements ─────────────────────────────────────────────────
+    const video           = document.getElementById('webcam');
+    const bgCanvas        = document.getElementById('bgCanvas');
+    const startScreen     = document.getElementById('startScreen');
+    const errorScreen     = document.getElementById('errorScreen');
+    const startBtn        = document.getElementById('startBtn');
+    const retryBtn        = document.getElementById('retryBtn');
+    const dialogueOverlay = document.getElementById('dialogueOverlay');
+    const analysisPanel   = document.getElementById('analysisPanel');
+
+    const blurhash = createBlurhashRenderer(bgCanvas, video);
+
+    async function startCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
+          audio: false
+        });
+        video.srcObject = stream;
+        await video.play();
+
+        startScreen.classList.add('hidden');
+        errorScreen.classList.remove('visible');
+        video.classList.add('visible');
+
+        blurhash.start();
+        requestAnimationFrame(faceDrawLoop);
+        setInterval(detectFace, 100);
+        setInterval(detectHands, 33);
+        setInterval(checkConditions, 100);
+
+        cameraReady = true;
+
+      } catch (err) {
+        console.error('Camera error:', err);
+        startScreen.classList.add('hidden');
+        errorScreen.classList.add('visible');
+      }
+    }
+
+    // title bar timer — starts immediately on page load, resets on refresh
+    (() => {
+      const timerEl = document.getElementById('titleTimer');
+      const timerStart = Date.now();
+      setInterval(() => {
+        const ms = Date.now() - timerStart;
+        const h  = String(Math.floor(ms / 3600000)).padStart(2, '0');
+        const m  = String(Math.floor((ms % 3600000) / 60000)).padStart(2, '0');
+        const s  = String(Math.floor((ms % 60000) / 1000)).padStart(2, '0');
+        const cs = String(Math.floor((ms % 1000) / 10)).padStart(2, '0');
+        timerEl.textContent = `(${h}:${m}:${s}:${cs})`;
+      }, 10);
+    })();
+
+    startBtn.addEventListener('click', startCamera);
+    retryBtn.addEventListener('click', () => {
+      errorScreen.classList.remove('visible');
+      startScreen.classList.remove('hidden');
+    });
+    document.getElementById('popup-ok').addEventListener('click', () => {
+      popupDismissed = true;
+      hidePopup();
+      checkConditions();
+    });
+
+    // Race checkbox: flicker every 150ms, real inference every 3s
+    document.getElementById('check-race').addEventListener('change', function() {
+      const row = this.closest('.field-row');
+      if (this.checked) {
+        row.classList.remove('disabled');
+        predictRace();
+        raceInferInterval   = setInterval(predictRace, 3000);
+        raceFlickerInterval = setInterval(flickerRaceDisplay, 150);
+      } else {
+        row.classList.add('disabled');
+        clearInterval(raceInferInterval);
+        clearInterval(raceFlickerInterval);
+        simulatedScores = null;
+        document.getElementById('result-race').innerHTML = '';
+      }
+    });
+
+    ['check-age', 'check-gender', 'check-emotion'].forEach(id => {
+      document.getElementById(id).addEventListener('change', function() {
+        this.closest('.field-row').classList.toggle('disabled', !this.checked);
+      });
+    });
+
+    // Hands checkbox: show/hide controls
+    document.getElementById('check-hands').addEventListener('change', function() {
+      this.closest('.field-row').classList.toggle('disabled', !this.checked);
+      document.getElementById('hands-controls').style.display = this.checked ? 'block' : 'none';
+      if (this.checked) {
+        updatePuppetDisplay();
+        if (!loadedImages.length) {
+          const handCanvas = document.getElementById('handCanvas');
+          handCanvas.getContext('2d').clearRect(0, 0, handCanvas.width, handCanvas.height);
+        }
+      } else {
+        const hc = document.getElementById('handCanvas');
+        hc.getContext('2d').clearRect(0, 0, hc.width, hc.height);
+      }
+    });
+
+    // Copy scene JSON helpers
+    function buildCurrentToggles() {
+      const checkMap = { bbox: 'check-bbox', facemesh: 'check-facemesh', race: 'check-race', age: 'check-age', gender: 'check-gender', emotion: 'check-emotion', hands: 'check-hands' };
+      const toggles = {};
+      Object.entries(checkMap).forEach(([key, id]) => { toggles[key] = document.getElementById(id).checked; });
+      if (toggles.hands) toggles.puppetNum = currentSlide + 1;
+      if (detect_prettyCute) toggles.detectPrettyCute = true;
+      if (detect_shm) toggles.detectShm = true;
+      return toggles;
+    }
+    function flashBtn(btn, label) {
+      btn.textContent = 'copied!';
+      setTimeout(() => btn.textContent = label, 1500);
+    }
+
+    document.getElementById('copy-scene-btn').addEventListener('click', () => {
+      const overlay = document.getElementById('dialogueOverlay');
+      const panel   = document.getElementById('dialogue-panel');
+      const tab     = overlay.querySelector('[role="tab"]');
+      const dialogue = overlay.classList.contains('visible')
+        ? { show: true, characterName: tab.textContent.trim(), text: panel.textContent.trim() }
+        : { show: false };
+      const scene = { id: currentScene + 1, toggles: buildCurrentToggles(), dialogue, actionRequired: currentActionRequired };
+      navigator.clipboard.writeText(JSON.stringify(scene, null, 2)).then(() => flashBtn(document.getElementById('copy-scene-btn'), 'copy scene'));
+    });
+
+    document.getElementById('copy-toggles-btn').addEventListener('click', () => {
+      navigator.clipboard.writeText(JSON.stringify(buildCurrentToggles(), null, 2)).then(() => flashBtn(document.getElementById('copy-toggles-btn'), 'copy toggles'));
+    });
+
+    // Scene nav buttons (director override — bypasses action gates)
+    function updateSceneDisplay() {
+      document.getElementById('scene-number').value = currentScene + 1;
+    }
+    document.getElementById('scene-prev').addEventListener('click', () => loadScene(Math.max(0, currentScene - 1), true));
+    document.getElementById('scene-next').addEventListener('click', () => loadScene(Math.min(gameScript.length - 1, currentScene + 1), true));
+    document.getElementById('scene-number').addEventListener('keydown', ev => {
+      if (ev.key === 'Enter') {
+        ev.preventDefault();
+        const n = parseInt(ev.target.value, 10);
+        if (!isNaN(n)) loadScene(Math.max(0, Math.min(gameScript.length - 1, n - 1)), true);
+        ev.target.blur();
+      }
+    });
+    document.getElementById('scene-number').addEventListener('blur', ev => {
+      const n = parseInt(ev.target.value, 10);
+      if (!isNaN(n)) loadScene(Math.max(0, Math.min(gameScript.length - 1, n - 1)), true);
+      else updateSceneDisplay();
+    });
+
+    // Puppet nav buttons
+    document.getElementById('puppet-prev').addEventListener('click', () => {
+      if (!loadedImages.length) return;
+      currentSlide = (currentSlide - 1 + loadedImages.length) % loadedImages.length;
+      updatePuppetDisplay();
+    });
+    document.getElementById('puppet-next').addEventListener('click', () => {
+      if (!loadedImages.length) return;
+      currentSlide = (currentSlide + 1) % loadedImages.length;
+      updatePuppetDisplay();
+    });
+
+    // ── Game state ────────────────────────────────────────────────────
+    let cameraReady = false;
+    let gameStarted = false;
+    let currentTypewriterInterval = null;
+    let currentTypewriterFull = null;
+    let currentTypewriterEl = null;
+    let currentActionRequired = null;
+    let actionConditionMet = false;
+    let hintPressCount = 0;
+
+    const keyMap = { r: 'check-race', a: 'check-age', g: 'check-gender', e: 'check-emotion', f: 'check-facemesh', b: 'check-bbox', h: 'check-hands' };
+    document.addEventListener('keydown', ev => {
+      if (ev.target.tagName === 'INPUT' && ev.target.type === 'text') return;
+
+      // Spacebar: start game on first press, scene advancement later
+      if (ev.code === 'Space') {
+        ev.preventDefault();
+        if (!cameraReady) return;
+        if (!gameStarted) {
+          gameStarted = true;
+          dialogueOverlay.classList.add('visible');
+          setTimeout(() => document.getElementById('spacebarHint').classList.add('visible'), 1400);
+          setTimeout(() => { analysisPanel.classList.add('visible'); loadScene(0); }, 1800);
+          return;
+        }
+        tryAdvance();
+        return;
+      }
+
+      // Toggle checkboxes
+      const id = keyMap[ev.key.toLowerCase()];
+      if (id) { const cb = document.getElementById(id); if (cb) { cb.checked = !cb.checked; cb.dispatchEvent(new Event('change')); } }
+
+      // Puppet size: [ to decrease, ] to increase
+      if (ev.key === '[' || ev.key === ']') {
+        const slider = document.getElementById('puppet-size');
+        if (slider) {
+          slider.value = Math.max(parseFloat(slider.min), Math.min(parseFloat(slider.max),
+            parseFloat(slider.value) + (ev.key === ']' ? 0.1 : -0.1)));
+        }
+      }
+
+      // Puppet number: ; to decrease, ' to increase
+      if ((ev.key === ';' || ev.key === "'") && loadedImages.length) {
+        currentSlide = (currentSlide + (ev.key === "'" ? 1 : -1) + loadedImages.length) % loadedImages.length;
+        updatePuppetDisplay();
+      }
+
+      // Scene nav: ArrowLeft / ArrowRight (director override)
+      if (ev.key === 'ArrowLeft') loadScene(Math.max(0, currentScene - 1), true);
+      if (ev.key === 'ArrowRight') loadScene(Math.min(gameScript.length - 1, currentScene + 1), true);
+    });
+</script>
+
+</body>
+</html>
