@@ -182,7 +182,44 @@
     const LERP     = 0.18;
     const FADE_IN  = 0.3;
     const FADE_OUT = 1 / 2;
-    import { createBlurhashRenderer } from '/facial_recognishm/js/blurhash.js';
+    // inlined from blurhash.js to avoid Vercel CommonJS compilation
+    const { encode: _bhEncode, decode: _bhDecode } = await import('https://esm.sh/blurhash@2.0.5');
+    function createBlurhashRenderer(bgCanvas, video) {
+      const ENCODE_INTERVAL = 150;
+      let lastEncodeTime = 0, rafId = null;
+      const encodeCanvas = document.createElement('canvas');
+      encodeCanvas.width = 64; encodeCanvas.height = 36;
+      const encodeCtx = encodeCanvas.getContext('2d', { willReadFrequently: true });
+      function sizeBgCanvas() { bgCanvas.width = window.innerWidth; bgCanvas.height = window.innerHeight; }
+      function renderBlurhash(hash) {
+        const w = bgCanvas.width, h = bgCanvas.height;
+        const decodeW = 128, decodeH = Math.round(128 * (h / w));
+        const pixels = _bhDecode(hash, decodeW, decodeH, 1);
+        const ctx = bgCanvas.getContext('2d');
+        const imageData = ctx.createImageData(decodeW, decodeH);
+        imageData.data.set(pixels);
+        const tmp = document.createElement('canvas');
+        tmp.width = decodeW; tmp.height = decodeH;
+        tmp.getContext('2d').putImageData(imageData, 0, 0);
+        ctx.drawImage(tmp, 0, 0, w, h);
+      }
+      function loop(timestamp) {
+        rafId = requestAnimationFrame(loop);
+        if (video.readyState < 2) return;
+        if (timestamp - lastEncodeTime < ENCODE_INTERVAL) return;
+        lastEncodeTime = timestamp;
+        encodeCtx.drawImage(video, 0, 0, 64, 36);
+        const pixels = encodeCtx.getImageData(0, 0, 64, 36);
+        try {
+          const hash = _bhEncode(pixels.data, 64, 36, 4, 3);
+          renderBlurhash(hash);
+          if (!bgCanvas.classList.contains('visible')) bgCanvas.classList.add('visible');
+        } catch (e) {}
+      }
+      sizeBgCanvas();
+      window.addEventListener('resize', sizeBgCanvas);
+      return { start() { if (rafId) cancelAnimationFrame(rafId); requestAnimationFrame(loop); } };
+    }
     /* tf and faceapi are globals loaded via <script defer> in <head> */
 
     // ── Load models ──────────────────────────────────────────────────
