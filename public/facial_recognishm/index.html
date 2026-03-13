@@ -834,6 +834,9 @@
         setInterval(checkConditions, 100);
 
         cameraReady = true;
+        // show the spacebar hint after the camera starts. 
+        setTimeout(() => document.getElementById('spacebarHint').classList.add('visible'), 1400);
+
 
       } catch (err) {
         console.error('Camera error:', err);
@@ -989,7 +992,6 @@
         if (!gameStarted) {
           gameStarted = true;
           dialogueOverlay.classList.add('visible');
-          setTimeout(() => document.getElementById('spacebarHint').classList.add('visible'), 1400);
           setTimeout(() => { analysisPanel.classList.add('visible'); loadScene(0); }, 1800);
           return;
         }
