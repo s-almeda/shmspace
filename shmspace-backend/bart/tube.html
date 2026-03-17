@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transbay Tube</title>
+  <link rel="stylesheet" href="https://unpkg.com/xp.css@/dist/98.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      background: #1a1a1a;
+      color: #eee;
+      margin: 0;
+      padding: 1rem;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      font-family: 'Arial', monospace;
+    }
+
+    .window { width: 100%; max-width: 700px; }
+
+    pre#dev-summary {
+      font-family: 'Courier New', monospace;
+      font-size: 0.72rem;
+      line-height: 1.6;
+      background: #111;
+      border: 2px inset #555;
+      padding: 6px 8px;
+      margin-top: 4px;
+      color: #a9a9a9;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.65rem;
+      color: #a4a4a4;
+      font-family: 'Courier New', monospace;
+      margin-top: 4px;
+      padding: 0 2px;
+    }
+
+    details > summary {
+      font-family: 'Courier New', monospace;
+      font-size: 0.72rem;
+      color: #b4b4b4;
+      cursor: pointer;
+      list-style: none;
+      padding: 4px 2px;
+      margin-top: 6px;
+    }
+    details > summary::-webkit-details-marker { display: none; }
+    details > summary::before { content: '▶ '; }
+    details[open] > summary::before { content: '▼ '; }
+
+    #test-badge {
+      font-size: 0.6rem;
+      padding: 2px 5px;
+      background: #a00;
+      color: #fff;
+      font-family: 'Arial', monospace;
+      margin-left: 6px;
+    }
+
+    .slot-row {
+      display: flex;
+      gap: 8px;
+      margin: 4px 0 2px;
+    }
+
+    .slot {
+      flex: 1;
+      font-family: 'Courier New', monospace;
+      font-size: 0.75rem;
+      text-align: center;
+    }
+
+    .slot-label {
+      color: #555;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 3px;
+    }
+
+    .slot-val {
+      padding: 5px 4px;
+      background: #111;
+      border: 2px inset #333;
+      color: #333;
+      transition: color 0.2s;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .slot-val.occupied {
+      color: var(--slot-color, #eee);
+    }
+
+    @keyframes slot-flash {
+      0%   { background: var(--slot-color, #eee); color: #000; border-color: var(--slot-color, #eee); }
+      60%  { background: #1a1a1a; color: var(--slot-color, #eee); }
+      100% { background: #111;    color: var(--slot-color, #eee); }
+    }
+
+    .slot-val.flash {
+      animation: slot-flash 3s ease-out forwards;
+    }
+
+    #events-list {
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem;
+      margin: 8px 0 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .event {
+      padding: 3px 6px;
+      background: #111;
+      border: 1px solid #222;
+    }
+
+    .event .train-name { font-weight: bold; }
+    .event.exited   { color: #888; }
+    .event.in-tube  { color: #fff; background: #1a2a1a; border-color: #2a4a2a; }
+    .event.entering { color: #aaa; }
+  </style>
+</head>
+<body>
+  <div class="window">
+    <div class="title-bar">
+      <div class="title-bar-text">
+        Transbay Tube
+        <span id="test-badge" style="display:none">test mode</span>
+      </div>
+      <div class="title-bar-controls">
+        <button aria-label="Minimize"></button>
+        <button aria-label="Maximize"></button>
+        <button aria-label="Close"></button>
+      </div>
+    </div>
+
+    <div class="window-body">
+
+      <!-- Tube arrival slots -->
+      <fieldset style="margin-bottom:8px">
+        <legend>Tube Arrivals · <span style="font-size:0.65rem;color:#666">/api/bart/tube/tube_arrivals</span></legend>
+        <div class="slot-row">
+          <div class="slot"><div class="slot-label">TUBE 1</div><div class="slot-val" id="slot-0">[ ——— ]</div></div>
+          <div class="slot"><div class="slot-label">TUBE 2</div><div class="slot-val" id="slot-1">[ ——— ]</div></div>
+          <div class="slot"><div class="slot-label">TUBE 3</div><div class="slot-val" id="slot-2">[ ——— ]</div></div>
+        </div>
+      </fieldset>
+
+      <!-- Events feed -->
+      <fieldset>
+        <legend>Events</legend>
+        <div id="events-list"></div>
+      </fieldset>
+
+      <div class="footer-row">
+        <span id="fetched-at"></span>
+        <span id="refresh-row">refresh in <span id="next-refresh">—</span></span>
+      </div>
+
+      <details id="dev-panel">
+        <summary id="dev-summary-label">tube state</summary>
+        <pre id="dev-summary"></pre>
+      </details>
+
+      <details id="raw-panel">
+        <summary id="raw-panel-label">/api/bart/tube/state</summary>
+        <pre id="raw-json"></pre>
+      </details>
+
+      <details id="arrivals-panel">
+        <summary id="arrivals-panel-label">/api/bart/tube/tube_arrivals</summary>
+        <pre id="arrivals-json"></pre>
+      </details>
+
+    </div>
+  </div>
+
+  <script>
+    const POLL_MS = 30000;
+    const LC = { Yellow: '#ffd700', Blue: '#4a9eff', Red: '#ff4444', Green: '#44ff88', Orange: '#ff8c00' };
+    function lc(line) { return LC[line.split('-')[0]] || '#888'; }
+    function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function dim(s) { return `<span style="color:#3a3a3a">${esc(s)}</span>`; }
+    function col(s, c) { return `<span style="color:${c}">${esc(s)}</span>`; }
+
+    // ── Dev panel ─────────────────────────────────────────────────────────────
+
+    function renderDevLive(s) {
+      const sb = s.southbound, nb = s.northbound;
+      const ft = s.fetchedAt ? new Date(s.fetchedAt).toLocaleTimeString() : '—';
+
+      function trainRow(trains) {
+        if (!trains.length) return dim('  —');
+        return trains.map(t =>
+          `  ${col(t.line, lc(t.line))} ${dim((t.minutesUntil ?? '?') + 'm  ' + t.dest)}`
+        ).join('\n');
+      }
+
+      document.getElementById('dev-summary-label').textContent = 'tube state (fetched ' + ft + ')';
+      document.getElementById('dev-summary').innerHTML = [
+        dim('southbound:'),
+        dim('  west_oakland:') + '\n' + trainRow(sb.west_oakland),
+        dim('  tube:')         + '\n' + trainRow(sb.tube),
+        dim('  embarcadero:')  + '\n' + trainRow(sb.embarcadero),
+        dim('northbound:'),
+        dim('  embarcadero:')  + '\n' + trainRow(nb.embarcadero),
+        dim('  tube:')         + '\n' + trainRow(nb.tube),
+        dim('  west_oakland:') + '\n' + trainRow(nb.west_oakland),
+      ].join('\n');
+    }
+
+    // ── Events ────────────────────────────────────────────────────────────────
+
+    function renderEvents(events) {
+      const el = document.getElementById('events-list');
+      if (!events.length) { el.innerHTML = '<span style="color:#555;font-size:0.75rem">no trains near the tube</span>'; return; }
+      const sorted = [...events].sort((a, b) => (a.minutes ?? 0) - (b.minutes ?? 0));
+      el.innerHTML = sorted.map(e => {
+        const c = lc(e.line);
+        const vref = e.vehicleRef ? ` <span style="color:#555">#${e.vehicleRef}</span>` : '';
+        const name = `<span class="train-name" style="color:${c}">${e.line}</span>${vref} to ${e.dest}`;
+        let msg;
+        if (e.status === 'entering') msg = `${name} will enter the tube in ${e.minutes} min`;
+        else if (e.status === 'in_tube') msg = `${name} will exit the tube, arriving at ${e.station}, in ${e.minutes} min`;
+        else msg = `${name} has exited the tube · arrived at ${e.station}`;
+        return `<div class="event ${e.status === 'in_tube' ? 'in-tube' : e.status}">${msg}</div>`;
+      }).join('');
+    }
+
+    async function pollEvents() {
+      try {
+        const res = await fetch('/api/bart/tube/events');
+        const data = await res.json();
+        renderEvents(data.events || []);
+      } catch (e) { console.error('events poll failed:', e); }
+    }
+
+    // ── Tube arrival slots ─────────────────────────────────────────────────────
+
+    const seenTrains = new Set();
+    function trainKey(t) { return t.vehicleRef ? t.vehicleRef : (t.line + '|' + t.dest); }
+
+    function renderSlots(tubes) {
+      tubes.forEach((t, i) => {
+        const el = document.getElementById('slot-' + i);
+        if (!t) {
+          el.textContent = '[ ——— ]';
+          el.className = 'slot-val';
+          el.style.removeProperty('--slot-color');
+          return;
+        }
+        const key = trainKey(t);
+        const label = '[ ' + t.line + (t.vehicleRef ? ' #' + t.vehicleRef : '') + ' ]';
+        el.textContent = label;
+        el.style.setProperty('--slot-color', t.color);
+        if (!seenTrains.has(key)) {
+          seenTrains.add(key);
+          el.className = 'slot-val';
+          void el.offsetWidth;
+          el.className = 'slot-val flash';
+        } else {
+          el.className = 'slot-val occupied';
+        }
+      });
+      const activeKeys = new Set(tubes.filter(Boolean).map(trainKey));
+      for (const k of seenTrains) {
+        if (!activeKeys.has(k)) seenTrains.delete(k);
+      }
+    }
+
+    let lastArrivalsData = null;
+
+    function renderArrivalsJSON(data) {
+      document.getElementById('arrivals-panel-label').textContent =
+        '/api/bart/tube/tube_arrivals  (polled ' + new Date().toLocaleTimeString() + ')';
+      document.getElementById('arrivals-json').textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function pollSlots() {
+      try {
+        const res = await fetch('/api/bart/tube/tube_arrivals');
+        const data = await res.json();
+        lastArrivalsData = data;
+        renderSlots(data.tubes || [null, null, null]);
+        if (document.getElementById('arrivals-panel').open) renderArrivalsJSON(data);
+      } catch (e) { console.error('slots poll failed:', e); }
+    }
+
+    document.getElementById('arrivals-panel').addEventListener('toggle', () => {
+      if (document.getElementById('arrivals-panel').open && lastArrivalsData) renderArrivalsJSON(lastArrivalsData);
+    });
+
+    // ── Poll /state ────────────────────────────────────────────────────────────
+
+    let liveState = null, lastPollAt = null;
+
+    async function poll() {
+      try {
+        const res = await fetch('/api/bart/tube/state');
+        liveState = await res.json();
+        lastPollAt = Date.now();
+        document.getElementById('fetched-at').textContent =
+          liveState.fetchedAt ? 'data from ' + new Date(liveState.fetchedAt).toLocaleTimeString() : '';
+        document.getElementById('test-badge').style.display = liveState.testMode ? 'inline' : 'none';
+        if (document.getElementById('dev-panel').open) renderDevLive(liveState);
+        if (document.getElementById('raw-panel').open) renderRawJSON(liveState);
+      } catch (e) { console.error('poll failed:', e); }
+    }
+
+    function renderRawJSON(state) {
+      document.getElementById('raw-panel-label').textContent =
+        '/api/bart/tube/state  (polled ' + new Date().toLocaleTimeString() + ')';
+      document.getElementById('raw-json').textContent = JSON.stringify(state, null, 2);
+    }
+
+    document.getElementById('dev-panel').addEventListener('toggle', () => {
+      if (document.getElementById('dev-panel').open && liveState) renderDevLive(liveState);
+    });
+    document.getElementById('raw-panel').addEventListener('toggle', () => {
+      if (document.getElementById('raw-panel').open && liveState) renderRawJSON(liveState);
+    });
+
+    function tick() {
+      if (lastPollAt) {
+        const s = Math.max(0, Math.round((lastPollAt + POLL_MS - Date.now()) / 1000));
+        document.getElementById('next-refresh').textContent = s + 's';
+      }
+    }
+
+    poll();
+    pollEvents();
+    pollSlots();
+    setInterval(poll, POLL_MS);
+    setInterval(pollEvents, 5000);
+    setInterval(pollSlots, 5000);
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>
