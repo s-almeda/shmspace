@@ -31,7 +31,7 @@ app.use('/api/collections', require('./garbage_collections/collections'));
 
 
 app.get('/', (req, res) => {
-    res.send("if you're reading this, the shmspace-backend works! updated march 2 @ 11:45pm");
+    res.send("if you're reading this, the shmspace-backend works! updated march 17 @ 12:01AM");
 });
 
 app.use('/portfolio', express.static(path.join(__dirname, 'portfolio')));

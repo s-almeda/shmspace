@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const API_KEY = '276d1e95-15ba-481a-9bf0-6a312e4fae49';
+router.use('/tube', require('./tube'));
+
+const API_KEY = process.env.BART_API_KEY;
+
 let cache = { trains: [], raw: null, fetchedAt: null };
 
 let testMode = false;
@@ -11,6 +14,8 @@ let testTrains = [
   { line: 'Green',  minutes: 12 },
   { line: 'Blue',   minutes: 18 },
 ];
+
+
 
 router.post('/testmode', express.json(), (req, res) => {
   testMode = Boolean(req.body.enabled);
