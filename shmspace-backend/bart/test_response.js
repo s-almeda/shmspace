@@ -13,13 +13,14 @@
 // On startup: tube is empty (all exit-stop trains > 7 min away).
 // First tube activation: ~45 seconds after server start (NB Yellow-N #1106).
 
-function makeVisit(lineRef, destName, minsFromNow, vehicleRef) {
+function makeVisit(lineRef, destName, minsFromNow, journeyRef) {
   const arrives = new Date(Date.now() + minsFromNow * 60000).toISOString();
   return {
     MonitoredVehicleJourney: {
       LineRef: lineRef,
       DestinationName: destName,
-      VehicleRef: vehicleRef || null,
+      VehicleRef: null,
+      FramedVehicleJourneyRef: { DatedVehicleJourneyRef: journeyRef || null },
       MonitoredCall: { ExpectedArrivalTime: arrives },
     },
   };
