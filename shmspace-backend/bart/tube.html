@@ -7,22 +7,22 @@
   <link rel="stylesheet" href="https://unpkg.com/xp.css@/dist/98.css">
   <style>
     body { color: #eee; background: #0e0e0e; display: flex; justify-content: center; padding: 2rem; }
-    .window { width: 100%; max-width: 500px; }
-    .slots {  display: flex; gap: 6px; margin: 6px 0; }
-    .slot { flex: 1; text-align: center; font-family: monospace; font-size: 0.8rem; }
-    .slot-label { font-size: 0.65rem; color: #666; margin-bottom: 2px; }
-    .slot-val { padding: 4px; background: #5b5b5b; border: 2px inset #999; color: #999; }
+    .window { width: 100%; max-width: 720px; }
+    .slots { display: flex; gap: 6px; margin: 6px 0; }
+    .slot { flex: 1; text-align: center; font-family: 'Lucida Console', monospace; font-size: 0.72rem; min-width: 0; }
+    .slot-label { font-size: 0.6rem; color: #666; margin-bottom: 2px; }
+    .slot-val { padding: 4px 2px; background: #5b5b5b; border: 2px inset #999; color: #999; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .slot-val.on { color: var(--c); font-weight: bold; }
     @keyframes flash {
       0%   { background: var(--c); color: #000; }
       100% { background: #0073ca; color: var(--c); }
     }
     .slot-val.flash { animation: flash 1s ease-out forwards; font-weight: bold; }
-    #events { font-family: monospace; font-size: 0.78rem; margin: 4px 0; }
+    #events { font-family: 'Lucida Console', monospace; font-size: 0.72rem; margin: 4px 0; }
     .ev { padding: 2px 4px; margin-bottom: 2px; }
     .ev.in-tube { background: #0d2e2e; }
-    pre { font-size: 0.68rem; background: #1a1a1a; color: #aaa; border: 2px inset #999; padding: 6px; max-height: 300px; overflow: auto; }
-    .foot { font-size: 0.6rem; color: #666; font-family: monospace; display: flex; justify-content: space-between; margin-top: 4px; }
+    pre { font-family: 'Lucida Console', monospace; font-size: 0.65rem; background: #1a1a1a; color: #aaa; border: 2px inset #999; padding: 6px; max-height: 300px; overflow: auto; }
+    .foot { font-size: 0.6rem; color: #666; font-family: 'Lucida Console', monospace; display: flex; justify-content: space-between; margin-top: 4px; }
   </style>
 </head>
 <body>

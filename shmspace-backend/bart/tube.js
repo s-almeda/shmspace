@@ -37,6 +37,10 @@ const tubeAssignments = new Map();
 
 // ── Routes ────────────────────────────────────────────────────────────────────
 
+router.get('/cache', (_req, res) => {
+  res.json(getCache());
+});
+
 router.get('/', (_req, res) => {
   res.sendFile(path.join(__dirname, 'tube.html'));
 });

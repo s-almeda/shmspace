@@ -25,7 +25,7 @@ function parseStop(data) {
     line:       v.MonitoredVehicleJourney.LineRef,
     dest:       v.MonitoredVehicleJourney.DestinationName,
     arrives:    v.MonitoredVehicleJourney.MonitoredCall.ExpectedArrivalTime,
-    vehicleRef: v.MonitoredVehicleJourney.VehicleRef || null,
+    vehicleRef: v.MonitoredVehicleJourney.FramedVehicleJourneyRef?.DatedVehicleJourneyRef || null,
   }));
 }
 
@@ -33,7 +33,8 @@ async function fetchStop(stopCode) {
   const url = `http://api.511.org/transit/StopMonitoring?api_key=${API_KEY}&agency=BA&stopCode=${stopCode}&format=json`;
   const res = await fetch(url, { headers: { 'Accept-Encoding': 'gzip' } });
   const text = await res.text();
-  return parseStop(JSON.parse(text.replace(/^\uFEFF/, '')));
+  const parsed = JSON.parse(text.replace(/^\uFEFF/, ''));
+  return parseStop(parsed);
 }
 
 async function fetchAll() {
