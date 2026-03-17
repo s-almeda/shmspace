@@ -1,4 +1,4 @@
-const TEST_MODE = true; // set true to use test_response.js instead of calling 511
+const TEST_MODE = false; // set true to use test_response.js instead of calling 511
 
 const API_KEY = process.env.BART_API_KEY;
 
