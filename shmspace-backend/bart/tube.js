@@ -84,7 +84,42 @@ router.get('/tube_arrivals', (_req, res) => {
       tubes[entry.idx] = { line: t.line, dest: t.dest, vehicleRef: t.vehicleRef || null, color: lineColor(t.line), minutesUntil: t.minutesUntil };
   }
 
-  res.json({ tubes, fetchedAt: cache.fetchedAt, testMode: cache.testMode || false });
+  // Trains approaching the tube (exit stop arrival 7–20 min away)
+  const now = new Date();
+  const approaching = [];
+  for (const t of [...cache.emb_sb, ...cache.wo_nb]) {
+    const m = minsUntil(t.arrives, now);
+    if (m > TUBE_WINDOW && m <= 20)
+      approaching.push({ line: t.line, dest: t.dest, vehicleRef: t.vehicleRef || null, color: lineColor(t.line), minutesUntil: Math.round(m) });
+  }
+
+  res.json({ tubes, approaching, fetchedAt: cache.fetchedAt, testMode: cache.testMode || false });
+});
+
+router.get('/events', (_req, res) => {
+  const cache = getCache();
+  const now = new Date();
+  const events = [];
+
+  // In tube: trains arriving at exit stop within 7 min
+  for (const [stop, station] of [[cache.emb_sb, 'Embarcadero'], [cache.wo_nb, 'West Oakland']]) {
+    for (const t of stop) {
+      const m = minsUntil(t.arrives, now);
+      if (m >= 0 && m <= TUBE_WINDOW)
+        events.push({ status: 'in_tube', line: t.line, dest: t.dest, vehicleRef: t.vehicleRef || null, color: lineColor(t.line), minutes: Math.round(m), station });
+    }
+  }
+
+  // Entering: trains arriving at entry stop within 15 min (about to enter tube)
+  for (const [stop, station] of [[cache.wo_sb, 'West Oakland'], [cache.emb_nb, 'Embarcadero']]) {
+    for (const t of stop) {
+      const m = minsUntil(t.arrives, now);
+      if (m >= 0 && m <= 15)
+        events.push({ status: 'entering', line: t.line, dest: t.dest, vehicleRef: t.vehicleRef || null, color: lineColor(t.line), minutes: Math.round(m), station });
+    }
+  }
+
+  res.json({ events, fetchedAt: cache.fetchedAt, testMode: cache.testMode || false });
 });
 
 module.exports = router;
