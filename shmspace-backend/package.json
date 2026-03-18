@@ -5,6 +5,9 @@
   "scripts": {
     "start": "node server.js"
   },
+  "devDependencies": {
+    "puppeteer": "^22.0.0"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^17.3.1",
