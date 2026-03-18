@@ -14,14 +14,7 @@
  *     ]
  *   }
  *
- * For each slot i (0, 1, 2):
- *   new train  → solenoid i on for 3s, NeoPixel on in train's line color for 3s
- *   same train → nothing (already played, never re-triggers)
- *   slot empty → nothing
- *
- * The server guarantees each train occupies exactly one slot for its entire transit
- * and is never moved to a different slot, so prevKey[i] dedup is reliable.
- */
+  */
 
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
