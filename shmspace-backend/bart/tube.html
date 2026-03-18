@@ -13,7 +13,7 @@
     .slot-label { font-size: 0.6rem; color: #666; margin-bottom: 2px; }
     .slot-val { padding: 4px 2px; background: #5b5b5b; border: 2px inset #999; color: #999; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .slot-val.occupied { color: #555; }
-    .slot-val.sounding { background: #4a9eff; color: #000; font-weight: bold; }
+    .slot-val.sounding { background: #ffffff; color: #000; font-weight: bold; }
     #events { font-family: 'Lucida Console', monospace; font-size: 0.72rem; margin: 4px 0; }
     .ev { padding: 2px 4px; margin-bottom: 2px; }
     .ev.in-tube { background: #0d2e2e; }
@@ -32,7 +32,7 @@
   <div class="window-body">
     <p style="font-size:0.65rem;color:#888;font-family:'Lucida Console',monospace;margin:4px 0 8px;line-height:1.6">
       When a BART train enters the Transbay Tube, it gets assigned to one of 3 physical tube slots (round-robin).
-      That tube <span style="color:#4a9eff">turns blue</span> for 3s — indicating when the tube fires.
+      That tube <span style="color:#fff">turns white</span> for 3s — indicating when the tube fires.
       The LED lights up in the train's BART line color for the same 3s.
       Each train only triggers its tube once, even if it stays in the tunnel for the full ~7 min transit.
       If all 3 slots are full and a new train arrives, the oldest is "evicted" from the tube 
