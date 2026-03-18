@@ -1,26 +1,30 @@
 /*
  * Transbay Tube — ESP32 control code!
  *
- * One ESP32 controls all 3 physical tubes (solenoids on pins 4, 5, 19) and one NeoPixel LED.
- * Connects to wifi (see NETWORKS), then every 5s polls:
+ * This is the code for one of three identical ESP32s in a sound sculpture, each should be flashed with a
+ * different TUBE_NUM (0, 1, or 2). 
+ * First, it tries to connect to wifi (see NETWORKS array) and remembers the last-working network in flash for faster reconnects.
+ * Then, once we're connected to wifi.....
+ * Every 5s, polls:
  *   GET https://art.snailbunny.site/api/bart/tube/tube_arrivals
+ * which returns a 3-slot array of real BART trains inside the Transbay Tube.
  *
  * Example response:
  *   {
  *     "tubes": [
- *       { "line": "Yellow-N", "dest": "Antioch",   "vehicleRef": "1842199", "color": "#ffd700", "minutesUntil": 3 },
+ *       { "line": "Yellow-N", "dest": "Antioch", "vehicleRef": "1842199", "color": "#ffd700", "minutesUntil": 3 },
  *       { "line": "Green-S",  "dest": "Daly City", "vehicleRef": "1842097", "color": "#44ff88", "minutesUntil": 6 },
  *       null
  *     ]
  *   }
+ * The device with (TUBE_NUM=0) would light up yellow. TUBE_NUM=1 would light green. TUBE_NUM=2 stays off.
  *
- * For each slot i (0, 1, 2):
- *   new train  → solenoid i on for 3s, NeoPixel on in train's line color for 3s
- *   same train → nothing (already played, never re-triggers)
- *   slot empty → nothing
+ * This device watches tubes[TUBE_NUM] only:
+ *   new train  → NeoPixel on in line color, sound on for 3s, LED stays on
+ *   same train → nothing (LED stays on for the full ~7-min transit)
+ *   slot empty → LED off, sound off
  *
- * The server guarantees each train occupies exactly one slot for its entire transit
- * and is never moved to a different slot, so prevKey[i] dedup is reliable.
+ * TO DO (hi sudhu): uncomment / rewrite analogWrite lines in soundOn()/soundOff() below.
  */
 
 #include <WiFi.h>
@@ -29,15 +33,15 @@
 #include <ArduinoJson.h>
 #include <Preferences.h>
 
-// ── Config ────────────────────────────────────────────────────────────────────
+// ── Per-device config ─────────────────────────────────────────────────────────
+const int TUBE_NUM = 0;  // CHANGE to 1 or 2 on the other two devices
+
 const char* server = "art.snailbunny.site";
 const char* path   = "/api/bart/tube/tube_arrivals";
 
 const unsigned long POLL_INTERVAL  = 5000;   // how often to check the server (ms)
-const unsigned long SOUND_DURATION = 3000;   // how long each tube sound plays (ms)
+const unsigned long SOUND_DURATION = 3000;   // how long the tube sound plays (ms)
 const unsigned long WIFI_TIMEOUT   = 10000;  // max wait per network attempt (ms)
-
-const int SOUND_PINS[3] = {4, 5, 19};  // solenoid driver pins: tube 0, 1, 2
 
 // ── Known networks (tries in order, remembers the winner in flash) ────────────
 typedef struct { const char* ssid; const char* pass; } WifiCred;
@@ -55,10 +59,10 @@ Adafruit_NeoPixel pixel(1, PIN_NEOPIXEL, NEO_GRB + NEO_KHZ800);
 Preferences prefs;
 
 // ── State ─────────────────────────────────────────────────────────────────────
-String prevKey[3]               = {"", "", ""};  // last seen train key per slot
-bool soundActive[3]             = {false, false, false};
-unsigned long soundStartedAt[3] = {0, 0, 0};
-unsigned long lastPoll          = 0;
+String prevKey = "";          // journey ID of train in this slot ("" = empty)
+unsigned long lastPoll       = 0;
+unsigned long soundStartedAt = 0;
+bool soundActive             = false;
 
 // ── WiFi helpers ──────────────────────────────────────────────────────────────
 
@@ -149,8 +153,24 @@ void ledOff() {
 }
 
 // ── Tube activation ───────────────────────────────────────────────────────────
-void soundOn(int i)  { analogWrite(SOUND_PINS[i], 255); }
-void soundOff(int i) { analogWrite(SOUND_PINS[i], 0);   }
+// soundOn() is called when a train enters this tube.
+// soundOff() is called automatically after SOUND_DURATION ms (non-blocking).
+// Also called on tube exit in case the sound needs to cut short.
+//
+// TODO: uncomment the analogWrite lines once the tube hardware is wired.
+//       Pins 4, 5, 19 → set to 255 to activate, 0 to deactivate.
+
+void soundOn() {
+  // analogWrite(4,  255);
+  // analogWrite(5,  255);
+  // analogWrite(19, 255);
+}
+
+void soundOff() {
+  // analogWrite(4,  0);
+  // analogWrite(5,  0);
+  // analogWrite(19, 0);
+}
 
 // ── Setup ─────────────────────────────────────────────────────────────────────
 void setup() {
@@ -158,7 +178,7 @@ void setup() {
   pixel.begin();
   pixel.setBrightness(50);
   ledOff();
-  for (int i = 0; i < 3; i++) { pinMode(SOUND_PINS[i], OUTPUT); soundOff(i); }
+  soundOff();
 
   client.setInsecure();  // skip TLS cert verification (server uses self-signed cert)
   connectWifi();
@@ -169,20 +189,12 @@ void setup() {
 
 // ── Loop ──────────────────────────────────────────────────────────────────────
 void loop() {
-  // Non-blocking sound timers: stop each tube after SOUND_DURATION ms
-  bool anyActive = false;
-  for (int i = 0; i < 3; i++) {
-    if (soundActive[i]) {
-      if (millis() - soundStartedAt[i] >= SOUND_DURATION) {
-        soundOff(i);
-        soundActive[i] = false;
-        Serial.println("TUBE " + String(i) + " sound off");
-      } else {
-        anyActive = true;
-      }
-    }
+  // Non-blocking sound timer: cut off sound after SOUND_DURATION ms
+  if (soundActive && (millis() - soundStartedAt >= SOUND_DURATION)) {
+    soundOff();
+    soundActive = false;
+    Serial.println("TUBE " + String(TUBE_NUM) + " sound off");
   }
-  if (!anyActive) ledOff();
 
   // Reconnect if WiFi dropped mid-session
   if (WiFi.status() != WL_CONNECTED) {
@@ -198,7 +210,7 @@ void loop() {
 }
 
 // ── Poll ──────────────────────────────────────────────────────────────────────
-// Fetches /api/bart/tube/tube_arrivals and checks all 3 slots.
+// Fetches /api/bart/tube/tube_arrivals and checks tubes[TUBE_NUM].
 // Response shape: { "tubes": [ {train} | null, {train} | null, {train} | null ] }
 // Each train object: { "line", "dest", "vehicleRef", "color", "minutesUntil" }
 void poll() {
@@ -206,7 +218,7 @@ void poll() {
 
   if (!client.connect(server, 443)) {
     Serial.println("Connection failed — keeping current state");
-    return;
+    return;  // don't flicker the LED on network errors
   }
 
   client.print("GET "); client.print(path); client.println(" HTTP/1.1");
@@ -244,37 +256,56 @@ void poll() {
     return;
   }
 
-  // Check all 3 slots
-  for (int i = 0; i < 3; i++) {
-    JsonVariant slot = doc["tubes"][i];
+  // Read this device's assigned slot
+  JsonVariant slot = doc["tubes"][TUBE_NUM];
 
-    // Build stable key: vehicleRef (journey ID) or "line|dest" fallback; "" = empty
-    String currentKey = "";
-    if (!slot.isNull()) {
-      const char* vref = slot["vehicleRef"];
-      currentKey = (vref && strlen(vref) > 0)
-        ? String(vref)
-        : String(slot["line"] | "") + "|" + String(slot["dest"] | "");
-    }
-
-    if (currentKey == prevKey[i]) continue;  // no change in this slot
-    prevKey[i] = currentKey;
-
-    if (currentKey != "") {
-      // New train in slot i — activate solenoid and LED
-      uint8_t r, g, b;
-      lineColor(slot["line"] | "", r, g, b);
-      ledOn(r, g, b);
-      soundOn(i);
-      soundStartedAt[i] = millis();
-      soundActive[i]    = true;
-      Serial.println("TUBE " + String(i) + " ON: "
-                     + String(slot["line"] | "?")
-                     + " dest=" + String(slot["dest"] | "?")
-                     + " key=" + currentKey);
+  // Build a stable key for the current occupant of this slot.
+  // vehicleRef is a journey ID like "1842199" — unique per train run.
+  // Falls back to "line|dest" if somehow missing.
+  // Empty string means the slot is unoccupied.
+  String currentKey = "";
+  if (!slot.isNull()) {
+    const char* vref = slot["vehicleRef"];
+    if (vref && strlen(vref) > 0) {
+      currentKey = String(vref);
     } else {
-      // Slot cleared — sound/LED managed by timer in loop()
-      Serial.println("TUBE " + String(i) + " OFF");
+      currentKey = String(slot["line"] | "") + "|" + String(slot["dest"] | "");
     }
   }
+
+  // Only act on changes — if the same train is still in the slot, do nothing
+  if (currentKey == prevKey) return;
+
+  if (currentKey != "") {
+    // A new train has entered this tube (or replaced the previous one).
+    // Light the LED in the train's line color and trigger the tube sound.
+    uint8_t r, g, b;
+    lineColor(slot["line"] | "", r, g, b);
+    ledOn(r, g, b);  // LED stays on until the train exits (~7 min)
+
+    // ── ACTIVATE TUBE SOUND HERE ──────────────────────────────────────────────
+    soundOn();          // triggers pins 4, 5, 19 (uncomment lines in soundOn())
+    soundStartedAt = millis();
+    soundActive    = true;
+    // soundOff() is called automatically after SOUND_DURATION ms in loop()
+    // ─────────────────────────────────────────────────────────────────────────
+
+    Serial.println("TUBE " + String(TUBE_NUM) + " ON: "
+                   + String(slot["line"] | "?")
+                   + " dest=" + String(slot["dest"] | "?")
+                   + " key=" + currentKey);
+  } else {
+    // Slot is now empty — the train has exited the tube.
+    // Turn off the LED and silence the sound immediately.
+    ledOff();
+
+    // ── DEACTIVATE TUBE HERE ──────────────────────────────────────────────────
+    soundOff();
+    soundActive = false;
+    // ─────────────────────────────────────────────────────────────────────────
+
+    Serial.println("TUBE " + String(TUBE_NUM) + " OFF");
+  }
+
+  prevKey = currentKey;
 }
