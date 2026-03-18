@@ -40,6 +40,9 @@ const tubeAssignments = new Map();
 // Cleared when the train exits the tube.
 const playedTrains = new Set();
 
+// Round-robin cursor so tube assignments distribute across all 3 slots
+let nextSlot = 0;
+
 try {
   const saved = JSON.parse(fs.readFileSync(PERSIST_FILE, 'utf8'));
   for (const [k, v] of Object.entries(saved)) tubeAssignments.set(k, v);
@@ -89,9 +92,11 @@ router.get('/tube_arrivals', (_req, res) => {
     const key = trainKey(t);
     if (!tubeAssignments.has(key) && !playedTrains.has(key)) {
       const usedIdxs = [...tubeAssignments.values()].map(v => v.idx);
-      const free = [0, 1, 2].find(i => !usedIdxs.includes(i));
-      if (free !== undefined) {
-        tubeAssignments.set(key, { idx: free, assignedAt: Date.now() });
+      const offset = [0, 1, 2].find(j => !usedIdxs.includes((nextSlot + j) % 3));
+      if (offset !== undefined) {
+        const idx = (nextSlot + offset) % 3;
+        nextSlot = (idx + 1) % 3;
+        tubeAssignments.set(key, { idx, assignedAt: Date.now() });
       } else {
         // All slots occupied — evict the oldest to make room
         let oldestKey = null, oldestTime = Infinity;

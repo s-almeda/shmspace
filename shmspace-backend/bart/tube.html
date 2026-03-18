@@ -12,12 +12,8 @@
     .slot { flex: 1; text-align: center; font-family: 'Lucida Console', monospace; font-size: 0.72rem; min-width: 0; }
     .slot-label { font-size: 0.6rem; color: #666; margin-bottom: 2px; }
     .slot-val { padding: 4px 2px; background: #5b5b5b; border: 2px inset #999; color: #999; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .slot-val.on { color: var(--c); font-weight: bold; }
-    @keyframes flash {
-      0%   { background: var(--c); color: #000; }
-      100% { background: #0073ca; color: var(--c); }
-    }
-    .slot-val.flash { animation: flash 1s ease-out forwards; font-weight: bold; }
+    .slot-val.occupied { color: #555; }
+    .slot-val.sounding { background: #4a9eff; color: #000; font-weight: bold; }
     #events { font-family: 'Lucida Console', monospace; font-size: 0.72rem; margin: 4px 0; }
     .ev { padding: 2px 4px; margin-bottom: 2px; }
     .ev.in-tube { background: #0d2e2e; }
@@ -37,9 +33,15 @@
     <fieldset>
       <legend>tubes</legend>
       <div class="slots">
-        <div class="slot"><div class="slot-label">TUBE 1</div><div class="slot-val" id="s0">[ — ]</div></div>
-        <div class="slot"><div class="slot-label">TUBE 2</div><div class="slot-val" id="s1">[ — ]</div></div>
-        <div class="slot"><div class="slot-label">TUBE 3</div><div class="slot-val" id="s2">[ — ]</div></div>
+        <div class="slot"><div class="slot-label">TUBE 0</div><div class="slot-val" id="s0">[ — ]</div></div>
+        <div class="slot"><div class="slot-label">TUBE 1</div><div class="slot-val" id="s1">[ — ]</div></div>
+        <div class="slot"><div class="slot-label">TUBE 2</div><div class="slot-val" id="s2">[ — ]</div></div>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>led</legend>
+      <div style="text-align:center;padding:6px 0">
+        <div id="led" style="display:inline-block;width:28px;height:28px;border-radius:50%;background:#222;border:2px solid #444;transition:background 0.15s,box-shadow 0.15s"></div>
       </div>
     </fieldset>
     <fieldset>
@@ -58,8 +60,9 @@
 </div>
 <script>
   const POLL = 5000;
+  const SOUND_DURATION = 3000;
   const prevKey = ['','',''];
-  const activatedKeys = new Set(); // trains that have already flashed — never flash same train twice
+  const activatedKeys = new Set(); // trains that have already sounded — never re-trigger
   function key(t) { return t.vehicleRef || (t.line + '|' + t.dest); }
 
   async function poll() {
@@ -74,7 +77,7 @@
     const tubes = data.tubes || [null,null,null];
     const currentKeys = new Set(tubes.filter(Boolean).map(key));
 
-    // Remove keys no longer in any slot so they can flash again if the train re-enters
+    // Clear played trains that have left all slots (so they'd re-trigger if they re-enter)
     for (const k of activatedKeys) if (!currentKeys.has(k)) activatedKeys.delete(k);
 
     tubes.forEach((t, i) => {
@@ -82,27 +85,28 @@
       if (!t) {
         el.textContent = '[ — ]';
         el.className = 'slot-val';
-        el.style.removeProperty('--c');
         prevKey[i] = '';
         return;
       }
       const k = key(t);
       el.textContent = '[ ' + t.line + (t.vehicleRef ? ' #'+t.vehicleRef : '') + ' ]';
-      el.style.setProperty('--c', t.color);
       if (k !== prevKey[i]) {
         prevKey[i] = k;
         if (!activatedKeys.has(k)) {
-          // Truly new train — flash once
+          // New train — tube fires: glow blue for SOUND_DURATION, then dim
           activatedKeys.add(k);
-          el.className = 'slot-val';
-          void el.offsetWidth;
-          el.className = 'slot-val flash';
+          el.className = 'slot-val sounding';
+          setTimeout(() => { if (el.classList.contains('sounding')) el.className = 'slot-val occupied'; }, SOUND_DURATION);
+          // LED glows in train's line color for SOUND_DURATION
+          const led = document.getElementById('led');
+          led.style.background = t.color;
+          led.style.boxShadow = '0 0 12px ' + t.color;
+          setTimeout(() => { led.style.background = '#222'; led.style.boxShadow = 'none'; }, SOUND_DURATION);
         } else {
-          // Same train shifted slots — just light up, no flash
-          el.className = 'slot-val on';
+          el.className = 'slot-val occupied';
         }
-      } else {
-        el.className = 'slot-val on';
+      } else if (!el.classList.contains('sounding')) {
+        el.className = 'slot-val occupied';
       }
     });
 
