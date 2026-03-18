@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Transbay Tube</title>
+  <title>Transbay Tubes</title>
+  <link rel="icon" href="/images/clock.ico" type="image/x-icon">
   <link rel="stylesheet" href="https://unpkg.com/xp.css@/dist/98.css">
   <style>
     body { color: #eee; background: #0e0e0e; display: flex; justify-content: center; padding: 2rem; }
@@ -13,47 +14,108 @@
     .slot-label { font-size: 0.6rem; color: #666; margin-bottom: 2px; }
     .slot-val { padding: 4px 2px; background: #5b5b5b; border: 2px inset #999; color: #999; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .slot-val.occupied { color: #555; }
-    .slot-val.sounding { background: #ffffff; color: #000; font-weight: bold; }
-    #events { font-family: 'Lucida Console', monospace; font-size: 0.72rem; margin: 4px 0; }
+    .slot-val.sounding { background: #ffffff !important; color: #000; font-weight: bold; }
+    .ev-label { font-size: 0.6rem; color: #888; font-family: 'Lucida Console', monospace; margin: 6px 0 2px; padding-bottom: 2px; border-bottom: 1px solid #2a2a2a; }
+    .ev-label.alert { color: #ffaa00; }
+    .ev-list { font-family: 'Lucida Console', monospace; font-size: 0.72rem; margin-bottom: 4px; min-height: 1.4em; }
     .ev { padding: 2px 4px; margin-bottom: 2px; }
     .ev.in-tube { background: #0d2e2e; }
+    .ev.imminent { background: #261800; border-left: 2px solid #f80; }
+    a { color: #82b6ff; text-decoration: none; }
+    a:hover { background: #0050d0; color: #fff; }
+    #log-entries { font-family: 'Lucida Console', monospace; font-size: 0.65rem; max-height: 130px; overflow-y: auto; }
+    .log-row { padding: 2px 4px; color: #777; border-bottom: 1px solid #1a1a1a; }
+    .log-row .ts { color: #444; }
     pre { font-family: 'Lucida Console', monospace; font-size: 0.65rem; background: #1a1a1a; color: #aaa; border: 2px inset #999; padding: 6px; max-height: 300px; overflow: auto; }
     .foot { font-size: 0.6rem; color: #666; font-family: 'Lucida Console', monospace; display: flex; justify-content: space-between; margin-top: 4px; }
+    fieldset { margin-bottom: 6px; }
   </style>
 </head>
 <body>
 <div class="window">
   <div class="title-bar">
-    <div class="title-bar-text">Transbay Tube <span id="badge" style="display:none;background:#c00;color:#fff;font-size:0.6rem;padding:1px 4px;margin-left:6px">TEST MODE</span></div>
+    <div class="title-bar-text">this is a web monitor for the Transbay Tubes sound sculpture <span id="badge" style="display:none;background:#c00;color:#fff;font-size:0.6rem;padding:1px 4px;margin-left:6px">TEST MODE</span></div>
     <div class="title-bar-controls">
       <button aria-label="Minimize"></button><button aria-label="Maximize"></button><button aria-label="Close"></button>
     </div>
   </div>
   <div class="window-body">
-    <p style="font-size:0.65rem;color:#888;font-family:'Lucida Console',monospace;margin:4px 0 8px;line-height:1.6">
-      When a BART train enters the Transbay Tube, it gets assigned to one of 3 physical tube slots (round-robin).
-      That tube <span style="color:#fff">turns white</span> for 3s — indicating when the tube fires.
-      The LED lights up in the train's BART line color for the same 3s.
-      Each train only triggers its tube once, even if it stays in the tunnel for the full ~7 min transit.
-      If all 3 slots are full and a new train arrives, the oldest is "evicted" from the tube 
-    </p>
+    <details style="font-size:0.92rem;color:#bbb;font-family:Arial,sans-serif;line-height:1.75;margin-bottom:6px">
+      <summary style="font-weight:bold;color:rgb(231,231,220);cursor:pointer;font-family:'Times New Roman',Times,serif">about the transbay tube...</summary>
+      <div style="padding:6px 2px 2px">
+        <p style="margin:0 0 8px">
+          The Transbay Tube is an underwater rail tunnel carrying BART's four transbay lines (Red, Yellow, Green, Blue) under San Francisco Bay between Oakland and San Francisco.
+          It is 3.6 miles long, with a maximum depth of 135 feet below sea level.
+          The two nearest stations are Embarcadero in San Francisco and West Oakland in Oakland — the rail section between them is 6 miles in length.
+        </p>
+        <p style="margin:0 0 8px">
+          Opened in 1974, the tube was the final segment of the original BART system.
+          During peak hours, over 28,000 passengers per hour pass through, with headways as short as 2.5 minutes.
+          Trains reach their highest speeds here — up to 80 mph, though typically 70 mph.
+          Current capacity improvement projects aim to reduce headways to 2 minutes, or 30 trains per hour in each direction.
+          <br>wow, what a cool tube!
+        </p>
+        <p style="margin:0;font-size:0.7rem;color:#555">
+          (from <a href="https://www.bart.gov/about/projects/corecapacity" target="_blank">bart.gov</a> and the <a href="https://en.wikipedia.org/wiki/Transbay_Tube" target="_blank">Transbay Tube Wikipedia page</a>)
+        </p>
+      </div>
+    </details>
+    <details style="font-size:0.92rem;color:#bbb;font-family:Arial,sans-serif;line-height:1.75;margin-bottom:6px">
+      <summary style="font-weight:bold;color:rgb(231,231,220);cursor:pointer;font-family:'Times New Roman',Times,serif">about the transbay tubes sound sculpture...</summary>
+      <div style="padding:6px 2px 2px">
+        <p style="margin:0">
+          When a BART train enters the Transbay Tube it fires one of 3 heater tubes (round-robin).
+          Each tube has a different sequence: <span style="color:#ddd">tube0 7.7s · tube1 8.5s · tube2 11.2s</span>.
+          The LED stays on in the train's BART line color for the full sequence.
+          Each train only triggers a sound once.
+        </p>
+      </div>
+    </details>
+    <details style="font-size:0.92rem;color:#bbb;font-family:Arial,sans-serif;line-height:1.75;margin-bottom:10px">
+      <summary style="font-weight:bold;color:rgb(231,231,220);cursor:pointer;font-family:'Times New Roman',Times,serif">about the artists...</summary>
+      <div style="padding:6px 2px 2px">
+        <p style="margin:0 0 10px">
+          <a href="https://www.oliverdicicco.com/" target="_blank" style="color:#ff6b6b;font-weight:bold;text-decoration:underline">Oliver DiCicco</a> is a sculptor, musician, and invented instrument builder.
+          His sculptural work is focused primarily on kinetic sound sculptures, designed to create sound using a variety of techniques — including magnetic fields, feedback, and various mechanical mechanisms.
+          His work was recognized as a 2024 SECA award finalist, and his "Escape Pod" installation has been added to the SFMOMA permanent collection.
+        </p>
+        <p style="margin:0 0 10px">
+          <a href="http://www.sudhutewari.com/" target="_blank" style="color:#ffd700;font-weight:bold;text-decoration:underline">Sudhu Tewari</a> is an electro-acoustic composer, improvisor, and bricoleur in sound, kinetic and interactive art.
+          His passion for design, re-design, and recuperation has led to experimental musical instruments, kinetic sculptures, interactive installations, audio electronics, and wearable sound art.
+          His visual and interactive art has been exhibited in Europe and the US, most recently at SFMOMA.
+          Dr. Tewari teaches art and design at California College of the Arts and UC Berkeley, and bell casting at the Crucible.
+          He holds a B.A. in Music from Sonoma State University, a M.F.A. in Electronic Music and Recording Technology from Mills College, and a Ph.D. in Cultural Musicology from UC Santa Cruz.
+        </p>
+        <p style="margin:0">
+          <a href="https://shmuh.co/" target="_blank" style="color:#44ff88;font-weight:bold;text-decoration:underline">shm garanganao almeda</a> ("shim") is an artist &amp; computer scientist conducting HCI research on the impact of AI on creativity, while teaching creative &amp; artistic technology practice at UC Berkeley.
+          Or they're a green-haired filipino guy from New Jersey who likes looking at trains and art on the computer. recently they've been asking the computer to look back.
+        </p>
+      </div>
+    </details>
     <fieldset>
       <legend>tubes</legend>
       <div class="slots">
-        <div class="slot"><div class="slot-label">TUBE 0</div><div class="slot-val" id="s0">[ — ]</div></div>
-        <div class="slot"><div class="slot-label">TUBE 1</div><div class="slot-val" id="s1">[ — ]</div></div>
-        <div class="slot"><div class="slot-label">TUBE 2</div><div class="slot-val" id="s2">[ — ]</div></div>
+        <div class="slot"><div class="slot-label">TUBE 0 · red · 7.7s</div><div class="slot-val" id="s0">[ — ]</div></div>
+        <div class="slot"><div class="slot-label">TUBE 1 · yellow · 8.5s</div><div class="slot-val" id="s1">[ — ]</div></div>
+        <div class="slot"><div class="slot-label">TUBE 2 · green · 11.2s</div><div class="slot-val" id="s2">[ — ]</div></div>
       </div>
     </fieldset>
     <fieldset>
       <legend>led</legend>
       <div style="text-align:center;padding:6px 0">
-        <div id="led" style="display:inline-block;width:28px;height:28px;border-radius:50%;background:#222;border:2px solid #444;transition:background 0.15s,box-shadow 0.15s"></div>
+        <div id="led" style="display:inline-block;width:28px;height:28px;border-radius:50%;background:#222;border:2px solid #444;transition:background 0.1s,box-shadow 0.1s"></div>
       </div>
     </fieldset>
     <fieldset>
-      <legend>in transbay tube now</legend>
-      <div id="events"><span style="color:#999;font-size:0.72rem;font-family:monospace">—</span></div>
+      <legend>train activity</legend>
+      <div class="ev-label alert">!! about to enter the tube</div>
+      <div class="ev-list" id="ev-imminent"><span style="color:#444;padding:2px 4px;display:block">—</span></div>
+      <div class="ev-label">in tube now / coming later (&gt;5m)</div>
+      <div class="ev-list" id="ev-other"><span style="color:#444;padding:2px 4px;display:block">—</span></div>
+    </fieldset>
+    <fieldset>
+      <legend>event log</legend>
+      <div id="log-entries"><span style="color:#444;font-size:0.65rem;font-family:monospace;padding:2px 4px;display:block">no activations yet (since opening this page)</span></div>
     </fieldset>
     <div class="foot">
       <span id="fetched"></span>
@@ -67,11 +129,58 @@
 </div>
 <script>
   const POLL = 5000;
-  const SOUND_DURATION = 3000;
-  const prevKey = ['','',''];
-  const activatedKeys = new Set(); // trains that have already sounded — never re-trigger
-  let firstPoll = true; // on first poll, silently snapshot state without triggering anything
+
+  // Heater sequences matching tube_esp32.ino exactly.
+  // Each segment: { on: bool, ms: number } — the pin state and how long it holds.
+  // Total = sum of all segment ms.
+  const TUBE_SEQS = [
+    // tube0 / redPin:    ON 5500 → OFF 500 → ON 500 → OFF 500 → ON 700 → OFF  = 7700ms
+    { name: 'red',    totalMs: 7700,
+      segments: [{on:true,ms:5500},{on:false,ms:500},{on:true,ms:500},{on:false,ms:500},{on:true,ms:700}] },
+    // tube1 / yellowPin: ON 7500 → OFF 500 → ON 500 → OFF                     = 8500ms
+    { name: 'yellow', totalMs: 8500,
+      segments: [{on:true,ms:7500},{on:false,ms:500},{on:true,ms:500}] },
+    // tube2 / greenPin:  ON 9000 → OFF 500 → ON 500 → OFF 500 → ON 700 → OFF  = 11200ms
+    { name: 'green',  totalMs: 11200,
+      segments: [{on:true,ms:9000},{on:false,ms:500},{on:true,ms:500},{on:false,ms:500},{on:true,ms:700}] },
+  ];
+
+  const prevKey     = ['','',''];
+  const activatedKeys = new Set();
+  let firstPoll = true;
+  const fireLog = [];
+
   function key(t) { return t.vehicleRef || (t.line + '|' + t.dest); }
+
+  function playTube(tubeIdx, train) {
+    const seq = TUBE_SEQS[tubeIdx];
+    const el  = document.getElementById('s' + tubeIdx);
+    const led = document.getElementById('led');
+
+    // LED on for full sequence duration
+    led.style.background = train.color;
+    led.style.boxShadow  = '0 0 14px ' + train.color;
+    setTimeout(() => { led.style.background = '#222'; led.style.boxShadow = 'none'; }, seq.totalMs);
+
+    // Animate slot: replay each segment's on/off state
+    let t = 0;
+    for (const seg of seq.segments) {
+      const delay = t;
+      setTimeout(() => { el.className = 'slot-val ' + (seg.on ? 'sounding' : 'occupied'); }, delay);
+      t += seg.ms;
+    }
+    setTimeout(() => { el.className = 'slot-val occupied'; }, t); // final off
+
+    // Append to fire log
+    const ts   = new Date().toLocaleTimeString();
+    const vref = train.vehicleRef ? ` #${train.vehicleRef}` : '';
+    const entry = `<div class="log-row"><span class="ts">${ts}</span> · `
+      + `<span style="color:${train.color};font-weight:bold">${train.line}</span>${vref} → ${train.dest} entered the tube! `
+      + `· fired <b>tube${tubeIdx}</b> (${seq.name} heater) · LED for ${(seq.totalMs/1000).toFixed(1)}s</div>`;
+    fireLog.unshift(entry);
+    if (fireLog.length > 30) fireLog.pop();
+    document.getElementById('log-entries').innerHTML = fireLog.join('');
+  }
 
   async function poll() {
     const data = await fetch('/api/bart/tube/tube_arrivals').then(r=>r.json()).catch(()=>null);
@@ -84,12 +193,9 @@
 
     const tubes = data.tubes || [null,null,null];
     const currentKeys = new Set(tubes.filter(Boolean).map(key));
-
-    // Clear played trains that have left all slots (so they'd re-trigger if they re-enter)
     for (const k of activatedKeys) if (!currentKeys.has(k)) activatedKeys.delete(k);
 
     if (firstPoll) {
-      // Silently snapshot current state — trains already in the tube don't trigger
       firstPoll = false;
       tubes.forEach((t, i) => {
         const el = document.getElementById('s' + i);
@@ -107,7 +213,7 @@
       const el = document.getElementById('s' + i);
       if (!t) {
         el.textContent = '[ — ]';
-        el.className = 'slot-val';
+        if (!el.classList.contains('sounding')) el.className = 'slot-val';
         prevKey[i] = '';
         return;
       }
@@ -116,16 +222,9 @@
       if (k !== prevKey[i]) {
         prevKey[i] = k;
         if (!activatedKeys.has(k)) {
-          // New train — tube fires: glow blue for SOUND_DURATION, then dim
           activatedKeys.add(k);
-          el.className = 'slot-val sounding';
-          setTimeout(() => { if (el.classList.contains('sounding')) el.className = 'slot-val occupied'; }, SOUND_DURATION);
-          // LED glows in train's line color for SOUND_DURATION
-          const led = document.getElementById('led');
-          led.style.background = t.color;
-          led.style.boxShadow = '0 0 12px ' + t.color;
-          setTimeout(() => { led.style.background = '#222'; led.style.boxShadow = 'none'; }, SOUND_DURATION);
-        } else {
+          playTube(i, t);
+        } else if (!el.classList.contains('sounding')) {
           el.className = 'slot-val occupied';
         }
       } else if (!el.classList.contains('sounding')) {
@@ -140,19 +239,30 @@
   async function pollEvents() {
     const data = await fetch('/api/bart/tube/events').then(r=>r.json()).catch(()=>null);
     if (!data) return;
-    const ev = document.getElementById('events');
-    if (!data.events.length) {
-      ev.innerHTML = '<span style="color:#999;font-size:0.72rem;font-family:monospace">no trains near tube</span>';
-      return;
-    }
-    const sorted = [...data.events].sort((a,b) => a.minutes - b.minutes);
-    ev.innerHTML = sorted.map(e => {
-      const vref = e.vehicleRef ? ` <span style="color:#999">#${e.vehicleRef}</span>` : '';
+
+    const imminent = data.events.filter(e => e.status !== 'in_tube' && e.minutes <= 5)
+                                .sort((a,b) => a.minutes - b.minutes);
+    const other    = data.events.filter(e => e.status === 'in_tube' || e.minutes > 5)
+                                .sort((a,b) => a.minutes - b.minutes);
+
+    const renderEv = e => {
+      const vref   = e.vehicleRef ? ` <span style="color:#666">#${e.vehicleRef}</span>` : '';
       const status = e.status === 'in_tube'
-        ? `in tube · exits ${e.station} in ${e.minutes}m`
-        : `enters tube in ${e.minutes}m`;
-      return `<div class="ev${e.status === 'in_tube' ? ' in-tube' : ''}"><span style="color:${e.color};font-weight:bold">${e.line}</span>${vref} → ${e.dest} · ${status}</div>`;
-    }).join('');
+        ? `in tube · exits to ${e.station} in ${e.minutes}m`
+        : `enters the tube in ${e.minutes}m`;
+      const cls = e.status === 'in_tube' ? 'in-tube' : (e.minutes <= 5 ? 'imminent' : '');
+      return `<div class="ev ${cls}"><span style="color:${e.color};font-weight:bold">${e.line}</span>${vref} → ${e.dest} · ${status}</div>`;
+    };
+
+    const imEl = document.getElementById('ev-imminent');
+    imEl.innerHTML = imminent.length
+      ? imminent.map(renderEv).join('')
+      : '<span style="color:#444;padding:2px 4px;display:block">none within 5m</span>';
+
+    const otEl = document.getElementById('ev-other');
+    otEl.innerHTML = other.length
+      ? other.map(renderEv).join('')
+      : '<span style="color:#444;padding:2px 4px;display:block">—</span>';
   }
 
   let lastPoll = null;
