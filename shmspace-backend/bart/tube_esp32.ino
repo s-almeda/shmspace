@@ -146,8 +146,8 @@ void soundOff(int i) { analogWrite(SOUND_PINS[i], 0);   }
 
 void activateTube0() {
   soundOn(0);
-  // put code for tube0 here !!!
-       Serial.print("1 - red - 5.5sec"); 
+  // heater sequence code for tube0 !!!
+      Serial.print("1 - red - 5.5sec"); 
       analogWrite(redPin, 255);
       delay(5500);  // not longer than 5sec...(!)
       analogWrite(redPin, 0); 
@@ -165,7 +165,7 @@ void activateTube0() {
 }
 void activateTube1() {
   soundOn(1);
-  // put code for tube1 here !!!
+  // heater sequence code for tube1 !!!
       Serial.print("2 - yellow - 7.5sec");
       analogWrite(yellowPin, 255);
       delay(7500);
@@ -180,7 +180,7 @@ void activateTube1() {
 }
 void activateTube2() {
   soundOn(2);
-  // put code for tube2 here !!!
+  // heater sequence code for tube2 !!!
        Serial.print("3 - green - 9sec");
       analogWrite(greenPin, 255);
       delay(9000);
