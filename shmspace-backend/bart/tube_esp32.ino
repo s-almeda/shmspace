@@ -29,10 +29,9 @@ const char* path   = "/api/bart/tube/tube_arrivals";
 const unsigned long POLL_INTERVAL  = 5000;   // how often to check the server (ms)
 const unsigned long WIFI_TIMEOUT   = 10000;  // max wait per network attempt (ms)
 
-const int SOUND_PINS[3] = {4, 5, 19};  // solenoid driver pins: tube 0, 1, 2
-  int redPin = 4; //heater driver 1 on pin 4 (A5)
-  int yellowPin = 5; //heater driver 2 on pin 5 (SCK)
-  int greenPin = 19; //heater driver 3 on pin 19 (MOSI)
+const int redPin    = 4;   // heater driver 1 on pin 4  (A5)
+const int yellowPin = 5;   // heater driver 2 on pin 5  (SCK)
+const int greenPin  = 19;  // heater driver 3 on pin 19 (MOSI)
 
 // ── Known networks (tries in order, remembers the winner in flash) ────────────
 typedef struct { const char* ssid; const char* pass; } WifiCred;
@@ -144,11 +143,7 @@ void ledOff() {
 }
 
 // ── TUBE ACTIVATION CODE!! ───────────────────────────────────────────────────────────
-void soundOn(int i)  { analogWrite(SOUND_PINS[i], 255); }
-void soundOff(int i) { analogWrite(SOUND_PINS[i], 0);   }
-
 void activateTube0() {
-  soundOn(0);
   // heater sequence code for tube0 !!!
       Serial.print("1 - red - 5.5sec"); 
       analogWrite(redPin, 255);
@@ -163,11 +158,8 @@ void activateTube0() {
       delay(700); 
       analogWrite(redPin, 0);
       Serial.println("\t OFF - cooldown time");
-  soundOff(0);
-
 }
 void activateTube1() {
-  soundOn(1);
   // heater sequence code for tube1 !!!
       Serial.print("2 - yellow - 7.5sec");
       analogWrite(yellowPin, 255);
@@ -178,12 +170,8 @@ void activateTube1() {
       delay(500);
       analogWrite(yellowPin, 0);
       Serial.println("\t OFF - cooldown time");
-  soundOff(1);
-
-
 }
 void activateTube2() {
-  soundOn(2);
   // heater sequence code for tube2 !!!
        Serial.print("3 - green - 9sec");
       analogWrite(greenPin, 255);
@@ -198,9 +186,6 @@ void activateTube2() {
       delay(700);
       analogWrite(greenPin, 0);
       Serial.println("\t OFF - cooldown time");
-  soundOff(2);
-
-
 }
 // hi sudhu
 
@@ -210,10 +195,9 @@ void setup() {
   pixel.begin();
   pixel.setBrightness(50);
   ledOff();
-  for (int i = 0; i < 3; i++) { pinMode(SOUND_PINS[i], OUTPUT); soundOff(i); }
-    // pinMode(redPin, OUTPUT);
-    // pinMode(yellowPin, OUTPUT);
-    // pinMode(greenPin, OUTPUT);
+  pinMode(redPin,    OUTPUT); analogWrite(redPin,    0);
+  pinMode(yellowPin, OUTPUT); analogWrite(yellowPin, 0);
+  pinMode(greenPin,  OUTPUT); analogWrite(greenPin,  0);
 
   client.setInsecure();  // skip TLS cert verification (server uses self-signed cert)
   connectWifi();
