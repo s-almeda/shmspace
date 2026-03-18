@@ -27,7 +27,6 @@ const char* server = "art.snailbunny.site";
 const char* path   = "/api/bart/tube/tube_arrivals";
 
 const unsigned long POLL_INTERVAL  = 5000;   // how often to check the server (ms)
-const unsigned long SOUND_DURATION = 3000;   // how long each tube sound plays (ms)
 const unsigned long WIFI_TIMEOUT   = 10000;  // max wait per network attempt (ms)
 
 const int SOUND_PINS[3] = {4, 5, 19};  // solenoid driver pins: tube 0, 1, 2
@@ -49,10 +48,8 @@ Adafruit_NeoPixel pixel(1, PIN_NEOPIXEL, NEO_GRB + NEO_KHZ800);
 Preferences prefs;
 
 // ── State ─────────────────────────────────────────────────────────────────────
-String prevKey[3]               = {"", "", ""};  // last seen train key per slot
-bool soundActive[3]             = {false, false, false};
-unsigned long soundStartedAt[3] = {0, 0, 0};
-unsigned long lastPoll          = 0;
+String prevKey[3]  = {"", "", ""};  // last seen train key per slot
+unsigned long lastPoll = 0;
 bool firstPoll                  = true;  // on first poll, snapshot state without firing
 
 // ── WiFi helpers ──────────────────────────────────────────────────────────────
@@ -149,15 +146,15 @@ void soundOff(int i) { analogWrite(SOUND_PINS[i], 0);   }
 
 void activateTube0() {
   soundOn(0);
-  // put code for tube0 here !
+  // put code for tube0 here !!!
 }
 void activateTube1() {
   soundOn(1);
-  // put code for tube1 here !
+  // put code for tube1 here !!!
 }
 void activateTube2() {
   soundOn(2);
-  // put code for tube2 here !
+  // put code for tube2 here !!!
 }
 // hi sudhu
 
@@ -178,21 +175,6 @@ void setup() {
 
 // ── Loop ──────────────────────────────────────────────────────────────────────
 void loop() {
-  // Non-blocking sound timers: stop each tube after SOUND_DURATION ms
-  bool anyActive = false;
-  for (int i = 0; i < 3; i++) {
-    if (soundActive[i]) {
-      if (millis() - soundStartedAt[i] >= SOUND_DURATION) {
-        soundOff(i);
-        soundActive[i] = false;
-        Serial.println("TUBE " + String(i) + " sound off");
-      } else {
-        anyActive = true;
-      }
-    }
-  }
-  if (!anyActive) ledOff();
-
   // Reconnect if WiFi dropped mid-session
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("WiFi lost — reconnecting...");
@@ -289,12 +271,11 @@ void poll() {
       // New train in slot i — activate solenoid and LED
       uint8_t r, g, b;
       lineColor(slot["line"] | "", r, g, b);
-      ledOn(r, g, b);
+      ledOn(r, g, b); 
+      // activate the correct tube based on the assigned slot number from server
       if      (i == 0) activateTube0();
       else if (i == 1) activateTube1();
       else             activateTube2();
-      soundStartedAt[i] = millis();
-      soundActive[i]    = true;
       Serial.println("TUBE " + String(i) + " ON: "
                      + String(slot["line"] | "?")
                      + " dest=" + String(slot["dest"] | "?")
