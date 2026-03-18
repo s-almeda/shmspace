@@ -33,13 +33,13 @@
 </head>
 <body>
 <div class="window">
-  <div class="title-bar">
-    <div class="title-bar-text">this is a web monitor for the Transbay Tubes sound sculpture <span id="badge" style="display:none;background:#c00;color:#fff;font-size:0.6rem;padding:1px 4px;margin-left:6px">TEST MODE</span></div>
-    <div class="title-bar-controls">
-      <button aria-label="Minimize"></button><button aria-label="Maximize"></button><button aria-label="Close"></button>
-    </div>
-  </div>
   <div class="window-body">
+        <fieldset style="margin:0">
+          <legend style="font-weight:bold"> This is a web monitor for the Transbay Tubes sound sculpture. <span id="badge" style="display:none;background:#c00;color:#fff;font-size:0.6rem;padding:1px 4px;margin-left:6px">TEST MODE</span>
+</legend>
+          When a BART train enters the Transbay Tube, the sculpture turns on an LED to indicate its line color, fires one of 3 tubes (assigned by the server round-robin), causing a sound. 
+        </fieldset>
+    
     <details style="font-size:0.92rem;color:#bbb;font-family:Arial,sans-serif;line-height:1.75;margin-bottom:6px">
       <summary style="font-weight:bold;color:rgb(231,231,220);cursor:pointer;font-family:'Times New Roman',Times,serif">about the transbay tube...</summary>
       <div style="padding:6px 2px 2px">
@@ -57,17 +57,6 @@
         </p>
         <p style="margin:0;font-size:0.7rem;color:#555">
           (from <a href="https://www.bart.gov/about/projects/corecapacity" target="_blank">bart.gov</a> and the <a href="https://en.wikipedia.org/wiki/Transbay_Tube" target="_blank">Transbay Tube Wikipedia page</a>)
-        </p>
-      </div>
-    </details>
-    <details style="font-size:0.92rem;color:#bbb;font-family:Arial,sans-serif;line-height:1.75;margin-bottom:6px">
-      <summary style="font-weight:bold;color:rgb(231,231,220);cursor:pointer;font-family:'Times New Roman',Times,serif">about the transbay tubes sound sculpture...</summary>
-      <div style="padding:6px 2px 2px">
-        <p style="margin:0">
-          When a BART train enters the Transbay Tube it fires one of 3 heater tubes (round-robin).
-          Each tube has a different sequence: <span style="color:#ddd">tube0 7.7s · tube1 8.5s · tube2 11.2s</span>.
-          The LED stays on in the train's BART line color for the full sequence.
-          Each train only triggers a sound once.
         </p>
       </div>
     </details>
@@ -95,9 +84,9 @@
     <fieldset>
       <legend>tubes</legend>
       <div class="slots">
-        <div class="slot"><div class="slot-label">TUBE 0 · red · 7.7s</div><div class="slot-val" id="s0">[ — ]</div></div>
-        <div class="slot"><div class="slot-label">TUBE 1 · yellow · 8.5s</div><div class="slot-val" id="s1">[ — ]</div></div>
-        <div class="slot"><div class="slot-label">TUBE 2 · green · 11.2s</div><div class="slot-val" id="s2">[ — ]</div></div>
+        <div class="slot"><div class="slot-label">TUBE 0 · 7.7s</div><div class="slot-val" id="s0">[ — ]</div></div>
+        <div class="slot"><div class="slot-label">TUBE 1 · 8.5s</div><div class="slot-val" id="s1">[ — ]</div></div>
+        <div class="slot"><div class="slot-label">TUBE 2 · 11.2s</div><div class="slot-val" id="s2">[ — ]</div></div>
       </div>
     </fieldset>
     <fieldset>
@@ -135,13 +124,13 @@
   // Total = sum of all segment ms.
   const TUBE_SEQS = [
     // tube0 / redPin:    ON 5500 → OFF 500 → ON 500 → OFF 500 → ON 700 → OFF  = 7700ms
-    { name: 'red',    totalMs: 7700,
+    { name: 'tube0',    totalMs: 7700,
       segments: [{on:true,ms:5500},{on:false,ms:500},{on:true,ms:500},{on:false,ms:500},{on:true,ms:700}] },
     // tube1 / yellowPin: ON 7500 → OFF 500 → ON 500 → OFF                     = 8500ms
-    { name: 'yellow', totalMs: 8500,
+    { name: 'tube1', totalMs: 8500,
       segments: [{on:true,ms:7500},{on:false,ms:500},{on:true,ms:500}] },
     // tube2 / greenPin:  ON 9000 → OFF 500 → ON 500 → OFF 500 → ON 700 → OFF  = 11200ms
-    { name: 'green',  totalMs: 11200,
+    { name: 'tube2', totalMs: 11200,
       segments: [{on:true,ms:9000},{on:false,ms:500},{on:true,ms:500},{on:false,ms:500},{on:true,ms:700}] },
   ];
 
