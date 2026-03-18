@@ -147,14 +147,20 @@ void soundOff(int i) { analogWrite(SOUND_PINS[i], 0);   }
 void activateTube0() {
   soundOn(0);
   // put code for tube0 here !!!
+  soundOff(0);
+  ledOff();
 }
 void activateTube1() {
   soundOn(1);
   // put code for tube1 here !!!
+  soundOff(1);
+  ledOff();
 }
 void activateTube2() {
   soundOn(2);
   // put code for tube2 here !!!
+  soundOff(2);
+  ledOff();
 }
 // hi sudhu
 
