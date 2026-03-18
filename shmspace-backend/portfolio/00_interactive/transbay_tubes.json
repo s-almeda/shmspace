@@ -1,0 +1,6 @@
+{
+  "title": "transbay_tubes",
+  "preview": "assets/transbay_tubes_preview.png",
+  "link": "https://art.snailbunny.site/api/bart/tube",
+  "css": "body { background: #000 !important; }"
+}

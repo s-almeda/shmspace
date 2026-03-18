@@ -1,0 +1,6 @@
+{
+  "title": "recognizing_my_self",
+  "preview": "assets/recognize_me_preview.JPG",
+  "link": "https://shmuh.co/recognize_me",
+  "css": "body { position: relative; } body::before { content: ''; position: fixed; inset: 0; background: url('https://art.snailbunny.site/portfolio/00_interactive/assets/recognize_me_preview.JPG') center / cover no-repeat; filter: blur(20px); transform: scale(1.1); z-index: -1; }"
+}
