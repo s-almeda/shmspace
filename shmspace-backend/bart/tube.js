@@ -36,6 +36,10 @@ function getInTube(cache, now = new Date()) {
 // don't cause slot reshuffling and re-firing on the ESP32s.
 const tubeAssignments = new Map();
 
+// Trains that have already been assigned a slot this transit — never assign again.
+// Cleared when the train exits the tube.
+const playedTrains = new Set();
+
 try {
   const saved = JSON.parse(fs.readFileSync(PERSIST_FILE, 'utf8'));
   for (const [k, v] of Object.entries(saved)) tubeAssignments.set(k, v);
@@ -70,23 +74,26 @@ router.get('/tube_arrivals', (_req, res) => {
   const cache = getCache();
   const allInTube = getInTube(cache);
 
-  // Drop assignments for trains that left the tube
+  // Drop assignments and played-marks for trains that left the tube
   const active = new Set(allInTube.map(trainKey));
   for (const k of tubeAssignments.keys())
     if (!active.has(k)) tubeAssignments.delete(k);
+  for (const k of playedTrains)
+    if (!active.has(k)) playedTrains.delete(k);
 
-  // Assign new trains to slots; evict the oldest if all 3 are full
+  // Assign new unplayed trains to slots; evict oldest if all 3 full.
+  // playedTrains prevents evicted trains from recapturing a slot and re-firing.
   const tubes = [null, null, null];
   let changed = false;
   for (const t of allInTube) {
     const key = trainKey(t);
-    if (!tubeAssignments.has(key)) {
+    if (!tubeAssignments.has(key) && !playedTrains.has(key)) {
       const usedIdxs = [...tubeAssignments.values()].map(v => v.idx);
       const free = [0, 1, 2].find(i => !usedIdxs.includes(i));
       if (free !== undefined) {
         tubeAssignments.set(key, { idx: free, assignedAt: Date.now() });
       } else {
-        // All slots occupied — evict the oldest to make room for the new train
+        // All slots occupied — evict the oldest to make room
         let oldestKey = null, oldestTime = Infinity;
         for (const [k, v] of tubeAssignments)
           if (v.assignedAt < oldestTime) { oldestTime = v.assignedAt; oldestKey = k; }
@@ -94,6 +101,7 @@ router.get('/tube_arrivals', (_req, res) => {
         tubeAssignments.delete(oldestKey);
         tubeAssignments.set(key, { idx: evictedIdx, assignedAt: Date.now() });
       }
+      playedTrains.add(key);
       changed = true;
     }
     const entry = tubeAssignments.get(key);
