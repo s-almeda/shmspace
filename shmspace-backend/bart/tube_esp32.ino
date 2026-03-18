@@ -30,6 +30,9 @@ const unsigned long POLL_INTERVAL  = 5000;   // how often to check the server (m
 const unsigned long WIFI_TIMEOUT   = 10000;  // max wait per network attempt (ms)
 
 const int SOUND_PINS[3] = {4, 5, 19};  // solenoid driver pins: tube 0, 1, 2
+  int redPin = 4; //heater driver 1 on pin 4 (A5)
+  int yellowPin = 5; //heater driver 2 on pin 5 (SCK)
+  int greenPin = 19; //heater driver 3 on pin 19 (MOSI)
 
 // ── Known networks (tries in order, remembers the winner in flash) ────────────
 typedef struct { const char* ssid; const char* pass; } WifiCred;
@@ -208,6 +211,9 @@ void setup() {
   pixel.setBrightness(50);
   ledOff();
   for (int i = 0; i < 3; i++) { pinMode(SOUND_PINS[i], OUTPUT); soundOff(i); }
+    // pinMode(redPin, OUTPUT);
+    // pinMode(yellowPin, OUTPUT);
+    // pinMode(greenPin, OUTPUT);
 
   client.setInsecure();  // skip TLS cert verification (server uses self-signed cert)
   connectWifi();
