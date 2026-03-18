@@ -76,8 +76,11 @@ router.get('/next', (req, res) => {
   res.json(next);
 });
 
+// redirect /api/bart to the tube monitor
+router.get('/', (_req, res) => res.redirect('/api/bart/tube'));
+
 // the webpage itself
-router.get('/', (req, res) => {
+router.get('/bart-status', (_req, res) => {
   res.send(`<!DOCTYPE html>
 <html lang="en">
 <head>

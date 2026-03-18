@@ -77,6 +77,7 @@ app.get('/api/portfolio-files', (req, res) => {
   res.json(structure);
 });
 
+app.get('/bart', (_req, res) => res.redirect('/api/bart/tube'));
 app.use('/api/bart', require('./bart/bart'));
 
 app.listen(3001, () => {
