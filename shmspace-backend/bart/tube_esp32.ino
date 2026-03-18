@@ -52,6 +52,7 @@ String prevKey[3]               = {"", "", ""};  // last seen train key per slot
 bool soundActive[3]             = {false, false, false};
 unsigned long soundStartedAt[3] = {0, 0, 0};
 unsigned long lastPoll          = 0;
+bool firstPoll                  = true;  // on first poll, snapshot state without firing
 
 // ── WiFi helpers ──────────────────────────────────────────────────────────────
 
@@ -234,6 +235,22 @@ void poll() {
   StaticJsonDocument<1024> doc;
   if (deserializeJson(doc, body)) {
     Serial.println("JSON parse failed — keeping current state");
+    return;
+  }
+
+  // On first poll, silently record current state — don't fire solenoids for trains already in tube
+  if (firstPoll) {
+    firstPoll = false;
+    for (int i = 0; i < 3; i++) {
+      JsonVariant slot = doc["tubes"][i];
+      if (!slot.isNull()) {
+        const char* vref = slot["vehicleRef"];
+        prevKey[i] = (vref && strlen(vref) > 0)
+          ? String(vref)
+          : String(slot["line"] | "") + "|" + String(slot["dest"] | "");
+        Serial.println("TUBE " + String(i) + " startup (no fire): key=" + prevKey[i]);
+      }
+    }
     return;
   }
 

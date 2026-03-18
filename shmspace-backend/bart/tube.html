@@ -70,6 +70,7 @@
   const SOUND_DURATION = 3000;
   const prevKey = ['','',''];
   const activatedKeys = new Set(); // trains that have already sounded — never re-trigger
+  let firstPoll = true; // on first poll, silently snapshot state without triggering anything
   function key(t) { return t.vehicleRef || (t.line + '|' + t.dest); }
 
   async function poll() {
@@ -86,6 +87,21 @@
 
     // Clear played trains that have left all slots (so they'd re-trigger if they re-enter)
     for (const k of activatedKeys) if (!currentKeys.has(k)) activatedKeys.delete(k);
+
+    if (firstPoll) {
+      // Silently snapshot current state — trains already in the tube don't trigger
+      firstPoll = false;
+      tubes.forEach((t, i) => {
+        const el = document.getElementById('s' + i);
+        if (!t) { el.textContent = '[ — ]'; return; }
+        const k = key(t);
+        prevKey[i] = k;
+        activatedKeys.add(k);
+        el.textContent = '[ ' + t.line + (t.vehicleRef ? ' #'+t.vehicleRef : '') + ' ]';
+        el.className = 'slot-val occupied';
+      });
+      return;
+    }
 
     tubes.forEach((t, i) => {
       const el = document.getElementById('s' + i);
