@@ -43,7 +43,7 @@
       </div>
     </fieldset>
     <fieldset>
-      <legend>in tube now</legend>
+      <legend>in transbay tube now</legend>
       <div id="events"><span style="color:#999;font-size:0.72rem;font-family:monospace">—</span></div>
     </fieldset>
     <div class="foot">
@@ -58,8 +58,8 @@
 </div>
 <script>
   const POLL = 5000;
-  const seen = new Set();
   const prevKey = ['','',''];
+  const activatedKeys = new Set(); // trains that have already flashed — never flash same train twice
   function key(t) { return t.vehicleRef || (t.line + '|' + t.dest); }
 
   async function poll() {
@@ -72,6 +72,11 @@
       ? 'data ' + new Date(data.fetchedAt).toLocaleTimeString() : '';
 
     const tubes = data.tubes || [null,null,null];
+    const currentKeys = new Set(tubes.filter(Boolean).map(key));
+
+    // Remove keys no longer in any slot so they can flash again if the train re-enters
+    for (const k of activatedKeys) if (!currentKeys.has(k)) activatedKeys.delete(k);
+
     tubes.forEach((t, i) => {
       const el = document.getElementById('s' + i);
       if (!t) {
@@ -85,10 +90,17 @@
       el.textContent = '[ ' + t.line + (t.vehicleRef ? ' #'+t.vehicleRef : '') + ' ]';
       el.style.setProperty('--c', t.color);
       if (k !== prevKey[i]) {
-        el.className = 'slot-val';
-        void el.offsetWidth;
-        el.className = 'slot-val flash';
         prevKey[i] = k;
+        if (!activatedKeys.has(k)) {
+          // Truly new train — flash once
+          activatedKeys.add(k);
+          el.className = 'slot-val';
+          void el.offsetWidth;
+          el.className = 'slot-val flash';
+        } else {
+          // Same train shifted slots — just light up, no flash
+          el.className = 'slot-val on';
+        }
       } else {
         el.className = 'slot-val on';
       }

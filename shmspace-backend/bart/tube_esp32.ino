@@ -15,9 +15,9 @@ const unsigned long SOUND_DURATION = 3000;
 const unsigned long WIFI_TIMEOUT   = 10000;  // ms to wait per network attempt
 
 // ── Known networks (default try order) ───────────────────────────────────────
-struct Network { const char* ssid; const char* pass; };
+typedef struct { const char* ssid; const char* pass; } WifiCred;
 
-const Network NETWORKS[] = {
+const WifiCred NETWORKS[] = {
   { "tiat-guest",   "artandtechnology" },
   { "Berkeley-IoT", "Hopper12!"        },
   { "shmzone",      "hopper&anya"      },
@@ -209,7 +209,7 @@ void poll() {
 
   Serial.println(body);
 
-  StaticJsonDocument<1024> doc;
+  StaticJsonDocument<512> doc;
   if (deserializeJson(doc, body)) {
     Serial.println("JSON parse failed — keeping current state");
     return;

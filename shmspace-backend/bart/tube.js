@@ -88,16 +88,7 @@ router.get('/tube_arrivals', (_req, res) => {
       tubes[entry.idx] = { line: t.line, dest: t.dest, vehicleRef: t.vehicleRef || null, color: lineColor(t.line), minutesUntil: t.minutesUntil };
   }
 
-  // Trains approaching the tube (exit stop arrival 7–20 min away)
-  const now = new Date();
-  const approaching = [];
-  for (const t of [...cache.emb_sb, ...cache.wo_nb]) {
-    const m = minsUntil(t.arrives, now);
-    if (m > TUBE_WINDOW && m <= 20)
-      approaching.push({ line: t.line, dest: t.dest, vehicleRef: t.vehicleRef || null, color: lineColor(t.line), minutesUntil: Math.round(m) });
-  }
-
-  res.json({ tubes, approaching, fetchedAt: cache.fetchedAt, testMode: cache.testMode || false });
+  res.json({ tubes, fetchedAt: cache.fetchedAt, testMode: cache.testMode || false });
 });
 
 router.get('/events', (_req, res) => {
