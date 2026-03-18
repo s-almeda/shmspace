@@ -146,21 +146,26 @@ void soundOff(int i) { analogWrite(SOUND_PINS[i], 0);   }
 
 void activateTube0() {
   soundOn(0);
+    delay(3000); // wait 3 seconds
   // put code for tube0 here !!!
   soundOff(0);
-  ledOff();
+
 }
 void activateTube1() {
   soundOn(1);
+    delay(3000); // wait 3 seconds
   // put code for tube1 here !!!
   soundOff(1);
-  ledOff();
+
+
 }
 void activateTube2() {
   soundOn(2);
+      delay(3000); // wait 3 seconds
   // put code for tube2 here !!!
   soundOff(2);
-  ledOff();
+
+
 }
 // hi sudhu
 
@@ -286,6 +291,8 @@ void poll() {
                      + String(slot["line"] | "?")
                      + " dest=" + String(slot["dest"] | "?")
                      + " key=" + currentKey);
+
+      ledOff(); // turn off the LED after activating the tube
     } else {
       // Slot cleared — sound/LED managed by timer in loop()
       Serial.println("TUBE " + String(i) + " OFF");
