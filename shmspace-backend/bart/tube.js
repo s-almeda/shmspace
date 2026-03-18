@@ -1,8 +1,11 @@
 const express = require('express');
 const path    = require('path');
+const fs      = require('fs');
 const { getCache } = require('./fetcher');
 
 const router = express.Router();
+
+const PERSIST_FILE = path.join(__dirname, '.tube_slots.json');
 
 // Tube transit window: a train is considered "in the tube" when its arrival
 // at the exit stop is between 0 and 7 minutes away.
@@ -29,11 +32,19 @@ function getInTube(cache, now = new Date()) {
   return inTube;
 }
 
-// Maps trainKey → { idx, assignedAt }. Guarantees no two trains share a tube.
-// When all 3 slots are full and a new train arrives, the oldest slot is evicted
-// so the new train gets announced. ESP32 fires on any key change (not just null→key).
-// Each ESP32 is flashed with TUBE_NUM = 0 | 1 | 2 and watches tubes[TUBE_NUM].
+// Maps trainKey → { idx, assignedAt }. Persisted to disk so server restarts
+// don't cause slot reshuffling and re-firing on the ESP32s.
 const tubeAssignments = new Map();
+
+try {
+  const saved = JSON.parse(fs.readFileSync(PERSIST_FILE, 'utf8'));
+  for (const [k, v] of Object.entries(saved)) tubeAssignments.set(k, v);
+  console.log('[tube] loaded', tubeAssignments.size, 'slot assignments from disk');
+} catch (_) {}
+
+function persistAssignments() {
+  fs.writeFileSync(PERSIST_FILE, JSON.stringify(Object.fromEntries(tubeAssignments)));
+}
 
 // ── Routes ────────────────────────────────────────────────────────────────────
 
@@ -66,6 +77,7 @@ router.get('/tube_arrivals', (_req, res) => {
 
   // Assign new trains to slots; evict the oldest if all 3 are full
   const tubes = [null, null, null];
+  let changed = false;
   for (const t of allInTube) {
     const key = trainKey(t);
     if (!tubeAssignments.has(key)) {
@@ -82,11 +94,14 @@ router.get('/tube_arrivals', (_req, res) => {
         tubeAssignments.delete(oldestKey);
         tubeAssignments.set(key, { idx: evictedIdx, assignedAt: Date.now() });
       }
+      changed = true;
     }
     const entry = tubeAssignments.get(key);
     if (entry !== undefined)
       tubes[entry.idx] = { line: t.line, dest: t.dest, vehicleRef: t.vehicleRef || null, color: lineColor(t.line), minutesUntil: t.minutesUntil };
   }
+
+  if (changed) persistAssignments();
 
   res.json({ tubes, fetchedAt: cache.fetchedAt, testMode: cache.testMode || false });
 });
