@@ -35,6 +35,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/portfolio', express.static(path.join(__dirname, 'portfolio')));
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 
 // In your server.js, update the description endpoint:
