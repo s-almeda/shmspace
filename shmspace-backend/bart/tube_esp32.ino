@@ -146,23 +146,70 @@ void soundOff(int i) { analogWrite(SOUND_PINS[i], 0);   }
 
 void activateTube0() {
   soundOn(0);
+<<<<<<< HEAD
     delay(3000); // wait 3 seconds
   // put code for tube0 here !!!
+=======
+  // heater sequence code for tube0 !!!
+      Serial.print("1 - red - 5.5sec"); 
+      analogWrite(redPin, 255);
+      delay(5500);  // not longer than 5sec...(!)
+      analogWrite(redPin, 0); 
+      delay(500); 
+      analogWrite(redPin, 255); Serial.print(" - pulse"); 
+      delay(500); 
+      analogWrite(redPin, 0);
+      delay(500); 
+      analogWrite(redPin, 255); Serial.print(" - pulse"); 
+      delay(700); 
+      analogWrite(redPin, 0);
+      Serial.println("\t OFF - cooldown time");
+>>>>>>> 40aed484ee2c614f538ddc7673d17c5300f30da7
   soundOff(0);
 
 }
 void activateTube1() {
   soundOn(1);
+<<<<<<< HEAD
     delay(3000); // wait 3 seconds
   // put code for tube1 here !!!
+=======
+  // heater sequence code for tube1 !!!
+      Serial.print("2 - yellow - 7.5sec");
+      analogWrite(yellowPin, 255);
+      delay(7500);
+      analogWrite(yellowPin, 0);
+      delay(500);
+      analogWrite(yellowPin, 255); Serial.print(" - pulse"); 
+      delay(500);
+      analogWrite(yellowPin, 0);
+      Serial.println("\t OFF - cooldown time");
+>>>>>>> 40aed484ee2c614f538ddc7673d17c5300f30da7
   soundOff(1);
 
 
 }
 void activateTube2() {
   soundOn(2);
+<<<<<<< HEAD
       delay(3000); // wait 3 seconds
   // put code for tube2 here !!!
+=======
+  // heater sequence code for tube2 !!!
+       Serial.print("3 - green - 9sec");
+      analogWrite(greenPin, 255);
+      delay(9000);
+      analogWrite(greenPin, 0);
+      delay(500);
+      analogWrite(greenPin, 255); Serial.print(" - pulse"); 
+      delay(500);
+      analogWrite(greenPin, 0);
+      delay(500);
+      analogWrite(greenPin, 255); Serial.print(" - pulse"); 
+      delay(700);
+      analogWrite(greenPin, 0);
+      Serial.println("\t OFF - cooldown time");
+>>>>>>> 40aed484ee2c614f538ddc7673d17c5300f30da7
   soundOff(2);
 
 
