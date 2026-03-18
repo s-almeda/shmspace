@@ -1,7 +1,7 @@
 /*
  * Transbay Tube — ESP32 control code!
  *
- * One ESP32 controls all 3 physical tubes (solenoids on pins 4, 5, 19) and one NeoPixel LED.
+ * One ESP32 controls all 3 physical tubes (heaters on pins 4, 5, 19) and one NeoPixel LED.
  * Connects to wifi (see NETWORKS), then every 5s polls:
  *   GET https://art.snailbunny.site/api/bart/tube/tube_arrivals
  *
