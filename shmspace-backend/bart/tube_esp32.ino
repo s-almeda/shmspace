@@ -39,6 +39,7 @@ const WifiCred NETWORKS[] = {
   { "tiat-guest",   "artandtechnology" },
   { "Berkeley-IoT", "Hopper12!"        },
   { "shmzone",      "hopper&anya"      },
+  { "SparkleMotion2",  "SparkleMotion" },
 };
 const int NUM_NETWORKS = sizeof(NETWORKS) / sizeof(NETWORKS[0]);
 
