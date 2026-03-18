@@ -142,9 +142,23 @@ void ledOff() {
   pixel.show();
 }
 
-// ── Tube activation ───────────────────────────────────────────────────────────
+// ── TUBE ACTIVATION CODE!! ───────────────────────────────────────────────────────────
 void soundOn(int i)  { analogWrite(SOUND_PINS[i], 255); }
 void soundOff(int i) { analogWrite(SOUND_PINS[i], 0);   }
+
+void activateTube0() {
+  soundOn(0);
+  // put code for tube0 here !
+}
+void activateTube1() {
+  soundOn(1);
+  // put code for tube1 here !
+}
+void activateTube2() {
+  soundOn(2);
+  // put code for tube2 here !
+}
+// hi sudhu
 
 // ── Setup ─────────────────────────────────────────────────────────────────────
 void setup() {
@@ -275,7 +289,9 @@ void poll() {
       uint8_t r, g, b;
       lineColor(slot["line"] | "", r, g, b);
       ledOn(r, g, b);
-      soundOn(i);
+      if      (i == 0) activateTube0();
+      else if (i == 1) activateTube1();
+      else             activateTube2();
       soundStartedAt[i] = millis();
       soundActive[i]    = true;
       Serial.println("TUBE " + String(i) + " ON: "
