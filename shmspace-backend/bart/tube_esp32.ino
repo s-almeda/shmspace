@@ -147,18 +147,53 @@ void soundOff(int i) { analogWrite(SOUND_PINS[i], 0);   }
 void activateTube0() {
   soundOn(0);
   // put code for tube0 here !!!
+       Serial.print("1 - red - 5.5sec"); 
+      analogWrite(redPin, 255);
+      delay(5500);  // not longer than 5sec...(!)
+      analogWrite(redPin, 0); 
+      delay(500); 
+      analogWrite(redPin, 255); Serial.print(" - pulse"); 
+      delay(500); 
+      analogWrite(redPin, 0);
+      delay(500); 
+      analogWrite(redPin, 255); Serial.print(" - pulse"); 
+      delay(700); 
+      analogWrite(redPin, 0);
+      Serial.println("\t OFF - cooldown time");
   soundOff(0);
   ledOff();
 }
 void activateTube1() {
   soundOn(1);
   // put code for tube1 here !!!
+      Serial.print("2 - yellow - 7.5sec");
+      analogWrite(yellowPin, 255);
+      delay(7500);
+      analogWrite(yellowPin, 0);
+      delay(500);
+      analogWrite(yellowPin, 255); Serial.print(" - pulse"); 
+      delay(500);
+      analogWrite(yellowPin, 0);
+      Serial.println("\t OFF - cooldown time");
   soundOff(1);
   ledOff();
 }
 void activateTube2() {
   soundOn(2);
   // put code for tube2 here !!!
+       Serial.print("3 - green - 9sec");
+      analogWrite(greenPin, 255);
+      delay(9000);
+      analogWrite(greenPin, 0);
+      delay(500);
+      analogWrite(greenPin, 255); Serial.print(" - pulse"); 
+      delay(500);
+      analogWrite(greenPin, 0);
+      delay(500);
+      analogWrite(greenPin, 255); Serial.print(" - pulse"); 
+      delay(700);
+      analogWrite(greenPin, 0);
+      Serial.println("\t OFF - cooldown time");
   soundOff(2);
   ledOff();
 }
