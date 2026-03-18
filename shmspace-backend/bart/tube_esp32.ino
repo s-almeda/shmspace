@@ -131,12 +131,15 @@ void connectWifi() {
 
 // ── LED helpers ───────────────────────────────────────────────────────────────
 
-void parseHexColor(const char* hex, uint8_t &r, uint8_t &g, uint8_t &b) {
-  const char* h = (hex && hex[0] == '#') ? hex + 1 : hex;
-  unsigned long v = strtoul(h, nullptr, 16);
-  r = (v >> 16) & 0xFF;
-  g = (v >> 8)  & 0xFF;
-  b =  v        & 0xFF;
+// Map BART line name (e.g. "Yellow-N") to a pure RGB color.
+// Uses only the prefix before the dash.
+void lineColor(const char* line, uint8_t &r, uint8_t &g, uint8_t &b) {
+  if      (strncmp(line, "Yellow", 6) == 0) { r=255; g=200; b=0;   }
+  else if (strncmp(line, "Blue",   4) == 0) { r=0;   g=0;   b=255; }
+  else if (strncmp(line, "Red",    3) == 0) { r=255; g=0;   b=0;   }
+  else if (strncmp(line, "Green",  5) == 0) { r=0;   g=255; b=0;   }
+  else if (strncmp(line, "Orange", 6) == 0) { r=255; g=80;  b=0;   }
+  else                                       { r=255; g=255; b=255; }  // unknown → white
 }
 
 void ledOn(uint8_t r, uint8_t g, uint8_t b) {
@@ -247,7 +250,7 @@ void poll() {
   Serial.println(body);
 
   // Parse JSON
-  StaticJsonDocument<512> doc;
+  StaticJsonDocument<1024> doc;
   if (deserializeJson(doc, body)) {
     Serial.println("JSON parse failed — keeping current state");
     return;
@@ -277,7 +280,7 @@ void poll() {
     // A new train has entered this tube (or replaced the previous one).
     // Light the LED in the train's line color and trigger the tube sound.
     uint8_t r, g, b;
-    parseHexColor(slot["color"] | "#ffffff", r, g, b);
+    lineColor(slot["line"] | "", r, g, b);
     ledOn(r, g, b);  // LED stays on until the train exits (~7 min)
 
     // ── ACTIVATE TUBE SOUND HERE ──────────────────────────────────────────────
