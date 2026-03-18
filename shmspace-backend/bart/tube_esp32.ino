@@ -230,7 +230,7 @@ void loop() {
 // Response shape: { "tubes": [ {train} | null, {train} | null, {train} | null ] }
 // Each train object: { "line", "dest", "vehicleRef", "color", "minutesUntil" }
 void poll() {
-  // *st* Serial.println("Polling...");
+  // *st* Serial.println("Polling...");  // comment out for less to read while waiting for tube activations
 
   if (!client.connect(server, 443)) {
     Serial.println("Connection failed — keeping current state");
