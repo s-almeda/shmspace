@@ -106,6 +106,12 @@
       <legend>event log</legend>
       <div id="log-entries"><span style="color:#444;font-size:0.65rem;font-family:monospace;padding:2px 4px;display:block">no activations yet (since opening this page)</span></div>
     </fieldset>
+    <fieldset>
+      <legend>acks</legend>
+      <div style="font-family:'Lucida Console',monospace;font-size:0.7rem;color:#aaa;line-height:1.6">
+        thanks to esteemed train and logistics enthusiast <a href="https://timothyaveni.com/">tim aveni</a> for the idea to make the TBT the star of the piece, and to the dear friends and family who tolerated shm interrupting conversations to say "A TRAIN JUST ENTERED THE TUBE" while holding up a glowing esp32, 500x a day for several days
+      </div>
+    </fieldset>
     <div class="foot">
       <span id="fetched"></span>
       <span>next poll <span id="countdown">—</span></span>
@@ -274,5 +280,6 @@
   setInterval(pollEvents, POLL);
   setInterval(tick, 1000);
 </script>
+
 </body>
 </html>
