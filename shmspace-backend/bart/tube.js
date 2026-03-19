@@ -18,8 +18,9 @@ const PERSIST_FILE = path.join(__dirname, '.tube_slots.json');
 // Using TUBE_WINDOW=7 would detect the train while it's still at WO station;
 // using TUBE_TRAVEL_MINS ensures we only fire once it's actually in the tube.
 const TUBE_WINDOW       = 7;
-const TUBE_TRAVEL_MINS  = 4 + 40 / 60;  // ~4:40 — one-way travel time through tube
-const WO_SB_OFFSET_MINS = 2 + 15 / 60;  // ~2:15 — WO dwell + surface transit to tube entrance
+const TUBE_TRAVEL_MINS   = 4 + 40 / 60;  // ~4:40 — one-way travel time through tube
+const WO_SB_OFFSET_MINS  = 2 + 15 / 60;  // ~2:15 — WO dwell + surface transit to tube entrance (SB)
+const WO_NB_EXIT_MINS    = 2;             // ~2:00 — NB train exits tube this many mins before WO arrival
 
 function minsUntil(isoTime, now) {
   return (new Date(isoTime) - now) / 60000;
@@ -39,10 +40,11 @@ function getInTube(cache, now = new Date()) {
     if (m >= 0 && m <= TUBE_TRAVEL_MINS)
       inTube.push({ line: t.line, dest: t.dest, vehicleRef: t.vehicleRef || null, minutesUntil: Math.round(m) });
   }
-  // NB: exit at West Oakland. No offset reported for this direction yet.
+  // NB: exit at West Oakland. Train surfaces ~2 min before WO arrival, so use
+  // WO_NB_EXIT_MINS as a lower bound to avoid marking it in-tube after it exits.
   for (const t of cache.wo_nb) {
     const m = minsUntil(t.arrives, now);
-    if (m >= 0 && m <= TUBE_WINDOW)
+    if (m >= WO_NB_EXIT_MINS && m <= TUBE_WINDOW)
       inTube.push({ line: t.line, dest: t.dest, vehicleRef: t.vehicleRef || null, minutesUntil: Math.round(m) });
   }
   return inTube;
