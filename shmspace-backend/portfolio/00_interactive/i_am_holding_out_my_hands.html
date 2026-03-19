@@ -23,21 +23,24 @@
     .main-window {
       width: min(90vw, 600px);
       margin: 15px;
-      max-height: 650px;
+      max-height: calc(100vh - 30px);
+      display: flex;
+      flex-direction: column;
     }
 
     .main-window .title-bar {
       padding: 15px;
+      flex-shrink: 0;
     }
 
     .window-body {
       display: flex;
       flex-direction: column;
-      align-items: left;
       padding: 32px;
       background: #ede9d8;
-      overflow-y: hidden;
-      max-height: 600px;
+      overflow: hidden;
+      flex: 1;
+      min-height: 0;
     }
 
     .window-body p {
