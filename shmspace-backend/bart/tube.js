@@ -8,10 +8,18 @@ const router = express.Router();
 const PERSIST_FILE = path.join(__dirname, '.tube_slots.json');
 
 // Tube transit window: a train is considered "in the tube" when its arrival
-// at the exit stop is between 0 and 7 minutes away.
-//   SB in tube → arriving at Embarcadero (emb_sb) within 7 min
-//   NB in tube → arriving at West Oakland (wo_nb)  within 7 min
-const TUBE_WINDOW = 7;
+// at the exit stop is between 0 and N minutes away.
+//   SB in tube → arriving at Embarcadero (emb_sb) within TUBE_TRAVEL_MINS (~4:40)
+//   NB in tube → arriving at West Oakland (wo_nb)  within TUBE_WINDOW (7 min)
+//
+// For SB trains, 511 reports West Oakland *arrival* time. The train then dwells
+// ~1 min and travels ~1:15 to the tube entrance (WO_SB_OFFSET_MINS total).
+// Tube travel SF↔Oakland is ~4:40. So emb_sb arrival ≈ WO arrival + 6:55.
+// Using TUBE_WINDOW=7 would detect the train while it's still at WO station;
+// using TUBE_TRAVEL_MINS ensures we only fire once it's actually in the tube.
+const TUBE_WINDOW       = 7;
+const TUBE_TRAVEL_MINS  = 4 + 40 / 60;  // ~4:40 — one-way travel time through tube
+const WO_SB_OFFSET_MINS = 2 + 15 / 60;  // ~2:15 — WO dwell + surface transit to tube entrance
 
 function minsUntil(isoTime, now) {
   return (new Date(isoTime) - now) / 60000;
@@ -24,7 +32,15 @@ function trainKey(t)     { return t.vehicleRef ? String(t.vehicleRef) : (t.line 
 // Returns all trains currently in the tube (both directions combined).
 function getInTube(cache, now = new Date()) {
   const inTube = [];
-  for (const t of [...cache.emb_sb, ...cache.wo_nb]) {
+  // SB: exit at Embarcadero. Use tube travel time so we don't fire while the
+  // train is still sitting at West Oakland station above ground.
+  for (const t of cache.emb_sb) {
+    const m = minsUntil(t.arrives, now);
+    if (m >= 0 && m <= TUBE_TRAVEL_MINS)
+      inTube.push({ line: t.line, dest: t.dest, vehicleRef: t.vehicleRef || null, minutesUntil: Math.round(m) });
+  }
+  // NB: exit at West Oakland. No offset reported for this direction yet.
+  for (const t of cache.wo_nb) {
     const m = minsUntil(t.arrives, now);
     if (m >= 0 && m <= TUBE_WINDOW)
       inTube.push({ line: t.line, dest: t.dest, vehicleRef: t.vehicleRef || null, minutesUntil: Math.round(m) });
@@ -133,13 +149,18 @@ router.get('/events', (_req, res) => {
     }
   }
 
-  // Entering: trains arriving at entry stop within 15 min (about to enter tube)
-  for (const [stop, station] of [[cache.wo_sb, 'West Oakland'], [cache.emb_nb, 'Embarcadero']]) {
-    for (const t of stop) {
-      const m = minsUntil(t.arrives, now);
-      if (m >= 0 && m <= 15)
-        events.push({ status: 'entering', line: t.line, dest: t.dest, vehicleRef: t.vehicleRef || null, color: lineColor(t.line), minutes: Math.round(m), station });
-    }
+  // Entering: trains about to enter the tube.
+  // SB: 511 reports WO *arrival* time; add offset to get actual tube entry time.
+  for (const t of cache.wo_sb) {
+    const m = minsUntil(t.arrives, now) + WO_SB_OFFSET_MINS;
+    if (m >= 0 && m <= 15)
+      events.push({ status: 'entering', line: t.line, dest: t.dest, vehicleRef: t.vehicleRef || null, color: lineColor(t.line), minutes: Math.round(m), station: 'West Oakland' });
+  }
+  // NB: no offset adjustment reported for this direction.
+  for (const t of cache.emb_nb) {
+    const m = minsUntil(t.arrives, now);
+    if (m >= 0 && m <= 15)
+      events.push({ status: 'entering', line: t.line, dest: t.dest, vehicleRef: t.vehicleRef || null, color: lineColor(t.line), minutes: Math.round(m), station: 'Embarcadero' });
   }
 
   res.json({ events, fetchedAt: cache.fetchedAt, testMode: cache.testMode || false });
