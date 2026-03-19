@@ -29,14 +29,15 @@ const char* path   = "/api/bart/tube/tube_arrivals";
 const unsigned long POLL_INTERVAL  = 5000;   // how often to check the server (ms)
 const unsigned long WIFI_TIMEOUT   = 10000;  // max wait per network attempt (ms)
 
-const int tube0  = 4;   // heater driver 1 on pin 4  (A5). // was redPin
-const int tube1  = 5;   // heater driver 2 on pin 5  (SCK) // yellowPin 
-const int tube2  = 19;  // heater driver 3 on pin 19 (MOSI)    // was greenPin
+const int redPin    = 4;   // heater driver 1 on pin 4  (A5)
+const int yellowPin = 5;   // heater driver 2 on pin 5  (SCK)
+const int greenPin  = 19;  // heater driver 3 on pin 19 (MOSI)
 
 // ── Known networks (tries in order, remembers the winner in flash) ────────────
 typedef struct { const char* ssid; const char* pass; } WifiCred;
 
 const WifiCred NETWORKS[] = {
+  {"tiat-infra", "151powell"},
   { "tiat-guest",   "artandtechnology" },
   { "Berkeley-IoT", "Hopper12!"        },
   { "shmzone",      "hopper&anya"      },
@@ -145,67 +146,63 @@ void ledOff() {
 // ── TUBE ACTIVATION CODE!! ───────────────────────────────────────────────────────────
 void activateTube0() {
   // heater sequence code for tube0 !!!
-      Serial.print("0 - was red - 5.5sec"); 
-      analogWrite(tube0, 255);
-      delay(5700);  // not longer than 5sec...(!)
-      analogWrite(tube0, 0); 
+      Serial.print("1 - red - 5.5sec"); 
+      analogWrite(redPin, 255);
+      delay(5500);  // not longer than 5sec...(!)
+      analogWrite(redPin, 0); 
       delay(500); 
-      analogWrite(tube0, 255); Serial.print(" - pulse"); 
-      delay(700); 
-      analogWrite(tube0, 0);
+      analogWrite(redPin, 255); Serial.print(" - pulse"); 
       delay(500); 
-      analogWrite(tube0, 255); Serial.print(" - pulse"); 
+      analogWrite(redPin, 0);
+      delay(500); 
+      analogWrite(redPin, 255); Serial.print(" - pulse"); 
       delay(700); 
-      analogWrite(tube0, 0);
+      analogWrite(redPin, 0);
       Serial.println("\t OFF - cooldown time");
 }
 void activateTube1() {
   // heater sequence code for tube1 !!!
-      Serial.print("1 - was yellow - 7.5sec");
-      analogWrite(tube1, 255);
+      Serial.print("2 - yellow - 7.5sec");
+      analogWrite(yellowPin, 255);
       delay(7500);
-      analogWrite(tube1, 0);
+      analogWrite(yellowPin, 0);
       delay(500);
-      analogWrite(tube1, 255); Serial.print(" - pulse"); 
-      delay(700);
-      analogWrite(tube1, 0);
+      analogWrite(yellowPin, 255); Serial.print(" - pulse"); 
+      delay(500);
+      analogWrite(yellowPin, 0);
       Serial.println("\t OFF - cooldown time");
 }
 void activateTube2() {
   // heater sequence code for tube2 !!!
-       Serial.print("2 - was green - 9sec");
-      analogWrite(tube2, 255);
+       Serial.print("3 - green - 9sec");
+      analogWrite(greenPin, 255);
       delay(9000);
-      analogWrite(tube2, 0);
+      analogWrite(greenPin, 0);
       delay(500);
-      analogWrite(tube2, 255); Serial.print(" - pulse"); 
+      analogWrite(greenPin, 255); Serial.print(" - pulse"); 
       delay(500);
-      analogWrite(tube2, 0);
+      analogWrite(greenPin, 0);
       delay(500);
-      analogWrite(tube2, 255); Serial.print(" - pulse"); 
+      analogWrite(greenPin, 255); Serial.print(" - pulse"); 
       delay(700);
-      analogWrite(tube2, 0);
-      delay(500);
-      analogWrite(tube2, 255); Serial.print(" - pulse"); 
-      delay(500);
-      analogWrite(tube2, 0);
+      analogWrite(greenPin, 0);
       Serial.println("\t OFF - cooldown time");
 }
-// hi shm!
+// hi sudhu
 
 // ── Setup ─────────────────────────────────────────────────────────────────────
 void setup() {
-  Serial.begin(115200); Serial.println(" --- 20260318d_tube_esp32 ---");
+  Serial.begin(115200);
   pixel.begin();
   pixel.setBrightness(50);
   ledOff();
-  pinMode(tube0, OUTPUT); analogWrite(tube0,  0);   // old - red
-  pinMode(tube1, OUTPUT); analogWrite(tube1,  0);    // old - yellow
-  pinMode(tube2, OUTPUT); analogWrite(tube2,  0);     // old - green
+  pinMode(redPin,    OUTPUT); analogWrite(redPin,    0);
+  pinMode(yellowPin, OUTPUT); analogWrite(yellowPin, 0);
+  pinMode(greenPin,  OUTPUT); analogWrite(greenPin,  0);
 
   client.setInsecure();  // skip TLS cert verification (server uses self-signed cert)
   connectWifi();
-  Serial.println("IP: " + WiFi.localIP().toString()); 
+  Serial.println("IP: " + WiFi.localIP().toString());
 
   poll();  // poll immediately on boot rather than waiting POLL_INTERVAL
 }
@@ -230,7 +227,7 @@ void loop() {
 // Response shape: { "tubes": [ {train} | null, {train} | null, {train} | null ] }
 // Each train object: { "line", "dest", "vehicleRef", "color", "minutesUntil" }
 void poll() {
-  // *st* Serial.println("Polling...");  // comment out for less to read while waiting for tube activations
+  Serial.println("Polling...");
 
   if (!client.connect(server, 443)) {
     Serial.println("Connection failed — keeping current state");
@@ -263,7 +260,7 @@ void poll() {
   while (client.available()) body += (char)client.read();
   client.stop();
 
-  // *st* Serial.println(body);  // comment out for less to read while waiting for tube activations
+  Serial.println(body);
 
   // Parse JSON
   StaticJsonDocument<1024> doc;
@@ -282,7 +279,7 @@ void poll() {
         prevKey[i] = (vref && strlen(vref) > 0)
           ? String(vref)
           : String(slot["line"] | "") + "|" + String(slot["dest"] | "");
-         Serial.println("TUBE " + String(i) + " startup (no fire): key=" + prevKey[i]);
+        Serial.println("TUBE " + String(i) + " startup (no fire): key=" + prevKey[i]);
       }
     }
     return;
@@ -321,11 +318,6 @@ void poll() {
       ledOff(); // turn off the LED after activating the tube
     } else {
       // Slot cleared — sound/LED managed by timer in loop()
-      Serial.println("TUBE " + String(i) + " OFF");
-    }
-  }
-}
-
       Serial.println("TUBE " + String(i) + " OFF");
     }
   }
