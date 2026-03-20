@@ -1,0 +1,351 @@
+[
+  {
+    "id": 1,
+    "leftPuppet": 0,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": { "detectShm": true, "bbox": true },
+    "dialogue": { "show": true, "characterName": "shm", "text": "what's up chat. i made this digital puppeteering rig last week and started joking that i would give my lightning talk in front of all these brilliant people I admire as a puppet show. and then some of those people started saying," }
+  },
+  {
+    "id": 2,
+    "leftPuppet": 0,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": { "hands": true },
+    "dialogue": { "show": true, "characterName": "brilliant people i admire", "text": "shm. you would be remiss to not give this as a puppet show. i'm really looking forward to your puppet show." }
+  },
+  {
+    "id": 3,
+    "leftPuppet": 0,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "so here we are." }
+  },
+  {
+    "id": 4,
+    "leftPuppet": 1,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": { "detectShm": false, "bbox": false },
+    "dialogue": { "show": true, "characterName": "shm", "text": "I'm shm, I'm an artist and computer scientist doing HCI + AI creativity research in the Berkeley Institute of Design Lab, and sometimes places like here and here" },
+    "_note": "use ;/' to cycle puppets 1–7 manually within this scene"
+  },
+  {
+    "id": 5,
+    "leftPuppet": 8,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "I'm also Filipino." }
+  },
+  {
+    "id": 6,
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "slide": "000_philippines_full.png",
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "As are many of the people annotating our data." }
+  },
+  {
+    "id": 7,
+    "leftPuppet": 9,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "in crowded internet cafes and outsourced business processing warehouses." }
+  },
+  {
+    "id": 8,
+    "leftPuppet": 10,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "It's been said that \"There is no AI without data.\"" }
+  },
+  {
+    "id": 9,
+    "leftPuppet": 10,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "but i sometimes like to say… depending on the vibe of the room…" }
+  },
+  {
+    "id": 10,
+    "leftPuppet": 11,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "…that there is no AI at all." }
+  },
+  {
+    "id": 11,
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "there is the organized knowledge and creative labor of real humans, their communities – ecosystems that we systematically extract and synthesize from" }
+  },
+  {
+    "id": 12,
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": { "gestures": false },
+    "dialogue": { "show": true, "characterName": "shm", "text": "there is no *A*I when the large, data-driven statistical models we call AI are, materially, cultural archives of human-made and human-managed knowledge — a kind of intelligence that is anything but artificial." }
+  },
+  {
+    "id": 13,
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": { "bbox": true, "race": true, "age": true, "gender": true, "face": true },
+    "dialogue": { "show": true, "characterName": "shm", "text": "when we recognize this, it becomes evident why we are moving away from a paradigm where engineering good AI meant optimizing for values like \"universal accuracy\" and \"efficiency\" — but too often actually meant optimizing for the values of a Western, capital-driven world." }
+  },
+  {
+    "id": 14,
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "we have reached the places where building big and fast would take us. where should, and must, we reach next?" }
+  },
+  {
+    "id": 15,
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "we are moving towards a paradigm where we can, and must, start designing data and models with intentionality. to be intentionally cultural. positional. contextual. artistically opinionated. relational." }
+  },
+  {
+    "id": 16,
+    "leftPuppet": 13,
+    "rightPuppet": 14,
+    "slide": null,
+    "toggles": { "bbox": false, "race": false, "age": false, "gender": false, "face":false, "hands": true },
+    "dialogue": { "show": true, "characterName": "shm", "text": "and when we recognize this it becomes obvious why data scraping bots are targeting our cultural institutions — museums, libraries, archives" }
+  },
+  {
+    "id": 17,
+    "leftPuppet": 12,
+    "rightPuppet": 14,
+    "slide": null,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "the intelligence isn't in here — it's in our libraries, museums, cultural institutions, and other established archives of human knowledge" }
+  },
+  {
+    "id": 18,
+    "leftPuppet": 15,
+    "rightPuppet": null,
+    "slide": "001_datais.png",
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "Data is the material of agent design. Data is real, human intelligence, shaped into a design material. Data has come to represent, for me, how deeply we underappreciate the collective intelligence of human communities. so in my work I try to explore and design against that current." }
+  },
+  {
+    "id": 19,
+    "leftPuppet": 15,
+    "rightPuppet": null,
+    "slide": "002_datais.png",
+    "toggles": {},
+    "dialogue": { "show": true, "instant": true, "characterName": "shm", "text": "Data is the material of agent design. Data is real, human intelligence, shaped into a design material. Data has come to represent, for me, how deeply we underappreciate the collective intelligence of human communities. so in my work I try to explore and design against that current." }
+  },
+  {
+    "id": 20,
+    "leftPuppet": 15,
+    "rightPuppet": null,
+    "slide": "003_datais.png",
+    "toggles": {},
+    "dialogue": { "show": true, "instant": true, "characterName": "shm", "text": "Data is the material of agent design. Data is real, human intelligence, shaped into a design material. Data has come to represent, for me, how deeply we underappreciate the collective intelligence of human communities. so in my work I try to explore and design against that current." }
+  },
+  {
+    "id": 21,
+    "leftPuppet": 16,
+    "rightPuppet": 22,
+    "slide": null,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "First, a line of research being led by my mentee, Berkeley senior Sophia Liu — you would be so lucky to hire her — is motivated by something we've seen and felt as instructors here at Berkeley:" }
+  },
+  {
+    "id": 22,
+    "leftPuppet": 15,
+    "rightPuppet": null,
+    "slide": "004_question.png",
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "when our students feel an ounce of curiosity, an agent like ChatGPT can take them directly from question to answer." }
+  },
+  {
+    "id": 23,
+    "leftPuppet": 15,
+    "rightPuppet": null,
+    "slide": "005_question.png",
+    "toggles": {},
+    "dialogue": { "show": true, "instant": true, "characterName": "shm", "text": "when our students feel an ounce of curiosity, an agent like ChatGPT can take them directly from question to answer." }
+  },
+  {
+    "id": 24,
+    "leftPuppet": 15,
+    "rightPuppet": null,
+    "slide": "006_question.png",
+    "toggles": {},
+    "dialogue": { "show": true, "instant": true, "characterName": "shm", "text": "when our students feel an ounce of curiosity, an agent like ChatGPT can take them directly from question to answer." }
+  },
+  {
+    "id": 25,
+    "leftPuppet": 15,
+    "rightPuppet": null,
+    "slide": "006_question.png",
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "This is certainly an efficient, and hopefully accurate, way to get from point A to point B." }
+  },
+  {
+    "id": 26,
+    "leftPuppet": 15,
+    "rightPuppet": null,
+    "slide": "007_question.png",
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "But someone driving their own search for knowledge, such as on Wikipedia, might trace a path that looks more like this" }
+  },
+  {
+    "id": 27,
+    "leftPuppet": 15,
+    "rightPuppet": null,
+    "slide": "008_question.png",
+    "toggles": {},
+    "dialogue": { "show": true, "instant": true, "characterName": "shm", "text": "But someone driving their own search for knowledge, such as on Wikipedia, might trace a path that looks more like this" }
+  },
+  {
+    "id": 28,
+    "leftPuppet": 15,
+    "rightPuppet": null,
+    "slide": "009_question.png",
+    "toggles": {},
+    "dialogue": { "show": true, "instant": true, "characterName": "shm", "text": "But someone driving their own search for knowledge, such as on Wikipedia, might trace a path that looks more like this" }
+  },
+  {
+    "id": 29,
+    "leftPuppet": 15,
+    "rightPuppet": null,
+    "slide": "010_question.png",
+    "toggles": {},
+    "dialogue": { "show": true, "instant": true, "characterName": "shm", "text": "But someone driving their own search for knowledge, such as on Wikipedia, might trace a path that looks more like this" }
+  },
+  {
+    "id": 30,
+    "leftPuppet": 15,
+    "rightPuppet": null,
+    "slide": "011_question.png",
+    "toggles": {},
+    "dialogue": { "show": true, "instant": true, "characterName": "shm", "text": "But someone driving their own search for knowledge, such as on Wikipedia, might trace a path that looks more like this" }
+  },
+  {
+    "id": 31,
+    "leftPuppet": 15,
+    "rightPuppet": null,
+    "slide": "011_question.png",
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "what do we lose when we abandon hypertextual web navigation? what do we gain from authoring our own self-directed, winding paths across networks of information? Well, we give up our agency, and" }
+  },
+  {
+    "id": 32,
+    "leftPuppet": 15,
+    "rightPuppet": null,
+    "slide": "012_friction.png",
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "we eliminate FRICTION," },
+    "_note": "transparent PNG — FRICTION appears above shm's head"
+  },
+  {
+    "id": 33,
+    "leftPuppet": 15,
+    "rightPuppet": null,
+    "slide": "012_friction.png",
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "this word is historically a kind of antivalue we've been trained as technology designers to eliminate. but in the new paradigm FRICTION represents to us a design quality that creates moments where users reflect and build relational meaning." }
+  },
+  {
+    "id": 34,
+    "leftPuppet": 15,
+    "rightPuppet": null,
+    "slide": "013_wikimuseum1.png",
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "We're interested in tracing and designing with these kinds of cognitive journeys — these human-agency-driven creative trajectories — to preserve friction and serendipity as we move into an era of AI agents." }
+  },
+  {
+    "id": 35,
+    "leftPuppet": 15,
+    "rightPuppet": null,
+    "slide": "014_wikimuseum2.png",
+    "toggles": {},
+    "dialogue": null
+  },
+  {
+    "id": 36,
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "slide": "015_artographer1.mp4",
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "This is Artographer — a way of exploring art datasets as a 2.5D similarity-clustered map." }
+  },
+  {
+    "id": 37,
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "slide": "016_artographer2.mp4",
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "we plot AI-generated images next to their nearest neighbors in historical art space, putting new media into a relational dialogue with its cultural ancestors." }
+  },
+  {
+    "id": 38,
+    "leftPuppet": 17,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "I want to emphasize that we have to do months of kind of boring public domain data labor with historical images and text to build these sorts of things." },
+    "_note": "use ;/' to cycle puppets 17→18→19 (data0, data1, data2) manually"
+  },
+  {
+    "id": 39,
+    "leftPuppet": 17,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "and I'm continuing to build on this knowledge base, not only to support this line of research, but also because I believe doing this kind of data labor —" }
+  },
+  {
+    "id": 40,
+    "leftPuppet": 24,
+    "rightPuppet": 23,
+    "slide": null,
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "building newer technology and infrastructures to support older knowledge and practices — is the foundation of a healthy cultural ecosystem where AI agents and human communities can ideally" }
+  },
+  {
+    "id": 41,
+    "leftPuppet": 24,
+    "rightPuppet": 23,
+    "slide": "017_thrive.png",
+    "toggles": {},
+    "dialogue": null,
+    "_note": "transparent PNG — THRIVE appears above shm's head while both puppets held up"
+  },
+  {
+    "id": 42,
+    "leftPuppet": 24,
+    "rightPuppet": 23,
+    "slide": "018_sustainably_coexist.png",
+    "toggles": {},
+    "dialogue": { "show": true, "characterName": "shm", "text": "or, at the very least, sustainably coexist." },
+    "_note": "transparent PNG — SUSTAINABLY COEXIST appears above head"
+  },
+  {
+    "id": 43,
+    "leftPuppet": 20,
+    "rightPuppet": 21,
+    "slide": null,
+    "toggles": { "detectShm": true, "bbox": true, "race": false, "age": false, "gender": false },
+    "dialogue": { "show": true, "characterName": "shm", "text": "you can see more of my work here on my website — oh my gosh there was so much i wanted to share but can't — i'll see you at the reception! thanks for listening to me yap and watching my puppet show!  -shm" }
+  }
+]

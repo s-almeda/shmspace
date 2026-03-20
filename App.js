@@ -64,9 +64,32 @@ app.get('/facial_recognishm/puppets-list', function (_req, res) {
     const fs = require('fs');
     const puppetsDir = path.join(publicPath, 'facial_recognishm', 'puppets');
     const files = fs.readdirSync(puppetsDir)
-        .filter(f => /\.(png|jpg|jpeg|gif|webp)$/i.test(f))
+        .filter(f => /\.(png|jpg|jpeg|gif|webp|mp4|webm|mov)$/i.test(f))
         .sort();
     res.json(files);
+});
+
+app.get('/artographer', (_req, res) => {
+    res.redirect('https://image-space-cyan.vercel.app/v8');
+});
+
+// Generic puppeteering rig — /puppets and /puppets?show=<name>
+const fs = require('fs');
+app.get('/puppets', function (_req, res) {
+    res.sendFile(publicPath + '/puppets/index.html');
+});
+app.get('/puppets/default-puppets-list', function (_req, res) {
+    const dir = path.join(publicPath, 'puppets', 'default_puppets');
+    const files = fs.readdirSync(dir).filter(f => /\.(png|jpg|jpeg|gif|webp|mp4|webm|mov)$/i.test(f)).sort();
+    res.json(files);
+});
+app.get('/puppets/shows/:show/puppets-list', function (req, res) {
+    const dir = path.join(publicPath, 'puppets', 'shows', req.params.show, 'puppets');
+    const files = fs.readdirSync(dir).filter(f => /\.(png|jpg|jpeg|gif|webp|mp4|webm|mov)$/i.test(f)).sort();
+    res.json(files);
+});
+app.get('/puppets/shows/:show/script', function (req, res) {
+    res.sendFile(path.join(publicPath, 'puppets', 'shows', req.params.show, 'game_script.json'));
 });
 
 
