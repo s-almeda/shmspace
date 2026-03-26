@@ -101,7 +101,7 @@
     "leftPuppet": null,
     "rightPuppet": null,
     "slide": null,
-    "toggles": { "bbox": true, "race": true, "age": true, "gender": true, "face": true },
+    "toggles": { "bbox": true, "race": true, "age": true, "gender": true, "facemesh": true },
     "dialogue": { "show": true, "characterName": "shm", "text": "when we recognize this, it becomes evident why we are moving away from a paradigm where engineering good AI meant optimizing for values like \"universal accuracy\" and \"efficiency\" — but too often actually meant optimizing for the values of a Western, capital-driven world." }
   },
   {
@@ -125,7 +125,7 @@
     "leftPuppet": 13,
     "rightPuppet": 14,
     "slide": null,
-    "toggles": { "bbox": false, "race": false, "age": false, "gender": false, "face":false, "hands": true },
+    "toggles": { "bbox": false, "race": false, "age": false, "gender": false, "facemesh": false, "hands": true },
     "dialogue": { "show": true, "characterName": "shm", "text": "and when we recognize this it becomes obvious why data scraping bots are targeting our cultural institutions — museums, libraries, archives" }
   },
   {

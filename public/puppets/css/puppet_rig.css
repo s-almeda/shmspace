@@ -470,26 +470,34 @@ body {
 body.show-mode    .freeplay-only { display: none !important; }
 body.freeplay-mode .show-only   { display: none !important; }
 
+/* hide dialogue overlay in freeplay (tray is the display instead) */
+body.freeplay-mode #dialogueOverlay { display: none !important; }
+
+/* hide freeplay tray until camera is ready */
+body:not(.camera-ready) #freeplayTray { display: none !important; }
+
 /* ── Analysis panel: more visible in freeplay mode ── */
 body.freeplay-mode #analysisPanel.visible { opacity: 0.4; }
 body.freeplay-mode #analysisPanel:hover   { opacity: 0.92; }
 
-/* ── Freeplay dialogue tray ── */
+/* ── Freeplay dialogue tray — matches dialogue overlay aesthetic ── */
 #freeplayTray {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
+  margin: 0 20px 50px 20px;
+  height: 30%;
   z-index: 6;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   pointer-events: none;
 }
 
 #freeplayTrayToggle {
   pointer-events: auto;
-  margin: 0 0 0 20px;
+  align-self: flex-start;
+  margin: 0 0 0 3px;
   font-size: 12px;
   padding: 3px 10px;
   background: rgba(0,0,0,0.65);
@@ -502,33 +510,98 @@ body.freeplay-mode #analysisPanel:hover   { opacity: 0.92; }
 
 #freeplayTrayBody {
   pointer-events: auto;
-  width: 100%;
-  transform: translateY(100%);
+  flex: 1;
+  min-height: 0;
+  transform: translateY(calc(100% + 26px));
   transition: transform 0.3s ease;
-  background: rgba(236, 233, 216, 0.94);
-  border-top: 1px solid #888;
-  padding: 10px 16px 12px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
 #freeplayTrayBody.open {
   transform: translateY(0);
 }
 
+#freeplayTrayBody menu[role="tablist"] {
+  padding-left: 3px;
+  margin-bottom: -2px;
+  display: block;
+}
+
+#freeplayTrayBody menu[role="tablist"] button {
+  font-size: 28px;
+  padding: 5px 16px;
+}
+
+#freeplayTrayBody [role="tabpanel"] {
+  background: rgba(236, 233, 216, 0.92);
+  border: 1px solid #888;
+  flex: 1;
+  min-height: 0;
+  padding: 12px 20px 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 #freeplay-char {
-  font-size: 13px;
-  width: 220px;
-  padding: 3px 6px;
+  font-size: 12px;
+  width: 180px;
+  padding: 2px 5px;
 }
 
 #freeplay-text {
-  font-size: 20px;
+  font-size: 22px;
   line-height: 1.3;
-  resize: vertical;
-  min-height: 72px;
+  resize: none;
+  flex: 1;
+  min-height: 0;
   width: 100%;
-  padding: 6px 8px;
+  padding: 5px 8px;
   font-family: inherit;
 }
+
+/* ── Floating hand upload overlays (freeplay only) ── */
+.hand-upload-overlay {
+  position: absolute;
+  z-index: 10;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  user-select: none;
+}
+
+.hand-upload-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hand-upload-overlay .upload-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  font-size: 11px;
+  white-space: nowrap;
+  padding: 4px 8px;
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.hand-upload-overlay:hover .upload-tooltip { display: block; }
+.hand-upload-overlay input[type="file"] { display: none; }

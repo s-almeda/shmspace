@@ -27,7 +27,7 @@
     <div class="window-body">
       <!-- always-visible start state -->
       <div id="startScreen">
-        <button id="startBtn"> start webcam </button>
+        <button id="startBtn"> it's showtime! </button>
       </div>
 
       <!-- error state -->
@@ -42,6 +42,18 @@
       <canvas id="handCanvas"></canvas>
       <!-- slide canvas — shown when a scene specifies a slide image -->
       <canvas id="slideCanvas"></canvas>
+
+      <!-- floating hand upload overlays (freeplay only) -->
+      <div id="upload-overlay-left" class="hand-upload-overlay freeplay-only">
+        &#x1F4F7;
+        <span class="upload-tooltip">click to upload a new puppet</span>
+        <input type="file" id="upload-left" accept="image/*">
+      </div>
+      <div id="upload-overlay-right" class="hand-upload-overlay freeplay-only">
+        &#x1F4F7;
+        <span class="upload-tooltip">click to upload a new puppet</span>
+        <input type="file" id="upload-right" accept="image/*">
+      </div>
 
       <!-- spacebar hint — shown only until user advances for the first time (show mode only) -->
       <div id="spacebarHint" class="show-only">press spacebar to continue</div>
@@ -89,7 +101,7 @@
             </div>
             <div class="field-row">
               <input id="check-gestures" type="checkbox" checked>
-              <label for="check-gestures"><u>G</u>estures?</label>
+              <label for="check-gestures"><u>Q</u>: gestures?</label>
             </div>
             <div class="field-row disabled">
               <input id="check-hands" type="checkbox">
@@ -107,17 +119,6 @@
                   <input type="text" id="puppet-number" value="1" readonly style="width: 30px; padding: 2px;">
                   <button id="puppet-next">&gt;</button>
                 </div>
-              </div>
-            </div>
-            <!-- puppet upload controls (freeplay mode only) -->
-            <div id="uploadControls" class="freeplay-only" style="margin-top: 6px; border-top: 1px solid #bbb; padding-top: 6px;">
-              <div class="field-row" style="flex-direction: column; align-items: flex-start; gap: 3px; zoom: 1;">
-                <label style="font-size: 10px; color: #555;">upload left puppet</label>
-                <input type="file" id="upload-left" accept="image/*" style="font-size: 10px; width: 100%;">
-              </div>
-              <div class="field-row" style="flex-direction: column; align-items: flex-start; gap: 3px; zoom: 1; margin-top: 4px;">
-                <label style="font-size: 10px; color: #555;">upload right puppet</label>
-                <input type="file" id="upload-right" accept="image/*" style="font-size: 10px; width: 100%;">
               </div>
             </div>
           </div>
@@ -138,12 +139,20 @@
         </article>
       </div>
 
-      <!-- freeplay dialogue tray — slides up from bottom (freeplay mode only) -->
+      <!-- freeplay dialogue tray (freeplay mode only, hidden until camera starts) -->
       <div id="freeplayTray" class="freeplay-only">
         <button id="freeplayTrayToggle">▲ dialogue</button>
         <div id="freeplayTrayBody">
-          <input id="freeplay-char" type="text" placeholder="character name" value="shm">
-          <textarea id="freeplay-text" placeholder="what do you want to say?"></textarea>
+          <menu role="tablist">
+            <button role="tab" id="freeplay-tab" aria-selected="true" aria-controls="freeplay-panel">shm</button>
+          </menu>
+          <article role="tabpanel" id="freeplay-panel">
+            <textarea id="freeplay-text" placeholder="what do you want to say?"></textarea>
+            <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+              <label style="font-size:11px; color:#666;">character:</label>
+              <input id="freeplay-char" type="text" placeholder="character name" value="shm">
+            </div>
+          </article>
         </div>
       </div>
 
@@ -726,13 +735,12 @@
     let lastThumbsUpTime  = 0; // cooldown for thumbs-up
     const GESTURE_COOLDOWN = 800; // ms
     let wasPinching = false; // edge-trigger: only fire on transition into pinch
+    let lastLeftHandSeen  = 0; // timestamps for upload overlay fade-out
+    let lastRightHandSeen = 0;
 
     // OK-sign 👌: index tip (8) near thumb tip (4), middle/ring/pinky fully extended
     // → cycles left-hand puppet forward (same as ')
     function checkPinchGesture(hand, width, height) {
-      if (!document.getElementById('check-gestures')?.checked) return;
-      if (!loadedImages.length) return;
-
       const pinchDist = Math.hypot(
         (hand[8].x - hand[4].x) * width,
         (hand[8].y - hand[4].y) * height
@@ -740,14 +748,18 @@
       const middleExtended = hand[12].y < hand[10].y;
       const ringExtended   = hand[16].y < hand[14].y;
       const pinkyExtended  = hand[20].y < hand[18].y;
-
       const isPinching = pinchDist < 40 && middleExtended && ringExtended && pinkyExtended;
 
-      if (isPinching && !wasPinching) {
+      // Always update wasPinching so state is fresh when gestures are re-enabled
+      const justPinched = isPinching && !wasPinching;
+      wasPinching = isPinching;
+
+      if (!document.getElementById('check-gestures')?.checked) return;
+      if (!loadedImages.length) return;
+      if (justPinched) {
         currentLeftPuppet = (currentLeftPuppet + 1) % loadedImages.length;
         updatePuppetDisplay();
       }
-      wasPinching = isPinching;
     }
 
     // Thumbs-up 👍: thumb tip (4) well above thumb MCP (2), all fingers curled
@@ -798,6 +810,26 @@
           checkThumbsUpGesture(hand);
         }
 
+        // Compute palm position (used for both upload overlays and puppet drawing)
+        const wrist   = hand[0];
+        const midBase = hand[9];
+        const palmX   = ((wrist.x + midBase.x) / 2) * width;
+        const palmY   = ((wrist.y + midBase.y) / 2) * height;
+
+        // Track hand positions for freeplay upload overlays
+        if (!isShowMode) {
+          const screenX = width - palmX; // account for CSS scaleX(-1) on canvas
+          if (handednessLabel === PERFORMER_LEFT) {
+            lastLeftHandSeen = performance.now();
+            const ov = document.getElementById('upload-overlay-left');
+            if (ov) { ov.style.left = screenX + 'px'; ov.style.top = palmY + 'px'; }
+          } else if (handednessLabel === PERFORMER_RIGHT) {
+            lastRightHandSeen = performance.now();
+            const ov = document.getElementById('upload-overlay-right');
+            if (ov) { ov.style.left = screenX + 'px'; ov.style.top = palmY + 'px'; }
+          }
+        }
+
         if (!handsEnabled) return;
 
         // Pick puppet index for this hand
@@ -812,10 +844,6 @@
         const img = loadedImages[puppetIdx];
         if (!img || !img.complete) return;
 
-        const wrist   = hand[0];
-        const midBase = hand[9];
-        const palmX   = ((wrist.x + midBase.x) / 2) * width;
-        const palmY   = ((wrist.y + midBase.y) / 2) * height;
         const tip     = hand[12];
         const handSize = Math.hypot((tip.x - wrist.x) * width, (tip.y - wrist.y) * height);
         const imgW = handSize * handSlider;
@@ -826,6 +854,15 @@
         handCtx.drawImage(img, -(palmX + imgW / 2), palmY - imgH / 2, imgW, imgH);
         handCtx.restore();
       });
+
+      // Update upload overlay visibility based on whether hands were recently seen
+      if (!isShowMode) {
+        const now = performance.now();
+        const leftOv  = document.getElementById('upload-overlay-left');
+        const rightOv = document.getElementById('upload-overlay-right');
+        if (leftOv)  leftOv.classList.toggle('active',  now - lastLeftHandSeen  < 800);
+        if (rightOv) rightOv.classList.toggle('active', now - lastRightHandSeen < 800);
+      }
     }
 
     // ── Scene system ──────────────────────────────────────────────────
@@ -983,6 +1020,7 @@
         setInterval(checkConditions, 100);
 
         cameraReady = true;
+        document.body.classList.add('camera-ready');
         if (isShowMode) document.getElementById('spacebarHint').classList.add('visible');
 
       } catch (err) {
@@ -1120,7 +1158,7 @@
     let currentTypewriterFull = null;
     let currentTypewriterEl = null;
 
-    const keyMap = { r: 'check-race', a: 'check-age', e: 'check-emotion', f: 'check-facemesh', b: 'check-bbox', g: 'check-gestures' };
+    const keyMap = { r: 'check-race', a: 'check-age', g: 'check-gender', e: 'check-emotion', f: 'check-facemesh', b: 'check-bbox', q: 'check-gestures' };
 
     document.addEventListener('keydown', ev => {
       if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA') return;
@@ -1216,6 +1254,19 @@
     }
     wireUploadInput('upload-left',  'puppet_upload_left',  false);
     wireUploadInput('upload-right', 'puppet_upload_right', true);
+
+    // Floating overlay click → trigger hidden file input
+    document.getElementById('upload-overlay-left').addEventListener('click', () => {
+      document.getElementById('upload-left').click();
+    });
+    document.getElementById('upload-overlay-right').addEventListener('click', () => {
+      document.getElementById('upload-right').click();
+    });
+
+    // Character name input → live-update freeplay tab label
+    document.getElementById('freeplay-char').addEventListener('input', function () {
+      document.getElementById('freeplay-tab').textContent = this.value.trim() || 'shm';
+    });
   </script>
 
 </body>
