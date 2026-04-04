@@ -18,7 +18,7 @@ if [ -n "$LARGE_FILES" ]; then
     echo "📦 Uploading large files via SCP..."
     while IFS= read -r file; do
         remote_dir="$SERVER_BASE/$(dirname "$file")"
-        ssh "$SERVER" "mkdir -p '$remote_dir'"
+        ssh -n "$SERVER" "mkdir -p '$remote_dir'"
         scp "$file" "$SERVER:$SERVER_BASE/$file"
         echo "  ✓ $file"
     done <<< "$LARGE_FILES"
