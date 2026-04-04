@@ -10,8 +10,8 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-# Find files that should be SCP'd: any .mp4 or any file over 8MB in shmspace-backend/
-LARGE_FILES=$(find . -type f \( -iname "*.mp4" -o -size +8M \) 2>/dev/null)
+# Find video files that should be SCP'd (too large for git)
+LARGE_FILES=$(find . -type f \( -iname "*.mp4" -o -iname "*.mov" -o -iname "*.webm" \) 2>/dev/null)
 
 # SCP large files directly to server (bypassing git)
 if [ -n "$LARGE_FILES" ]; then
