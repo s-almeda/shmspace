@@ -4,404 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shm Garanganao Almeda CV</title>
-    <style>
-    /* General styles for the screen */
-    body {
-        font-family: 'Arial', sans-serif;
-        margin: 0;
-        margin-left: 15px;
-        margin-right: 15px;
-        padding: 0;
-        background: linear-gradient(180deg, #CDE9F9 0%, #FFF 40%, #FFF5EF 85.43%);
-        background-attachment: fixed;
-        background-size: cover;
-        color: #333;
-        line-height: 1.21;
-        padding-bottom: 250px;
-        position: relative;
-        overflow: visible;
-        min-height: 100vh;
-    }
-
-    /* Cloud movement and animations (only for screen) */
-    @media screen {
-        .cloud {
-            position: fixed;
-            z-index: -1;
-            opacity: 0.8;
-            overflow: visible;
-        }
-
-        .cloud-1 {
-            top: 100px;
-            left: -150px;
-            transform: translateX(50vw) scale(1.8);
-            -webkit-animation: moveCloud1 45s linear infinite;
-            animation: moveCloud1 45s linear infinite;
-        }
-
-        .cloud-2 {
-            bottom: 100px;
-            left: -450px;
-            -webkit-animation: moveCloud2 49s linear infinite;
-            animation: moveCloud2 49s linear infinite;
-        }
-
-        @-webkit-keyframes moveCloud1 {
-            0% {
-          -webkit-transform: translateX(-30vw) scale(1.8);
-          transform: translateX(-30vw) scale(1.8);
-            }
-            100% {
-          -webkit-transform: translateX(110vw) scale(1.8);
-          transform: translateX(110vw) scale(1.8);
-            }
-        }
-
-        @keyframes moveCloud1 {
-            0% {
-          -webkit-transform: translateX(-50vw) scale(1.8);
-          transform: translateX(-50vw) scale(1.8);
-            }
-            100% {
-          -webkit-transform: translateX(150vw) scale(1.8);
-          transform: translateX(150vw) scale(1.8);
-            }
-        }
-
-        @-webkit-keyframes moveCloud2 {
-            0% {
-          -webkit-transform: translateX(-160vw);
-          transform: translateX(-160vw);
-            }
-            100% {
-          -webkit-transform: translateX(160vw);
-          transform: translateX(160vw);
-            }
-        }
-
-        @keyframes moveCloud2 {
-            0% {
-          -webkit-transform: translateX(-60vw);
-          transform: translateX(-60vw);
-            }
-            100% {
-          -webkit-transform: translateX(160vw);
-          transform: translateX(160vw);
-            }
-        }
-     }
-
-    /* Print-specific styles */
-    @media print {
-        body {
-            background: linear-gradient(180deg, #CDE9F9 0%, #FFF 50%, #FFF5EF 90.43%);
-            background-size: 100% 100%; /* Ensure the gradient fits each page */
-            -webkit-print-color-adjust: exact; /* Ensures colors are printed accurately */
-            print-color-adjust: exact; /* For non-WebKit browsers */
-        }
-
-        html, body {
-            height: auto; /* Allow the height to adjust for each page */
-        }
-
-        /* Ensure clouds repeat on each page */
-        .cloud {
-            display: block;
-            position: absolute; /* Use absolute positioning for printing */
-            z-index: -1;
-            opacity: 0.8;
-            overflow: visible;
-        }
-
-        .cloud-1 {
-            top: 280px; /* Position for the first cloud */
-            right: -40px;
-        }
-
-        .cloud-2 {
-            top: 80vh; /* Position for the second cloud */
-            left: -30px;
-        }
-
-
-        @page {
-            margin: 0; /* Remove default margins to prevent clipping */
-        }
-    }
-
-      a {
-        color: rgb(19, 19, 145);
-        text-decoration: underline;
-      }
-
-      a:hover {
-        color: purple;
-      }
-      
-      .container {
-          max-width: 1000px;
-          margin: 0 auto;
-          padding: 15px;
-          position: relative;
-          z-index: 1;
-      }
-      
-
-      .main-header {
-        margin-left: -10px;
-        display: block;
-        padding: 20px 40px;
-        border-top: 10px solid #1C4ECF;
-        border-right: 4px solid #1C4ECF;
-        border-bottom: 4px solid #1C4ECF;
-        border-left: 4px solid #1C4ECF;
-        background: #F1E6E3;
-        box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.25);
-        margin-bottom: 15px;
-        font-size: 24px;
-        color: #222;
-        text-align: left;
-      }
-
-      .main-header .header h1 {
-        font-size: 36px;
-        font-weight: bold;
-        margin: 0 0 0 0;
-        color: #1C4ECF;
-      }
-
-
-
-      .main-header .header .pronunciation {
-        font-size: 14px;
-        font-style: italic;
-        margin: 0 -5px 5px 0;
-        color: #555;
-      }
-
-      .main-header .header .contact-info {
-        font-size: 10px;
-        font-weight: normal;
-        line-height: 1.1;
-        margin: -1;
-        color: #333;
-      }
-
-      .main-header .header .contact-info p {
-        margin: 5px 0;
-      }
-      .main-header .bio{
-        margin: 5px 0;
-        font-size: 16px;
-      }
-      
-      
-      .section-header {
-          display: inline-flex;
-          height: 35px;
-          padding: 15px 35px 10px 20px;
-          margin-left: -10px;
-          align-items: center;
-          flex-shrink: 0;
-          border-top: 8px solid #1C4ECF;
-          border-right: 3px solid #1C4ECF;
-          border-bottom: 3px solid #1C4ECF;
-          border-left: 3px solid #1C4ECF;
-          background: #F1E6E3;
-          box-shadow: 1px 2px 2px 0px rgba(0, 0, 0, 0.25);
-          margin-bottom: 10px;
-          font-size: 20px;
-          font-weight: bold;
-          color: #222;
-      }
-      
-      .experience-item, .education-item, .publication-item {
-          margin-bottom: 18px;
-      }
-      
-      .experience-header, .education-header, .publication-header {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 2px;
-          gap: 40px;
-      }
-      
-      .title {
-          font-weight: bold;
-          font-size: 18px;
-      }
-      
-      .organization {
-          font-weight: bold;
-          padding-top: 3px;
-          padding-bottom: -3px;
-          line-height: 1.1;
-          color: #000099;
-      }
-      
-      .location {
-          font-style: italic;
-      }
-      
-      .date {
-          color: #444;
-          font-weight: normal;
-          font-size: small;
-          text-align: right;
-          flex:1;
-      }
-      
-      .description {
-          margin-top: 3px;
-          text-align: justify;
-      }
-      
-      .publication-title {
-          font-weight: bold;
-          font-size: 16px;
-          margin-bottom: 2px;
-          flex:2
-      }
-      
-      .publication-authors {
-          font-style: italic;
-          margin-bottom: 2px;
-      }
-
-      .publication-venue {
-          font-weight: normal;
-          font-size: small;
-          font-style: italic;
-          color: #444;
-          margin-top: 2px;
-      }
-
-      .publication-award {
-          font-weight: bold;
-          font-size: small;
-          font-style: normal;
-          margin-top: 2px;
-      }
-      
-      .publication-link {
-          color: #1C4ECF;
-          text-decoration: none;
-          margin-bottom: 2px;
-          display: inline-block;
-      }
-      
-      .publication-link:hover {
-          text-decoration: underline;
-      }
-      
-      .awards-list, .leadership-list, .teaching-list {
-          list-style-type: none;
-          padding-left: 0;
-      }
-      
-      .awards-list li, .leadership-list li, .teaching-list li {
-          margin-bottom: 4px;
-          display: flex;
-          justify-content: space-between;
-      }
-      
-      .award-title, .leadership-title, .teaching-title {
-          font-weight: bold;
-      }
-      
-      
-      .two-column {
-          display: flex;
-          justify-content: space-between;
-          gap: 30px;
-      }
-      .column {
-          flex: 1;
-      }
-      
-
-      @media (max-width: 650px) {
-        .two-column {
-          flex-direction: column;
-          gap: 15px;
-        }
-        .column {
-          width: 100%;
-        }
-      }
-      /* Unique styles for mentorship items */
-.mentorship-list {
-    list-style-type: none;
-    padding-left: 0;
-}
-
-.mentorship-item {
-    margin-bottom: 10px;
-    font-size: 14px; /* Smaller text */
-}
-
-.mentorship-header {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-.mentee-names {
-    font-weight: bold; /* Names are not bolded */
-    flex: 2; /* Less room for names */
-}
-.mentee-location {
-  font-style: italic;
-  font-weight: normal;
-}
-.mentorship-date {
-    flex: 1; /* More room for the date */
-    text-align: right;
-    font-size: 12px;
-    color: #555;
-}
-
-.mentorship-description {
-    margin-top: 5px;
-    font-size: 13px;
-    color: #333;
-}
-
-/* Unique styles for honors and fellowships */
-.honors-list {
-    list-style-type: none;
-    padding-left: 0;
-}
-
-.honor-item {
-    margin-bottom: 10px;
-    font-size: 14px; /* Smaller text */
-}
-
-.honor-header {
-    display: flex;
-    justify-content: space-between;
-    gap: 0px;
-}
-
-.honor-title {
-  font-size: 15px;
-  line-height: 1.1;
-    font-weight: bold; /* Titles are not bolded */
-    flex: 2; /* Less room for the title */
-}
-
-.honor-date {
-    flex: 1; /* More room for the date */
-    text-align: right;
-    font-size: 12px;
-    color: #555;
-}
-
-
-
-  </style>
+    <link rel="stylesheet" href="css/cv.css">
 </head>
 <body>
 
@@ -461,11 +64,20 @@
       <div class="main-header">
         <div class="header">
             <h1>Shm Garanganao Almeda</h1>
-            <p class="pronunciation">"SHIM guh-RANG-guh-now all-MAY-dah"</p>
-            <div class="contact-info" style="line-height: 1.1; font-size: 10px;">
-                <p>☀️ Berkeley, California</p>
-                <p>📧 shm.almeda@berkeley.edu</p>
-                <p>🌐 <a href="https://shmuh.co" style="color: #1C4ECF;">shmuh.co</a> </p>
+            <!--p class="pronunciation">"SHIM guh-RANG-guh-now all-MAY-dah"</p-->
+            <div class="contact-info" style="line-height: 1.1; font-size: 14px;">
+                <p>
+                    <img src="/images/world.ico" alt="World icon" style="display: inline; width: 1em; height: 1em; vertical-align: middle; margin-right: 0.25em;">
+                    Berkeley, California
+                </p>
+                <p>
+                    <img src="/images/mail.ico" alt="Email icon" style="display: inline; width: 1em; height: 1em; vertical-align: middle; margin-right: 0.25em;">
+                    shm.almeda@berkeley.edu
+                </p>
+                <p>
+                    <img src="/images/tiat.ico" alt="art icon" style="display: inline; width: 1em; height: 1em; vertical-align: middle; margin-right: 0.25em;">
+                    <a href="https://shmuh.co" style="color: #1C4ECF;">shmuh.co</a>
+                </p>
             </div>
         </div>
         
@@ -526,8 +138,7 @@
             <div class="location">San Francisco, CA</div>
             <div class="description">Conducted a sociotechnical research study into GenAI-driven data scraping practices and their impact on digital art communities, developing design guidelines to support the socioeconomic sustainability of public media infrastructure and promote equitable access to arts and culture. Advised by Joy Kim.</div>
         </div>
-                <!-- <div style="page-break-before: always; margin-top: 20px;"></div>
-         -->
+
         <div class="experience-item">
             <div class="experience-header">
                 <div class="organization">Adobe Research</div>
@@ -538,7 +149,6 @@
             <div class="description">Developed bPigment - a novel parametric color-mixing model and interface that emulates the behavior of physical pigments and produces unique effects that transcend existing color-blending technology. Advised by Stephen DiVerdi and Jose Echevarria.</div>
         </div>
 
-        <br>
 
         <div class="experience-item">
             <div class="experience-header">
@@ -566,16 +176,88 @@
 
         <!-- add here-->
 
+       <div class="publication-item">
+            <div class="publication-header">
+                <div class="publication-title">
+                    <a href="https://arxiv.org/abs/2512.02288">
+                    Artographer: Art Space Exploration as a Curatorial Media Interaction Design
+                    </a>
+                    <div class="publication-award">To Appear in Creativity &amp; Cognition 2026 (20% acceptance rate)</div>
+                </div>
+            </div>
+            <div class="publication-authors">Shm Garanganao Almeda, John Joon Young Chung, Bjoern Hartmann, Sophia Liu, Brett A. Halperin, Yuwen Lu, Max Kreminski</div>
+        </div>
+
 
         <div class="publication-item">
             <div class="publication-header">
                 <div class="publication-title">
                     The Future of Creative Education: What We Can Learn About Technology from Art Teachers and their Classrooms
-                    <div class="publication-venue">Forthcoming</div>
+                    <div class="publication-venue">To Appear in DIS 2026</div>
                 </div>
             </div>
             <div class="publication-authors">Isabel Li, Ace S. Chen, Shm Garanganao Almeda, Katie Chung, Jingyi Li</div>
         </div>
+
+                <div class="publication-item">
+            <div class="publication-header">
+                <div class="publication-title">
+                    <a href="#">
+                    Noise Pilot: Enabling Artistic Workflow Composition with Diffusion-Based Image Generation
+                    </a>
+                    <div class="publication-award">🏆 Best Paper Honorable Mention Award (top 5%)</div>
+                </div>
+            </div>
+            <div class="publication-authors">James Smith, Shm Garanganao Almeda, Timothy Aveni, Anya Agarwal, Bjoern Hartmann</div>
+        </div>
+
+                <div class="publication-item">
+            <div class="publication-header">
+                <div class="publication-title">
+                    <a href="https://herding-cats-ws.github.io/2026/papers/p31.pdf">
+                    Chasing RATs: Tracing Reading for and as Creative Activity
+                    </a>
+                    <div class="publication-venue">Herding CATs @ CHI 2026</div>
+                </div>
+            </div>
+            <div class="publication-authors">Sophia Liu, Shm Garanganao Almeda</div>
+        </div>
+                <div class="publication-item">
+            <div class="publication-header">
+                <div class="publication-title">
+                    <a href="https://herding-cats-ws.github.io/2026/papers/p16.pdf">
+                    InfiniteCATs: Semantic Crafting as a Substrate for Creative Activity Tracing
+                    </a>
+                    <div class="publication-venue">Herding CATs @ CHI 2026</div>
+                </div>
+            </div>
+            <div class="publication-authors">Nicholas Jennings, Shm Garanganao Almeda, Sam Poder, Bjoern Hartmann</div>
+        </div>
+
+                <div class="publication-item">
+            <div class="publication-header">
+                <div class="publication-title">
+                    <a href="https://herding-cats-ws.github.io/">
+                    Herding CATs: Making Sense of Creative Activity Traces
+                    </a>
+                    <div class="publication-venue">CHI 2026 Workshop</div>
+                </div>
+            </div>
+            <div class="publication-authors">Max Kreminski, Amy Smith, John Joon Young Chung, Kihoon Son, Qian Yang, Sang Won Lee, Noor Hammad, Eric Rawn, Shm Garanganao Almeda, J.D. Zamfirescu-Pereira</div>
+        </div>
+
+        <div class="publication-item">
+            <div class="publication-header">
+                <div class="publication-title">
+                    <a href="https://wikiworkshop.org/2026/paper/wikiworkshop_2026_46_revisiting_the_rabbit_hole_the_hypertextual_friction_of_wikipedia">
+                    Revisiting the Rabbit Hole: The Hypertextual Friction of Wikipedia
+                    </a>
+                    <div class="publication-venue">Wiki Workshop 2026</div>
+                </div>
+            </div>
+            <div class="publication-authors">Sophia Liu, Shm Garanganao Almeda</div>
+        </div>
+
 
 
         <div class="publication-item">
@@ -593,6 +275,7 @@
         </div>
 
 
+
         <div class="publication-item">
             <div class="publication-header">
                 <div class="publication-title">
@@ -605,14 +288,25 @@
             <div class="publication-authors">Shm Garanganao Almeda, Robin Netzorg, Isabel Li, Ethan Tam, Skyla Ma, Bob Tianqi Wei</div>
             <!--div class="description">How is Speech AI impacting voice actors and their community? A study with 15 professional voice artists, investigating how Speech AI development practices are impacting their work. We call for researchers and developers to center and honor the voice community's uniquely human, situated expertise – as creative performers, and as experienced organizers and negotiators of creative rights in the face of exploitative labor practices – towards an equitable and community-led future for creative voice work.</div-->
         </div>
+        <div class="publication-item">
+            <div class="publication-header">
+                <div class="publication-title">
+                    <a href="https://arxiv.org/abs/2601.15295">
+                    Elsewise: Authoring AI-Based Interactive Narrative with Possibility Space Visualization
+                    </a>
+                    <div class="publication-venue">Preprint, 2025</div>
+                </div>
+            </div>
+            <div class="publication-authors">Yi Wang, John Joon Young Chung, Melissa Roemmele, Yuqian Sun, Tiffany Wang, Shm Garanganao Almeda, Brett A. Halperin, Yuwen Lu, Max Kreminski</div>
+        </div>
 
 
-    <div class="publication-item">
+        <div class="publication-item">
             <div class="publication-header">
                 <div class="publication-title">
                     <a href="https://dl.acm.org/doi/10.1145/3720533.3750065">
-                        Agency Among Agents: Designing with Hypertextual Friction in the Algorithmic Web
-                        </a>
+                    Agency Among Agents: Designing with Hypertextual Friction in the Algorithmic Web
+                    </a>
                     <div class="publication-award">🏆 3rd Place Blue Sky Track</div>
                     <div class="publication-venue">Blue Sky @ ACM Hypertext 2025</div>
                 </div>
@@ -623,7 +317,7 @@
 
 
 
-                <div class="publication-item">
+        <div class="publication-item">
             <div class="publication-header">
                 <div class="publication-title">
                     <a href="https://dl.acm.org/doi/10.1145/3706598.3714068">
@@ -634,30 +328,6 @@
             </div>
             <div class="publication-authors">Isabel Li*, Ace Chen*, Eric Rawn, Shm Garanganao Almeda, Bjoern Hartmann, Jingyi Li</div>
             <!--div class="description">How do artists perceive "misuse" of digital tools, and what does that mean for [mis]user-centered CST design? A deep dive into the notion of creatively "misusing" digital tools via thematic analysis of interviews with 20 artists – towards an understanding of "misuse" and "use" as the same motions, framed by different cultural perspectives and norms.</div-->
-        </div>
-
-        <div class="publication-item">
-            <div class="publication-header">
-                <div class="publication-title">
-                    <a href="https://arxiv.org/abs/2512.02288">
-                    Artographer: a Curatorial Interface for Art Space Exploration
-                    </a>
-                    <div class="publication-award">To Appear in Creativity &amp; Cognition 2026 (20% acceptance rate)</div>
-                </div>
-            </div>
-            <div class="publication-authors">Shm Garanganao Almeda, John Joon Young Chung, Bjoern Hartmann, Sophia Liu, Brett Halperin, Yuwen Lu, Max Kreminski</div>
-        </div>
-
-        <div class="publication-item">
-            <div class="publication-header">
-                <div class="publication-title">
-                    <a href="#">
-                    Noise Pilot: Enabling Artistic Workflow Composition with Diffusion-Based Image Generation
-                    </a>
-                    <div class="publication-award">🏆 Best Paper Honorable Mention Award (top 5%)</div>
-                </div>
-            </div>
-            <div class="publication-authors">James Smith, Shm Garanganao Almeda, Timothy Aveni, Anya Agarwal, Bjoern Hartmann</div>
         </div>
 
         <div class="publication-item">
@@ -701,8 +371,7 @@
          </div>
          
 
-        <div style="page-break-before: always; margin-top: 20px;"></div>
-        
+
         <div class="publication-item">
             <div class="publication-header">
                 <div class="publication-title">
@@ -740,8 +409,8 @@
                     <div class="title">DES INV 23: Creative Programming & Electronics</div>
                     <div class="date">Summer 2023, Spring 2024, Spring 2025, Spring 2026</div>
                 </div>
-                <div class="description">Head Course Instructor, with TA Albert Hodo</div>
-                <div class="description">Head Course Instructor, with Co-Instructor Sudhu Tewari</div>
+                <div class="description">Head Course Instructor, with TA Albert Hodo (2023)</div>
+                <div class="description">Head Course Instructor, with Co-Instructor Sudhu Tewari (2024-2026)</div>
             </div>
             
             <div class="experience-item">
@@ -767,7 +436,7 @@
                 </div>
                 <div class="description">Head TA for Sudhu Tewari, Jeff Lubow, and TJ McLeish</div>
             </div>
-            
+
             <div class="experience-item">
                 <div class="experience-header">
                     <div class="title">CS160: User Interface Design & Development</div>
@@ -787,13 +456,21 @@
         </div>
 
 
-        <div class="section-header">Invited Talks, Panels, &amp; Performances</div>
+        <div class="section-header">Invited Talks, Workshops, &amp Panels</div>
 
         <div class="honors-list">
 
             <div class="honor-item">
                 <div class="honor-header">
-                    <div class="honor-title">Critical AI Puppet Show</div>
+                    <div class="honor-title">Guest Lecturer / Performer: <em>Introduction to HCI, The Puppet Show</em></div>
+                    <div class="honor-date">2026</div>
+                </div>
+                <div class="honor-description"><a href="https://cs10.org/sp26/" style="color: #000099; text-decoration: none;">CS 10: The Beauty and Joy of Computing, (Prof. Dan Garcia) </a>@ UC Berkeley</div>
+            </div>
+
+            <div class="honor-item">
+                <div class="honor-header">
+                    <div class="honor-title"><a href="https://shmuh.co/puppets/?show=lightning_talk" style="color: #000099; text-decoration: none;"><em>Critical AI Puppet Show</em></a></div>
                     <div class="honor-date">2026</div>
                 </div>
                 <div class="honor-description"><a href="https://design.berkeley.edu/forum" style="color: #000099; text-decoration: none;">MDes Forum on Emerging Technologies: From Interface to Agency, A New Discourse for Design and AI</a> @ UC Berkeley</div>
@@ -801,18 +478,10 @@
 
             <div class="honor-item">
                 <div class="honor-header">
-                    <div class="honor-title"><a href="https://shmuh.co/recognize_me" style="color: #000099; text-decoration: none;"><em>recognizing my self</em></a></div>
+                    <div class="honor-title"><a href="https://docs.google.com/presentation/d/1RWScygqs_Joux4ruvkWQ6aKfPiCLFuo6b18auvD7Gso/edit?usp=sharing" style="color: #000099; text-decoration: none;"><em>refractions of the self: exploring the digital self portrait</em></a> (with <a href="https://isabel.li/" style="color: #000099; text-decoration: none;">isabel li</a>)</div>
                     <div class="honor-date">2026</div>
                 </div>
-                <div class="honor-description">performance in <a href="https://lu.ma/allchat" style="color: #000099; text-decoration: none;">ALL CHAT</a>, curated by <a href="https://everythingi.love/" style="color: #000099; text-decoration: none;">chia amisola</a> at <a href="https://www.tiat.place/" style="color: #000099; text-decoration: none;">tiat.place</a>, San Francisco, CA</div>
-            </div>
-
-            <div class="honor-item">
-                <div class="honor-header">
-                    <div class="honor-title"><a href="https://art.snailbunny.site/portfolio/00_interactive/artist_in_the_loop.html" style="color: #000099; text-decoration: none;"><em>Recursive Self-Portrait #1</em></a></div>
-                    <div class="honor-date">2025</div>
-                </div>
-                <div class="honor-description">performance at <a href="https://www.tiat.place/" style="color: #000099; text-decoration: none;">tiat.place</a>, San Francisco, CA</div>
+                <div class="honor-description"><a href="https://luma.com/shmbee" style="color: #000099; text-decoration: none;">workshop on digital self portraiture</a> for <a href="https://www.tiat.place/" style="color: #000099; text-decoration: none;">tiat.place</a>, San Francisco, CA</div>
             </div>
 
             <div class="honor-item">
@@ -820,15 +489,7 @@
                     <div class="honor-title"><a href="https://colab.research.google.com/drive/1F_sZit4IxrkxUhu2AJcZoIwlRbOYejd9?usp=sharing" style="color: #000099; text-decoration: none;"><em>data crafting!</em></a></div>
                     <div class="honor-date">2025</div>
                 </div>
-                <div class="honor-description">workshop: artistic appropriation of object detection model training pipelines at <a href="https://www.tiat.place/" style="color: #000099; text-decoration: none;">tiat.place</a>, San Francisco, CA</div>
-            </div>
-
-            <div class="honor-item">
-                <div class="honor-header">
-                    <div class="honor-title"><a href="https://art.snailbunny.site/portfolio/00_interactive/artist_in_the_loop.html" style="color: #000099; text-decoration: none;"><em>Recursive Self-Portrait #0</em></a></div>
-                    <div class="honor-date">2025</div>
-                </div>
-                <div class="honor-description">performance at the Jacobs Winter Design Showcase</div>
+                <div class="honor-description">workshop on artistic appropriation of object detection model training pipelines for <a href="https://www.tiat.place/" style="color: #000099; text-decoration: none;">tiat.place</a>, San Francisco, CA</div>
             </div>
 
             <div class="honor-item">
@@ -841,7 +502,7 @@
 
             <div class="honor-item">
                 <div class="honor-header">
-                    <div class="honor-title">Creativity is an Ecosystem</div>
+                    <div class="honor-title"><em>Creativity is an Ecosystem</em></div>
                     <div class="honor-date">2025</div>
                 </div>
                 <div class="honor-description">Creative Future Counterstructures Artist Residency Program, supported by <a href="https://www.mozillafoundation.org/en/creative-futures-counterstructures/" style="color: #000099; text-decoration: none;">The Mozilla Foundation</a>, at <a href="https://www.tiat.place/" style="color: #000099; text-decoration: none;">tiat.place</a>, San Francisco, CA</div>
@@ -870,6 +531,14 @@
                 </div>
                 <div class="honor-description">Stanford HCI Lunch</div>
             </div>
+            <div class="honor-item">
+                <div class="honor-header">
+                    <div class="honor-title">Guest Lecturer, <a href="https://drive.google.com/drive/folders/1CtyMZJ1gGxe-DT0S5bPRmh3nMGuFnvi0" style="color: #000099; font-style: italic; text-decoration: none;">Introduction to HCI</a></div>
+                    <div class="honor-date">2025</div>
+                </div>
+                <div class="honor-description"><a href="https://cs10.org/sp25/" style="color: #000099; text-decoration: none;">CS 10: The Beauty and Joy of Computing, (Prof. Dan Garcia) </a>@ UC Berkeley</div>
+            </div>
+
 
             <div class="honor-item">
                 <div class="honor-header">
@@ -881,12 +550,79 @@
 
             <div class="honor-item">
                 <div class="honor-header">
+                    <div class="honor-title"><em>Creativity at the Intersection of Art and Machine</em></div>
+                    <div class="honor-date">2023</div>
+                </div>
+                <div class="honor-description"><a href="https://calpilcommunity.org/graduate" style="color: #000099; text-decoration: none;">Pilipinx American Graduate Student Association (PAGaSA)</a></div>
+            </div>
+
+            <div class="honor-item">
+                <div class="honor-header">
+                    <div class="honor-title">Panelist, GradMAP PH Career Panel 2023</div>
+                    <div class="honor-date">2023</div>
+                </div>
+                <div class="honor-description"><a href="https://www.gradmap.ph/event-details/career-panel-2023" style="color: #000099; text-decoration: none;">GradMAP Philippines STEM Mentorship Network</a></div>
+            </div>
+
+            <div class="honor-item">
+                <div class="honor-header">
+                    <div class="honor-title">Panelist, Pathways 2022</div>
+                    <div class="honor-date">2022</div>
+                </div>
+                <div class="honor-description"><a href="https://pass.studentorg.berkeley.edu/" style="color: #000099; text-decoration: none;">PASS (Pilipinx Academic Student Services)</a> @ UC Berkeley</div>
+            </div>
+
+
+
+            <div class="honor-item">
+                <div class="honor-header">
                     <div class="honor-title">Keynote Speaker for the Queer, Trans (QT) Black, Indigenous, People of Color (BIPOC) Participatory Design Workshop</div>
                     <div class="honor-date">CHI 2022</div>
                 </div>
             </div>
 
         </div>
+
+
+        <div class="section-header">Performances &amp; Art Exhibitions</div>
+
+        <div class="honors-list">
+
+            <div class="honor-item">
+                <div class="honor-header">
+                    <div class="honor-title"><a href="https://art.snailbunny.site/bart" style="color: #000099; text-decoration: none;"><em>Transbay Tubes</em></a></div>
+                    <div class="honor-date">2026</div>
+                </div>
+                <div class="honor-description">exhibition for <a href="https://www.tiat.place/exhibitions/time-place" style="color: #000099; text-decoration: none;">time.place</a> at <a href="https://www.tiat.place/" style="color: #000099; text-decoration: none;">tiat.place</a>, San Francisco, CA</div>
+            </div>
+
+            <div class="honor-item">
+                <div class="honor-header">
+                    <div class="honor-title"><a href="https://shmuh.co/recognize_me" style="color: #000099; text-decoration: none;"><em>recognizing my self</em></a></div>
+                    <div class="honor-date">2026</div>
+                </div>
+                <div class="honor-description">performance in <a href="https://lu.ma/allchat" style="color: #000099; text-decoration: none;">ALL CHAT</a>, curated by <a href="https://everythingi.love/" style="color: #000099; text-decoration: none;">chia amisola</a> at <a href="https://www.tiat.place/" style="color: #000099; text-decoration: none;">tiat.place</a>. San Francisco, CA</div>
+            </div>
+
+            <div class="honor-item">
+                <div class="honor-header">
+                    <div class="honor-title"><a href="https://art.snailbunny.site/portfolio/00_interactive/artist_in_the_loop.html" style="color: #000099; text-decoration: none;"><em>Recursive Self-Portrait #2</em></a></div>
+                    <div class="honor-date">2025</div>
+                </div>
+                <div class="honor-description">performance at <a href="https://www.tiat.place/" style="color: #000099; text-decoration: none;">tiat.place</a>. San Francisco, CA</div>
+            </div>
+
+            <div class="honor-item">
+                <div class="honor-header">
+                    <div class="honor-title"><a href="https://art.snailbunny.site/portfolio/00_interactive/artist_in_the_loop.html" style="color: #000099; text-decoration: none;"><em>Recursive Self-Portrait #1</em></a></div>
+                    <div class="honor-date">2025</div>
+                </div>
+                <div class="honor-description">performance at the Winter Design Showcase, Jacobs Institute for Design Innovation. Berkeley, CA</div>
+            </div>
+
+        </div>
+
+        <div style="page-break-before: always; margin-top: 5px;"></div>
 
 
         <div class="two-column">
@@ -904,7 +640,7 @@
                     <div class="honor-item">
                         <div class="honor-header">
                             <div class="honor-title">Computer Science Graduate Student Association</div>
-                            <div class="honor-date">2020 - Present</div>
+                            <div class="honor-date">2020 - 2025</div>
                         </div>
                         <div class="honor-description">President (<em>2024 - 2025</em>)</div>
                         <div class="honor-description">Officer, Visit Day Organizer, Lounge Coordinator (<em>2020 - 2024</em>)</div>
@@ -942,9 +678,9 @@
                     </div>
                 </div>
 
-                        <div style="page-break-before: always; margin-top: 15px;"></div>
+                        <!-- <div style="page-break-before: always; margin-top: 15px;"></div>
                 
-                
+                 -->
                 <div class="section-header">Advising and Mentorship</div>
                 
                 <div class="mentorship-list">
@@ -971,7 +707,7 @@
                     </div>
                    <div class="mentorship-item">
                         <div class="mentorship-header">
-                            <div class="mentee-names">Bob Tianqi Wei</div>
+                            <div class="mentee-names">Bob Tianqi Wei <span class="mentee-location">(MIT Media Lab)</span></div>
                             <div class="mentorship-date">2024 - 2025</div>
                         </div>
                     </div>
@@ -1009,6 +745,13 @@
                 <div class="section-header">Fellowships & Honors</div>
                 
                 <div class="honors-list">
+                    <div class="honor-item">
+                        <div class="honor-header">
+                            <div class="honor-title">Best Paper Honorable Mention, CHI 2026</div>
+                            <div class="honor-date">2026</div>
+                        </div>
+                        <div class="honor-description"><a href="https://dl.acm.org/doi/10.1145/3772318.3790531" style="color: #000099; text-decoration: none;"><em>Noise Pilot: Enabling Artistic Workflow Composition with Diffusion-Based Image Generation</em></a></div>
+                    </div>
                     <div class="honor-item">
                         <div class="honor-header">
                             <div class="honor-title">Best Paper Honorable Mention, CHI 2025</div>

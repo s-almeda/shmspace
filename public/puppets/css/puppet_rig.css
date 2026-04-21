@@ -215,6 +215,14 @@ body {
   pointer-events: auto;
 }
 
+/* ── Dialogue overlay: hover-fade mode (opt-in via body.dialogue-hover-mode) ── */
+body.dialogue-hover-mode #dialogueOverlay.visible {
+  opacity: 0.12;
+}
+body.dialogue-hover-mode #dialogueOverlay.visible:hover {
+  opacity: 1;
+}
+
 /* blinking cursor during typewriter */
 #dialogue-panel::after {
   content: '|';
