@@ -121,6 +121,29 @@
                 </div>
               </div>
             </div>
+            <div class="field-row">
+              <input id="check-head-puppets" type="checkbox">
+              <label for="check-head-puppets">head puppets?</label>
+            </div>
+            <div id="head-puppets-controls" class="hands-controls" style="display:none;">
+              <div class="field-row hands-sub-row">
+                <label for="head-puppet-position">position</label>
+                <select id="head-puppet-position" style="width: 100%;">
+                  <option value="heading">heading (above head)</option>
+                  <option value="hat">hat (on head)</option>
+                  <option value="glasses">glasses (on eyes)</option>
+                  <option value="mask">mask (on face)</option>
+                </select>
+              </div>
+              <div class="field-row hands-sub-row">
+                <label>headPuppet&nbsp;:</label>
+                <div class="puppet-nav-row">
+                  <button id="head-puppet-prev">&lt;</button>
+                  <input type="text" id="head-puppet-number" value="0" readonly style="width: 30px; padding: 2px;">
+                  <button id="head-puppet-next">&gt;</button>
+                </div>
+              </div>
+            </div>
           </div>
           <div style="padding: 4px 0 2px 0; flex-shrink: 0; display: flex; gap: 4px;">
             <button id="copy-scene-btn" style="flex: 1; font-size: 11px;">copy scene</button>
@@ -174,7 +197,7 @@
 
     </div>
   <div class="status-bar">
-    <p class="status-bar-field">interface to agency</p>
+    <p class="status-bar-field">april 8 2026</p>
     <p class="status-bar-field show-only" id="status-scene">scene 1</p>
     <p class="status-bar-field" id="status-timer">00:00:00</p>
   </div>
@@ -339,6 +362,36 @@
     let currentLeftPuppet  = loadedImages.length ? 0 : null; // index into loadedImages
     let currentRightPuppet = uploadedRightIndex;              // null unless freeplay + uploaded
 
+    // ── Head puppets (separate list/folder from hand puppets) ────────
+    const headPuppetListUrl = isShowMode
+      ? `/puppets/shows/${showName}/head-puppets-list`
+      : `/puppets/default-head-puppets-list`;
+    const headPuppetBaseUrl = isShowMode
+      ? `/puppets/shows/${showName}/head_puppets`
+      : `/puppets/default_head_puppets`;
+    const headPuppetFiles  = await fetch(headPuppetListUrl).then(r => r.json()).catch(() => []);
+    const loadedHeadImages = headPuppetFiles.map(f => makeMediaEl(`${headPuppetBaseUrl}/${f}`));
+    // Per-puppet position parsed from filename suffix: "001_shades_glasses.png" → "glasses".
+    // null means "fall back to the dropdown/global setting".
+    const HEAD_POSITIONS = ['heading', 'hat', 'glasses', 'mask'];
+    const headPuppetPositions = headPuppetFiles.map(f => {
+      const base = f.replace(/\.[^.]+$/, '').toLowerCase();
+      return HEAD_POSITIONS.find(p => base.endsWith('_' + p) || base === p) ?? null;
+    });
+    let currentHeadPuppet   = loadedHeadImages.length ? 0 : null;
+    // Per-puppet position comes from the filename suffix. User interaction (dropdown)
+    // or scene JSON can set a temporary override; cycling puppets clears the override
+    // so the filename's position takes effect again.
+    let headPuppetPositionOverride = null;
+
+    function effectiveHeadPuppetPosition() {
+      if (headPuppetPositionOverride) return headPuppetPositionOverride;
+      if (currentHeadPuppet !== null && headPuppetPositions[currentHeadPuppet]) {
+        return headPuppetPositions[currentHeadPuppet];
+      }
+      return 'hat'; // ultimate fallback if filename has no suffix and no override is set
+    }
+
     // ── Slide canvas ─────────────────────────────────────────────────
     const slideCanvas = document.getElementById('slideCanvas');
     const slideCtx    = slideCanvas.getContext('2d');
@@ -346,15 +399,42 @@
 
     let slideRafId = null;
 
-    function loadSlide(filename) {
+    // Tracks the current slide video so we can pause/tear it down on scene change.
+    // Without this, an old slide video keeps playing audio from the previous scene.
+    let currentSlideVideo = null;
+
+    function loadSlide(filename, withAudio = false) {
       if (slideRafId) { cancelAnimationFrame(slideRafId); slideRafId = null; }
+      // Tear down any previous slide video so its audio stops and it can be GC'd
+      if (currentSlideVideo) {
+        try { currentSlideVideo.pause(); } catch (_) {}
+        currentSlideVideo.src = '';
+        currentSlideVideo.load();
+        currentSlideVideo = null;
+      }
       if (!filename) {
         slideCanvas.style.display = 'none';
         slideCtx.clearRect(0, 0, slideCanvas.width, slideCanvas.height);
         slideImage = null;
         return;
       }
-      const el = makeMediaEl(`/puppets/shows/${showName}/slides/${filename}`);
+      const src = `/puppets/shows/${showName}/slides/${filename}`;
+      // Build the element directly instead of going through makeMediaEl() so
+      // slide videos can opt into audio while puppet videos stay muted.
+      let el;
+      if (VIDEO_EXT.test(src)) {
+        el = document.createElement('video');
+        el.src = src;
+        el.loop = true;
+        el.muted = !withAudio; // slide audio is opt-in per scene via toggles.audio
+        el.autoplay = true;
+        el.playsInline = true;
+        el.play().catch(() => {});
+        currentSlideVideo = el;
+      } else {
+        el = new Image();
+        el.src = src;
+      }
       const onReady = () => {
         slideImage = el;
         slideCanvas.style.display = 'block';
@@ -388,8 +468,7 @@
       const naturalH = slideImage.naturalHeight ?? slideImage.videoHeight;
       if (!naturalW || !naturalH) return;
       const scale = Math.min(width / naturalW, height / naturalH);
-      const SLIDE_Y_OFFSET = -60; // shift slide upward to clear dialogue box
-      slideCtx.drawImage(slideImage, (width - naturalW * scale) / 2, (height - naturalH * scale) / 2 + SLIDE_Y_OFFSET, naturalW * scale, naturalH * scale);
+      slideCtx.drawImage(slideImage, (width - naturalW * scale) / 2, (height - naturalH * scale) / 2, naturalW * scale, naturalH * scale);
     }
 
     // ── Face canvas + smooth lerp state ──────────────────────────────
@@ -557,6 +636,72 @@
             ctx.restore();
           }
         });
+      }
+
+      // Head puppet: draw on the primary (first) face based on position mode
+      if (document.getElementById('check-head-puppets')?.checked
+          && currentHeadPuppet !== null
+          && loadedHeadImages.length
+          && faceDisplay.boxes.length
+          && faceDisplay.landmarks.length) {
+        const img = loadedHeadImages[currentHeadPuppet];
+        if (img && (img.complete || (img.readyState !== undefined && img.readyState >= 2))) {
+          const box  = faceDisplay.boxes[0];
+          const pts  = faceDisplay.landmarks[0];
+          const natW = img.naturalWidth  ?? img.videoWidth;
+          const natH = img.naturalHeight ?? img.videoHeight;
+          if (natW && natH) {
+            const faceCenterX = box.x + box.w / 2;
+            // Eye centers (landmarks 36-41 = left eye, 42-47 = right eye in face-api's 68-pt scheme)
+            const avg = (idxs) => {
+              let sx = 0, sy = 0;
+              idxs.forEach(i => { sx += pts[i].x; sy += pts[i].y; });
+              return { x: sx / idxs.length, y: sy / idxs.length };
+            };
+            const leftEye  = avg([36,37,38,39,40,41]);
+            const rightEye = avg([42,43,44,45,46,47]);
+            const eyesCx   = (leftEye.x + rightEye.x) / 2;
+            const eyesCy   = (leftEye.y + rightEye.y) / 2;
+
+            // Decide width based on position mode, preserve aspect ratio
+            const pos = effectiveHeadPuppetPosition();
+            let imgW, imgH, cx, cy;
+            if (pos === 'heading') {
+              imgW = box.w * 1.4;
+              imgH = imgW * (natH / natW);
+              cx   = faceCenterX;
+              // Reserve vertical space above the bbox for the label that bbox draws at
+              // `box.y - 6` with font size ~42 (or 45 when prettyCute). Pad generously
+              // so the heading puppet never overlaps the label text.
+              const bboxOn = document.getElementById('check-bbox').checked;
+              const LABEL_CLEARANCE = bboxOn ? 54 : 10; // 42px font + ~12px padding
+              cy   = box.y - LABEL_CLEARANCE - imgH / 2;
+            } else if (pos === 'hat') {
+              imgW = box.w * 1.25;
+              imgH = imgW * (natH / natW);
+              cx   = faceCenterX;
+              cy   = box.y - imgH / 2 + box.h * 0.12; // bottom of hat overlaps top of face
+            } else if (pos === 'glasses') {
+              imgW = box.w * 1.1;
+              imgH = imgW * (natH / natW);
+              cx   = eyesCx;
+              cy   = eyesCy;
+            } else { // mask
+              imgW = box.w * 1.1;
+              imgH = imgW * (natH / natW);
+              cx   = faceCenterX;
+              cy   = box.y + box.h * 0.55; // roughly nose/mouth center
+            }
+
+            // faceCanvas is CSS-mirrored (scaleX(-1)) so we un-flip the image here,
+            // matching the pattern used for hand puppets.
+            ctx.save();
+            ctx.globalAlpha = faceOpacity;
+            ctx.scale(-1, 1);
+            ctx.drawImage(img, -(cx + imgW / 2), cy - imgH / 2, imgW, imgH);
+            ctx.restore();
+          }
+        }
       }
 
       // Smile condition: highlight mouth landmarks
@@ -842,12 +987,19 @@
         if (puppetIdx === null || puppetIdx === undefined) return;
 
         const img = loadedImages[puppetIdx];
-        if (!img || !img.complete) return;
+        // <img> exposes `.complete`; <video> exposes `.readyState` (>=2 once it has
+        // current frame data). Accept either so webm/mp4 puppets also draw.
+        if (!img) return;
+        const ready = img.complete || (img.readyState !== undefined && img.readyState >= 2);
+        if (!ready) return;
 
         const tip     = hand[12];
         const handSize = Math.hypot((tip.x - wrist.x) * width, (tip.y - wrist.y) * height);
         const imgW = handSize * handSlider;
-        const imgH = imgW * (img.naturalHeight / img.naturalWidth);
+        const natW = img.naturalWidth  ?? img.videoWidth;
+        const natH = img.naturalHeight ?? img.videoHeight;
+        if (!natW || !natH) return;
+        const imgH = imgW * (natH / natW);
 
         handCtx.save();
         handCtx.scale(-1, 1);
@@ -872,10 +1024,13 @@
         bbox: 'check-bbox', facemesh: 'check-facemesh', race: 'check-race',
         age: 'check-age', gender: 'check-gender', emotion: 'check-emotion',
         hands: 'check-hands', gestures: 'check-gestures',
+        headPuppets: 'check-head-puppets',
       };
       Object.entries(toggles).forEach(([key, val]) => {
         if (key === 'detectPrettyCute') { detect_prettyCute = val; if (CONDITIONS.prettyCute) CONDITIONS.prettyCute.active = val; return; }
         if (key === 'detectShm') { detect_shm = val; return; }
+        if (key === 'dialogueHover') { document.body.classList.toggle('dialogue-hover-mode', !!val); return; }
+        if (key === 'audio') { return; } // handled in loadScene via loadSlide() — not a checkbox
         const cb = document.getElementById(checkMap[key]);
         if (cb && cb.checked !== val) { cb.checked = val; cb.dispatchEvent(new Event('change')); }
       });
@@ -958,8 +1113,23 @@
       currentLeftPuppet  = (scene.leftPuppet  !== null && scene.leftPuppet  !== undefined) ? scene.leftPuppet  : null;
       currentRightPuppet = (scene.rightPuppet !== null && scene.rightPuppet !== undefined) ? scene.rightPuppet : null;
 
+      // Set head puppet assignment (only if specified). Changing puppets clears any
+      // previous override so the new puppet's filename-derived position takes effect.
+      if (scene.headPuppet !== undefined) {
+        currentHeadPuppet = scene.headPuppet;
+        headPuppetPositionOverride = null;
+      }
+      // Scene-level position sets a hard override (wins over filename suffix).
+      // Passing null explicitly clears the override; omitting the key leaves it sticky.
+      if (scene.headPuppetPosition !== undefined) {
+        headPuppetPositionOverride = scene.headPuppetPosition;
+      }
+      updateHeadPuppetDisplay();
+
       // Load or clear slide
-      loadSlide(scene.slide ?? null);
+      // `toggles.audio: true` opts this scene's slide video into playing audio.
+      // Default is muted so puppet scenes and silent visual beats don't surprise you.
+      loadSlide(scene.slide ?? null, !!scene.toggles?.audio);
 
       // Optional: legacy toggle + dialogue support
       if (scene.toggles) applyToggles(scene.toggles);
@@ -1087,6 +1257,38 @@
       if (!this.checked) handCtx.clearRect(0, 0, handCanvas.width, handCanvas.height);
     });
 
+    // Head puppets checkbox: show/hide head puppet sub-controls
+    document.getElementById('check-head-puppets').addEventListener('change', function() {
+      this.closest('.field-row').classList.toggle('disabled', !this.checked);
+      document.getElementById('head-puppets-controls').style.display = this.checked ? 'block' : 'none';
+    });
+
+    // Head puppet cycling (independent of scenes)
+    function updateHeadPuppetDisplay() {
+      const el = document.getElementById('head-puppet-number');
+      if (el) el.value = loadedHeadImages.length ? (currentHeadPuppet ?? 0) + 1 : 0;
+      // Reflect the effective position of the current puppet in the dropdown (read-only hint).
+      const sel = document.getElementById('head-puppet-position');
+      if (sel) sel.value = effectiveHeadPuppetPosition();
+    }
+    document.getElementById('head-puppet-prev').addEventListener('click', () => {
+      if (!loadedHeadImages.length) return;
+      currentHeadPuppet = ((currentHeadPuppet ?? 0) - 1 + loadedHeadImages.length) % loadedHeadImages.length;
+      headPuppetPositionOverride = null; // let the new puppet's filename decide
+      updateHeadPuppetDisplay();
+    });
+    document.getElementById('head-puppet-next').addEventListener('click', () => {
+      if (!loadedHeadImages.length) return;
+      currentHeadPuppet = ((currentHeadPuppet ?? -1) + 1) % loadedHeadImages.length;
+      headPuppetPositionOverride = null;
+      updateHeadPuppetDisplay();
+    });
+    document.getElementById('head-puppet-position').addEventListener('change', function() {
+      // User picked a position explicitly → override the filename-derived choice.
+      headPuppetPositionOverride = this.value;
+    });
+    updateHeadPuppetDisplay();
+
     // Puppet cycling (independent of scenes — cycles currentLeftPuppet)
     function updatePuppetDisplay() {
       const el = document.getElementById('puppet-number');
@@ -1190,6 +1392,11 @@
       const id = keyMap[ev.key.toLowerCase()];
       if (id) { const cb = document.getElementById(id); if (cb) { cb.checked = !cb.checked; cb.dispatchEvent(new Event('change')); } }
 
+      // T: toggle dialogue hover-fade mode
+      if (ev.key.toLowerCase() === 't') {
+        document.body.classList.toggle('dialogue-hover-mode');
+      }
+
       // Puppet size: [ decrease, ] increase
       if (ev.key === '[' || ev.key === ']') {
         const slider = document.getElementById('puppet-size');
@@ -1203,6 +1410,13 @@
       if ((ev.key === ';' || ev.key === "'") && loadedImages.length) {
         currentLeftPuppet = (currentLeftPuppet + (ev.key === "'" ? 1 : -1) + loadedImages.length) % loadedImages.length;
         updatePuppetDisplay();
+      }
+
+      // , / . cycle the head puppet independently of scenes
+      if ((ev.key === ',' || ev.key === '.') && loadedHeadImages.length) {
+        currentHeadPuppet = ((currentHeadPuppet ?? 0) + (ev.key === '.' ? 1 : -1) + loadedHeadImages.length) % loadedHeadImages.length;
+        headPuppetPositionOverride = null; // let the new puppet's filename decide
+        updateHeadPuppetDisplay();
       }
 
       // Arrow keys: scene navigation (show mode only)
