@@ -127,6 +127,12 @@ body {
         @bottom-center { content: ""; }
         @bottom-right { content: ""; }
     }
+
+    .publication-item,
+    .honor-item {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
 }
 
 a {
