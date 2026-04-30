@@ -683,10 +683,10 @@
               const LABEL_CLEARANCE = bboxOn ? 54 : 10; // 42px font + ~12px padding
               cy   = box.y - LABEL_CLEARANCE - imgH / 2;
             } else if (pos === 'hat') {
-              imgW = box.w * 1.25;
+              imgW = box.w * 1.4;
               imgH = imgW * (natH / natW);
               cx   = faceCenterX;
-              cy   = box.y - imgH / 2 + box.h * 0.12; // bottom of hat overlaps top of face
+              cy   = box.y - imgH / 2 + box.h * 0.25; // bottom of hat overlaps top of face
             } else if (pos === 'glasses') {
               imgW = box.w * 1.1;
               imgH = imgW * (natH / natW);
@@ -1367,10 +1367,12 @@
               sceneNavPill.classList.add('visible');
               loadScene(0);
             } else {
-              // Freeplay: auto-enable hands and reveal the (editable) dialogue overlay
+              // Freeplay: auto-enable hands and heads and reveal the (editable) dialogue overlay
               const hCb = document.getElementById('check-hands');
               if (hCb && !hCb.checked) { hCb.checked = true; hCb.dispatchEvent(new Event('change')); }
               document.getElementById('dialogueOverlay').classList.add('visible');
+              const hpCb = document.getElementById('check-head-puppets');
+              if (hpCb && !hpCb.checked) { hpCb.checked = true; hpCb.dispatchEvent(new Event('change')); }
             }
           }, 1800);
           return;
