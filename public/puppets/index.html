@@ -199,11 +199,23 @@
       const panelEl = document.getElementById('dialogue-panel');
       tabEl.setAttribute('contenteditable', 'true');
       tabEl.setAttribute('spellcheck', 'false');
+      tabEl.setAttribute('type', 'button'); // prevent form-submit semantics on Enter
       panelEl.setAttribute('contenteditable', 'true');
       panelEl.setAttribute('spellcheck', 'false');
       panelEl.textContent = '';
       panelEl.dataset.placeholder = "what's up chat";
       document.body.classList.add('dialogue-hover-mode');
+
+      // <button> swallows Space/Enter to fire its click action — override so the user can
+      // actually type spaces and newlines into the editable tab/panel.
+      const insertChar = (ch) => document.execCommand('insertText', false, ch);
+      [tabEl, panelEl].forEach(el => {
+        el.addEventListener('keydown', e => {
+          if (e.code === 'Space') { e.preventDefault(); e.stopPropagation(); insertChar(' '); }
+          // In the tab (single-line character name), keep Enter from inserting newlines.
+          if (e.key === 'Enter' && el === tabEl) { e.preventDefault(); e.stopPropagation(); el.blur(); }
+        });
+      });
     }
 
     const RACE_CLASSES = ['White', 'Black', 'Asian', 'Hispanic_Latino', 'Middle_Eastern'];
@@ -683,10 +695,10 @@
               const LABEL_CLEARANCE = bboxOn ? 54 : 10; // 42px font + ~12px padding
               cy   = box.y - LABEL_CLEARANCE - imgH / 2;
             } else if (pos === 'hat') {
-              imgW = box.w * 1.4;
+              imgW = box.w * 1.25;
               imgH = imgW * (natH / natW);
               cx   = faceCenterX;
-              cy   = box.y - imgH / 2 + box.h * 0.25; // bottom of hat overlaps top of face
+              cy   = box.y - imgH / 2 + box.h * 0.13; // bottom of hat overlaps top of face
             } else if (pos === 'glasses') {
               imgW = box.w * 1.1;
               imgH = imgW * (natH / natW);
@@ -1173,7 +1185,20 @@
 
         cameraReady = true;
         document.body.classList.add('camera-ready');
-        if (isShowMode) document.getElementById('spacebarHint').classList.add('visible');
+        if (isShowMode) {
+          document.getElementById('spacebarHint').classList.add('visible');
+        } else {
+          // Freeplay: skip the spacebar-to-start gate — kick off the reveal automatically.
+          gameStarted = true;
+          setTimeout(() => {
+            analysisPanel.classList.add('visible');
+            const hCb = document.getElementById('check-hands');
+            if (hCb && !hCb.checked) { hCb.checked = true; hCb.dispatchEvent(new Event('change')); }
+            const hpCb = document.getElementById('check-head-puppets');
+            if (hpCb && !hpCb.checked) { hpCb.checked = true; hpCb.dispatchEvent(new Event('change')); }
+            document.getElementById('dialogueOverlay').classList.add('visible');
+          }, 1800);
+        }
 
       } catch (err) {
         console.error('Camera error:', err);
@@ -1355,29 +1380,20 @@
       if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA') return;
       if (ev.target.isContentEditable) return;
 
-      // Spacebar: start or advance
+      // Spacebar: start the show (show mode only — freeplay auto-starts on camera-ready) or advance.
       if (ev.code === 'Space') {
         ev.preventDefault();
-        if (!cameraReady) return;
+        if (!cameraReady || !isShowMode) return;
         if (!gameStarted) {
           gameStarted = true;
           setTimeout(() => {
             analysisPanel.classList.add('visible');
-            if (isShowMode) {
-              sceneNavPill.classList.add('visible');
-              loadScene(0);
-            } else {
-              // Freeplay: auto-enable hands and heads and reveal the (editable) dialogue overlay
-              const hCb = document.getElementById('check-hands');
-              if (hCb && !hCb.checked) { hCb.checked = true; hCb.dispatchEvent(new Event('change')); }
-              document.getElementById('dialogueOverlay').classList.add('visible');
-              const hpCb = document.getElementById('check-head-puppets');
-              if (hpCb && !hpCb.checked) { hpCb.checked = true; hpCb.dispatchEvent(new Event('change')); }
-            }
+            sceneNavPill.classList.add('visible');
+            loadScene(0);
           }, 1800);
           return;
         }
-        if (isShowMode) tryAdvance();
+        tryAdvance();
         return;
       }
 
