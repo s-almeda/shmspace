@@ -5,7 +5,8 @@
     "rightPuppet": null,
     "slide": null,
     "toggles": { "detectShm": true, "bbox": true },
-    "dialogue": { "show": true, "characterName": "shm", "text": "what's up chat. i made this digital puppeteering rig last week and started joking that i would give my lightning talk in front of all these brilliant people I admire as a puppet show. and then some of those people started saying," }
+    "dialogue": { "show": true, "characterName": "shm", 
+    "text": "what's up chat. i made this digital puppeteering rig, and I used it to give a lightning talk at the MDES Forum a couple weeks ago. It started as a joke but then a bunch of brilliant people i admire were like" }
   },
   {
     "id": 2,
