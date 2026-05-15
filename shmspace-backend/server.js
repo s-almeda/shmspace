@@ -78,6 +78,7 @@ app.get('/api/portfolio-files', (req, res) => {
   res.json(structure);
 });
 
+app.get('/rsp', (_req, res) => res.redirect('/portfolio/00_interactive/artist_in_the_loop.html'));
 app.get('/bart', (_req, res) => res.redirect('/api/bart/tube'));
 app.use('/api/bart', require('./bart/bart'));
 
