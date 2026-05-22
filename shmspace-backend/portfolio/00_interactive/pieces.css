@@ -1,0 +1,319 @@
+/* pieces.css
+   shared styles for art-piece pages built on top of xp.css
+   reusable across any piece — see pieces_css_notes.md / examples.html
+   ------------------------------------------------------------ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  color: #f0f0f0;
+  font-family: 'Pixelated MS Sans Serif', Arial, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ---- page layout ---- */
+.piece-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 60px;
+  padding: 60px 20px 120px 20px;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.piece-title {
+  font-family: 'Arial', monospace;
+  font-size: 1.4em;
+  letter-spacing: 0.15em;
+  text-align: center;
+  color: #f0f0f0;
+  margin: 20px 0 10px 0;
+}
+
+.piece-subtitle {
+  font-family: 'Arial', monospace;
+  font-size: 0.9em;
+  text-align: center;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+/* ---- the reusable window ---- */
+/* combine with xp.css's `.window` */
+.piece-window {
+  width: min(90vw, 520px);
+  background: #ece9d8; /* xp.css default-ish */
+  color: #000;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.55);
+}
+
+/* opt IN to a hover lift (rare — most windows should sit still) */
+.piece-window.float-on-hover {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.piece-window.float-on-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.7);
+}
+
+/* size modifiers */
+.piece-window.size-sm { width: min(80vw, 320px); }
+.piece-window.size-md { width: min(85vw, 460px); }
+.piece-window.size-lg { width: min(92vw, 640px); }
+
+/* alignment / askew variants (apply on the wrapper) */
+.piece-row {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+.piece-row.left   { justify-content: flex-start; }
+.piece-row.right  { justify-content: flex-end; }
+.piece-row.center { justify-content: center; }
+
+/* halfway between center and the edges */
+.piece-row.left-center  { justify-content: flex-start; padding-left:  15%; }
+.piece-row.right-center { justify-content: flex-end;   padding-right: 15%; }
+
+.askew-left  { transform: rotate(-1.2deg); }
+.askew-right { transform: rotate(1.2deg); }
+.askew-none  { transform: none; }
+
+.title-bar {
+  padding: 6px 12px;
+  height: 3.5em;
+}
+
+/* ---- title bar text ---- */
+.piece-window .title-bar-text {
+  letter-spacing: 0.04em;
+}
+
+/* ---- body ---- */
+.piece-window .window-body {
+  margin: 0;
+  padding: 12px;
+  background: #ece9d8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.piece-window .window-body.dark {
+  background: #1a1a1a;
+  color: #f0f0f0;
+}
+
+.piece-window .window-body p {
+  margin: 0;
+  font-size: 0.9em;
+  line-height: 1.4;
+  text-align: center;
+  font-family: 'Arial', monospace;
+}
+
+/* ---- the image inside a window ---- */
+.piece-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 60vh;
+  object-fit: cover;
+  border: 1px solid #555;
+}
+
+.piece-img.contain { object-fit: contain; }
+.piece-img.tall    { max-height: 75vh; }
+.piece-img.short   { max-height: 40vh; }
+
+/* ---- bare image (no window chrome) ---- */
+/* centers an image inside a max-500px column, optional caption below */
+.piece-bare {
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.piece-bare img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.piece-bare p {
+  margin: 0;
+  font-family: 'Arial', monospace;
+  font-size: 1.3em;
+  text-align: center;
+  color: #f0f0f0;
+}
+
+/* width modifiers for bare images */
+.piece-bare.w-sm { max-width: 300px; }
+.piece-bare.w-md { max-width: 500px; } /* default */
+.piece-bare.w-lg { max-width: 700px; }
+
+/* side-by-side variants: image + caption laid out as a row.
+   markup order is always <img> then <p>.
+   - side-left   = image on the LEFT, caption on the right
+   - side-right  = image on the RIGHT, caption on the left  */
+.piece-bare.side-left,
+.piece-bare.side-right {
+  flex-direction: row;
+  align-items: center;
+  gap: 24px;
+  max-width: 780px;
+  text-align: left;
+}
+
+.piece-bare.side-right { flex-direction: row-reverse; }
+
+.piece-bare.side-left > img,
+.piece-bare.side-right > img {
+  width: 50%;
+  flex-shrink: 0;
+}
+
+.piece-bare.side-left > p,
+.piece-bare.side-right > p {
+  flex: 1;
+  text-align: left;
+}
+
+/* hover-swap pattern (optional, like I_DYED_MY_HAIR_BLACK) */
+.piece-img-wrapper {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+.piece-img-wrapper .hover-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+.piece-img-wrapper:hover .hover-img { opacity: 1; }
+
+/* ---- status bar ---- */
+.piece-window .status-bar {
+  font-family: 'Arial', monospace;
+  font-size: 1em;
+}
+
+.piece-window .status-bar-field {
+  padding: 2px 6px;
+}
+
+/* ---- redacted / hidden-text helpers ---- */
+.redacted {
+  background: #000;
+  color: #000;
+  padding: 0 4px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  user-select: none;
+}
+.redacted.revealed {
+  color: #f0f0f0;
+  background: #2a2a2a;
+}
+
+.struck { text-decoration: line-through; opacity: 0.6; }
+
+/* ---- popup window ---- */
+/* a click-to-open modal window that appears over the page.
+   markup pattern:
+     <img class="popup-trigger" data-popup="my-popup-id" ... />
+
+     <div class="popup-backdrop" id="my-popup-id">
+       <div class="popup window piece-window">
+         <div class="title-bar">
+           <div class="title-bar-text">...</div>
+           <div class="title-bar-controls">
+             <button class="popup-close" aria-label="Close"></button>
+           </div>
+         </div>
+         <div class="window-body"> ... </div>
+       </div>
+     </div>
+   click trigger to open, click .popup-close or the backdrop or press ESC to close.
+   the JS at the bottom of pieces.html / examples.html wires this up. */
+.popup-trigger { cursor: pointer; }
+
+.popup-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+.popup-backdrop.is-open {
+  display: flex;
+  animation: popup-fade 0.18s ease;
+}
+
+@keyframes popup-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.popup-backdrop .popup {
+  max-width: min(90vw, 640px);
+  max-height: 90vh;
+  overflow-y: auto;
+  /* override the page-level :hover lift — popups are already raised */
+  transform: none !important;
+}
+
+.popup-close { cursor: pointer; }
+
+/* ---- mobile ---- */
+@media (max-width: 600px) {
+  .piece-page { gap: 40px; padding: 30px 24px 80px 24px; }
+  .piece-window,
+  .piece-window.size-sm,
+  .piece-window.size-md,
+  .piece-window.size-lg { width: 86vw; }
+  .askew-left, .askew-right { transform: none; } /* easier to read on mobile */
+
+  /* on mobile the row is already as wide as the window — collapse the
+     half-offset variants to center so nothing overflows */
+  .piece-row.left-center,
+  .piece-row.right-center {
+    justify-content: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin: auto;
+    max-width: 80vw;
+  }
+
+  /* collapse side-by-side bare images back to stacked column on mobile */
+  .piece-bare.side-left,
+  .piece-bare.side-right {
+    flex-direction: column;
+    max-width: 80vw;
+    gap: 8px;
+  }
+  .piece-bare.side-left > img,
+  .piece-bare.side-right > img { width: 100%; }
+  .piece-bare.side-left > p,
+  .piece-bare.side-right > p { text-align: center; }
+}

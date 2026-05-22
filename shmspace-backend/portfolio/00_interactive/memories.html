@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>memories to edit to hide</title>
+  <link rel="stylesheet" href="https://unpkg.com/xp.css" />
+  <link rel="stylesheet" href="pieces.css" />
+  <link rel="stylesheet" href="minesweeper.css" />
+
+  <!-- leaflet (for the map window) — defer keeps it from blocking initial render -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+
+  <div class="piece-page">
+
+
+    <!-- ============================================================
+         WINDOW 1 — medium, centered, slightly askew left
+         ============================================================ -->
+    <!-- <div class="piece-row center">
+      <div class="window piece-window size-md askew-left">
+        <div class="title-bar">
+          <div class="title-bar-text">memory_001.jpg — Properties</div>
+          <div class="title-bar-controls">
+            <button aria-label="Minimize"></button>
+            <button aria-label="Maximize"></button>
+            <button aria-label="Close"></button>
+          </div>
+        </div>
+        <div class="window-body">
+          <img class="piece-img" src="assets/I_DYED_MY_HAIR_BLACK-1.png" alt="memory 1" />
+          <p>caption goes here — what is being remembered?</p>
+        </div>
+        <div class="status-bar">
+          <p class="status-bar-field">last modified: never</p>
+          <p class="status-bar-field">size: 1 lifetime</p>
+        </div>
+      </div>
+    </div> -->
+    <div class="piece-bare w-md">
+      <img style="width: 80%;" src="assets/memories_compressed.gif" alt="memory 1" />
+      <p>i don't want to be made to remember</p>
+    </div>
+
+
+
+    <!-- ============================================================
+         WINDOW 2 — leaflet map widget (no hover, no animation)
+         ============================================================ -->
+    <div class="piece-row left-center">
+      <div class="window piece-window size-md">
+        <div class="title-bar">
+          <div class="title-bar-text">does that mean avoiding places that remind me...?</div>
+          <!-- <div class="title-bar-controls">
+            <button aria-label="Minimize"></button>
+            <button aria-label="Maximize"></button>
+            <button aria-label="Close"></button>
+          </div> -->
+        </div>
+        <div class="window-body">
+          <div id="scribble-map" style="width: 100%; height: 350px; border: 1px solid #555;"></div>
+          <div id="scribble-map-error" style="display: none; color: #b00;">
+            leaflet failed to load. (sorry this part doesn't work offline)
+          </div>
+        </div>
+        <div class="status-bar">
+          <p class="status-bar-field">are they ruined for me now?</p>
+          <p class="status-bar-field">does it even matter? i'm running away regardless</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         WINDOW 3 — minesweeper. click anywhere on the grid to cycle:
+           initial ("but how do i forget?") → mined ("something scary
+           happened") → cleared ("the danger is gone now") → mined …
+         ============================================================ -->
+    <div class="piece-row right-center">
+      <div class="window piece-window size-md" style="max-width: 500px;">
+        <div class="title-bar">
+            <div class="title-bar-text"><img src="assets/minesweeper_logo.png" alt="memory" style="width: 1.2em; height: 1.2em; vertical-align: middle; margin-right: 6px;">how do i forget. how do i scrub the fear from my bones</div>
+        </div>
+        <div class="window-body">
+          <div id="ms-bezel" style="background:#bdbdbd !important;padding:14px;border-top:3px solid #fff;border-left:3px solid #fff;border-right:3px solid #7b7b7b;border-bottom:3px solid #7b7b7b;display:block;width:fit-content;margin:0 auto;border-radius:0 !important;box-shadow:none !important;">
+
+            <div id="ms-score" style="background:#000 !important;border-top:3px solid #7b7b7b;border-left:3px solid #7b7b7b;border-right:3px solid #fff;border-bottom:3px solid #fff;border-radius:0 !important;display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:60px;margin-bottom:10px;color:#ff0000;line-height:1;overflow:hidden;">
+              <span id="ms-score-left" style="display:inline-block;">000</span>
+              <span id="ms-score-right" style="display:inline-block;">000</span>
+            </div>
+
+            <div style="background:#bdbdbd !important;padding:10px;border-top:3px solid #7b7b7b;border-left:3px solid #7b7b7b;border-right:3px solid #fff;border-bottom:3px solid #fff;border-radius:0 !important;box-shadow:none !important;">
+                <div id="ms-grid" style="display:grid;grid-template-columns:repeat(11,var(--cell-size,32px));grid-template-rows:repeat(9,var(--cell-size,32px));gap:0;border:2px solid #adadad;"></div>
+            </div>
+
+          </div>
+        </div>
+        <div class="status-bar">
+          <p class="status-bar-field" id="ms-status">i'm trying to be normal</p>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+      (function(){
+        const grid       = document.getElementById('ms-grid');
+        const statusEl   = document.getElementById('ms-status');
+        const scoreEl    = document.getElementById('ms-score');
+        const scoreLeft  = document.getElementById('ms-score-left');
+        const scoreRight = document.getElementById('ms-score-right');
+        const ROWS = 9;
+        const COLS = 11;
+        const CENTER_ROW = 4;  // middle of 0..8
+        const CENTER_COL = 5;  // middle of 0..10
+        const cells  = [];
+
+        const mineSVG = `<svg class="mine-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g><rect x="11" y="2" width="2" height="20" fill="#000"/><rect x="2" y="11" width="20" height="2" fill="#000"/><line x1="5" y1="5" x2="19" y2="19" stroke="#000" stroke-width="2"/><line x1="19" y1="5" x2="5" y2="19" stroke="#000" stroke-width="2"/><circle cx="12" cy="12" r="5" fill="#000"/><rect x="9" y="9" width="2" height="2" fill="#fff"/></g></svg>`;
+        const smileIMG = `<img class="smile-img" src="assets/smiley.png" alt="smile">`;
+
+        const STATES = {
+          initial: { title: '...',     left: '000',                       right: '000', textMode: false, single: false },
+          mined:   { title: "i was lighter before", left: "something scary happened",                right: '',    textMode: true,  single: true  },
+          cleared_0: { title:"the fear has soaked into my skin",   left: "i think it's over now",   right: '',    textMode: true,  single: true  },
+          cleared: { title:"i wish my body would stop keeping score",   left: "but i still can't move",   right: '',    textMode: true,  single: true  },
+        };
+
+        let state = 'initial';
+
+        function applyState(name){
+          state = name;
+          const s = STATES[name];
+          statusEl.textContent   = s.title;
+          scoreLeft.textContent  = s.left;
+          scoreRight.textContent = s.right;
+          scoreEl.classList.toggle('text-mode',   s.textMode);
+          scoreEl.classList.toggle('single-text', s.single);
+        }
+
+        // build grid — center cell is the smiley
+        for (let r = 0; r < ROWS; r++) {
+          for (let c = 0; c < COLS; c++) {
+            const div = document.createElement('div');
+            div.className = 'cell';
+            div.dataset.r = r;
+            div.dataset.c = c;
+            if (r === CENTER_ROW && c === CENTER_COL) {
+              div.classList.add('smile');
+              div.innerHTML = smileIMG;
+            }
+            grid.appendChild(div);
+            cells.push(div);
+          }
+        }
+
+        function pressIn(el)  { if (el.classList.contains('revealed')) return; el.classList.add('pressed'); }
+        function pressOut(el) { if (el.classList.contains('revealed')) return; el.classList.remove('pressed'); }
+
+        // walk cells outward from center, sorted by chebyshev distance
+        function orderByDistance(){
+          return cells.map((cell, i) => {
+            const r = Math.floor(i / COLS), c = i % COLS;
+            const dist = Math.max(Math.abs(r - CENTER_ROW), Math.abs(c - CENTER_COL));
+            return { cell, dist, isSmile: cell.classList.contains('smile') };
+          }).sort((a, b) => a.dist - b.dist);
+        }
+
+        function revealMines(){
+          orderByDistance().forEach(({ cell, dist, isSmile }) => {
+            if (isSmile) return;
+            setTimeout(() => {
+              cell.classList.remove('pressed');
+              cell.classList.add('revealed');
+              cell.innerHTML = mineSVG;
+            }, dist * 70);
+          });
+        }
+
+        function clearMines(){
+          // keep '.revealed' so cells stay flat/depressed — just empty them out
+          orderByDistance().forEach(({ cell, dist, isSmile }) => {
+            if (isSmile) return;
+            setTimeout(() => {
+              cell.innerHTML = '';
+              cell.style.pointerEvents = 'none';
+            }, dist * 70);
+          });
+        }
+        function depressSmile(){
+          const smileCell = cells.find(c => c.classList.contains('smile'));
+          if (!smileCell) return;
+
+          smileCell.style.pointerEvents = 'none';
+                    smileCell.classList.add('revealed');
+          smileCell.classList.add('pressed');
+        }
+
+        function onClick(){
+          if (state === 'initial')      { applyState('mined');   revealMines(); }
+          else if (state === 'mined')   { applyState('cleared_0'); clearMines();  }
+          else if (state === 'cleared_0') { applyState('cleared');  depressSmile();}
+          // cleared = terminal; further clicks do nothing
+        }
+
+        cells.forEach(el => {
+          el.addEventListener('mousedown',  e => { e.preventDefault(); pressIn(el); });
+          el.addEventListener('mouseup',    ()=> { pressOut(el); onClick(); });
+          el.addEventListener('mouseleave', ()=> pressOut(el));
+          el.addEventListener('touchstart', e => { e.preventDefault(); pressIn(el); }, { passive: false });
+          el.addEventListener('touchend',   e => { e.preventDefault(); pressOut(el); onClick(); }, { passive: false });
+        });
+      })();
+    </script>
+
+    <!-- ============================================================
+         WINDOW 4 — left-aligned, dark body, with redacted text
+         ============================================================ -->
+    <div class="piece-row left-center">
+      <div class="window piece-window size-lg">
+        <div class="title-bar">
+          <div class="title-bar-text">i've been trying to enumerate my options</div>
+          <div class="title-bar-controls">
+            <button aria-label="Minimize"></button>
+            <button aria-label="Close"></button>
+          </div>
+        </div>
+        <div class="window-body">
+          <fieldset>
+            <legend>legend</legend>
+          <ul class="tree-view">
+  <li>Table of Contents</li>
+  <li>What is web development?</li>
+  <li>
+    CSS
+    <ul>
+      <li>Selectors</li>
+      <li>Specificity</li>
+      <li>Properties</li>
+    </ul>
+  </li>
+  <li>
+    <details open>
+      <summary>JavaScript</summary>
+      <ul>
+        <li>Avoid at all costs</li>
+        <li>
+          <details>
+            <summary>Unless</summary>
+            <ul>
+              <li>Avoid</li>
+              <li>
+                <details>
+                  <summary>At</summary>
+                  <ul>
+                    <li>Avoid</li>
+                    <li>At</li>
+                    <li>All</li>
+                    <li>Cost</li>
+                  </ul>
+                </details>
+              </li>
+              <li>All</li>
+              <li>Cost</li>
+            </ul>
+          </details>
+        </li>
+      </ul>
+    </details>
+  </li>
+  <li>HTML</li>
+  <li>Special Thanks</li>
+</ul>
+</fieldset>
+
+        </div>
+        <div class="status-bar">
+          <p class="status-bar-field">unsaved changes</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         WINDOW 5 — small, right, just an image + minimal status
+         ============================================================ -->
+    <div class="piece-row right">
+      <div class="window piece-window size-sm">
+        <div class="title-bar">
+          <div class="title-bar-text">i am holding out my hands</div>
+          <div class="title-bar-controls">
+            <button aria-label="Close"></button>
+          </div>
+        </div>
+        <div class="window-body">
+          <img class="piece-img" src="assets/i_am_holding_out_my_hands.png" alt="memory 5" />
+        </div>
+        <div class="status-bar">
+          <p class="status-bar-field">i don't know what i am wanting for</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         WINDOW 6 — wide / "fig" style, contain-fit, centered
+         ============================================================ -->
+    <div class="piece-row center">
+      <div class="window piece-window size-md askew-left">
+        <div class="title-bar">
+          <div class="title-bar-text">fig_01 — recovered</div>
+          <div class="title-bar-controls">
+            <button aria-label="Minimize"></button>
+            <button aria-label="Maximize"></button>
+            <button aria-label="Close"></button>
+          </div>
+        </div>
+        <div class="window-body" style="padding:0%"> 
+          <img class="piece-img contain tall" style="height: 100%; width: 100%;" src="assets/can_i_rest_here.png" alt="memory 6" />
+        </div>
+
+         <div class="status-bar">
+          <p class="status-bar-field">this is home for me</p>
+          <p class="status-bar-field">can i rest here?</p>
+        </div>
+      </div>
+    </div>
+
+    <h1 class="piece-title">hide/edit memories</h1>
+    <p class="piece-subtitle">shm, may 2026</p>
+
+
+  </div>
+
+
+
+
+
+
+  <script>
+    // click to toggle the .redacted blackbars
+    document.querySelectorAll('.redacted').forEach(el => {
+      el.addEventListener('click', () => el.classList.toggle('revealed'));
+    });
+  </script>
+
+  <script>
+    // leaflet map: berkeley bowl west with a red scribble ground overlay.
+    // edit constants to reposition / resize the scribble.
+    window.addEventListener('load', function () {
+      if (typeof L === 'undefined') {
+        document.getElementById('scribble-map-error').style.display = 'block';
+        console.error('Leaflet failed to load.');
+        return;
+      }
+
+      // ---- Config ---------------------------------------------------
+      const BERKELEY_MARINA = [37.81, -122.38];   // [lat, lng]
+      const START_ZOOM = 11.25;
+
+      // [[southLat, westLng], [northLat, eastLng]] — roughly 250m square
+      // centered on Berkeley Bowl West. push corners apart to enlarge,
+      // shift both corners the same direction to move.
+      const SCRIBBLE_BOUNDS = [
+        [37.725, -122.529],  // SW
+        [37.892, -122.2624],  // NE
+      ];
+
+      const SCRIBBLE_URL = './assets/map_scribble.png';
+      // ---------------------------------------------------------------
+
+      const map = L.map('scribble-map', {
+        center: BERKELEY_MARINA,
+        zoom: START_ZOOM,
+        scrollWheelZoom: true,
+      });
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors',
+      }).addTo(map);
+
+      L.imageOverlay(SCRIBBLE_URL, SCRIBBLE_BOUNDS, {
+        opacity: 0.90,
+        interactive: false,
+        alt: 'scribble',
+      }).addTo(map);
+    });
+  </script>
+
+</body>
+</html>

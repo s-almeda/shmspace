@@ -1,0 +1,64 @@
+ #ms-grid, #ms-grid * { border-radius: 0 !important; box-shadow: none !important; box-sizing: border-box !important; }
+      #ms-grid { --cell-size: 32px; } /* fixed across all viewports — no responsive shrink */
+      #ms-grid .cell {
+        width: var(--cell-size) !important;
+        height: var(--cell-size) !important;
+        background: #bdbdbd !important;
+        border-top: 4px solid #ffffff !important;
+        border-left: 4px solid #ffffff !important;
+        border-right: 4px solid #7b7b7b !important;
+        border-bottom: 4px solid #7b7b7b !important;
+        cursor: pointer;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        padding: 0 !important;
+        margin: 0 !important;
+        color: #000;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        outline: none !important;
+        font-family: inherit;
+        appearance: none !important;
+        -webkit-appearance: none !important;
+      }
+      #ms-grid .cell.pressed,
+      #ms-grid .cell.revealed {
+        border-top: 1px solid #7b7b7b !important;
+        border-left: 1px solid #7b7b7b !important;
+        border-right: 1px solid #bdbdbd !important;
+        border-bottom: 1px solid #bdbdbd !important;
+        padding: 3px !important;
+        background: #bdbdbd !important;
+      }
+      #ms-grid .mine-svg  { width: calc(var(--cell-size) * 0.78); height: calc(var(--cell-size) * 0.78); display: block; }
+      #ms-grid .smile-img { width: calc(var(--cell-size) * 0.88); height: calc(var(--cell-size) * 0.88); display: block; image-rendering: pixelated; }
+
+      /* cell size intentionally fixed — preserves the retro illusion.
+         on narrow viewports we scale down the entire bezel (cells, text,
+         scorebar all together) using `zoom`, which affects layout too,
+         so it never overflows. internal proportions stay identical. */
+      @media (max-width: 540px) { #ms-bezel { zoom: 0.85; } }
+      @media (max-width: 460px) { #ms-bezel { zoom: 0.72; } }
+      @media (max-width: 380px) { #ms-bezel { zoom: 0.6;  } }
+      @media (max-width: 340px) { #ms-bezel { zoom: 0.5;  } }
+
+      /* scorebar: monospace sans-serif, vertically stretched (LCD-ish) */
+      #ms-score {
+        text-transform: uppercase;
+        font-family: 'Menlo', 'Consolas', 'Monaco', 'Courier New', monospace;
+        font-weight: bold;
+        font-size: 36px;
+        letter-spacing: 3px;
+      }
+      #ms-score span {
+        display: inline-block;
+        white-space: nowrap;       /* force one line */
+        transform: scaleY(1.4);    /* the "stretched height" LCD look */
+        transform-origin: center center;
+      }
+      /* smaller font when displaying prose instead of 3-digit numbers */
+      #ms-score.text-mode { font-size: 17px; letter-spacing: 1px; }
+      /* single-string mode: hide the right span, center the left */
+      #ms-score.single-text { justify-content: center; }
+      #ms-score.single-text #ms-score-right { display: none; }
