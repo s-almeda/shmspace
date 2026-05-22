@@ -69,8 +69,12 @@ app.get('/facial_recognishm/puppets-list', function (_req, res) {
     res.json(files);
 });
 
+// SHMUH.CO/...
 app.get('/artographer', (_req, res) => {
-    res.redirect('https://image-space-cyan.vercel.app/v8');
+    res.redirect('https://artographer.snailbunny.site/');
+});
+app.get('/walo', (_req, res) => {
+    res.redirect('https://drive.google.com/file/d/1084qTZ1h9WmhtC-w2g-UyvVDSoCoEfzg/view?usp=sharing');
 });
 
 // Generic puppeteering rig — /puppets and /puppets?show=<name>
