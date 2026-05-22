@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>examples — pieces.css reference</title>
+  <link rel="stylesheet" href="https://unpkg.com/xp.css" />
+  <link rel="stylesheet" href="pieces.css" />
+  <style>
+    /* tiny styles just for this reference page (not part of the framework) */
+    .ex-section {
+      width: 100%;
+      max-width: 820px;
+      border-top: 1px solid #333;
+      padding-top: 24px;
+      margin-top: 12px;
+    }
+    .ex-heading {
+      font-family: 'Courier New', monospace;
+      font-size: 1em;
+      color: #f0f0f0;
+      letter-spacing: 0.12em;
+      margin: 0 0 6px 0;
+    }
+    .ex-classes {
+      font-family: 'Courier New', monospace;
+      font-size: 0.8em;
+      color: #6aa0ff;
+      margin: 0 0 18px 0;
+      word-break: break-word;
+    }
+    .ex-note {
+      font-family: 'Courier New', monospace;
+      font-size: 0.8em;
+      color: #888;
+      margin: 18px 0 0 0;
+      text-align: center;
+      max-width: 700px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="piece-page">
+
+    <h1 class="piece-title">examples.html</h1>
+    <p class="piece-subtitle">reference for pieces.css — copy what you need</p>
+
+    <!-- ============================================================
+         00 — PAGE LAYOUT
+         ============================================================ -->
+    <section class="ex-section">
+      <h2 class="ex-heading">00 — page layout</h2>
+      <p class="ex-classes">.piece-page  .piece-title  .piece-subtitle</p>
+      <p class="ex-note">
+        wrap everything in <code>&lt;div class="piece-page"&gt;</code>. it centers,
+        max-width 1100px, gap 60px between children. use <code>.piece-title</code> +
+        <code>.piece-subtitle</code> for the page header. (you're looking at it.)
+      </p>
+    </section>
+
+    <!-- ============================================================
+         01 — BARE IMAGE (no window chrome)
+         ============================================================ -->
+    <section class="ex-section">
+      <h2 class="ex-heading">01 — bare image (no window)</h2>
+      <p class="ex-classes">.piece-bare  .w-sm  .w-md  .w-lg</p>
+    </section>
+
+    <div class="piece-bare w-sm">
+      <img src="assets/I_DYED_MY_HAIR_BLACK-1.png" alt="w-sm demo" />
+      <p>.piece-bare.w-sm → max-width 300px</p>
+    </div>
+
+    <div class="piece-bare w-md">
+      <img src="assets/I_DYED_MY_HAIR_BLACK-1.png" alt="w-md demo" />
+      <p>.piece-bare.w-md → max-width 500px (default if no modifier)</p>
+    </div>
+
+    <div class="piece-bare w-lg">
+      <img src="assets/I_DYED_MY_HAIR_BLACK-1.png" alt="w-lg demo" />
+      <p>.piece-bare.w-lg → max-width 700px</p>
+    </div>
+
+    <!-- ============================================================
+         02 — BARE IMAGE SIDE-BY-SIDE
+         ============================================================ -->
+    <section class="ex-section">
+      <h2 class="ex-heading">02 — bare image side-by-side</h2>
+      <p class="ex-classes">.piece-bare.side-left  .piece-bare.side-right</p>
+    </section>
+
+    <div class="piece-bare side-left">
+      <img src="assets/I_DYED_MY_HAIR_BLACK-2.png" alt="side-left demo" />
+      <p>
+        .piece-bare.side-left → image on the LEFT, caption on the right.
+        50/50 split, gap 24px, max-width 780px. markup order is always
+        &lt;img&gt; then &lt;p&gt; — the modifier flips the row direction.
+      </p>
+    </div>
+
+    <div class="piece-bare side-right">
+      <img src="assets/I_DYED_MY_HAIR_BLACK-2.png" alt="side-right demo" />
+      <p>
+        .piece-bare.side-right → image on the RIGHT, caption on the left.
+        same proportions, just mirrored. both side variants auto-collapse
+        to a stacked column under 600px wide.
+      </p>
+    </div>
+
+    <!-- ============================================================
+         03 — WINDOW: BASIC
+         ============================================================ -->
+    <section class="ex-section">
+      <h2 class="ex-heading">03 — basic window</h2>
+      <p class="ex-classes">.window.piece-window  .title-bar  .window-body  .status-bar</p>
+    </section>
+
+    <div class="piece-row center">
+      <div class="window piece-window">
+        <div class="title-bar">
+          <div class="title-bar-text">basic_window.exe</div>
+          <div class="title-bar-controls">
+            <button aria-label="Minimize"></button>
+            <button aria-label="Maximize"></button>
+            <button aria-label="Close"></button>
+          </div>
+        </div>
+        <div class="window-body">
+          <img class="piece-img" src="assets/I_DYED_MY_HAIR_BLACK-3.png" alt="basic window" />
+          <p>
+            combine xp.css's .window with .piece-window.
+            structure: .title-bar (text + controls) → .window-body → .status-bar.
+            default width is min(90vw, 520px).
+          </p>
+        </div>
+        <div class="status-bar">
+          <p class="status-bar-field">ready</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         04 — WINDOW SIZES
+         ============================================================ -->
+    <section class="ex-section">
+      <h2 class="ex-heading">04 — window sizes</h2>
+      <p class="ex-classes">.size-sm  .size-md  .size-lg</p>
+    </section>
+
+    <div class="piece-row center">
+      <div class="window piece-window size-sm">
+        <div class="title-bar">
+          <div class="title-bar-text">.size-sm</div>
+          <div class="title-bar-controls"><button aria-label="Close"></button></div>
+        </div>
+        <div class="window-body">
+          <p>min(80vw, 320px) — good for tight side notes or photo-only windows</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="piece-row center">
+      <div class="window piece-window size-md">
+        <div class="title-bar">
+          <div class="title-bar-text">.size-md</div>
+          <div class="title-bar-controls"><button aria-label="Close"></button></div>
+        </div>
+        <div class="window-body">
+          <p>min(85vw, 460px) — middle of the road, fits most captions</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="piece-row center">
+      <div class="window piece-window size-lg">
+        <div class="title-bar">
+          <div class="title-bar-text">.size-lg</div>
+          <div class="title-bar-controls"><button aria-label="Close"></button></div>
+        </div>
+        <div class="window-body">
+          <p>min(92vw, 640px) — full presence, for hero images / longer text</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         05 — ROW ALIGNMENT + TILT
+         ============================================================ -->
+    <section class="ex-section">
+      <h2 class="ex-heading">05 — row alignment &amp; tilt</h2>
+      <p class="ex-classes">.piece-row.left/.center/.right  +  .askew-left  .askew-right  .askew-none</p>
+    </section>
+
+    <div class="piece-row left">
+      <div class="window piece-window size-sm askew-left">
+        <div class="title-bar">
+          <div class="title-bar-text">left + askew-left</div>
+          <div class="title-bar-controls"><button aria-label="Close"></button></div>
+        </div>
+        <div class="window-body"><p>.piece-row.left pushes me to the left edge. .askew-left tilts -1.2deg.</p></div>
+      </div>
+    </div>
+
+    <div class="piece-row center">
+      <div class="window piece-window size-sm">
+        <div class="title-bar">
+          <div class="title-bar-text">center (no tilt)</div>
+          <div class="title-bar-controls"><button aria-label="Close"></button></div>
+        </div>
+        <div class="window-body"><p>.piece-row.center is the default. no tilt = no askew class.</p></div>
+      </div>
+    </div>
+
+    <div class="piece-row right">
+      <div class="window piece-window size-sm askew-right">
+        <div class="title-bar">
+          <div class="title-bar-text">right + askew-right</div>
+          <div class="title-bar-controls"><button aria-label="Close"></button></div>
+        </div>
+        <div class="window-body"><p>.piece-row.right pushes me right. .askew-right tilts +1.2deg. tilt auto-disables under 600px.</p></div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         06 — BODY THEMING (light vs dark)
+         ============================================================ -->
+    <section class="ex-section">
+      <h2 class="ex-heading">06 — body theming</h2>
+      <p class="ex-classes">.window-body  vs  .window-body.dark</p>
+    </section>
+
+    <div class="piece-row center">
+      <div class="window piece-window size-md">
+        <div class="title-bar">
+          <div class="title-bar-text">light body (default)</div>
+          <div class="title-bar-controls"><button aria-label="Close"></button></div>
+        </div>
+        <div class="window-body">
+          <p>default .window-body uses the xp.css beige (#ece9d8) with black text.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="piece-row center">
+      <div class="window piece-window size-md">
+        <div class="title-bar">
+          <div class="title-bar-text">dark body</div>
+          <div class="title-bar-controls"><button aria-label="Close"></button></div>
+        </div>
+        <div class="window-body dark">
+          <p>add .dark to .window-body → background #1a1a1a, text #f0f0f0.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         07 — IMAGE FITS INSIDE A WINDOW
+         ============================================================ -->
+    <section class="ex-section">
+      <h2 class="ex-heading">07 — image fits inside a window</h2>
+      <p class="ex-classes">.piece-img  +  .contain  .tall  .short</p>
+    </section>
+
+    <div class="piece-row center">
+      <div class="window piece-window size-md">
+        <div class="title-bar">
+          <div class="title-bar-text">.piece-img (default = cover)</div>
+          <div class="title-bar-controls"><button aria-label="Close"></button></div>
+        </div>
+        <div class="window-body">
+          <img class="piece-img" src="assets/fig1.jpg" alt="cover fit" />
+          <p>default: object-fit cover, max-height 60vh. crops to fill the box.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="piece-row center">
+      <div class="window piece-window size-md">
+        <div class="title-bar">
+          <div class="title-bar-text">.piece-img.contain</div>
+          <div class="title-bar-controls"><button aria-label="Close"></button></div>
+        </div>
+        <div class="window-body">
+          <img class="piece-img contain" src="assets/fig1.jpg" alt="contain fit" />
+          <p>.contain → no cropping. fits whole image, may letterbox.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="piece-row center">
+      <div class="window piece-window size-md">
+        <div class="title-bar">
+          <div class="title-bar-text">.piece-img.short</div>
+          <div class="title-bar-controls"><button aria-label="Close"></button></div>
+        </div>
+        <div class="window-body">
+          <img class="piece-img short" src="assets/I_DYED_MY_HAIR_BLACK-4.png" alt="short" />
+          <p>.short → max-height 40vh. for thumbnail-y rows.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="piece-row center">
+      <div class="window piece-window size-md">
+        <div class="title-bar">
+          <div class="title-bar-text">.piece-img.tall</div>
+          <div class="title-bar-controls"><button aria-label="Close"></button></div>
+        </div>
+        <div class="window-body">
+          <img class="piece-img tall" src="assets/I_DYED_MY_HAIR_BLACK-4.png" alt="tall" />
+          <p>.tall → max-height 75vh. for portraits or hero shots.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         08 — HOVER-SWAP IMAGE
+         ============================================================ -->
+    <section class="ex-section">
+      <h2 class="ex-heading">08 — hover-swap image</h2>
+      <p class="ex-classes">.piece-img-wrapper  +  .hover-img</p>
+    </section>
+
+    <div class="piece-row center">
+      <div class="window piece-window size-md">
+        <div class="title-bar">
+          <div class="title-bar-text">hover_to_swap.png</div>
+          <div class="title-bar-controls"><button aria-label="Close"></button></div>
+        </div>
+        <div class="window-body">
+          <div class="piece-img-wrapper">
+            <img class="piece-img" src="assets/I_DYED_MY_HAIR_BLACK-3.png" alt="rest state" />
+            <img class="piece-img hover-img" src="assets/I_DYED_MY_HAIR_BLACK-3-hover.png" alt="hover state" />
+          </div>
+          <p>
+            wrap two .piece-img tags in .piece-img-wrapper; mark the second one
+            .hover-img. hover the image to fade between them.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         09 — STATUS BAR (one or multiple fields)
+         ============================================================ -->
+    <section class="ex-section">
+      <h2 class="ex-heading">09 — status bar</h2>
+      <p class="ex-classes">.status-bar  &gt;  .status-bar-field</p>
+    </section>
+
+    <div class="piece-row center">
+      <div class="window piece-window size-md">
+        <div class="title-bar">
+          <div class="title-bar-text">status_bars.txt</div>
+          <div class="title-bar-controls"><button aria-label="Close"></button></div>
+        </div>
+        <div class="window-body">
+          <p>add one or many .status-bar-field &lt;p&gt;s — they sit side-by-side.</p>
+        </div>
+        <div class="status-bar">
+          <p class="status-bar-field">one field</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="piece-row center">
+      <div class="window piece-window size-md">
+        <div class="title-bar">
+          <div class="title-bar-text">status_bars.txt</div>
+          <div class="title-bar-controls"><button aria-label="Close"></button></div>
+        </div>
+        <div class="window-body">
+          <p>three is comfortable; more will wrap awkwardly on narrow viewports.</p>
+        </div>
+        <div class="status-bar">
+          <p class="status-bar-field">field one</p>
+          <p class="status-bar-field">field two</p>
+          <p class="status-bar-field">field three</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         10 — TITLE BAR BUTTON VARIANTS
+         ============================================================ -->
+    <section class="ex-section">
+      <h2 class="ex-heading">10 — title bar button variants</h2>
+      <p class="ex-classes">aria-label: "Minimize" "Maximize" "Restore" "Help" "Close"</p>
+    </section>
+
+    <div class="piece-row center">
+      <div class="window piece-window size-md">
+        <div class="title-bar">
+          <div class="title-bar-text">all_five_buttons</div>
+          <div class="title-bar-controls">
+            <button aria-label="Help"></button>
+            <button aria-label="Minimize"></button>
+            <button aria-label="Maximize"></button>
+            <button aria-label="Restore"></button>
+            <button aria-label="Close"></button>
+          </div>
+        </div>
+        <div class="window-body">
+          <p>
+            xp.css renders the right icon based on aria-label. valid labels:
+            Minimize, Maximize, Restore, Help, Close. wrap the &lt;button&gt;
+            in an &lt;a&gt; tag if you want it to navigate.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         11 — TEXT HELPERS: REDACTED + STRUCK
+         ============================================================ -->
+    <section class="ex-section">
+      <h2 class="ex-heading">11 — text helpers</h2>
+      <p class="ex-classes">.redacted (click to reveal)  .struck</p>
+    </section>
+
+    <div class="piece-row center">
+      <div class="window piece-window size-md">
+        <div class="title-bar">
+          <div class="title-bar-text">text_helpers.txt</div>
+          <div class="title-bar-controls"><button aria-label="Close"></button></div>
+        </div>
+        <div class="window-body dark">
+          <p>
+            this is normal text, but <span class="struck">this is struck through</span>
+            and <span class="redacted">this is a black-bar redaction — click to reveal</span>.
+          </p>
+          <p style="font-size: 0.8em; color: #888;">
+            (the click-to-reveal toggle needs the &lt;script&gt; at the bottom of this file
+            — copy it into any page using .redacted.)
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         12 — POPUP WINDOW
+         ============================================================ -->
+    <section class="ex-section">
+      <h2 class="ex-heading">12 — popup window</h2>
+      <p class="ex-classes">.popup-trigger[data-popup="id"]  .popup-backdrop#id  .popup  .popup-close</p>
+    </section>
+
+    <div class="piece-bare w-md">
+      <img class="popup-trigger" data-popup="popup-demo-1" src="assets/I_DYED_MY_HAIR_BLACK-4.png" alt="click to open popup" />
+      <p>↑ click the image to open a popup. close it with the × button, by clicking the dark backdrop, or by pressing ESC.</p>
+    </div>
+
+    <div class="piece-row center">
+      <div class="window piece-window size-md">
+        <div class="title-bar">
+          <div class="title-bar-text">popup_pattern.txt</div>
+          <div class="title-bar-controls"><button aria-label="Close"></button></div>
+        </div>
+        <div class="window-body dark">
+          <p style="text-align: left; font-family: 'Courier New', monospace; font-size: 0.85em;">
+            two parts:<br><br>
+            1) on the trigger element, add class <code>popup-trigger</code>
+            and <code>data-popup="some-id"</code>.<br><br>
+            2) somewhere on the page, add a <code>.popup-backdrop</code> with
+            <code>id="some-id"</code> containing a <code>.popup.window.piece-window</code>.
+            give its close button class <code>popup-close</code>.<br><br>
+            the &lt;script&gt; at the bottom of this file wires up open / close / ESC /
+            click-backdrop-to-close.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- the popup itself (hidden until trigger is clicked) -->
+    <div class="popup-backdrop" id="popup-demo-1">
+      <div class="popup window piece-window size-md">
+        <div class="title-bar">
+          <div class="title-bar-text">popup_demo.exe</div>
+          <div class="title-bar-controls">
+            <button class="popup-close" aria-label="Close"></button>
+          </div>
+        </div>
+        <div class="window-body">
+          <img class="piece-img short" src="assets/i_am_holding_out_my_hands.png" alt="popup content" />
+          <p>this is a popup. it can hold anything — image, text, status bar, more buttons.</p>
+        </div>
+        <div class="status-bar">
+          <p class="status-bar-field">modal: true</p>
+          <p class="status-bar-field">click outside to close</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         13 — COMBINING EVERYTHING (kitchen sink example)
+         ============================================================ -->
+    <section class="ex-section">
+      <h2 class="ex-heading">13 — kitchen sink</h2>
+      <p class="ex-classes">size-lg + askew-right + dark body + hover-swap + struck + multi-status</p>
+    </section>
+
+    <div class="piece-row center">
+      <div class="window piece-window size-lg askew-right">
+        <div class="title-bar">
+          <div class="title-bar-text">everything_at_once.exe</div>
+          <div class="title-bar-controls">
+            <button aria-label="Help"></button>
+            <button aria-label="Minimize"></button>
+            <button aria-label="Maximize"></button>
+            <button aria-label="Close"></button>
+          </div>
+        </div>
+        <div class="window-body dark">
+          <div class="piece-img-wrapper">
+            <img class="piece-img" src="assets/I_DYED_MY_HAIR_BLACK-3.png" alt="kitchen sink" />
+            <img class="piece-img hover-img" src="assets/I_DYED_MY_HAIR_BLACK-3-hover.png" alt="kitchen sink hover" />
+          </div>
+          <p>
+            tip: any modifier classes stack. drop multiple onto a single .window:
+            <span class="struck">size, tilt</span>, body theme, image fit, and
+            <span class="redacted">whatever else fits</span>. hover the image for the swap.
+          </p>
+        </div>
+        <div class="status-bar">
+          <p class="status-bar-field">demo: combined</p>
+          <p class="status-bar-field">tilt: +1.2deg</p>
+          <p class="status-bar-field">vibes: yes</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="ex-note" style="margin-top: 60px;">
+      see pieces_css_notes.md for the full written reference.
+    </p>
+
+  </div>
+
+  <script>
+    // ---- .redacted: click to toggle ----
+    document.querySelectorAll('.redacted').forEach(el => {
+      el.addEventListener('click', () => el.classList.toggle('revealed'));
+    });
+
+    // ---- .popup-trigger / .popup-close / .popup-backdrop ----
+    // open: click any .popup-trigger with data-popup="some-id"
+    document.querySelectorAll('.popup-trigger').forEach(el => {
+      el.addEventListener('click', () => {
+        const popup = document.getElementById(el.dataset.popup);
+        if (popup) popup.classList.add('is-open');
+      });
+    });
+
+    // close: click the .popup-close button inside a popup
+    document.querySelectorAll('.popup-close').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.closest('.popup-backdrop').classList.remove('is-open');
+      });
+    });
+
+    // close: click the backdrop (but not the popup itself)
+    document.querySelectorAll('.popup-backdrop').forEach(bd => {
+      bd.addEventListener('click', (e) => {
+        if (e.target === bd) bd.classList.remove('is-open');
+      });
+    });
+
+    // close: ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.popup-backdrop.is-open')
+          .forEach(bd => bd.classList.remove('is-open'));
+      }
+    });
+  </script>
+
+</body>
+</html>
