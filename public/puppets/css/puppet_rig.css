@@ -332,6 +332,7 @@ body.freeplay-mode #dialogue-panel:empty::before {
   height: calc(70% - 70px);
   z-index: 5;
   padding: 8px;
+  font-size: 11px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -370,11 +371,11 @@ body.freeplay-mode #dialogue-panel:empty::before {
 
 /* checkbox rows */
 #analysisPanel .field-row {
-  margin-top: 3px;
-  zoom: 1.4;
+  margin-top: 2px;
+  zoom: 1.25;
   flex-wrap: wrap;
   overflow: visible;
-  padding-bottom: 3px;
+  padding-bottom: 2px;
 }
 
 /* detected output row */
@@ -426,7 +427,7 @@ body.freeplay-mode #dialogue-panel:empty::before {
 #analysisPanel .result-value {
   width: 100%;
   margin-left: var(--checkbox-total-width);
-  margin-top: 7px;
+  margin-top: 4px;
   color: #333;
 }
 
@@ -444,15 +445,15 @@ body.freeplay-mode #dialogue-panel:empty::before {
   padding-left: 6px;
   border-left: 2px solid #bbb;
   margin-left: 4px;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 .hands-sub-row {
   zoom: 0.9;
   flex-direction: column;
   align-items: flex-start !important;
-  gap: 4px;
-  margin-top: 2px !important;
+  gap: 3px;
+  margin-top: 1px !important;
 }
 
 .hands-sub-row label {
