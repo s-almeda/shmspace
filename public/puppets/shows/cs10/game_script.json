@@ -6,8 +6,26 @@
     "headPuppet": 0,
     "headPuppetPosition": "heading",
     "slide": null,
-    "toggles": { "gestures": false, "detectShm": true, "bbox": true, "hands": true, "headPuppets": true, "dialogueHover": false },
-    "dialogue": { "show": true, "characterName": "shm", "text": "hi everyone, my name is shm, and I'm a Human-Computer Interaction Researcher!" }
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": true,
+      "detectShm": true,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "hi everyone! my name is shm, and I'm a Human-Computer Interaction Researcher."
+    },
+    "puppetSize": 1.1
   },
   {
     "id": 2,
@@ -15,7 +33,11 @@
     "rightPuppet": null,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "today I'm gonna give you a glimpse into the wide range of things a computer scientist who studies Human-Computer Interaction might do! I want to encourage you to stop me to ask questions at any time." }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "today I'm gonna give you a glimpse into the wide range of things a computer scientist who studies Human-Computer Interaction might do! I want to encourage you to stop me to ask questions at any time."
+    }
   },
   {
     "id": 3,
@@ -23,7 +45,11 @@
     "rightPuppet": null,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "i made this presentation software / puppet show rig myself, as just one really big website. so it might be a little weird… thanks for your patience in advance." }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "i made this presentation software / puppet show rig myself, as just one really big website. so it might be a little weird… thanks for your patience in advance."
+    }
   },
   {
     "id": 4,
@@ -31,7 +57,11 @@
     "rightPuppet": null,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "first, allow me to introduce myself!" }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "first, allow me to introduce myself!"
+    }
   },
   {
     "id": 5,
@@ -39,8 +69,15 @@
     "rightPuppet": null,
     "headPuppet": 1,
     "slide": null,
-    "toggles": { "detectShm": false, "bbox": false },
-    "dialogue": { "show": true, "characterName": "shm", "text": "I'm shm garanganao almeda, my favorite pronouns are they/them — first and foremost I am an artist, a computer scientist, and a non-binary Filipino American." },
+    "toggles": {
+      "detectShm": false,
+      "bbox": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "I'm shm garanganao almeda, my favorite pronouns are they/them — first and foremost I am an artist, a computer scientist, and a non-binary Filipino American."
+    },
     "_note": "head puppet 1 (beret, hat). use ;/' to manually cycle left puppets 1→2→3→4 (paintbrush, computer, nonbinary flag, filipino flag) across the sentence"
   },
   {
@@ -49,8 +86,14 @@
     "rightPuppet": null,
     "headPuppet": null,
     "slide": null,
-    "toggles": { "headPuppets": false },
-    "dialogue": { "show": true, "characterName": "shm", "text": "I do HCI research as part of a group called The Berkeley Institute of Design Lab, but in the past for Adobe Research Labs and the Midjourney Storytelling Lab. how did I get here?" },
+    "toggles": {
+      "headPuppets": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "I do HCI research as part of a group called The Berkeley Institute of Design Lab, but in the past for Adobe Research Labs and the Midjourney Storytelling Lab. how did I get here?"
+    },
     "_note": "head puppet off. use ;/' to manually cycle left puppets 5→6→7 (BiD, Adobe Research, MJ Storytelling)"
   },
   {
@@ -58,16 +101,28 @@
     "leftPuppet": null,
     "rightPuppet": null,
     "slide": "000_tcnj.png",
-    "toggles": { "dialogueHover": true },
-    "dialogue": { "show": true, "characterName": "shm", "text": "I studied Computer Science and Fine Art at a small liberal arts school called The College of New Jersey, located in the greatest state of our union…" }
+    "toggles": {
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "I studied Computer Science and Fine Art at a small liberal arts school called The College of New Jersey, located in the greatest state of our union…"
+    }
   },
   {
     "id": 8,
     "leftPuppet": 8,
     "rightPuppet": null,
     "slide": null,
-    "toggles": { "dialogueHover": false },
-    "dialogue": { "show": true, "characterName": "shm", "text": "…:-)" }
+    "toggles": {
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "…:-)"
+    }
   },
   {
     "id": 9,
@@ -75,7 +130,11 @@
     "rightPuppet": null,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "and since 2020 I've been a graduate student researcher studying HCI here at Berkeley, with plans to graduate with my PhD by the end of this year." }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "and since 2020 I've been a graduate student researcher studying HCI here at Berkeley, with plans to graduate with my PhD by the end of this year."
+    }
   },
   {
     "id": 10,
@@ -84,8 +143,14 @@
     "headPuppet": 0,
     "headPuppetPosition": "heading",
     "slide": null,
-    "toggles": { "headPuppets": true },
-    "dialogue": { "show": true, "characterName": "shm", "text": "so what does it mean to be an HCI researcher?" }
+    "toggles": {
+      "headPuppets": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "so what does it mean to be an HCI researcher?"
+    }
   },
   {
     "id": 11,
@@ -93,7 +158,11 @@
     "rightPuppet": null,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "well, we've got the humans." }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "well, we've got the humans."
+    }
   },
   {
     "id": 12,
@@ -101,7 +170,11 @@
     "rightPuppet": null,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "the computers." }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "the computers."
+    }
   },
   {
     "id": 13,
@@ -109,7 +182,11 @@
     "rightPuppet": 24,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "the interactions! puttem' together, we've got human-computer interactions." }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "the interactions! puttem' together, we've got human-computer interactions."
+    }
   },
   {
     "id": 14,
@@ -117,16 +194,24 @@
     "rightPuppet": null,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "but let me actually talk about the researcher part first!" }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "but let me actually talk about the researcher part first!"
+    }
   },
   {
     "id": 15,
     "leftPuppet": null,
     "rightPuppet": null,
-        "headPuppet": null,
+    "headPuppet": null,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "as a researcher, I ask research questions, conduct experiments to try to find or contribute to answers, and write papers to share what I learned with the scientific and academic research community." }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "as a researcher, I ask research questions, conduct experiments to try to find or contribute to answers, and write papers to share what I learned with the scientific and academic research community."
+    }
   },
   {
     "id": 16,
@@ -134,8 +219,15 @@
     "rightPuppet": null,
     "headPuppet": null,
     "slide": "001_CSEdrawing.mp4",
-    "toggles": { "headPuppets": false, "dialogueHover": true },
-    "dialogue": { "show": true, "characterName": "shm", "text": "my interest in learning about this topic started when I was a kid, spending hours watching my sister teach herself, and me, how to draw in Photoshop. My sister Christine is now professional illustrator, and I study how artists use technology to create and share art on the computer." }
+    "toggles": {
+      "headPuppets": false,
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "my interest in learning about this topic started when I was a kid, spending hours watching my sister teach herself, and me, how to draw in Photoshop. My sister Christine is now professional illustrator, and I study how artists use technology to create and share art on the computer."
+    }
   },
   {
     "id": 17,
@@ -143,22 +235,42 @@
     "rightPuppet": null,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "my particular expertise is in an area of HCI called Creativity Support Research, or Creativity Support Tools, sometimes abbreviated CSTs. so I'm interested in how technology can support creativity, and help artists do creative work." }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "my particular expertise is in an area of HCI called Creativity Support Research, or Creativity Support Tools, sometimes abbreviated CSTs. so I'm interested in how technology can support creativity, and help artists do creative work."
+    }
   },
   {
     "id": 18,
     "leftPuppet": 20,
     "rightPuppet": null,
-    "toggles": { "dialogueHover": true },
-    "dialogue": { "show": true, "characterName": "shm", "text": "this is the first Creativity Support Tool I made during my Junior Year internship with Adobe Research, called bPigment. This CST experimented with new ways of mixing digital paint in digital canvases!" }
+    "toggles": {
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "this is the first Creativity Support Tool I made during my Junior Year internship with Adobe Research, called bPigment. This CST experimented with new ways of mixing digital paint in digital canvases!"
+    }
   },
   {
     "id": 19,
     "leftPuppet": null,
     "rightPuppet": null,
     "slide": null,
-    "toggles": { "detectShm": false, "facemesh": true, "emotion": true, "bbox": true, "dialogueHover": false },
-    "dialogue": { "show": true, "characterName": "shm", "text": "I also specialize in *Human-AI Interaction.*" }
+    "toggles": {
+      "detectShm": false,
+      "facemesh": true,
+      "emotion": true,
+      "bbox": true,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "I also specialize in *Human-AI Interaction.*"
+    }
   },
   {
     "id": 20,
@@ -166,7 +278,11 @@
     "rightPuppet": null,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "A pure AI researcher might investigate: how can we train these large statistical models to produce more accurate results, more efficiently, for different domains?" }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "A pure AI researcher might investigate: how can we train these large statistical models to produce more accurate results, more efficiently, for different domains?"
+    }
   },
   {
     "id": 21,
@@ -174,16 +290,29 @@
     "rightPuppet": null,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "as a Human-AI Interaction Researcher, I ask questions like: what makes us trust or distrust AI? what happens when a model responds inaccurately?" }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "as a Human-AI Interaction Researcher, I ask questions like: what makes us trust or distrust AI? what happens when a model responds inaccurately?"
+    }
   },
   {
     "id": 22,
     "leftPuppet": null,
     "rightPuppet": null,
     "slide": null,
-"toggles": { "detectShm": false, "facemesh": false, "emotion": false, "bbox": false, "dialogueHover": false },
-
-    "dialogue": { "show": true, "characterName": "shm", "text": "an AI researcher might work on problems like: how can we make an Image Generation Model produce higher quality images?" }
+    "toggles": {
+      "detectShm": false,
+      "facemesh": false,
+      "emotion": false,
+      "bbox": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "an AI researcher might work on problems like: how can we make an Image Generation Model produce higher quality images?"
+    }
   },
   {
     "id": 23,
@@ -191,7 +320,11 @@
     "rightPuppet": null,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "as a Creativity Support Researcher, I ask questions like: does a higher quality image model actually help artists be more creative? could using AI actually make us... less creative or original? And on a larger, sociocultural scale... how is AI changing the creative labor market, and disrupting artists' careers and communities?" }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "as a Creativity Support Researcher, I ask questions like: does a higher quality image model actually help artists be more creative? could using AI actually make us... less creative or original? And on a larger, sociocultural scale... how is AI changing the creative labor market, and disrupting artists' careers and communities?"
+    }
   },
   {
     "id": 24,
@@ -199,7 +332,11 @@
     "rightPuppet": null,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "and, to tie it back to my sister, I've always been super interested in how new technologies can help human artists to make and share artwork that they couldn't before." }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "and, to tie it back to my sister, I've always been super interested in how new technologies can help human artists to make and share artwork that they couldn't before."
+    }
   },
   {
     "id": 25,
@@ -207,7 +344,11 @@
     "rightPuppet": null,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "in practice, this means I spend a bit of time coding — developing new Creativity Support Technologies and Tools, sometimes with experimental technology like AI involved." }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "in practice, this means I spend a bit of time coding — developing new Creativity Support Technologies and Tools, sometimes with experimental technology like AI involved."
+    }
   },
   {
     "id": 26,
@@ -215,7 +356,11 @@
     "rightPuppet": null,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "…I spend a lot of time talking to artists, sometimes asking them to use technology in front of me while I study them…" }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "…I spend a lot of time talking to artists, sometimes asking them to use technology in front of me while I study them…"
+    }
   },
   {
     "id": 27,
@@ -223,7 +368,11 @@
     "rightPuppet": null,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "…and I spend a TON of time writing papers about what I learned." }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "…and I spend a TON of time writing papers about what I learned."
+    }
   },
   {
     "id": 28,
@@ -232,8 +381,17 @@
     "headPuppet": 0,
     "headPuppetPosition": "heading",
     "slide": null,
-    "toggles": { "facemesh": false, "emotion": false, "bbox": false, "headPuppets": true },
-    "dialogue": { "show": true, "characterName": "shm", "text": "that's my research-- but let me rewind a bit. let's break down what HCI is more generally." }
+    "toggles": {
+      "facemesh": false,
+      "emotion": false,
+      "bbox": false,
+      "headPuppets": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "that's my research-- but let me rewind a bit. let's break down what HCI is more generally."
+    }
   },
   {
     "id": 29,
@@ -242,7 +400,11 @@
     "headPuppet": 1,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "something really cool about being an HCI researcher is that you get to wear a lot of hats. I get to be an artist, a scientist, an engineer, and a designer." },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "something really cool about being an HCI researcher is that you get to wear a lot of hats. I get to be an artist, a scientist, an engineer, and a designer."
+    },
     "_note": "use ,/. to manually cycle head puppets 1→2→3→4 (beret, scientist_glasses, engineer_goggles, designer_hat) across the sentence"
   },
   {
@@ -251,16 +413,29 @@
     "rightPuppet": null,
     "headPuppet": null,
     "slide": "002_richgold.png",
-    "toggles": { "headPuppets": false, "dialogueHover": true },
-    "dialogue": { "show": true, "characterName": "shm", "text": "by the way — this 'many hats' concept is adapted from artist-researcher Rich Gold, who first described his role like this in his book, The Plenitude." }
+    "toggles": {
+      "headPuppets": false,
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "by the way — this 'many hats' concept is adapted from artist-researcher Rich Gold, who first described his role like this in his book, The Plenitude."
+    }
   },
   {
     "id": 31,
     "leftPuppet": 2,
     "rightPuppet": null,
     "slide": null,
-    "toggles": { "dialogueHover": false },
-    "dialogue": { "show": true, "characterName": "shm", "text": "you've learned a lot about computers in this course. you know what computers are." }
+    "toggles": {
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "you've learned a lot about computers in this course. you know what computers are."
+    }
   },
   {
     "id": 32,
@@ -268,15 +443,25 @@
     "rightPuppet": 24,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "HCI researchers research computers, but in a way that centers humans, and the ways we interact with them." }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "HCI researchers research computers, but in a way that centers humans, and the ways we interact with them."
+    }
   },
   {
     "id": 33,
     "leftPuppet": 0,
     "rightPuppet": null,
     "slide": "003_interface.png",
-    "toggles": { "dialogueHover": true },
-    "dialogue": { "show": true, "characterName": "shm", "text": "what would you call these areas of the computer I have highlighted?" }
+    "toggles": {
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "what would you call these areas of the computer I have highlighted?"
+    }
   },
   {
     "id": 34,
@@ -284,23 +469,39 @@
     "rightPuppet": null,
     "slide": "003_interface.png",
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "(hopefully y'all say something like interfaces or input devices)" }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "(hopefully y'all say something like interfaces or input devices)"
+    }
   },
   {
     "id": 35,
     "leftPuppet": 13,
     "rightPuppet": null,
     "slide": null,
-    "toggles": { "dialogueHover": false },
-    "dialogue": { "show": true, "characterName": "shm", "text": "does anyone know what this is a prototype for?" }
+    "toggles": {
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "does anyone know what this is a prototype for?"
+    }
   },
   {
     "id": 36,
     "leftPuppet": 0,
     "rightPuppet": null,
     "slide": "004_first_mouse.png",
-    "toggles": { "dialogueHover": true },
-    "dialogue": { "show": true, "characterName": "shm", "text": "this is the first computer mouse! ((@ future shm, explain it!))" }
+    "toggles": {
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "this is the first computer mouse! ((@ future shm, explain it!))"
+    }
   },
   {
     "id": 37,
@@ -308,8 +509,15 @@
     "rightPuppet": null,
     "headPuppet": 3,
     "slide": null,
-    "toggles": { "headPuppets": true, "dialogueHover": false },
-    "dialogue": { "show": true, "characterName": "shm", "text": "so when our design and engineer hats are on, HCI researchers design and engineer new interfaces and input devices — technology that changes the way we experience computers." },
+    "toggles": {
+      "headPuppets": true,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "so when our design and engineer hats are on, HCI researchers design and engineer new interfaces and input devices — technology that changes the way we experience computers."
+    },
     "_note": "use ,/. to manually cycle head puppets 3↔4 (engineer_goggles, designer_hat)"
   },
   {
@@ -319,7 +527,11 @@
     "headPuppet": 1,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "but what I love about this, is we also get to put our artist hats on, and think really creatively about computers… like, does a computer even really have to look like … 'a computer'? sometimes designing new interfaces means literally thinking outside the box." }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "but what I love about this, is we also get to put our artist hats on, and think really creatively about computers… like, does a computer even really have to look like … 'a computer'? sometimes designing new interfaces means literally thinking outside the box."
+    }
   },
   {
     "id": 39,
@@ -327,7 +539,11 @@
     "rightPuppet": null,
     "headPuppet": null,
     "slide": "005_adobe_dress.mp4",
-    "toggles": { "headPuppets": false, "dialogueHover": true, "audio": true },
+    "toggles": {
+      "headPuppets": false,
+      "dialogueHover": true,
+      "audio": true
+    },
     "dialogue": null
   },
   {
@@ -335,8 +551,14 @@
     "leftPuppet": 14,
     "rightPuppet": null,
     "slide": null,
-    "toggles": { "dialogueHover": false },
-    "dialogue": { "show": true, "characterName": "shm", "text": "this project is from Adobe Research Scientist, and UC Berkeley alum, Christie Dierk. in her time at Berkeley she did a ton of awesome tangible and wearable computing projects, including designing, prototyping, and engineering… and re-engineering, components of what would later become this dynamic dress." }
+    "toggles": {
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "this project is from Adobe Research Scientist, and UC Berkeley alum, Christie Dierk. in her time at Berkeley she did a ton of awesome tangible and wearable computing projects, including designing, prototyping, and engineering… and re-engineering, components of what would later become this dynamic dress."
+    }
   },
   {
     "id": 41,
@@ -344,8 +566,14 @@
     "rightPuppet": 24,
     "headPuppet": 2,
     "slide": null,
-    "toggles": { "headPuppets": true },
-    "dialogue": { "show": true, "characterName": "shm", "text": "sooo... once we have new interfaces, we get to put our scientist hats on and run experiments to learn about the impact of new interactions!" }
+    "toggles": {
+      "headPuppets": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "sooo... once we have new interfaces, we get to put our scientist hats on and run experiments to learn about the impact of new interactions!"
+    }
   },
   {
     "id": 42,
@@ -354,7 +582,11 @@
     "headPuppet": 2,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "let me tell you a bit about my latest experimental study." }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "let me tell you a bit about my latest experimental study."
+    }
   },
   {
     "id": 43,
@@ -362,16 +594,29 @@
     "rightPuppet": null,
     "headPuppet": null,
     "slide": "006_artographer.mp4",
-    "toggles": { "headPuppets": false, "dialogueHover": true },
-    "dialogue": { "show": true, "characterName": "shm", "text": "this is Artographer – a new interface for exploring art datasets, as a 2.5D similarity map. artworks that are visually or contextually similar are clustered closer together. users can explore the map by dragging around or using their arrow keys, and save art pieces that they like to a collection." }
+    "toggles": {
+      "headPuppets": false,
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "this is Artographer – a new interface for exploring art datasets, as a 2.5D similarity map. artworks that are visually or contextually similar are clustered closer together. users can explore the map by dragging around or using their arrow keys, and save art pieces that they like to a collection."
+    }
   },
   {
     "id": 44,
     "leftPuppet": 15,
     "rightPuppet": null,
     "slide": null,
-    "toggles": { "dialogueHover": false },
-    "dialogue": { "show": true, "characterName": "shm", "text": "we ran a research study where we recruited 20 participants, collecting data on how they interacted with art on this map — tracking every art piece they clicked on or saved to a collection. we found that finding artwork in a map like this is slower than searching for it with a search bar… but more fun, with more surprises!" }
+    "toggles": {
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "we ran a research study where we recruited 20 participants, collecting data on how they interacted with art on this map — tracking every art piece they clicked on or saved to a collection. we found that finding artwork in a map like this is slower than searching for it with a search bar… but more fun, with more surprises!"
+    }
   },
   {
     "id": 45,
@@ -379,7 +624,11 @@
     "rightPuppet": null,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "...so we talked about computers and interactions... but the one area that HCI researchers are interested in moreso than any other specialized form of computer scientist… is the study of humans." }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "...so we talked about computers and interactions... but the one area that HCI researchers are interested in moreso than any other specialized form of computer scientist… is the study of humans."
+    }
   },
   {
     "id": 46,
@@ -387,8 +636,14 @@
     "rightPuppet": 2,
     "headPuppet": 2,
     "slide": null,
-    "toggles": { "headPuppets": true },
-    "dialogue": { "show": true, "characterName": "shm", "text": "HCI is a place where the study of humanities & social sciences — psychology, sociology, anthropology — intersect with computer science research." }
+    "toggles": {
+      "headPuppets": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "HCI is a place where the study of humanities & social sciences — psychology, sociology, anthropology — intersect with computer science research."
+    }
   },
   {
     "id": 47,
@@ -396,16 +651,28 @@
     "rightPuppet": null,
     "headPuppet": null,
     "slide": null,
-    "toggles": { "headPuppets": false },
-    "dialogue": { "show": true, "characterName": "shm", "text": "my dissertation focuses on taking a sociocultural and socioeconomic perspective on supporting online art communities. a lot of this work doesn't involve coding or engineering, and is much closer to the work of a sociologist who is interested in technology." }
+    "toggles": {
+      "headPuppets": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "my dissertation focuses on taking a sociocultural and socioeconomic perspective on supporting online art communities. a lot of this work doesn't involve coding or engineering, and is much closer to the work of a sociologist who is interested in technology."
+    }
   },
   {
     "id": 48,
     "leftPuppet": null,
     "rightPuppet": null,
     "slide": "007_hci_researchers.png",
-    "toggles": { "dialogueHover": true },
-    "dialogue": { "show": true, "characterName": "shm", "text": "HCI researchers and the broad work we do can then have really broad impacts on society — HCI research can impact the design of new technology policies and regulations — for example, reporting on the potential ethical harms of new technology, issues of misinformation and tech literacy. here is a handful of researchers I look up to who do work like this." }
+    "toggles": {
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "HCI researchers and the broad work we do can then have really broad impacts on society — HCI research can impact the design of new technology policies and regulations — for example, reporting on the potential ethical harms of new technology, issues of misinformation and tech literacy. here is a handful of researchers I look up to who do work like this."
+    }
   },
   {
     "id": 49,
@@ -414,8 +681,15 @@
     "headPuppet": 0,
     "headPuppetPosition": "heading",
     "slide": null,
-    "toggles": { "headPuppets": true, "dialogueHover": false },
-    "dialogue": { "show": true, "characterName": "shm", "text": "and one last thing I'm interested in sharing about the Human part of HCI... is that some researchers are asking... what if it's not just about... Humans." }
+    "toggles": {
+      "headPuppets": true,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "and one last thing I'm interested in sharing about the Human part of HCI... is that some researchers are asking... what if it's not just about... Humans."
+    }
   },
   {
     "id": 50,
@@ -423,7 +697,11 @@
     "rightPuppet": null,
     "headPuppet": null,
     "slide": "008_parrot_hci.mp4",
-    "toggles": { "headPuppets": false, "dialogueHover": true, "audio": true },
+    "toggles": {
+      "headPuppets": false,
+      "dialogueHover": true,
+      "audio": true
+    },
     "dialogue": null
   },
   {
@@ -431,15 +709,24 @@
     "leftPuppet": null,
     "rightPuppet": null,
     "slide": null,
-    "toggles": { "dialogueHover": false },
-    "dialogue": { "show": true, "characterName": "shm", "text": "so this line of research is interested in parrot computer interactions. this is actually a rapidly growing space of research, within a field called More Than Human Design. let me show you one more artist-led More Than Human Design project I love…" }
+    "toggles": {
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "so this line of research is interested in parrot computer interactions. this is actually a rapidly growing space of research, within a field called More Than Human Design. let me show you one more artist-led More Than Human Design project I love…"
+    }
   },
   {
     "id": 52,
     "leftPuppet": null,
     "rightPuppet": null,
     "slide": "009_cats.mp4",
-    "toggles": { "dialogueHover": true, "audio": true },
+    "toggles": {
+      "dialogueHover": true,
+      "audio": true
+    },
     "dialogue": null
   },
   {
@@ -447,10 +734,15 @@
     "leftPuppet": null,
     "rightPuppet": null,
     "slide": null,
-    "toggles": { "dialogueHover": false },
-    "dialogue": { "show": true, "characterName": "shm", "text": "so that was cat royale, which was both an art piece on display in a museum for about a week, and a research project where they had an AI model, acting through a robot arm, study and learn to anticipate the toy preferences of a group of cats!" }
+    "toggles": {
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "so that was cat royale, which was both an art piece on display in a museum for about a week, and a research project where they had an AI model, acting through a robot arm, study and learn to anticipate the toy preferences of a group of cats!"
+    }
   },
-
   {
     "id": 54,
     "leftPuppet": 0,
@@ -458,8 +750,17 @@
     "headPuppet": 0,
     "headPuppetPosition": "heading",
     "slide": null,
-    "toggles": { "detectShm": true, "bbox": true, "headPuppets": true, "dialogueHover": false },
-    "dialogue": { "show": true, "characterName": "shm", "text": "and that was my lil crash course into the broad and beautiful world of stuff HCI researchers do. let's say I've sold you on it and you're interested in learning more. how can you get involved in HCI at Berkeley?" }
+    "toggles": {
+      "detectShm": true,
+      "bbox": true,
+      "headPuppets": true,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "and that was my lil crash course into the broad and beautiful world of stuff HCI researchers do. let's say I've sold you on it and you're interested in learning more. how can you get involved in HCI at Berkeley?"
+    }
   },
   {
     "id": 55,
@@ -467,8 +768,17 @@
     "rightPuppet": null,
     "headPuppet": null,
     "slide": null,
-    "toggles": { "headPuppets": false, "detectShm": false, "bbox": false, "dialogueHover": false },
-    "dialogue": { "show": true, "characterName": "shm", "text": "In terms of upper division courses, CS 160 is one of the best courses you can take. It introduces students to skills and topics helpful for a career in industry UI/UX design AND in academic HCI research!" }
+    "toggles": {
+      "headPuppets": false,
+      "detectShm": false,
+      "bbox": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "In terms of upper division courses, CS 160 is one of the best courses you can take. It introduces students to skills and topics helpful for a career in industry UI/UX design AND in academic HCI research!"
+    }
   },
   {
     "id": 56,
@@ -477,7 +787,11 @@
     "headPuppet": null,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "I teach Design Innovation 23, and recommend all of the DES INV courses in the Design Innovation program, which you can learn about at this URL." }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "I teach Design Innovation 23, and recommend all of the DES INV courses in the Design Innovation program, which you can learn about at this URL."
+    }
   },
   {
     "id": 57,
@@ -485,8 +799,14 @@
     "rightPuppet": null,
     "headPuppet": null,
     "slide": "011_jacobs_building.png",
-    "toggles": { "dialogueHover": true },
-    "dialogue": { "show": true, "characterName": "shm", "text": "Many of those courses are held in the Jacobs Design Institute, which also has a Makerspace run by some very friendly design experts. Anyone, from any department, can get a Jacobs Makerspace pass!" }
+    "toggles": {
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "Many of those courses are held in the Jacobs Design Institute, which also has a Makerspace run by some very friendly design experts. Anyone, from any department, can get a Jacobs Makerspace pass!"
+    }
   },
   {
     "id": 58,
@@ -494,8 +814,14 @@
     "rightPuppet": null,
     "headPuppet": null,
     "slide": "012_jacobs_making.png",
-    "toggles": { "dialogueHover": true },
-    "dialogue": { "show": true, "characterName": "shm", "text": "Jacobs has 3D printers, laser cutters, electronics, robotic arms, and a staff of again, super friendly design experts. If you're even vaguely interested, please feel encouraged to just head into Jacobs and just ask about the program." }
+    "toggles": {
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "Jacobs has 3D printers, laser cutters, electronics, robotic arms, and a staff of again, super friendly design experts. If you're even vaguely interested, please feel encouraged to just head into Jacobs and just ask about the program."
+    }
   },
   {
     "id": 59,
@@ -503,8 +829,17 @@
     "rightPuppet": null,
     "headPuppet": null,
     "slide": null,
-    "toggles": { "detectShm": false, "bbox": false, "headPuppets": false, "dialogueHover": false },
-    "dialogue": { "show": true, "characterName": "shm", "text": "As for HCI research happening at Berkeley…" }
+    "toggles": {
+      "detectShm": false,
+      "bbox": false,
+      "headPuppets": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "As for HCI research happening at Berkeley…"
+    }
   },
   {
     "id": 60,
@@ -512,8 +847,17 @@
     "rightPuppet": null,
     "headPuppet": null,
     "slide": "010_hci_at_berkeley.png",
-    "toggles": { "headPuppets": false, "detectShm": false, "bbox": false, "dialogueHover": true },
-    "dialogue": { "show": true, "characterName": "shm", "text": "these are some HCI professors at Berkeley! you can take a photo of this slide, or you can visit our website: hci.berkeley.edu ! this is a good starting point for learning about all the different HCI labs and research projects going on at Berkeley. I encourage you to stalk all of these professors' websites." }
+    "toggles": {
+      "headPuppets": false,
+      "detectShm": false,
+      "bbox": false,
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "these are some HCI professors at Berkeley! you can take a photo of this slide, or you can visit our website: hci.berkeley.edu ! this is a good starting point for learning about all the different HCI labs and research projects going on at Berkeley. I encourage you to stalk all of these professors' websites."
+    }
   },
   {
     "id": 61,
@@ -521,15 +865,27 @@
     "rightPuppet": null,
     "slide": "010_hci_at_berkeley.png",
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "but more importantly, you should stalk the graduate and undergraduate students doing research with them! we're all very friendly, but grad and undergrad students are much quicker to answer an email or hop on a zoom call to chat with you about HCI. also some of us have cool websites." }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "but more importantly, you should stalk the graduate and undergraduate students doing research with them! we're all very friendly, but grad and undergrad students are much quicker to answer an email or hop on a zoom call to chat with you about HCI. also some of us have cool websites."
+    }
   },
   {
     "id": 62,
     "leftPuppet": 18,
     "rightPuppet": 19,
     "slide": null,
-    "toggles": { "detectShm": true, "bbox": true, "dialogueHover": false },
-    "dialogue": { "show": true, "characterName": "shm", "text": "here's a link to mine! on my website you can find links to every undergraduate and masters student I've advised, info about all of my research projects, and a link to my art portfolio!" }
+    "toggles": {
+      "detectShm": true,
+      "bbox": true,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "here's a link to mine! on my website you can find links to every undergraduate and masters student I've advised, info about all of my research projects, and a link to my art portfolio!"
+    }
   },
   {
     "id": 63,
@@ -537,6 +893,10 @@
     "rightPuppet": null,
     "slide": null,
     "toggles": {},
-    "dialogue": { "show": true, "characterName": "shm", "text": "thank you for your attention and for letting me yap about my special interests! :-)" }
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "thank you for your attention and for letting me yap about my special interests! :-)"
+    }
   }
 ]
