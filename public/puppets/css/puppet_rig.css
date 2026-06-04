@@ -193,6 +193,30 @@ body {
   opacity: 1;
 }
 
+/* unsaved-changes hint — same top-center placement as the spacebar hint */
+#unsavedHint {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: #fff;
+  font-size: 18px;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  z-index: 6;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: rgba(190, 60, 60, 0.8);
+  padding: 4px 14px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+#unsavedHint.visible {
+  opacity: 1;
+}
+
 #dialogueOverlay {
   position: absolute;
   bottom: 0;
@@ -448,12 +472,22 @@ body.freeplay-mode #dialogue-panel:empty::before {
   margin-top: 1px;
 }
 
-.hands-sub-row {
+/* NOTE: this needs higher specificity than `#analysisPanel .field-row { zoom }`,
+   otherwise the 1.25 zoom wins and full-width sub-rows overflow ~25% past the
+   panel (and off the right screen edge). The combined selector below wins. */
+#analysisPanel .field-row.hands-sub-row {
   zoom: 0.9;
   flex-direction: column;
   align-items: flex-start !important;
   gap: 3px;
   margin-top: 1px !important;
+}
+
+/* keep full-width controls inside the panel (padding/border included) */
+#analysisPanel select,
+#analysisPanel input[type="text"] {
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .hands-sub-row label {

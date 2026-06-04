@@ -46,6 +46,9 @@
       <!-- spacebar hint — shown only until user advances for the first time (show mode only) -->
       <div id="spacebarHint" class="show-only">press spacebar to continue</div>
 
+      <!-- unsaved-changes hint — shown in edit mode when live state differs from the scene's JSON -->
+      <div id="unsavedHint" class="show-only">unsaved changes</div>
+
       <!-- scene nav pill — always visible top-right, outside analysis panel (show mode only) -->
       <div id="sceneNavPill" class="show-only">
         <label>scene</label>
@@ -142,6 +145,22 @@
                   <button id="head-puppet-next">&gt;</button>
                 </div>
               </div>
+              <div class="field-row hands-sub-row">
+                <label>head xOffset&nbsp;:</label>
+                <div class="puppet-nav-row">
+                  <button id="head-x-dec">&lt;</button>
+                  <input type="text" id="head-x-offset" value="0" readonly style="width: 34px; text-align:center;">
+                  <button id="head-x-inc">&gt;</button>
+                </div>
+              </div>
+              <div class="field-row hands-sub-row">
+                <label>head yOffset&nbsp;:</label>
+                <div class="puppet-nav-row">
+                  <button id="head-y-up">&and;</button>
+                  <input type="text" id="head-y-offset" value="0" readonly style="width: 34px; text-align:center;">
+                  <button id="head-y-down">&or;</button>
+                </div>
+              </div>
               <div class="field-row hands-sub-row freeplay-only">
                 <label>upload your own&nbsp;:</label>
                 <div class="puppet-nav-row">
@@ -150,7 +169,10 @@
               </div>
             </div>
           </div>
-          <div style="padding: 4px 0 2px 0; flex-shrink: 0; display: flex; gap: 4px;">
+          <div style="padding: 4px 0 2px 0; flex-shrink: 0; display: flex; gap: 4px; flex-wrap: wrap;">
+            <button id="edit-btn" class="show-only" style="flex: 1; font-size: 11px; display: none;">edit</button>
+            <button id="reset-scene-btn" class="show-only" style="flex: 1; font-size: 11px; display: none;">reset</button>
+            <button id="save-scene-btn" class="show-only" style="flex: 1; font-size: 11px; display: none;">save scene</button>
             <button id="copy-scene-btn" style="flex: 1; font-size: 11px;">copy scene</button>
           </div>
         </fieldset>
@@ -193,6 +215,9 @@
     // ── Mode detection ────────────────────────────────────────────────
     const showName   = new URLSearchParams(window.location.search).get('show');
     const isShowMode = !!showName;
+    // Script editing is local-only — the Edit button only appears when serving from
+    // localhost (and the save endpoint also rejects non-loopback requests).
+    const isLocalhost = ['localhost', '127.0.0.1', '[::1]', '::1', ''].includes(location.hostname);
     document.body.classList.add(isShowMode ? 'show-mode' : 'freeplay-mode');
     if (isShowMode) {
       document.getElementById('titleMain').textContent = `${showName.replace(/_/g, ' ')} | shm garanganao almeda | shmuh.co`;
@@ -414,6 +439,11 @@
     // or scene JSON can set a temporary override; cycling puppets clears the override
     // so the filename's position takes effect again.
     let headPuppetPositionOverride = null;
+    // Per-scene head puppet pixel offsets (editable in edit mode), and edit-mode state.
+    let headXOffset = 0;
+    let headYOffset = 0;
+    let editMode    = false;
+    let editBaseline = null; // snapshot of the scene's state when it loaded / was last saved
 
     function setActiveCollection(name) {
       if (!collections[name]) name = homeCollection;
@@ -749,6 +779,11 @@
               cx   = faceCenterX;
               cy   = box.y + box.h * 0.55; // roughly nose/mouth center
             }
+
+            // Apply per-scene manual offset (pixels). +x moves the puppet right on
+            // screen; because the canvas is mirrored below, we subtract on x.
+            cx += headXOffset;
+            cy += headYOffset;
 
             // faceCanvas is CSS-mirrored (scaleX(-1)) so we un-flip the image here,
             // matching the pattern used for hand puppets.
@@ -1165,7 +1200,18 @@
       if (scene.headPuppetPosition !== undefined) {
         headPuppetPositionOverride = scene.headPuppetPosition;
       }
+      // Per-scene head puppet offsets (default 0 — they reset each scene).
+      headXOffset = scene.headXOffset ?? 0;
+      headYOffset = scene.headYOffset ?? 0;
+      updateHeadOffsetDisplay();
       updateHeadPuppetDisplay();
+
+      // Per-scene hand puppet size. If unspecified, leave the slider sticky
+      // (matches the previous global-size behavior).
+      if (scene.puppetSize !== undefined) {
+        const sizeSlider = document.getElementById('puppet-size');
+        if (sizeSlider) sizeSlider.value = scene.puppetSize;
+      }
 
       // Load or clear slide
       // `toggles.audio: true` opts this scene's slide video into playing audio.
@@ -1182,6 +1228,9 @@
       setActionRequired(scene.actionRequired ?? null);
       if (scene.actionRequired === 'popup') showPopup(scene.popupConfig);
       else hidePopup();
+
+      // Capture the scene's state as the edit-mode baseline (for dirty detection).
+      editBaseline = snapshotState();
 
       console.log(`scene ${scene.id ?? (index + 1)} loaded`);
     }
@@ -1404,6 +1453,156 @@
       if (!loadedImages.length) return;
       currentLeftPuppet = parseInt(this.value, 10);
     });
+
+    // ── Head puppet offset controls ───────────────────────────────────
+    // Offsets are pixels in element space; the head-puppet draw adds them to cx/cy.
+    const HEAD_OFFSET_STEP = 5;
+    function updateHeadOffsetDisplay() {
+      const xEl = document.getElementById('head-x-offset');
+      const yEl = document.getElementById('head-y-offset');
+      if (xEl) xEl.value = headXOffset;
+      if (yEl) yEl.value = headYOffset;
+    }
+    document.getElementById('head-x-dec').addEventListener('click',  () => { headXOffset -= HEAD_OFFSET_STEP; updateHeadOffsetDisplay(); });
+    document.getElementById('head-x-inc').addEventListener('click',  () => { headXOffset += HEAD_OFFSET_STEP; updateHeadOffsetDisplay(); });
+    document.getElementById('head-y-up').addEventListener('click',   () => { headYOffset -= HEAD_OFFSET_STEP; updateHeadOffsetDisplay(); }); // ∧ = up (smaller y)
+    document.getElementById('head-y-down').addEventListener('click', () => { headYOffset += HEAD_OFFSET_STEP; updateHeadOffsetDisplay(); }); // ∨ = down
+    updateHeadOffsetDisplay();
+
+    // ── Edit mode (local-only WYSIWYG scene editing) ──────────────────
+    // Save writes the whole script to disk via the localhost-only POST endpoint.
+    const TOGGLE_KEYS = {
+      bbox: 'check-bbox', facemesh: 'check-facemesh', race: 'check-race',
+      age: 'check-age', gender: 'check-gender', emotion: 'check-emotion',
+      hands: 'check-hands', gestures: 'check-gestures', headPuppets: 'check-head-puppets',
+    };
+    function currentToggles() {
+      const t = {};
+      for (const [key, id] of Object.entries(TOGGLE_KEYS)) t[key] = !!document.getElementById(id)?.checked;
+      t.detectShm = detect_shm;
+      t.detectPrettyCute = detect_prettyCute;
+      t.dialogueHover = document.body.classList.contains('dialogue-hover-mode');
+      // `audio` isn't a checkbox — carry it from the scene's stored toggles.
+      const orig = gameScript[currentScene];
+      if (orig?.toggles && orig.toggles.audio !== undefined) t.audio = orig.toggles.audio;
+      return t;
+    }
+    // Absolute snapshot of everything a scene stores (used for both save + dirty check).
+    function snapshotState() {
+      const overlay = document.getElementById('dialogueOverlay');
+      const tab     = document.getElementById('dialogue-tab');
+      const panel   = document.getElementById('dialogue-panel');
+      // While the typewriter is mid-line, panel.textContent is partial — use the full
+      // target text so the baseline/snapshot are stable.
+      const text = (currentTypewriterInterval && currentTypewriterEl === panel)
+        ? currentTypewriterFull : panel.textContent;
+      const dialogue = overlay.classList.contains('visible')
+        ? { show: true, characterName: tab.textContent.trim(), text: (text ?? '').trim() }
+        : null;
+      const sizeSlider = document.getElementById('puppet-size');
+      const state = {
+        leftPuppet:  currentLeftPuppet,
+        rightPuppet: currentRightPuppet,
+        headPuppet:  currentHeadPuppet,
+        puppetSize:  sizeSlider ? parseFloat(sizeSlider.value) : undefined,
+        toggles:     currentToggles(),
+        dialogue,
+      };
+      if (activeCollection !== homeCollection) state.collection = activeCollection;
+      if (headPuppetPositionOverride)          state.headPuppetPosition = headPuppetPositionOverride;
+      if (headXOffset)                         state.headXOffset = headXOffset;
+      if (headYOffset)                         state.headYOffset = headYOffset;
+      return state;
+    }
+    function isSceneDirty() {
+      return editBaseline != null && JSON.stringify(snapshotState()) !== JSON.stringify(editBaseline);
+    }
+    function updateUnsavedHint() {
+      const hint = document.getElementById('unsavedHint');
+      if (hint) hint.classList.toggle('visible', editMode && isSceneDirty());
+    }
+    setInterval(updateUnsavedHint, 250);
+
+    function setEditMode(on) {
+      editMode = on;
+      // The edit button is replaced by reset/save while editing; the "editing" state
+      // is shown in the title bar instead of as a dead button.
+      document.getElementById('edit-btn').style.display        = on ? 'none' : '';
+      document.getElementById('reset-scene-btn').style.display = on ? '' : 'none';
+      document.getElementById('save-scene-btn').style.display  = on ? '' : 'none';
+      document.getElementById('save-scene-btn').textContent    = `save scene ${currentScene + 1}`;
+      const showLabel = showName.replace(/_/g, ' ');
+      document.getElementById('titleMain').textContent = on
+        ? `${showLabel} | shm garanganao almeda | EDITING…`
+        : `${showLabel} | shm garanganao almeda | shmuh.co`;
+      // Make the dialogue tab (character name) + panel (text) editable while editing.
+      const tab   = document.getElementById('dialogue-tab');
+      const panel = document.getElementById('dialogue-panel');
+      [tab, panel].forEach(el => {
+        if (on) { el.setAttribute('contenteditable', 'true'); el.setAttribute('spellcheck', 'false'); }
+        else    { el.removeAttribute('contenteditable'); }
+      });
+      if (!on) updateUnsavedHint();
+    }
+
+    if (isShowMode && isLocalhost) {
+      document.getElementById('edit-btn').style.display = '';
+
+      // Allow typing spaces / Enter into the contenteditable tab+panel without the
+      // <button>/global-shortcut handlers swallowing them. No-op unless editable.
+      const tabEl = document.getElementById('dialogue-tab');
+      const panelEl = document.getElementById('dialogue-panel');
+      [tabEl, panelEl].forEach(el => {
+        el.addEventListener('keydown', e => {
+          if (!el.isContentEditable) return;
+          if (e.code === 'Space') { e.preventDefault(); e.stopPropagation(); document.execCommand('insertText', false, ' '); }
+          if (e.key === 'Enter' && el === tabEl) { e.preventDefault(); e.stopPropagation(); el.blur(); }
+        });
+      });
+
+      document.getElementById('edit-btn').addEventListener('click', () => {
+        if (!editMode) { setEditMode(true); editBaseline = snapshotState(); }
+      });
+      document.getElementById('reset-scene-btn').addEventListener('click', () => {
+        loadScene(currentScene, true); // restore from JSON (recaptures editBaseline); stay in edit mode
+      });
+      document.getElementById('save-scene-btn').addEventListener('click', () => {
+        const btn  = document.getElementById('save-scene-btn');
+        const orig = gameScript[currentScene];
+        const snap = snapshotState();
+        // Preserve the original dialogue's typewriter hints (not edited in-panel).
+        if (snap.dialogue && orig?.dialogue) {
+          if (orig.dialogue.speed   !== undefined) snap.dialogue.speed   = orig.dialogue.speed;
+          if (orig.dialogue.instant !== undefined) snap.dialogue.instant = orig.dialogue.instant;
+        }
+        // Merge over the original (keeps id, slide, _note, actionRequired, …) but drop
+        // managed optional keys that are at their default this scene.
+        const merged = { ...orig, ...snap };
+        ['collection', 'headPuppetPosition', 'headXOffset', 'headYOffset'].forEach(k => {
+          if (!(k in snap)) delete merged[k];
+        });
+        gameScript[currentScene] = merged;
+        const restore = `save scene ${currentScene + 1}`;
+        fetch(`/puppets/shows/${showName}/script`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(gameScript),
+        }).then(r => r.json()).then(res => {
+          if (res?.ok) {
+            editBaseline = snapshotState();
+            setEditMode(false);
+            btn.textContent = 'saved!';
+            setTimeout(() => btn.textContent = restore, 1500);
+          } else {
+            btn.textContent = 'save failed';
+            setTimeout(() => btn.textContent = restore, 2000);
+          }
+        }).catch(() => {
+          btn.textContent = 'save failed';
+          setTimeout(() => btn.textContent = restore, 2000);
+        });
+      });
+    }
 
     // Copy scene helper
     function flashBtn(btn, label) {
