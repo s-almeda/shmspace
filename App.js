@@ -77,36 +77,8 @@ app.get('/walo', (_req, res) => {
     res.redirect('https://drive.google.com/file/d/1084qTZ1h9WmhtC-w2g-UyvVDSoCoEfzg/view?usp=sharing');
 });
 
-// Generic puppeteering rig — /puppets and /puppets?show=<name>
-const fs = require('fs');
-app.get('/puppets', function (_req, res) {
-    res.sendFile(publicPath + '/puppets/index.html');
-});
-app.get('/puppets/default-puppets-list', function (_req, res) {
-    const dir = path.join(publicPath, 'puppets', 'default_puppets');
-    const files = fs.readdirSync(dir).filter(f => /\.(png|jpg|jpeg|gif|webp|mp4|webm|mov)$/i.test(f)).sort();
-    res.json(files);
-});
-app.get('/puppets/shows/:show/puppets-list', function (req, res) {
-    const dir = path.join(publicPath, 'puppets', 'shows', req.params.show, 'puppets');
-    const files = fs.readdirSync(dir).filter(f => /\.(png|jpg|jpeg|gif|webp|mp4|webm|mov)$/i.test(f)).sort();
-    res.json(files);
-});
-// Head puppet listings (separate from regular puppets). Return [] if folder missing.
-function safeList(dir) {
-    try {
-        return fs.readdirSync(dir).filter(f => /\.(png|jpg|jpeg|gif|webp|mp4|webm|mov)$/i.test(f)).sort();
-    } catch (e) { return []; }
-}
-app.get('/puppets/default-head-puppets-list', function (_req, res) {
-    res.json(safeList(path.join(publicPath, 'puppets', 'default_head_puppets')));
-});
-app.get('/puppets/shows/:show/head-puppets-list', function (req, res) {
-    res.json(safeList(path.join(publicPath, 'puppets', 'shows', req.params.show, 'head_puppets')));
-});
-app.get('/puppets/shows/:show/script', function (req, res) {
-    res.sendFile(path.join(publicPath, 'puppets', 'shows', req.params.show, 'game_script.json'));
-});
+// Generic puppeteering rig — all puppet routes live alongside the rig.
+app.use(require('./public/puppets/puppet_routes')(publicPath));
 
 
 //run this server by entering "node App.js" using your command line. 
