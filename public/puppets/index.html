@@ -58,6 +58,10 @@
       <div id="analysisPanel">
         <fieldset>
           <div id="checkboxGroup">
+            <div class="field-row hands-sub-row">
+              <label for="puppet-collection">collection</label>
+              <select id="puppet-collection" style="width: 100%;"></select>
+            </div>
             <div class="field-row disabled">
               <input id="check-race" type="checkbox">
               <label for="check-race">"<u>R</u>ace"?</label>
@@ -104,7 +108,7 @@
                 <label>puppetNumber&nbsp;:</label>
                 <div class="puppet-nav-row">
                   <button id="puppet-prev">&lt;</button>
-                  <input type="text" id="puppet-number" value="1" readonly style="width: 30px; padding: 2px;">
+                  <select id="puppet-select" style="flex: 1; min-width: 0; padding: 2px;"></select>
                   <button id="puppet-next">&gt;</button>
                 </div>
               </div>
@@ -134,7 +138,7 @@
                 <label>headPuppet&nbsp;:</label>
                 <div class="puppet-nav-row">
                   <button id="head-puppet-prev">&lt;</button>
-                  <input type="text" id="head-puppet-number" value="0" readonly style="width: 30px; padding: 2px;">
+                  <select id="head-puppet-select" style="flex: 1; min-width: 0; padding: 2px;"></select>
                   <button id="head-puppet-next">&gt;</button>
                 </div>
               </div>
@@ -334,73 +338,108 @@
       return img;
     }
 
-    // ── Puppet images ─────────────────────────────────────────────────
-    const puppetListUrl = isShowMode
-      ? `/puppets/shows/${showName}/puppets-list`
-      : `/puppets/default-puppets-list`;
-    const puppetBaseUrl = isShowMode
-      ? `/puppets/shows/${showName}/puppets`
-      : `/puppets/default_puppets`;
+    // ── Puppet collections ────────────────────────────────────────────
+    // All graphics live under /puppets/hand_puppets/<collection>/ and
+    // /puppets/head_puppets/<collection>/. A "collection" (default, cs10,
+    // lightning_talk…) is one coherent set; puppetNum in scripts indexes into
+    // the *active* collection's sorted file list. Each show's home collection
+    // is its own name; freeplay's is "default".
+    const HEAD_POSITIONS = ['heading', 'hat', 'glasses', 'mask'];
+    // Per-puppet head position parsed from filename suffix ("001_shades_glasses.png"
+    // → "glasses"); null means "fall back to the dropdown/global setting".
+    const parseHeadPosition = (filename) => {
+      const base = filename.replace(/\.[^.]+$/, '').toLowerCase();
+      return HEAD_POSITIONS.find(p => base.endsWith('_' + p) || base === p) ?? null;
+    };
 
-    const puppetFiles  = await fetch(puppetListUrl).then(r => r.json());
-    const loadedImages = puppetFiles.map(f => makeMediaEl(`${puppetBaseUrl}/${f}`));
+    const homeCollection = isShowMode ? showName : 'default';
 
-    // Indices for uploaded puppets (freeplay); populated below from localStorage
+    // Preload every collection up-front so switching (and per-scene snap-back)
+    // is synchronous — no fetch race when loadScene() applies a puppetNum.
+    const collectionNames = await fetch('/puppets/collections').then(r => r.json()).catch(() => []);
+    if (!collectionNames.includes(homeCollection)) collectionNames.push(homeCollection);
+
+    const collections = {}; // name → { handFiles, hand[], headFiles, head[], headPositions[] }
+    await Promise.all(collectionNames.map(async (name) => {
+      const [handFiles, headFiles] = await Promise.all([
+        fetch(`/puppets/hand-puppets-list/${name}`).then(r => r.json()).catch(() => []),
+        fetch(`/puppets/head-puppets-list/${name}`).then(r => r.json()).catch(() => []),
+      ]);
+      collections[name] = {
+        handFiles,
+        hand:          handFiles.map(f => makeMediaEl(`/puppets/hand_puppets/${name}/${f}`)),
+        headFiles,
+        head:          headFiles.map(f => makeMediaEl(`/puppets/head_puppets/${name}/${f}`)),
+        headPositions: headFiles.map(parseHeadPosition),
+      };
+    }));
+
+    // Hydrate any uploaded puppets (freeplay only) into the default collection.
     let uploadedLeftIndex  = null;
     let uploadedRightIndex = null;
-
-    // Load any previously uploaded puppets from localStorage
-    function loadUploadedPuppet(storageKey) {
-      const b64 = localStorage.getItem(storageKey);
-      if (!b64) return null;
-      loadedImages.push(makeMediaEl(b64));
-      return loadedImages.length - 1;
-    }
-    if (!isShowMode) {
-      uploadedLeftIndex  = loadUploadedPuppet('puppet_upload_left');
-      uploadedRightIndex = loadUploadedPuppet('puppet_upload_right');
-    }
-
-    // Current puppet assignments set by scene JSON (null = no puppet for that hand)
-    let currentLeftPuppet  = loadedImages.length ? 0 : null; // index into loadedImages
-    let currentRightPuppet = uploadedRightIndex;              // null unless freeplay + uploaded
-
-    // ── Head puppets (separate list/folder from hand puppets) ────────
-    const headPuppetListUrl = isShowMode
-      ? `/puppets/shows/${showName}/head-puppets-list`
-      : `/puppets/default-head-puppets-list`;
-    const headPuppetBaseUrl = isShowMode
-      ? `/puppets/shows/${showName}/head_puppets`
-      : `/puppets/default_head_puppets`;
-    const headPuppetFiles  = await fetch(headPuppetListUrl).then(r => r.json()).catch(() => []);
-    const loadedHeadImages = headPuppetFiles.map(f => makeMediaEl(`${headPuppetBaseUrl}/${f}`));
-    // Per-puppet position parsed from filename suffix: "001_shades_glasses.png" → "glasses".
-    // null means "fall back to the dropdown/global setting".
-    const HEAD_POSITIONS = ['heading', 'hat', 'glasses', 'mask'];
-    const headPuppetPositions = headPuppetFiles.map(f => {
-      const base = f.replace(/\.[^.]+$/, '').toLowerCase();
-      return HEAD_POSITIONS.find(p => base.endsWith('_' + p) || base === p) ?? null;
-    });
-
-    // Hydrate uploaded head puppet from localStorage (freeplay only)
-    let uploadedHeadIndex = null;
-    if (!isShowMode) {
-      const b64 = localStorage.getItem('puppet_upload_head');
-      if (b64) {
-        loadedHeadImages.push(makeMediaEl(b64));
-        const savedName = (localStorage.getItem('puppet_upload_head_name') ?? '').toLowerCase();
-        const base = savedName.replace(/\.[^.]+$/, '');
-        const inferred = HEAD_POSITIONS.find(p => base.endsWith('_' + p) || base === p) ?? null;
-        headPuppetPositions.push(inferred);
-        uploadedHeadIndex = loadedHeadImages.length - 1;
+    let uploadedHeadIndex  = null;
+    if (!isShowMode && collections['default']) {
+      const dft = collections['default'];
+      const pushHand = (b64) => { dft.hand.push(makeMediaEl(b64)); dft.handFiles.push('(uploaded)'); return dft.hand.length - 1; };
+      const lb = localStorage.getItem('puppet_upload_left');
+      if (lb) uploadedLeftIndex  = pushHand(lb);
+      const rb = localStorage.getItem('puppet_upload_right');
+      if (rb) uploadedRightIndex = pushHand(rb);
+      const hb = localStorage.getItem('puppet_upload_head');
+      if (hb) {
+        dft.head.push(makeMediaEl(hb));
+        const savedName = localStorage.getItem('puppet_upload_head_name') ?? '';
+        dft.headFiles.push(savedName || '(uploaded)');
+        dft.headPositions.push(parseHeadPosition(savedName));
+        uploadedHeadIndex = dft.head.length - 1;
       }
     }
 
-    let currentHeadPuppet   = loadedHeadImages.length ? 0 : null;
+    // ── Active-collection state (the live arrays the rest of the rig reads) ──
+    // These are reassigned (not the const arrays inside `collections`) so every
+    // closure that references loadedImages / loadedHeadImages / headPuppetPositions
+    // automatically sees the active collection.
+    let loadedImages        = [];
+    let loadedHeadImages    = [];
+    let headPuppetPositions = [];
+    let currentHandFiles    = []; // filenames for the dropdown option labels
+    let currentHeadFiles    = [];
+    let activeCollection    = homeCollection;
+
+    // Current puppet assignments (index into the active collection; null = none)
+    let currentLeftPuppet  = 0;
+    let currentRightPuppet = uploadedRightIndex; // null unless freeplay + uploaded
+    let currentHeadPuppet  = 0;
     // Per-puppet position comes from the filename suffix. User interaction (dropdown)
     // or scene JSON can set a temporary override; cycling puppets clears the override
     // so the filename's position takes effect again.
     let headPuppetPositionOverride = null;
+
+    function setActiveCollection(name) {
+      if (!collections[name]) name = homeCollection;
+      const col = collections[name];
+      activeCollection    = name;
+      loadedImages        = col.hand;
+      loadedHeadImages    = col.head;
+      headPuppetPositions = col.headPositions;
+      currentHandFiles    = col.handFiles;
+      currentHeadFiles    = col.headFiles;
+      // Keep selections in range for the new collection.
+      currentLeftPuppet = loadedImages.length ? Math.min(currentLeftPuppet ?? 0, loadedImages.length - 1) : null;
+      if (currentRightPuppet != null && currentRightPuppet >= loadedImages.length) currentRightPuppet = null;
+      currentHeadPuppet = loadedHeadImages.length ? Math.min(currentHeadPuppet ?? 0, loadedHeadImages.length - 1) : null;
+      rebuildPuppetSelect();
+      rebuildHeadPuppetSelect();
+      const collSel = document.getElementById('puppet-collection');
+      if (collSel) collSel.value = activeCollection;
+      updatePuppetDisplay();
+      updateHeadPuppetDisplay();
+    }
+
+    // Build the collection dropdown + activate the home collection.
+    // (rebuild*/update*/buildCollectionSelect are hoisted function declarations.)
+    buildCollectionSelect();
+    setActiveCollection(homeCollection);
 
     function effectiveHeadPuppetPosition() {
       if (headPuppetPositionOverride) return headPuppetPositionOverride;
@@ -1103,6 +1142,11 @@
       currentScene = index;
       updateSceneDisplay();
 
+      // Scripts' puppetNums index into the show's home collection. If the user
+      // manually switched collections during the performance, snap back so the
+      // scene renders with its intended puppets.
+      if (isShowMode && activeCollection !== homeCollection) setActiveCollection(homeCollection);
+
       // Set hand puppet assignments
       currentLeftPuppet  = (scene.leftPuppet  !== null && scene.leftPuppet  !== undefined) ? scene.leftPuppet  : null;
       currentRightPuppet = (scene.rightPuppet !== null && scene.rightPuppet !== undefined) ? scene.rightPuppet : null;
@@ -1277,13 +1321,43 @@
       document.getElementById('head-puppets-controls').style.display = this.checked ? 'block' : 'none';
     });
 
+    // ── Collection + filename dropdown wiring ─────────────────────────
+    // Options are "<index>: <filename>"; the option value is the index (== puppetNum).
+    function fillFileSelect(sel, files) {
+      if (!sel) return;
+      sel.innerHTML = '';
+      files.forEach((f, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = `${i}: ${f}`;
+        sel.appendChild(opt);
+      });
+    }
+    function rebuildPuppetSelect()     { fillFileSelect(document.getElementById('puppet-select'),      currentHandFiles); }
+    function rebuildHeadPuppetSelect() { fillFileSelect(document.getElementById('head-puppet-select'), currentHeadFiles); }
+    function buildCollectionSelect() {
+      const sel = document.getElementById('puppet-collection');
+      if (!sel) return;
+      sel.innerHTML = '';
+      Object.keys(collections).sort().forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        opt.textContent = name;
+        sel.appendChild(opt);
+      });
+      sel.value = activeCollection;
+    }
+    document.getElementById('puppet-collection').addEventListener('change', function() {
+      setActiveCollection(this.value);
+    });
+
     // Head puppet cycling (independent of scenes)
     function updateHeadPuppetDisplay() {
-      const el = document.getElementById('head-puppet-number');
-      if (el) el.value = loadedHeadImages.length ? (currentHeadPuppet ?? 0) + 1 : 0;
-      // Reflect the effective position of the current puppet in the dropdown (read-only hint).
-      const sel = document.getElementById('head-puppet-position');
-      if (sel) sel.value = effectiveHeadPuppetPosition();
+      const sel = document.getElementById('head-puppet-select');
+      if (sel && loadedHeadImages.length && currentHeadPuppet != null) sel.value = currentHeadPuppet;
+      // Reflect the effective position of the current puppet in the position dropdown.
+      const posSel = document.getElementById('head-puppet-position');
+      if (posSel) posSel.value = effectiveHeadPuppetPosition();
     }
     document.getElementById('head-puppet-prev').addEventListener('click', () => {
       if (!loadedHeadImages.length) return;
@@ -1297,26 +1371,35 @@
       headPuppetPositionOverride = null;
       updateHeadPuppetDisplay();
     });
+    document.getElementById('head-puppet-select').addEventListener('change', function() {
+      if (!loadedHeadImages.length) return;
+      currentHeadPuppet = parseInt(this.value, 10);
+      headPuppetPositionOverride = null; // let the chosen puppet's filename decide
+      updateHeadPuppetDisplay();
+    });
     document.getElementById('head-puppet-position').addEventListener('change', function() {
       // User picked a position explicitly → override the filename-derived choice.
       headPuppetPositionOverride = this.value;
     });
-    updateHeadPuppetDisplay();
 
     // Puppet cycling (independent of scenes — cycles currentLeftPuppet)
     function updatePuppetDisplay() {
-      const el = document.getElementById('puppet-number');
-      if (el) el.value = loadedImages.length ? currentLeftPuppet + 1 : 0;
+      const sel = document.getElementById('puppet-select');
+      if (sel && loadedImages.length && currentLeftPuppet != null) sel.value = currentLeftPuppet;
     }
     document.getElementById('puppet-prev').addEventListener('click', () => {
       if (!loadedImages.length) return;
-      currentLeftPuppet = (currentLeftPuppet - 1 + loadedImages.length) % loadedImages.length;
+      currentLeftPuppet = ((currentLeftPuppet ?? 0) - 1 + loadedImages.length) % loadedImages.length;
       updatePuppetDisplay();
     });
     document.getElementById('puppet-next').addEventListener('click', () => {
       if (!loadedImages.length) return;
-      currentLeftPuppet = (currentLeftPuppet + 1) % loadedImages.length;
+      currentLeftPuppet = ((currentLeftPuppet ?? -1) + 1) % loadedImages.length;
       updatePuppetDisplay();
+    });
+    document.getElementById('puppet-select').addEventListener('change', function() {
+      if (!loadedImages.length) return;
+      currentLeftPuppet = parseInt(this.value, 10);
     });
 
     // Copy scene helper
@@ -1452,8 +1535,10 @@
             const img = new Image();
             img.src = b64;
             loadedImages.push(img);
+            currentHandFiles.push(isRight ? '(uploaded right)' : '(uploaded left)');
             if (isRight) uploadedRightIndex = loadedImages.length - 1;
             else         uploadedLeftIndex  = loadedImages.length - 1;
+            rebuildPuppetSelect();
           }
           if (isRight) currentRightPuppet = uploadedRightIndex;
           else { currentLeftPuppet = uploadedLeftIndex; updatePuppetDisplay(); }
@@ -1487,7 +1572,9 @@
             img.src = b64;
             loadedHeadImages.push(img);
             headPuppetPositions.push(inferred);
+            currentHeadFiles.push(file.name || '(uploaded)');
             uploadedHeadIndex = loadedHeadImages.length - 1;
+            rebuildHeadPuppetSelect();
           }
           currentHeadPuppet = uploadedHeadIndex;
           headPuppetPositionOverride = null;
