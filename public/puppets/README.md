@@ -16,7 +16,7 @@ the rig has two modes, chosen by the `show` URL param:
 | `/puppets` | **freeplay** | no script. dialogue box is editable, hover-fade on, hands + head puppets auto-enabled. lets you upload your own puppets. |
 | `/puppets?show=<name>` | **show** | loads `shows/<name>/game_script.json` and steps through its scenes. spacebar to start/advance. |
 
-each show lives in `shows/<name>/` with a `game_script.json`, a `slides/` folder, and (currently) its own `puppets/` + `head_puppets/` folders. freeplay uses `default_puppets/` + `default_head_puppets/`.
+each show lives in `shows/<name>/` with a `game_script.json` and a `slides/` folder. puppet **graphics** are centralized into collections (see below), not stored per-show.
 
 ## running locally
 
@@ -28,6 +28,24 @@ then open `http://localhost:8000/puppets` (or `?show=cs10`).
 > the file-listing routes (and, later, script-saving) need the **Node** server (`node App.js`), not the static `http-server` task. on Vercel these run as a serverless function.
 
 ---
+
+## puppet collections
+
+all puppet graphics live in two centralized trees, organized into named **collections**:
+
+```
+puppets/hand_puppets/<collection>/   # hand puppets
+puppets/head_puppets/<collection>/   # head puppets (optional per collection)
+```
+
+current collections: `default` (freeplay), `cs10`, `lightning_talk`. add a new collection by making a `hand_puppets/<name>/` folder (and optionally `head_puppets/<name>/`).
+
+- **active collection** — the set the rig is currently drawing from. a show's "home" collection is its own name (`?show=cs10` → `cs10`); freeplay's is `default`.
+- the analysis panel's **collection** dropdown switches the active collection live (drives BOTH hand & head puppets) — handy for grabbing a puppet from another set mid-performance.
+- in show mode, **navigating to any scene snaps the active collection back to the home collection**, so scripts always render with their intended puppets. (your manual switch lasts until the next scene change.)
+- the **puppetNumber** and **headPuppet** fields are filename dropdowns (`<index>: <filename>`); the index is the `puppetNum` used in scripts. the `<` / `>` arrows and the `;`/`'` (hand) and `,`/`.` (head) keys step through them.
+
+`puppetNum` is the index into the active collection's sorted file list — see [scene JSON](#puppetnum--files).
 
 ## keyboard shortcuts
 
