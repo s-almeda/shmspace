@@ -58,10 +58,6 @@
       <div id="analysisPanel">
         <fieldset>
           <div id="checkboxGroup">
-            <div class="field-row hands-sub-row">
-              <label for="puppet-collection">collection</label>
-              <select id="puppet-collection" style="width: 100%;"></select>
-            </div>
             <div class="field-row disabled">
               <input id="check-race" type="checkbox">
               <label for="check-race">"<u>R</u>ace"?</label>
@@ -94,6 +90,10 @@
             <div class="field-row">
               <input id="check-gestures" type="checkbox" checked>
               <label for="check-gestures"><u>Q</u>: gestures?</label>
+            </div>
+            <div class="field-row hands-sub-row">
+              <label for="puppet-collection">collection</label>
+              <select id="puppet-collection" style="width: 100%;"></select>
             </div>
             <div class="field-row disabled">
               <input id="check-hands" type="checkbox">
@@ -1142,10 +1142,13 @@
       currentScene = index;
       updateSceneDisplay();
 
-      // Scripts' puppetNums index into the show's home collection. If the user
-      // manually switched collections during the performance, snap back so the
-      // scene renders with its intended puppets.
-      if (isShowMode && activeCollection !== homeCollection) setActiveCollection(homeCollection);
+      // Resolve this scene's collection. puppetNums index into it. A scene may
+      // opt into another collection via "collection": "<name>" (e.g. a cs10 scene
+      // that borrows a lightning_talk puppet); scenes with no field use the show's
+      // home collection, so the active collection always snaps back to where the
+      // script expects — even if the user switched it manually mid-performance.
+      const targetCollection = (isShowMode && scene.collection) ? scene.collection : homeCollection;
+      if (activeCollection !== targetCollection) setActiveCollection(targetCollection);
 
       // Set hand puppet assignments
       currentLeftPuppet  = (scene.leftPuppet  !== null && scene.leftPuppet  !== undefined) ? scene.leftPuppet  : null;
@@ -1419,6 +1422,8 @@
         id: currentScene + 1,
         leftPuppet:  currentLeftPuppet,
         rightPuppet: currentRightPuppet,
+        // Only capture a collection when it's an override of the show's home collection.
+        ...(activeCollection !== homeCollection ? { collection: activeCollection } : {}),
         slide: null,
         dialogue,
         actionRequired: currentActionRequired

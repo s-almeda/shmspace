@@ -42,7 +42,8 @@ current collections: `default` (freeplay), `cs10`, `lightning_talk`. add a new c
 
 - **active collection** — the set the rig is currently drawing from. a show's "home" collection is its own name (`?show=cs10` → `cs10`); freeplay's is `default`.
 - the analysis panel's **collection** dropdown switches the active collection live (drives BOTH hand & head puppets) — handy for grabbing a puppet from another set mid-performance.
-- in show mode, **navigating to any scene snaps the active collection back to the home collection**, so scripts always render with their intended puppets. (your manual switch lasts until the next scene change.)
+- in show mode, **navigating to any scene resets the active collection to that scene's collection** — `scene.collection` if set, otherwise the home collection — so scripts always render with their intended puppets. (a manual dropdown switch lasts only until the next scene change.)
+- a scene can **borrow another collection** for itself with `"collection": "<name>"` (e.g. a `cs10` scene that shows a `lightning_talk` puppet); the next scene without the field snaps back to home. one `collection` field switches both hand & head puppets, and that scene's `puppetNum`s index into the chosen collection.
 - the **puppetNumber** and **headPuppet** fields are filename dropdowns (`<index>: <filename>`); the index is the `puppetNum` used in scripts. the `<` / `>` arrows and the `;`/`'` (hand) and `,`/`.` (head) keys step through them.
 
 `puppetNum` is the index into the active collection's sorted file list — see [scene JSON](#puppetnum--files).
@@ -114,6 +115,7 @@ a show script (`shows/<name>/game_script.json`) is an array of scene objects. al
 | `leftPuppet` | number \| null | `puppetNum` (index into the puppet folder, sorted) for the performer's left hand. `null` = none |
 | `rightPuppet` | number \| null | same, right hand |
 | `headPuppet` | number \| null | index into the head-puppet folder. `null` = none. omit the key entirely to leave the current head puppet unchanged |
+| `collection` | string | optional — render this scene from another [collection](#puppet-collections) (switches both hand & head puppets). omit to use the show's home collection |
 | `headPuppetPosition` | string | hard override for head placement: `heading` \| `hat` \| `glasses` \| `mask`. omit to use the filename suffix (below); pass `null` to clear a previous override |
 | `slide` | string \| null | filename in `shows/<name>/slides/` to show full-screen (image or video). `null` clears the slide |
 | `toggles` | object | analysis-panel state for this scene — see [toggles](#toggles). **delta-based**: only the keys you list change; everything else carries over from the previous scene |
