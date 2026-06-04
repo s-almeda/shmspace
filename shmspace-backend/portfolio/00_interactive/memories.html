@@ -53,7 +53,7 @@
     <div class="piece-row left-center">
       <div class="window piece-window size-md">
         <div class="title-bar">
-          <div class="title-bar-text">does that mean avoiding places that remind me...?</div>
+          <div class="title-bar-text">it's so embarrassing to be afraid of my own home</div>
           <!-- <div class="title-bar-controls">
             <button aria-label="Minimize"></button>
             <button aria-label="Maximize"></button>
@@ -67,8 +67,9 @@
           </div>
         </div>
         <div class="status-bar">
-          <p class="status-bar-field">are they ruined for me now?</p>
-          <p class="status-bar-field">does it even matter? i'm running away regardless</p>
+          <p class="status-bar-field">am i running away? like a coward?</p>
+          <p class="status-bar-field">it's your fault you did this to me you took this from me and it's such a fucking effort to take back i don't want to constantly be in this mode of reclaiming spaces that used to be 'ours' like what the fuck what the fuck</p>
+          <p class="status-bar-field">i wish i hadn't shared these spaces with you. i wish that when i'm in the back of a car turning onto Sacramento it didn't feel like going home. and when it passes '[y]our' street, i wish that this felt like nothing to me. but it does feel like something and i want to hunt down the part of my brain that feels this and burn them to death</p>
         </div>
       </div>
     </div>
@@ -81,7 +82,7 @@
     <div class="piece-row right-center">
       <div class="window piece-window size-md" style="max-width: 500px;">
         <div class="title-bar">
-            <div class="title-bar-text"><img src="assets/minesweeper_logo.png" alt="memory" style="width: 1.2em; height: 1.2em; vertical-align: middle; margin-right: 6px;">how do i forget. how do i scrub the fear from my bones</div>
+            <div class="title-bar-text"><img src="assets/minesweeper_logo.png" alt="memory" style="width: 1.2em; height: 1.2em; vertical-align: middle; margin-right: 6px;">i wish my body would stop keeping score</div>
         </div>
         <div class="window-body">
           <div id="ms-bezel" style="background:#bdbdbd !important;padding:14px;border-top:3px solid #fff;border-left:3px solid #fff;border-right:3px solid #7b7b7b;border-bottom:3px solid #7b7b7b;display:block;width:fit-content;margin:0 auto;border-radius:0 !important;box-shadow:none !important;">
@@ -98,7 +99,7 @@
           </div>
         </div>
         <div class="status-bar">
-          <p class="status-bar-field" id="ms-status">i'm trying to be normal</p>
+          <p class="status-bar-field" id="ms-status">how do i scrub the fear from my bones. you have left such a disgusting embarrassing stain. like a stew i was steeped in that went sour. fuck you fuck you fuck you fuck you</p>
         </div>
       </div>
     </div>
@@ -124,7 +125,7 @@
           initial: { title: '...',     left: '000',                       right: '000', textMode: false, single: false },
           mined:   { title: "i was lighter before", left: "something scary happened",                right: '',    textMode: true,  single: true  },
           cleared_0: { title:"the fear has soaked into my skin",   left: "i think it's over now",   right: '',    textMode: true,  single: true  },
-          cleared: { title:"i wish my body would stop keeping score",   left: "but i still can't move",   right: '',    textMode: true,  single: true  },
+          cleared: { title:"i wish my body would stop keeping score",   left: "...but i still can't move",   right: '',    textMode: true,  single: true  },
         };
 
         let state = 'initial';
@@ -132,7 +133,7 @@
         function applyState(name){
           state = name;
           const s = STATES[name];
-          statusEl.textContent   = s.title;
+          // statusEl.textContent   = s.title;
           scoreLeft.textContent  = s.left;
           scoreRight.textContent = s.right;
           scoreEl.classList.toggle('text-mode',   s.textMode);

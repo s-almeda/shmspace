@@ -45,9 +45,9 @@
 
       /* scorebar: monospace sans-serif, vertically stretched (LCD-ish) */
       #ms-score {
-        text-transform: uppercase;
+        /* text-transform: uppercase; */
         font-family: 'Menlo', 'Consolas', 'Monaco', 'Courier New', monospace;
-        font-weight: bold;
+        /* font-weight: bold; */
         font-size: 36px;
         letter-spacing: 3px;
       }
