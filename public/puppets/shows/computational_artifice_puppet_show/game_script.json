@@ -1,0 +1,870 @@
+[
+  {
+    "id": 0,
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "headPuppet": null,
+    "slide": null,
+    "toggles": {
+      "gestures": false,
+      "detectShm": false,
+      "bbox": false,
+      "facemesh": false,
+      "hands": false,
+      "headPuppets": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "what's up chat"
+    }
+  },
+  {
+    "id": 1,
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "headPuppet": null,
+    "slide": null,
+    "toggles": {
+      "gestures": false,
+      "detectShm": false,
+      "bbox": false,
+      "facemesh": false,
+      "hands": false,
+      "headPuppets": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "recently, i've been seeing them everywhere... everywhere i look.... there they are..."
+    }
+  },
+  {
+    "id": 2,
+    "leftPuppet": 0,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {
+      "hands": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "PUPPETS."
+    },
+    "_note": "cycle left puppet 0<->1 (sock puppet closed/open) with ;/' to flap the mouth on 'PUPPETS.'"
+  },
+  {
+    "id": 3,
+    "leftPuppet": 6,
+    "rightPuppet": null,
+    "headPuppet": 4,
+    "slide": null,
+    "toggles": {
+      "bbox": true,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": true,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "Hi, I'm shm garanganao almeda. I'm an artist, computer scientist, and HCI researcher in the Berkeley Institute of Design Lab. I'm wrapping up my PhD at Berkeley, starting a postdoc at The Smithsonian this fall."
+    },
+    "_note": "head puppet 0 (artist beret), left puppet 6 (BiD logo)",
+    "puppetSize": 1.1
+  },
+  {
+    "id": 4,
+    "leftPuppet": 7,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {
+      "bbox": true,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": true,
+      "detectPrettyCute": false,
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "I do creativity support research, which has included collaborating with Adobe Research to study digital color mixing and the socioeconomic impacts of AI, and with Midjourney Storytelling Lab where I made an art exploration system called Artographer and helped study the Dramamancer system. This involved authoring and playing a bunch of LLM-driven interactive narratives in the system."
+    },
+    "_note": "cycle left puppet 7->8->9->10->11 with ;/' across the sentence (adobe research, bPigment pears, mj storytelling, artographer, dramamancer)",
+    "headPuppet": 4,
+    "puppetSize": 1.1
+  },
+  {
+    "id": 5,
+    "leftPuppet": 12,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "I recently realized my childhood dream — attending a hatsune miku concert! and when i wasn't participating in the collective audience roleplay where we all recognize our queen as physically there. on stage..."
+    },
+    "_note": "left puppet 12 (miku_live)",
+    "headPuppet": 4,
+    "puppetSize": 1.1
+  },
+  {
+    "id": 6,
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "slide": "000_hatsune_miku.mp4",
+    "toggles": {
+      "hands": false,
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "I found myself marveling at the motion-captured choreography that some talented humans performed at some point, to author the movements that miku and her friends' bodies… models… were reenacting for us. and it's then that i realized."
+    }
+  },
+  {
+    "id": 7,
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {
+      "hands": false,
+      "headPuppets": false,
+      "bbox": false,
+      "detectShm": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "...that I was at a puppet show. a recorded virtual puppet show."
+    }
+  },
+  {
+    "id": 8,
+    "leftPuppet": 13,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "that i'd paid $152 for.... like"
+    },
+    "headPuppet": 4,
+    "puppetSize": 1.1
+  },
+  {
+    "id": 9,
+    "leftPuppet": 13,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {
+      "hands": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "miku",
+      "text": "hi i'm miku!"
+    },
+    "_note": "speaker name changes to miku; left puppet 13 (miku)"
+  },
+  {
+    "id": 10,
+    "leftPuppet": 13,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {},
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "save your money. we got miku expo at home"
+    },
+    "_note": "puppet still miku, speaker name back to shm"
+  },
+  {
+    "id": 11,
+    "leftPuppet": 14,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {},
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "in 1999, puppeteer Stephen Kaplin was dissatisfied with existing puppetry classification systems, and their incapacity to capture the new media puppet forms afforded by emergent technology. So he published a new model for understanding and relating Performing Object Forms, called…"
+    },
+    "_note": "left puppet 14 (Stephen Kaplin)"
+  },
+  {
+    "id": 12,
+    "leftPuppet": 15,
+    "rightPuppet": null,
+    "slide": "001_puppet_tree.png",
+    "toggles": {
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "…The Puppet Tree."
+    },
+    "_note": "left puppet 15 (ruler) — point at the slide"
+  },
+  {
+    "id": 13,
+    "leftPuppet": 15,
+    "rightPuppet": null,
+    "slide": "001_puppet_tree.png",
+    "toggles": {},
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "The axes for comparison here are Ratio — of performers to objects, and Distance — from performer to the object."
+    }
+  },
+  {
+    "id": 14,
+    "leftPuppet": 16,
+    "rightPuppet": null,
+    "headPuppet": 1,
+    "slide": "001_puppet_tree.png",
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": true,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "So a mask is very close distance performing object, and the ratio is 1 performer to 1 object. so it would be near the bottom center of this design space."
+    },
+    "_note": "head puppet 1 (theatre mask, mask position), left puppet 16 (mask)",
+    "puppetSize": 1.1,
+    "headPuppetPosition": "mask",
+    "headXOffset": 20,
+    "headYOffset": -75
+  },
+  {
+    "id": 15,
+    "leftPuppet": 17,
+    "rightPuppet": null,
+    "slide": "001_puppet_tree.png",
+    "toggles": {
+      "headPuppets": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "Meanwhile, rod and shadow puppetry practices might have many characters and scene elements manipulated by a single performer — here, Indonesian dalang, or puppetmaster, Manteb Soedharsono."
+    },
+    "_note": "left puppet 17 (manteb)"
+  },
+  {
+    "id": 16,
+    "leftPuppet": 18,
+    "rightPuppet": null,
+    "slide": "001_puppet_tree.png",
+    "toggles": {},
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "the mars rover! is a puppet! performed by the coordinated efforts of many people. so that's many performers to 1 object, from very far away"
+    },
+    "_note": "left puppet 18 (mars rover)"
+  },
+  {
+    "id": 17,
+    "leftPuppet": 15,
+    "rightPuppet": null,
+    "slide": "001_puppet_tree.png",
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "Kaplin published this in 1999. So now, in 2026, I find myself thinking about all the strange new virtual objects we can perform, the new ways we might manipulate distance (across time, and space, and ...?) and new ways of scaling and coordinating performer & audience participation."
+    },
+    "_note": "left puppet 15 (ruler)",
+    "headPuppet": 1,
+    "puppetSize": 1.1,
+    "headPuppetPosition": "mask"
+  },
+  {
+    "id": 18,
+    "leftPuppet": 19,
+    "rightPuppet": 19,
+    "headPuppet": 2,
+    "slide": null,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": true,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "a vtuber model is, of course, a puppet. or maybe it's many puppets, reenacting the vtuber's performance on computer screens all around the world."
+    },
+    "_note": "ironmouse everywhere: head puppet 2 + both hands (left & right) 19",
+    "puppetSize": 1.1,
+    "headPuppetPosition": "glasses",
+    "headYOffset": 60
+  },
+  {
+    "id": 19,
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "we've had *autonomous* performing objects for some time now. and if we're willing to consider those puppets, which i am…"
+    },
+    "headPuppet": 2,
+    "puppetSize": 1.1,
+    "headPuppetPosition": "glasses"
+  },
+  {
+    "id": 20,
+    "leftPuppet": 20,
+    "rightPuppet": 21,
+    "slide": null,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "animatronics are puppets."
+    },
+    "_note": "left puppet 20 (freddy fazbear), right puppet 21 (chuck e cheese)",
+    "headPuppet": 2,
+    "puppetSize": 1.1,
+    "headPuppetPosition": "glasses"
+  },
+  {
+    "id": 21,
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "headPuppet": null,
+    "slide": "002_chipotle.jpeg",
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "And an AI chatbot is a puppet. not only because it is a soulless corporate representative... but also because it is a virtual object performing the role of, in this case, a helpful Chipotle customer service agent named Pepper. And it's a problem for Chipotle when she breaks character and starts explaining how to reverse a linked list."
+    },
+    "_note": "slide 002_chipotle.png; left puppet 0 (sock puppet) as Pepper",
+    "puppetSize": 1.1
+  },
+  {
+    "id": 22,
+    "leftPuppet": 22,
+    "rightPuppet": null,
+    "headPuppet": null,
+    "slide": null,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "if LLM-driven characters are puppets — how should we think about the ratio of performers involved? how many people are implicated in the creation of Claude's performance?"
+    },
+    "_note": "no slide, no head puppet; left puppet 22 (Claude)",
+    "puppetSize": 1.1
+  },
+  {
+    "id": 23,
+    "leftPuppet": 23,
+    "rightPuppet": 23,
+    "slide": null,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "my dissertation work is actually not about puppets, but this... about the ethical, social, cultural implications of creative labor ecosystems, how the tech industry extracts from them for large-scale model training, by widely and nonconsensually scraping data from human creatives across the Internet."
+    },
+    "_note": "left puppet 22 (Claude), right puppet 23 (ecosystems)",
+    "headPuppet": null,
+    "puppetSize": 1.1
+  },
+  {
+    "id": 24,
+    "leftPuppet": 22,
+    "rightPuppet": 23,
+    "slide": null,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "if you've published text to the internet, you may be contributing to all kinds of performances you're not privy to."
+    },
+    "_note": "left puppet 22 (Claude), right puppet 23 (ecosystems)",
+    "headPuppet": null,
+    "puppetSize": 0.5
+  },
+  {
+    "id": 25,
+    "leftPuppet": 11,
+    "rightPuppet":null,
+    "slide": null,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "and now when we consider stories mediated by Large AI Models in systems like Dramamancer..."
+    },
+    "_note": "",
+    "headPuppet": null,
+    "puppetSize": 0.5
+  },
+  {
+    "id": 26,
+    "leftPuppet": 11,
+    "rightPuppet": null,
+    "slide": "004_be_my_hero_2.png",
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "Instead of directly scripting the final text of a story, we script what an LLM puppet, Claude, ''reads'' as it performs the story."
+    },
+    "_note": "left puppet 12",
+    "headPuppet": null,
+    "puppetSize": 0.5
+  },
+  {
+    "id": 27,
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "slide": "003_be_my_hero.png",
+    "toggles": {
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "We write character descriptions that the system receives at playtime, to prompt how it should perform the role of the different characters in the story, what kind of dialogue to generate to fit the character's personality, all while managing the movement of the plot, and its narration."
+    },
+    "_note": "slide 003_be_my_hero.png; left puppet 2 (sock puppet with hat); cycle 2<->3 for the mouth"
+  },
+  {
+    "id": 28,
+    "leftPuppet": 0,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "so the task of designing this LLM-driven story experience is the task of making a general purpose AI puppet…"
+    },
+    "_note": "left puppet 2 (sock puppet with hat)",
+    "puppetSize": 1,
+    "headPuppet": null
+  },
+  {
+    "id": 29,
+    "leftPuppet": 2,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": true
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "…act as a dramatic director puppet…"
+    },
+    "headPuppet": null
+  },
+  {
+    "id": 30,
+    "leftPuppet": 4,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {},
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "…who puppets puppets."
+    },
+    "_note": "left puppet 4 (sock puppet puppeteer); cycle 4<->5 with ;/' for the mouth"
+  },
+  {
+    "id": 31,
+    "leftPuppet": 24,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {},
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "and we run into the same issues that Chipotle chatbot developers... (and theatre directors) struggle with. if my instructions don't effectively convey my intent, my actor can break character! and break the plot of the story itself! especially if players act unpredictably, or adversarially."
+    },
+    "_note": "slide 004_be_my_hero_2.png; left puppet 24 (chipotle chatbot)"
+  },
+  {
+    "id": 32,
+    "leftPuppet": 2,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "crafting robust AI-driven interactions is looking a bit less like being good at writing Python and more like… being good at improv theatre character writing."
+    },
+    "_note": "left puppet 2 (sock puppet with hat)"
+  },
+  {
+    "id": 33,
+    "leftPuppet": 2,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "How might we make creative success in these new media experiences more reliably achievable?"
+    },
+    "_note": "left puppet 2 (sock puppet with hat)"
+  },
+  {
+    "id": 34,
+    "leftPuppet": 2,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {},
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "I'm not sure..."
+    }
+  },
+  {
+    "id": 35,
+    "leftPuppet": 4,
+    "rightPuppet": null,
+    "slide": null,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "But i think looking at these systems as autonomous, hivemind-authored puppeting puppets..."
+    },
+    "_note": "left puppet 2 (hat sock puppet); cycle 2<->3 for the mouth",
+    "headPuppet": null,
+    "puppetSize": 1.1
+  },
+  {
+    "id": 36,
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "headPuppet": 3,
+    "slide": null,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": true,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "...has been... provocative, to say the least."
+    },
+    "_note": "head puppet 3 (distant hat sock puppet, heading position — floats above); hands off so only the distant puppet shows",
+    "puppetSize": 1.1,
+    "headPuppetPosition": "mask",
+    "headXOffset": 400,
+    "headYOffset": -10
+  },
+  {
+    "id": 37,
+    "leftPuppet": null,
+    "rightPuppet": 25,
+    "slide": null,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": true,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "thanks for letting me talk about it! hehehehehe"
+    },
+    "headPuppet": 3,
+    "puppetSize": 1.9,
+    "headPuppetPosition": "mask",
+    "headXOffset": 400,
+    "headYOffset": -10
+  },
+    {
+    "id": 38,
+    "leftPuppet": null,
+    "rightPuppet": 25,
+    "slide": null,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": true,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    },
+    "dialogue": {
+      "show": false,
+      "characterName": "",
+      "text": "..."
+    },
+    "headPuppet": 3,
+    "puppetSize": 1.9,
+    "headPuppetPosition": "mask",
+    "headXOffset": 400,
+    "headYOffset": -10
+  }
+]
