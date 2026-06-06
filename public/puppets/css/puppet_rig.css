@@ -274,7 +274,7 @@ body.dialogue-hover-mode #dialogueOverlay.visible:focus-within {
 }
 
 #dialogueOverlay menu[role="tablist"] button {
-  font-size: 32px;
+  font-size: 24px;
   padding: 6px 18px;
 }
 
@@ -303,7 +303,7 @@ body.freeplay-mode #dialogue-panel:empty::before {
   padding: 20px 20px;
   overflow-y: auto;
   margin-bottom: 0;
-  font-size: 35px;
+  font-size: 28px;
   line-height: 1.1;
   display: block;
 }
@@ -383,14 +383,18 @@ body.freeplay-mode #dialogue-panel:empty::before {
   min-height: 0;
   display: flex;
   flex-direction: column;
+  padding-right: 12px;
 }
 
 /* ONLY the checkbox group scrolls */
 #checkboxGroup {
   overflow-y: auto;
+  overflow-x: hidden;   /* never scroll sideways — the zoom math below keeps rows in-bounds */
   min-height: 0;
   max-height: 100%;
   flex-shrink: 1;
+  box-sizing: border-box;
+  padding-right: 10px;  /* breathing room from the panel edge */
 }
 
 /* checkbox rows */
@@ -400,6 +404,16 @@ body.freeplay-mode #dialogue-panel:empty::before {
   flex-wrap: wrap;
   overflow: visible;
   padding-bottom: 2px;
+  padding-right: 12px;
+}
+
+/* A `zoom` of N renders an element at N× its laid-out width, so a full-width row
+   at zoom 1.25 spills 25% past the panel (scrollbar + cutoff). Cap the zoomed
+   top-level rows to 1/zoom so they land back at ~100%. (.hands-sub-rows use zoom
+   0.9 and already fit, so leave them alone.) */
+#checkboxGroup > .field-row:not(.hands-sub-row) {
+  box-sizing: border-box;
+  max-width: calc(100% / 1.25);
 }
 
 /* detected output row */
@@ -449,9 +463,14 @@ body.freeplay-mode #dialogue-panel:empty::before {
 }
 
 #analysisPanel .result-value {
-  width: 100%;
+  /* width:100% + a left margin would overflow the row; subtract the margin so it
+     stays inside (and wraps text rather than pushing the row wider) */
+  box-sizing: border-box;
+  width: calc(100% - var(--checkbox-total-width, 0px));
+  max-width: 100%;
   margin-left: var(--checkbox-total-width);
   margin-top: 4px;
+  overflow-wrap: anywhere;
   color: #333;
 }
 
