@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://unpkg.com/xp.css" />
   <link rel="stylesheet" href="pieces.css" />
   <link rel="stylesheet" href="minesweeper.css" />
+  <link rel="stylesheet" href="wikipedia.css" />
 
   <!-- leaflet (for the map window) — defer keeps it from blocking initial render -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -297,7 +298,54 @@
           <img class="piece-img" src="assets/i_am_holding_out_my_hands.png" alt="memory 5" />
         </div>
         <div class="status-bar">
-          <p class="status-bar-field">i don't know what i am wanting for</p>
+          <p class="status-bar-field">i don't know what i am wanting for, exactly</p>
+        </div>
+      </div>
+      </div>
+
+      <div class="window piece-window size-lg askew-right">
+        <!-- <div class="title-bar">
+          <div class="title-bar-text"></div>
+          <div class="title-bar-controls">
+            <button aria-label="Close"></button>
+          </div>
+        </div> -->
+        <div class="window-body">
+          <div class="wiki-widget">
+            <div class="wiki-header">
+              <h1 class="wiki-title">World Wide Web</h1>
+              <a class="wiki-lang-btn" href="javascript:void(0)">
+                 <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path d="M10 1a9 9 0 1 0 0 18A9 9 0 0 0 10 1zm0 1.5c.47 0 1.2.6 1.87 2.1.3.67.55 1.48.72 2.4H7.41c.17-.92.42-1.73.72-2.4C8.8 3.1 9.53 2.5 10 2.5zm-2.6.54C6.7 4.2 6.1 5.5 5.7 7H3.16a7.51 7.51 0 0 1 4.24-3.96zM12.6 3.04A7.51 7.51 0 0 1 16.84 7h-2.55c-.4-1.5-1-2.8-1.7-3.96zM2.77 8.5h2.9c-.1.48-.17.98-.17 1.5s.07 1.02.17 1.5h-2.9A7.48 7.48 0 0 1 2.5 10c0-.52.1-1.02.27-1.5zm4.4 0h5.66c.1.47.17.97.17 1.5s-.07 1.03-.17 1.5H7.17A8.27 8.27 0 0 1 7 10c0-.53.07-1.03.17-1.5zm7.06 0h2.9c.17.48.27.98.27 1.5s-.1 1.02-.27 1.5h-2.9c.1-.48.17-.98.17-1.5s-.07-1.02-.17-1.5zM3.16 13h2.55c.4 1.5 1 2.8 1.7 3.96A7.51 7.51 0 0 1 3.16 13zm4.25 0h5.18c-.17.92-.42 1.73-.72 2.4-.67 1.5-1.4 2.1-1.87 2.1s-1.2-.6-1.87-2.1c-.3-.67-.55-1.48-.72-2.4zm6.68 0h2.55a7.51 7.51 0 0 1-4.24 3.96c.7-1.16 1.3-2.46 1.7-3.96z"/>
+                </svg>
+                152 languages
+              </a>
+            </div>
+            <div class="wiki-body">
+              <table class="infobox hproduct">
+                <tbody>
+                  <tr><th colspan="2" class="infobox-above">World Wide Web</th></tr>
+                  <tr>
+                    <th class="infobox-label">Abbreviation</th>
+                    <td class="infobox-data">WWW, W3</td>
+                  </tr>
+                  <tr>
+                    <th class="infobox-label">Year started</th>
+                    <td class="infobox-data">1989<span class="noprint">; 37&nbsp;years ago</span></td>
+                  </tr>
+                  <tr>
+                    <th class="infobox-label">First published</th>
+                    <td class="infobox-data">6&nbsp;August 1991<span class="noprint">; 34 years ago</span></td>
+                  </tr>
+                  <tr>
+                    <th class="infobox-label">Authors</th>
+                    <td class="infobox-data"><a href="https://en.wikipedia.org/wiki/Tim_Berners-Lee">Tim Berners-Lee</a></td>
+                  </tr>
+                </tbody>
+              </table>
+              <p id="wiki-paragraph">The <b>World Wide Web</b> was invented in 1989 (just 37 years ago!) as the latest innovation in humanity's great quest for each other's love and attention. It worked marvelously and also made everything worse.<sup class="reference"><a href="#">[1]</a></sup></p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -308,7 +356,7 @@
     <div class="piece-row center">
       <div class="window piece-window size-md askew-left">
         <div class="title-bar">
-          <div class="title-bar-text">fig_01 — recovered</div>
+          <div class="title-bar-text">this is the only place</div>
           <div class="title-bar-controls">
             <button aria-label="Minimize"></button>
             <button aria-label="Maximize"></button>
@@ -320,7 +368,7 @@
         </div>
 
          <div class="status-bar">
-          <p class="status-bar-field">this is home for me</p>
+          <p class="status-bar-field">this is the only place where i am willing to let people see me being so pathetic</p>
           <p class="status-bar-field">can i rest here?</p>
         </div>
       </div>
@@ -386,6 +434,87 @@
         alt: 'scribble',
       }).addTo(map);
     });
+  </script>
+
+  <script>
+    const PLAIN_TEXT = "The World Wide Web was invented in 1989 (just 37 years ago!) as the latest innovation in humanity's great quest for each other's love and attention. It worked marvelously and also made everything worse.";
+
+const LANGUAGES = [
+  { code: "fr", name: "French" },
+  { code: "de", name: "German" },
+  { code: "es", name: "Spanish" },
+  { code: "it", name: "Italian" },
+  { code: "pt", name: "Portuguese" },
+  { code: "nl", name: "Dutch" },
+  { code: "pl", name: "Polish" },
+  { code: "ru", name: "Russian" },
+  { code: "ja", name: "Japanese" },
+  { code: "zh", name: "Chinese" },
+  { code: "ko", name: "Korean" },
+  { code: "ar", name: "Arabic" },
+  { code: "hi", name: "Hindi" },
+  { code: "tr", name: "Turkish" },
+  { code: "sv", name: "Swedish" },
+  { code: "no", name: "Norwegian" },
+  { code: "fi", name: "Finnish" },
+  { code: "el", name: "Greek" },
+  { code: "he", name: "Hebrew" },
+  { code: "uk", name: "Ukrainian" },
+  { code: "cs", name: "Czech" },
+  { code: "ro", name: "Romanian" },
+  { code: "hu", name: "Hungarian" },
+  { code: "id", name: "Indonesian" },
+  { code: "vi", name: "Vietnamese" },
+  { code: "th", name: "Thai" },
+  { code: "fa", name: "Persian" },
+  { code: "sw", name: "Swahili" },
+  { code: "la", name: "Latin" },
+  { code: "eo", name: "Esperanto" },
+  { code: "tl", name: "Tagalog" },
+];
+
+let currentLang = { code: "en", name: "English" };
+
+const btn = document.querySelector(".wiki-lang-btn");
+const para = document.getElementById("wiki-paragraph");
+const GLOBE_SVG = btn.querySelector("svg").outerHTML;
+
+async function translate() {
+  const candidates = LANGUAGES.filter(l => l.code !== currentLang.code);
+  const lang = candidates[Math.floor(Math.random() * candidates.length)];
+
+  btn.classList.add("loading");
+  para.classList.add("fading");
+
+  try {
+    const [mainRes, boldRes] = await Promise.all([
+      fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(PLAIN_TEXT)}&langpair=en|${lang.code}`).then(r => r.json()),
+      fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent("World Wide Web")}&langpair=en|${lang.code}`).then(r => r.json()),
+    ]);
+
+    const translated = mainRes.responseData?.translatedText;
+    if (!translated || mainRes.responseStatus !== 200) throw new Error();
+
+    const boldPhrase = boldRes.responseData?.translatedText || "World Wide Web";
+    const bolded = translated.includes(boldPhrase)
+      ? translated.replace(boldPhrase, `<b>${boldPhrase}</b>`)
+      : translated;
+
+    currentLang = lang;
+    await new Promise(r => setTimeout(r, 200));
+    para.innerHTML = `${bolded} <sup class="reference"><a href="#">[1]</a></sup>`;
+
+  } catch {
+    await new Promise(r => setTimeout(r, 200));
+    para.innerHTML = `The <b>World Wide Web</b> was invented in 1989 (just 37 years ago!) as the latest innovation in humanity's great quest for each other's love and attention. It worked marvelously, and also made everything worse. <sup class="reference"><a href="#">[1]</a></sup>`;
+  }
+
+  para.classList.remove("fading");
+  btn.classList.remove("loading");
+  btn.innerHTML = `${GLOBE_SVG} ${lang.name}`;
+}
+
+btn.addEventListener("click", translate);
   </script>
 
 </body>
