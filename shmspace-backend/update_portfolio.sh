@@ -22,20 +22,47 @@ fi
 COMMIT_MSG="$1"
 
 # --- 1. Upload media to the server (never committed to git) ---------------------
-# rsync skips unchanged files (size + mtime) automatically, so re-running is cheap.
-MEDIA_FILES=$(find ./portfolio -type f \( \
-    -iname "*.mp4"  -o -iname "*.mov"  -o -iname "*.webm" -o \
-    -iname "*.png"  -o -iname "*.jpg"  -o -iname "*.jpeg" -o \
-    -iname "*.gif"  -o -iname "*.webp" \) 2>/dev/null)
+# A SINGLE rsync over the whole portfolio/ tree. rsync builds the file list on
+# both ends in one connection and transfers only new/changed files (size+mtime),
+# so re-running is fast even with thousands of files. The filter limits it to
+# media; captions/metadata travel via `git pull` below.
+RSYNC_FILTER=(
+    --prune-empty-dirs
+    --include='*/'
+    --include='*.mp4'  --include='*.mov'  --include='*.webm'
+    --include='*.png'  --include='*.jpg'  --include='*.jpeg'
+    --include='*.gif'  --include='*.webp'
+    --include='*.PNG'  --include='*.JPG'  --include='*.JPEG'
+    --exclude='*'
+)
 
-if [ -n "$MEDIA_FILES" ]; then
-    echo "📦 Syncing media files to server..."
-    while IFS= read -r file; do
-        remote_dir="$SERVER_BASE/$(dirname "$file")"
-        ssh -n "$SERVER" "mkdir -p '$remote_dir'"
-        rsync -e ssh "$file" "$SERVER:$SERVER_BASE/$file" \
-            && echo "  ✓ $file" || echo "  ✗ failed: $file"
-    done <<< "$MEDIA_FILES"
+echo "📦 Syncing portfolio media to server (one pass, only changed files)..."
+ssh -n "$SERVER" "mkdir -p '$SERVER_BASE/portfolio'"
+rsync -ahv "${RSYNC_FILTER[@]}" ./portfolio/ "$SERVER:$SERVER_BASE/portfolio/"
+
+# Detect media on the server that no longer exists locally. We do NOT delete it
+# (that would be destructive); instead we log it to _to_delete.txt on the server
+# for you to review and remove by hand. This diffs the two file lists directly
+# (find + comm) so it works regardless of rsync flavor (macOS ships openrsync,
+# which doesn't report dry-run deletions).
+echo "🗑  Checking for server media with no local copy..."
+MEDIA_FIND_SH='find . -type f \( -iname "*.mp4" -o -iname "*.mov" -o -iname "*.webm" -o -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.gif" -o -iname "*.webp" \) | sed "s|^\./||" | LC_ALL=C sort'
+LOCAL_LIST=$(cd ./portfolio && eval "$MEDIA_FIND_SH")
+REMOTE_LIST=$(ssh "$SERVER" "cd '$SERVER_BASE/portfolio' 2>/dev/null && $MEDIA_FIND_SH" || true)
+STALE=$(comm -13 <(printf '%s\n' "$LOCAL_LIST") <(printf '%s\n' "$REMOTE_LIST"))
+
+if [ -n "$STALE" ]; then
+    count=$(printf '%s\n' "$STALE" | grep -c .)
+    echo "  $count file(s) on server are not in your local repo:"
+    printf '%s\n' "$STALE" | sed 's|^|    portfolio/|'
+    echo "  → appended to $SERVER_BASE/portfolio/_to_delete.txt (review & delete manually)"
+    {
+        echo "# $(date '+%Y-%m-%d %H:%M:%S') — server media with no local copy:"
+        printf 'portfolio/%s\n' "$STALE"
+        echo
+    } | ssh "$SERVER" "cat >> '$SERVER_BASE/portfolio/_to_delete.txt'"
+else
+    echo "  none — server media matches local."
 fi
 
 # --- 2. Commit only what YOU staged (no blanket `git add .`) ---------------------
