@@ -73,6 +73,10 @@ app.get('/facial_recognishm/puppets-list', function (_req, res) {
 app.get('/artographer', (_req, res) => {
     res.redirect('https://artographer.snailbunny.site/');
 });
+
+app.get('/artographer/:path', (_req, res) => {
+    res.redirect(`https://artographer.snailbunny.site/${_req.params.path}`);
+});
 app.get('/walo', (_req, res) => {
     res.redirect('https://drive.google.com/file/d/1084qTZ1h9WmhtC-w2g-UyvVDSoCoEfzg/view?usp=sharing');
 });
