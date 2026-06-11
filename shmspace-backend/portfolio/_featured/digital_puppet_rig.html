@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>shmuppetry</title>
+    <link rel="stylesheet" href="https://unpkg.com/xp.css" />
+      <!-- <link rel="stylesheet" href="pieces.css" />
+ -->
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        place-items: center;
+        min-width: 320px;
+        background: #1b1b1a;
+        color: #000;
+        overflow: hidden;
+        overflow-x: hidden !important;
+        width: 100%;
+        height: 100vh;
+      }
+
+
+       .main-window {
+        width: calc(100vw - 40px);
+        height: 90vh;
+        margin: auto;
+        margin-top: 10px;
+        max-width: 95vw;
+        box-sizing: border-box;
+      }
+
+      .window-body {
+        height: calc(90vh - 70px);
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        font-size: 1.1em;
+        overflow-y: auto;
+      } 
+
+      fieldset {
+        margin: 10px;
+        padding: 30px;
+        padding-top:10px;
+        font-family: 'Courier New', monospace;
+      }
+      legend{
+        font-size: 1.2em;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      figure {
+        text-align: center;
+        margin: 15px 0;
+        max-width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      figure img {
+        max-width: 100%;
+        height: auto;
+        border: 2px solid #000;
+      }
+
+      figure figcaption {
+        font-size: 0.8em;
+        margin-top: 5px;
+        font-weight: bold;
+      }
+
+      p {
+        margin: 10px 0;
+        line-height: 1.3;
+        font-size: 14px;
+      }
+
+      ol {
+        margin: 10px 0;
+        padding-left: 25px;
+      }
+
+      li {
+        margin: 5px 0;
+      }
+
+      .nested-list {
+        margin: 5px 0 5px 20px;
+        padding-left: 20px;
+      }
+
+      .nested-list li {
+        margin: 3px 0;
+      }
+
+      h2 {
+        margin-top: 20px;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #000;
+        padding-bottom: 5px;
+        font-size: 1.5em;
+      }
+
+      section {
+        margin-bottom: 30px;
+      }
+
+      .question-block {
+        margin-bottom: 15px;
+      }
+
+      .question-block p {
+        margin: 5px 0 10px 0;
+        font-weight: bold;
+        font-size: 13px;
+      }
+
+      .option-row {
+        margin: 8px 0;
+      }
+
+      .option-row-content {
+        display: grid;
+        grid-template-columns: 70px 1fr 50px;
+        gap: 3px;
+        align-items: center;
+      }
+
+      .option-row label {
+        font-size: 0.8em;
+        white-space: normal;
+        word-break: break-word;
+      }
+
+      .option-row progress {
+        width: 100%;
+        height: 12px;
+        cursor: pointer;
+      }
+
+      .option-row span {
+        font-size: 0.75em;
+        color: #666;
+        white-space: nowrap;
+        text-align: right;
+      }
+
+
+      #customTooltip {
+        position: fixed;
+        background-color: rgb(255, 255, 228);
+        border: 1px solid #000;
+        padding: 5px 7px;
+        font-family: Arial, sans-serif;
+        font-size: 0.85em;
+        pointer-events: none;
+        z-index: 9999;
+        display: none;
+        white-space: nowrap;
+        box-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+      }
+
+    </style>
+  </head>
+  <body>
+            <div class="window main-window">
+          <div class="title-bar">
+            <div class="title-bar-text">shmuppetry | by shm garanganao almeda</div>
+            <div class="title-bar-controls">
+                <a href="https://shmuh.co/portfolio#_featured/digital_puppet_rig.json" aria-label="Minimize"><button aria-label="Minimize"></button></a>
+
+                <a href="https://shmuh.co/portfolio#_featured/digital_puppet_rig.json" aria-label="Close"><button aria-label="Close"></button></a>
+            </div>
+          </div>
+          <div class="window-body" style="overflow: none;">
+            <fieldset style="overflow-y: scroll; margin: 5px; max-height: 85%;">
+              <!-- Video Player Fieldset -->
+                <h3 style="text-align: center;">shmuppetry</h3>
+                <fieldset>
+                  <legend>about</legend>
+                <p style="text-align: left; padding-left: 20px; padding-right: 20px;">this page is about shm's digital puppet rig! i'll also upload recordings of my <em>shmuppet shows</em> (lectures, performances, talks) that I've given using the system. 
+                  <br>
+                  the shmuppetry rig is a big long index.html file + JavaScript + CSS (including my favorite css library, xp.css)
+                  <br>
+                  
+                </p>
+                <div style="text-align: center;">
+                  <strong> i host a live demo version of it that you can play with here:</strong>
+                  <br>
+                  <button onclick="window.open('https://shmuh.co/puppets', '_blank')" style="margin: 5px; padding: 15px 15px; font-size: 1.5em; cursor: pointer;"><em>puppets, please</em><br><span style="font-size: 0.75em; color:chocolate">(click for live demo!)</span></button>
+                </div>
+                </fieldset>
+                  
+
+               <fieldset>
+                <legend>recordings</legend>
+                <h2>puppets puppeting puppets</h2>
+                <p description>  
+                  <strong>June 5, 2026</strong>
+                  <br>
+                  <em>for the <a href="https://singlab.org/events.html" target="_blank">UC Davis Computational Artifice Symposium</a></em>
+                  <br>
+                  a puppet show</a> <em>about</em> puppets, and narrative agents as puppets puppeting puppets.
+                  <br>
+                  thank you <a href="https://joshmccoy.com/" target="_blank">Josh McCoy</a> and the <a href="https://singlab.org/index.html" target="_blank">SING Lab</a> for having me!</p>
+                <div style="text-align: center; padding: 15px 0;">
+                  <video width="800" height="600" controls style="max-width: 100%; height: auto;">
+                    <source src="../talk_recordings/computational_artifice_talk.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+
+                <h2 id="cs10">an introduction to hci</h2>
+                <p description>  
+                  
+                  <strong>4/8/2026</strong>
+                  <br>
+                  <em>Guest Lecture for CS10: The Beauty and Joy of Computing, Spring 2026</a></em>
+                  <br>
+                  this is my third time giving the semesterly "Intro to HCI" guest lecture for CS10, but my first time performing it as a puppet show!
+                                   <br>
+thank you Dan Garcia and the <a href="https://cs10.org/sp26/">Beauty & Joy of Computing</a> community for having me.
+ 
+                  <div style="text-align: center; padding: 15px 0;">
+                  <video width="800" height="600" controls style="max-width: 100%; height: auto;">
+                    <source src="../talk_recordings/cs10talk.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div> 
+
+                      <div style="text-align: center; padding: 15px 0;">
+                  <video width="800" height="600" controls style="max-width: 100%; height: auto;">
+                    <source src="../talk_recordings/ShmAlmeda_LightningTalk.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+
+                <h2 id="cs10">an introduction to hci</h2>
+                <p description>  
+                  
+                  <strong>4/8/2026</strong>
+                  <br>
+                  <em>Guest Lecture for CS10: The Beauty and Joy of Computing, Spring 2026</a></em>
+                  <br>
+                  this is my third time giving the semesterly "Intro to HCI" guest lecture for CS10, but my first time performing it as a puppet show!
+                                   <br>
+thank you Dan Garcia and the <a href="https://cs10.org/sp26/">Beauty & Joy of Computing</a> community for having me.
+  
+                <div style="text-align: center; padding: 15px 0;">
+                  <video width="800" height="600" controls style="max-width: 100%; height: auto;">
+                    <source src="../talk_recordings/recognizing_my_self.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </fieldset>
+
+          </div>
+        </div>
+      
+  </body>
+</html> 
