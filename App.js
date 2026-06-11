@@ -78,6 +78,8 @@ app.get('/bart', (_req, res) => {
     res.redirect('https://art.snailbunny.site/portfolio/0_FEATURED/shm_X_bart.html');
 });
 
+
+
 app.get('/artographer/:path', (_req, res) => {
     res.redirect(`https://artographer.snailbunny.site/${_req.params.path}`);
 });
@@ -86,6 +88,10 @@ app.get('/walo', (_req, res) => {
 });
 app.get('/shmuppetry', (_req, res) => {
     res.redirect('https://art.snailbunny.site/portfolio/0_FEATURED/shmuppetry.html');
+});
+
+app.get('/tube', (_req, res) => {
+    res.redirect('https://art.snailbunny.site/api/bart/tube');
 });
 
 // Generic puppeteering rig — all puppet routes live alongside the rig.
