@@ -46,6 +46,14 @@ module.exports = (publicPath) => {
         res.sendFile(path.join(puppetsRoot, 'index.html'));
     });
 
+    // Raw source view — /puppets/source serves index.html as text/plain so a
+    // browser shows the markup instead of rendering it. Handy as a clickable
+    // "view the HTML" link (view-source: can't be linked to directly).
+    router.get('/puppets/source', function (_req, res) {
+        res.type('text/plain; charset=utf-8');
+        res.sendFile(path.join(puppetsRoot, 'index.html'));
+    });
+
     // Available puppet collections — the subfolders shared by hand_puppets/ &
     // head_puppets/ (e.g. ["cs10", "default", "lightning_talk"]). Driven off
     // hand_puppets since every collection has hand puppets; head puppets are optional.
