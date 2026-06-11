@@ -30,7 +30,7 @@
         height: 90vh;
         margin: auto;
         margin-top: 10px;
-        max-width: 95vw;
+        max-width: 75vw;
         box-sizing: border-box;
       }
 
@@ -42,6 +42,7 @@
         font-size: 1.1em;
         overflow-y: auto;
       } 
+
 
       fieldset {
         margin: 10px;
@@ -189,16 +190,18 @@
                       it is also an archive for <em>shmuppet shows</em> (lectures, performances, talks, etc., that I've given using the system.)
                       <br>
                     </p>
-                <ul class="tree-view">
+                <ul class="tree-view" style="font-size: 1em;">
                   <li>
                     <details>
                       <summary>what is a digital puppetry rig? + implementation details</summary>
                       <ul>
                         <li>
                           the shmuppetry rig is a big long index.html file + JavaScript + CSS (including my favorite css library, xp.css) for performing digital puppetry in the browser. It draws from a script (written in JSON; each scene is a JSON object that sets the dialogue and toggles different settings and puppets on / off) and a couple folders full of assets (pngs, slide images, videos).
-                          <br>
-                          i made it in a 72-hour sprint right before its first performance.
-                          <br>
+                          </li>
+                        <li>
+                          i made it in a 72-hour sprint right before its first performance. so the base set of a features is a bit biased to the needs of that performance... but I like to add new features / improvements / puppets each time i use it.
+                        </li>
+                          <li>
                           i'm using <a href="https://justadudewhohacks.github.io/face-api.js/docs/index.html" target="_blank">face-api.js</a> and <a href="https://developers.google.com/edge/mediapipe/solutions/vision/hand_landmarker" target="_blank">mediapipe</a> for the face and hand tracking.
                           i generally use VSCode + Claude to write code, and test right in the web browser. I also like to make my assets right in <a href="https://jspaint.app/" target="_blank">jspaint</a> if i can help it.
                         </li>
