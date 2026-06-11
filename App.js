@@ -80,6 +80,9 @@ app.get('/artographer/:path', (_req, res) => {
 app.get('/walo', (_req, res) => {
     res.redirect('https://drive.google.com/file/d/1084qTZ1h9WmhtC-w2g-UyvVDSoCoEfzg/view?usp=sharing');
 });
+app.get('/shmuppetry', (_req, res) => {
+    res.redirect('https://art.snailbunny.site/portfolio/0_FEATURED/shmuppetry.html');
+});
 
 // Generic puppeteering rig — all puppet routes live alongside the rig.
 app.use(require('./public/puppets/puppet_routes')(publicPath));
