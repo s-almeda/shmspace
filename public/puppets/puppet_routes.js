@@ -49,7 +49,7 @@ module.exports = (publicPath) => {
     // Raw source view — /puppets/source serves index.html as text/plain so a
     // browser shows the markup instead of rendering it. Handy as a clickable
     // "view the HTML" link (view-source: can't be linked to directly).
-    router.get('/puppets/source', function (_req, res) {
+    router.get(['/puppets/source', '/puppets/source/index.html'], function (_req, res) {
         res.type('text/plain; charset=utf-8');
         res.sendFile(path.join(puppetsRoot, 'index.html'));
     });
