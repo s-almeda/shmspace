@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>shm x BART</title>
+    <link rel="stylesheet" href="https://unpkg.com/xp.css" />
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        place-items: center;
+        min-width: 320px;
+        background: #1b1b1a;
+        color: #000;
+        overflow: hidden;
+        overflow-x: hidden !important;
+        width: 100%;
+        height: 100vh;
+      }
+
+
+       .main-window {
+        width: calc(100vw - 40px);
+        height: 90vh;
+        margin: auto;
+        margin-top: 10px;
+        max-width: 75vw;
+        box-sizing: border-box;
+      }
+
+      .window-body {
+        height: calc(90vh - 70px);
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        font-size: 1.1em;
+        overflow-y: auto;
+        scroll-behavior: smooth;
+      }
+
+
+      fieldset {
+        margin: 10px;
+        padding: 30px;
+        padding-top:10px;
+        font-family: 'Courier New', monospace;
+        scroll-behavior: smooth;
+      }
+      legend{
+        font-size: 1.2em;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      figure {
+        text-align: center;
+        margin: 15px 0;
+        max-width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      figure img {
+        max-width: 100%;
+        height: auto;
+        border: 2px solid #000;
+      }
+
+      figure figcaption {
+        font-size: 0.8em;
+        margin-top: 5px;
+        font-weight: bold;
+      }
+
+      ol {
+        margin: 10px 0;
+        padding-left: 25px;
+      }
+
+      li {
+        margin: 5px 0;
+      }
+
+      .nested-list {
+        margin: 5px 0 5px 20px;
+        padding-left: 20px;
+      }
+
+      .nested-list li {
+        margin: 3px 0;
+      }
+
+      h2 {
+        margin-top: 20px;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #000;
+        padding-bottom: 5px;
+        font-size: 1.5em;
+        scroll-margin-top: 10px;
+      }
+
+      section {
+        margin-bottom: 30px;
+      }
+
+      .tree-view a{
+        color: blue !important;
+        text-decoration: underline;
+      }
+      .tree-view a:visited {
+        color: purple !important;
+        text-decoration: underline;
+      }
+      .tree-view summary {
+        font-weight: bold;
+        font-size: 1.1em;
+        cursor: pointer;
+        margin: 6px 0;
+      }
+      .insta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: center;
+        padding: 15px 0;
+      }
+    </style>
+  </head>
+  <body>
+            <div class="window main-window">
+          <div class="title-bar" style="padding:7px; height:2em">
+            <div class="title-bar-text">shmuh.co/bart • shm garanganao almeda</div>
+
+            <div class="title-bar-controls">
+
+                <a href="https://shmuh.co/portfolio#0_FEATURED/shm_X_bart.json" aria-label="Minimize"><button aria-label="Minimize"></button></a>
+
+                <a href="https://shmuh.co/portfolio#0_FEATURED/shm_X_bart.json" aria-label="Close"><button aria-label="Close"></button></a>
+
+                           </div>
+          </div>
+          <div class="window-body" style="overflow: none;">
+            <fieldset style="overflow-y: scroll; margin: 5px; max-height: 85%;">
+                <h3 style="text-align: center;">
+                  shm x BART 🚆
+                </h3>
+
+                <fieldset>
+                  <legend>about</legend>
+                <p style="text-align: left; padding-left: 20px; padding-right: 20px;">
+                  shm likes trains. they have made a number of art pieces made about, and with, <a href="https://www.bart.gov/" target="_blank">BART</a> (the Bay Area Rapid Transit system), including two BART costumes (with working lights!) and a sound sculpture that uses real-time departure data, with their friends <a href="https://www.oliverdicicco.com/" target="_blank">Oliver DiCiccio</a> and <a href="https://www.sudhutewari.com/" target="_blank">Sudhu Tewari</a>.
+                  <br><br>
+                  here i will enumerate my BART-related projects
+                </p>
+
+                <ul class="tree-view" style="font-size: 1em;">
+
+                  <!-- ============ PROJECT 0: LEGACY BART 2023 ============ -->
+                  <li>
+                    <details closed>
+                      <summary>Legacy BART (2023)</summary>
+                      <div style="padding: 5px 10px;">
+                        <p>
+                        i made this Halloween costume for fun in 2023! I wore it to UIST 2023, and it also doubled as a mini portable workstation lol. It has working headlights, a small inside table surface where I could put my laptop + a place to store my phone / portable charger / put a cup of coffee.
+                        <br>  
+                        the Legacy BART costume was graciously awarded <strong>Best Craftsmanship at the UIST 2023 costume contest</strong>, organized by my friend and research senpai <a href="https://jingyi.me/" target="_blank">Jingyi Li</a>! 
+                          <br>
+                          (...meaning this is technically my first HCI research conference award...)
+                          <br>
+                          <em>photo credits to my dear friends <a href="https://jamesdsmith.net/" target="_blank">James D. Smith</a>, <a href="https://timothyaveni.com/" target="_blank">Timothy J. Aveni</a>, and <a href="https://hilamor.com/" target="_blank">Hila Mor</a> for all of my Legacy BART costume photos.</em>
+                        </p>
+
+                        <figure>
+                          <img src="../shm_X_BART/Train_2023.jpg" alt="Legacy BART costume, 2023" />
+                          <figcaption>fig. the Legacy BART costume (2023)</figcaption>
+                        </figure>
+
+                        <figure>
+                          <img src="../shm_X_BART/00_legacy_BART_2023/BARTshm_at_UIST.jpg" alt="shm wearing the Legacy BART costume at UIST 2023" />
+                          <figcaption>fig. at UIST 2023 in San Francisco</figcaption>
+                        </figure>
+
+                        <figure>
+                          <img src="../shm_X_BART/00_legacy_BART_2023/IMG_7727.jpg" alt="Legacy BART costume detail" />
+                        </figure>
+
+                        <figure>
+                          <img src="../shm_X_BART/00_legacy_BART_2023/IMG_7728.jpg" alt="Legacy BART costume detail" />
+                        </figure>
+
+                        <figure>
+                          <img src="../shm_X_BART/00_legacy_BART_2023/IMG_0703.jpg" alt="Legacy BART costume" />
+                        </figure>
+
+                        <figure>
+                          <img src="../shm_X_BART/00_legacy_BART_2023/IMG_0708.jpg" alt="Legacy BART costume" />
+                        </figure>
+
+                        <figure>
+                          <img src="../shm_X_BART/00_legacy_BART_2023/20231031_224012(0).jpg" alt="Legacy BART costume on Halloween night" />
+                        </figure>
+
+                        <div style="text-align: center; padding: 15px 0;">
+                          <video width="800" height="600" controls style="max-width: 100%; height: auto;">
+                            <source src="../shm_X_BART/00_legacy_BART_2023/IMG_0703.MP4" type="video/mp4">
+                            Your browser does not support the video tag.
+                          </video>
+                        </div>
+
+                        <div style="text-align: center; padding: 15px 0;">
+                          <video width="800" height="600" controls style="max-width: 100%; height: auto;">
+                            <source src="../shm_X_BART/00_legacy_BART_2023/20231031_224011_Original.MP4" type="video/mp4">
+                            Your browser does not support the video tag.
+                          </video>
+                        </div>
+                      </div>
+                    </details>
+                  </li>
+
+                  <!-- ============ PROJECT 1: FLEET OF THE FUTURE 2024 ============ -->
+                  <li>
+                    <details>
+                      <summary>Fleet of the Future (2024)</summary>
+                      <div style="padding: 5px 10px;">
+                        <p>
+                          after seeing the legacy BART costume on social media, BART reached out to commission me to make another for Halloween 2024! this time modeled on the new "Fleet of the Future" cars. they also invited me to make some instructional booklets documenting my build process for the growing BART costume-making community! 
+                          <br>
+                          This one also has working (rainbow!) headlights, and an LED matrix sign that displays the BART "line" and "next stop" ! 
+                          <br><br>
+                          thank you to <strong> BART's official <a href="https://www.instagram.com/sfbartable/" target="_blank">@sfbartable</a> social media team</strong> for supporting this awesome project! 
+                          <br>
+                          <em>Photography by the talented Ricky Chen (<a href="https://www.instagram.com/ttl.media/" target="_blank">@ttl.media</a>)!</em>
+                        </p>
+
+                        <figure>
+                          <img src="../shm_X_BART/01_fleet_of_the_future_2024/IMG_8506.jpg" alt="Fleet of the Future BART costume" />
+                          <figcaption>fig. the Fleet of the Future costume (2024)</figcaption>
+                        </figure>
+
+                        <figure>
+                          <img src="../shm_X_BART/01_fleet_of_the_future_2024/IMG_8567.jpg" alt="Fleet of the Future BART costume" />
+                        </figure>
+
+                        <figure>
+                          <img src="../shm_X_BART/01_fleet_of_the_future_2024/IMG_8587.jpg" alt="Fleet of the Future BART costume" />
+                        </figure>
+
+                        <figure>
+                          <img src="../shm_X_BART/01_fleet_of_the_future_2024/IMG_8594.jpg" alt="Fleet of the Future BART costume" />
+                        </figure>
+
+                        <figure>
+                          <img src="../shm_X_BART/01_fleet_of_the_future_2024/IMG_8643.jpg" alt="Fleet of the Future BART costume" />
+                        </figure>
+
+                        <figure>
+                          <img src="../shm_X_BART/01_fleet_of_the_future_2024/IMG_8661.jpg" alt="Fleet of the Future BART costume" />
+                        </figure>
+
+                        <figure>
+                          <img src="../shm_X_BART/01_fleet_of_the_future_2024/IMG_8724.jpg" alt="Fleet of the Future BART costume" />
+                        </figure>
+
+                        <figure>
+                          <img src="../shm_X_BART/01_fleet_of_the_future_2024/IMG_8779.jpg" alt="Fleet of the Future BART costume" />
+                        </figure>
+
+                        <figure>
+                          <img src="../shm_X_BART/01_fleet_of_the_future_2024/IMG_8791.jpg" alt="Fleet of the Future BART costume" />
+                        </figure>
+
+                        <figure>
+                          <img src="../shm_X_BART/01_fleet_of_the_future_2024/IMG_8803.jpg" alt="Fleet of the Future BART costume" />
+                        </figure>
+
+                        <figure>
+                          <img src="../shm_X_BART/01_fleet_of_the_future_2024/IMG_8818.jpg" alt="Fleet of the Future BART costume" />
+                        </figure>
+
+                        <figure>
+                          <img src="../shm_X_BART/01_fleet_of_the_future_2024/IMG_8877.jpg" alt="Fleet of the Future BART costume" />
+                          <figcaption>fig. photos by Ricky Chen (@ttl.media)</figcaption>
+                        </figure>
+
+                        <p style="text-align: center;"><strong>i made a series of short-form video content for @sfbartable:</strong></p>
+                        <div class="insta-row">
+                          <iframe src="https://www.instagram.com/reel/DBM_kslypUp/embed"
+                                  frameborder="0"
+                                  scrolling="no"
+                                  style="width: 100%; max-width: 400px; height: 480px;"
+                                  sandbox="allow-same-origin allow-scripts allow-pointer-lock allow-forms allow-popups allow-popups-to-escape-sandbox">
+                          </iframe>
+                          <iframe src="https://www.instagram.com/reel/DBy5Esov9vI/embed"
+                                  frameborder="0"
+                                  scrolling="no"
+                                  style="width: 100%; max-width: 400px; height: 480px;"
+                                  sandbox="allow-same-origin allow-scripts allow-pointer-lock allow-forms allow-popups allow-popups-to-escape-sandbox">
+                          </iframe>
+                        </div>
+
+                        <ul class="tree-view" style="font-size: 1em;">
+                          <li>
+                            <details>
+                              <summary>the BARTstructions booklet</summary>
+                              <div style="padding: 5px 10px;">
+                                <p>the build booklet / instructions commissioned alongside the costume — including a soldering guide for the lights.</p>
+                                <figure>
+                                  <img src="../shm_X_BART/BARTstructions/BARTstructions-1.png" alt="BARTstructions page 1" />
+                                </figure>
+                                <figure>
+                                  <img src="../shm_X_BART/BARTstructions/BARTstructions-2.png" alt="BARTstructions page 2" />
+                                </figure>
+                                <figure>
+                                  <img src="../shm_X_BART/BARTstructions/BARTstructions-3.png" alt="BARTstructions page 3" />
+                                </figure>
+                                <figure>
+                                  <img src="../shm_X_BART/BARTstructions/BARTstructions-4.png" alt="BARTstructions page 4" />
+                                </figure>
+                                <figure>
+                                  <img src="../shm_X_BART/BARTstructions/BARTstructions-5.png" alt="BARTstructions page 5" />
+                                </figure>
+                                <figure>
+                                  <img src="../shm_X_BART/BARTstructions/BARTstructions-6.png" alt="BARTstructions page 6" />
+                                </figure>
+                                <figure>
+                                  <img src="../shm_X_BART/BARTstructions/BARTstructions-7.png" alt="BARTstructions page 7" />
+                                </figure>
+                                <figure>
+                                  <img src="../shm_X_BART/BARTstructions/BARTstructions-8.png" alt="BARTstructions page 8" />
+                                </figure>
+                                <figure>
+                                  <img src="../shm_X_BART/BART_soldering_guide.png" alt="BART soldering guide" />
+                                  <figcaption>fig. the soldering guide for the lights</figcaption>
+                                </figure>
+                              </div>
+                            </details>
+                          </li>
+                        </ul>
+                      </div>
+                    </details>
+                  </li>
+
+                  <!-- ============ PROJECT 2: TRANSBAY TUBE ============ -->
+                  <li>
+                    <details>
+                      <summary>Transbay Tubes (2026)</summary>
+                      <div style="padding: 5px 10px;">
+                        <p>
+                          <a href="https://art.snailbunny.site/api/bart/tube" target="_blank">Transbay Tubes</a> is an instrument played by BART. It uses <strong>real-time departure data</strong> to produce sound whenever a BART train enters the <a href="https://en.wikipedia.org/wiki/Transbay_Tube" target="_blank">Transbay Tube</a> that connects the West Oakland and Embarcadero stations. Check out the <a href="https://art.snailbunny.site/bart" target="_blank">web monitor page</a> to learn more and see its current status!
+                          <br><br>
+                          </p>
+                    </details>
+                  </li>
+                </ul>
+                </fieldset>
+
+            </fieldset>
+          </div>
+        </div>
+
+  </body>
+</html>

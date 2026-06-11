@@ -1,0 +1,6 @@
+{
+  "title": "shm x BART",
+  "preview": "../shm_X_BART/Train_2023.jpg",
+  "link": "https://art.snailbunny.site/portfolio/0_FEATURED/shm_X_bart.html",
+  "css": "body { position: relative; } body::before { content: ''; position: fixed; inset: 0; background: url('https://art.snailbunny.site/portfolio/shm_X_BART/Train_2023.jpg') center / cover no-repeat; filter: blur(20px); transform: scale(1.1); z-index: -1; }"
+}
