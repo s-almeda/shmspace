@@ -2,7 +2,7 @@
 /**
  * generate-interactive-entries.js
  *
- * Scans shmspace-backend/portfolio/00_interactive/ for .html files and:
+ * Scans shmspace-backend/portfolio/0_FEATURED/ for .html files and:
  *   - Screenshots each via headless Chrome (needs the dev server running on localhost:3001)
  *   - Saves the screenshot to assets/<name>_preview.png
  *   - Creates <name>.json if none exists (with preview, link, css fields)
@@ -20,10 +20,10 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 
-const INTERACTIVE_DIR = path.join(__dirname, '..', 'portfolio', '00_interactive');
+const INTERACTIVE_DIR = path.join(__dirname, '..', 'portfolio', '0_FEATURED');
 const ASSETS_DIR = path.join(INTERACTIVE_DIR, 'assets');
-const BASE_LOCAL_URL = 'http://localhost:3001/portfolio/00_interactive';
-const BASE_PROD_URL = 'https://art.snailbunny.site/portfolio/00_interactive';
+const BASE_LOCAL_URL = 'http://localhost:3001/portfolio/0_FEATURED';
+const BASE_PROD_URL = 'https://art.snailbunny.site/portfolio/0_FEATURED';
 const SCREENSHOT_WIDTH = 1280;
 const SCREENSHOT_HEIGHT = 720;
 
@@ -37,7 +37,7 @@ async function main() {
   );
 
   if (entries.length === 0) {
-    console.log('No .html files found in 00_interactive/');
+    console.log('No .html files found in 0_FEATURED/');
     return;
   }
 
