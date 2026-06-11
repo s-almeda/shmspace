@@ -1,6 +1,6 @@
 {
   "title": "shmuppetry",
   "preview": "assets/shmuppetry.gif",
-  "link": "https://shmuh.co/puppets",
+  "link": "https://art.snailbunny.site/portfolio/0_FEATURED/shmuppetry.html",
   "css": "body { position: relative; } body::before { content: ''; position: fixed; inset: 0; background: url('https://art.snailbunny.site/portfolio/0_FEATURED/assets/shmuppetry.gif') center / cover no-repeat; filter: blur(20px); transform: scale(1.1); z-index: -1; }"
 }
