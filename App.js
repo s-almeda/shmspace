@@ -74,6 +74,10 @@ app.get('/artographer', (_req, res) => {
     res.redirect('https://artographer.snailbunny.site/');
 });
 
+app.get('/bart', (_req, res) => {
+    res.redirect('https://art.snailbunny.site/portfolio/0_FEATURED/shm_X_bart.html');
+});
+
 app.get('/artographer/:path', (_req, res) => {
     res.redirect(`https://artographer.snailbunny.site/${_req.params.path}`);
 });
