@@ -2,3 +2,17 @@ node_modules/
 .env
 garbage_collections/collections.db
 garbage_collections/uploads/
+
+# Portfolio media — uploaded to the server via rsync (update_portfolio.sh),
+# never committed to git. Captions/metadata (.md, .html, .json) stay tracked.
+portfolio/**/*.mp4
+portfolio/**/*.mov
+portfolio/**/*.webm
+portfolio/**/*.png
+portfolio/**/*.jpg
+portfolio/**/*.jpeg
+portfolio/**/*.gif
+portfolio/**/*.webp
+portfolio/**/*.PNG
+portfolio/**/*.JPG
+portfolio/**/*.JPEG
