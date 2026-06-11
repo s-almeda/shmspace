@@ -75,11 +75,11 @@
         font-weight: bold;
       }
 
-      p {
+      /* p {
         margin: 10px 0;
         line-height: 1.3;
         font-size: 14px;
-      }
+      } */
 
       ol {
         margin: 10px 0;
@@ -170,7 +170,7 @@
   </head>
   <body>
             <div class="window main-window">
-          <div class="title-bar">
+          <div class="title-bar" style="padding:7px; height:2em">
             <div class="title-bar-text">shmuppetry | by shm garanganao almeda</div>
             <div class="title-bar-controls">
                 <a href="https://shmuh.co/portfolio#0_FEATURED/shmuppetry.json" aria-label="Minimize"><button aria-label="Minimize"></button></a>
@@ -184,16 +184,36 @@
                 <h3 style="text-align: center;">shmuppetry</h3>
                 <fieldset>
                   <legend>about</legend>
-                <p style="text-align: left; padding-left: 20px; padding-right: 20px;">this page is about shm's digital puppet rig! i'll also upload recordings of my <em>shmuppet shows</em> (lectures, performances, talks) that I've given using the system. 
+                <p style="text-align: left; padding-left: 20px; padding-right: 20px;">this is a page about shm's digital puppet rig. 
                   <br>
-                  the shmuppetry rig is a big long index.html file + JavaScript + CSS (including my favorite css library, xp.css)
-                  <br>
-                  
-                </p>
+                      it is also an archive for <em>shmuppet shows</em> (lectures, performances, talks, etc., that I've given using the system.)
+                      <br>
+                    </p>
+                <ul class="tree-view">
+                  <li>
+                    <details>
+                      <summary>what is a digital puppetry rig? + implementation details</summary>
+                      <ul>
+                        <li>
+                          the shmuppetry rig is a big long index.html file + JavaScript + CSS (including my favorite css library, xp.css) for performing digital puppetry in the browser. It draws from a script (written in JSON; each scene is a JSON object that sets the dialogue and toggles different settings and puppets on / off) and a couple folders full of assets (pngs, slide images, videos).
+                          <br>
+                          i made it in a 72-hour sprint right before its first performance.
+                          <br>
+                          i'm using <a href="https://justadudewhohacks.github.io/face-api.js/docs/index.html" target="_blank">face-api.js</a> and <a href="https://developers.google.com/edge/mediapipe/solutions/vision/hand_landmarker" target="_blank">mediapipe</a> for the face and hand tracking.
+                          i generally use VSCode + Claude to write code, and test right in the web browser. I also like to make my assets right in <a href="https://jspaint.app/" target="_blank">jspaint</a> if i can help it.
+                        </li>
+                      </ul>
+                    </details>
+                  </li>
+                </ul>
+                <br> 
                 <div style="text-align: center;">
-                  <strong> i host a live demo version of it that you can play with here:</strong>
+                  
+                  <strong> i host a live demo version of the system that you can play with here:</strong>
                   <br>
                   <button onclick="window.open('https://shmuh.co/puppets', '_blank')" style="margin: 5px; padding: 15px 15px; font-size: 1.5em; cursor: pointer;"><em>puppets, please</em><br><span style="font-size: 0.75em; color:chocolate">(click for live demo!)</span></button>
+                  <br>
+                  you can even upload your own puppets. go forth and puppet!! 
                 </div>
                 </fieldset>
                   
@@ -240,7 +260,7 @@ thank you Dan Garcia and the Beauty & Joy of Computing course community for havi
                   
                   <strong>March 20, 2026</strong>
                   <br>
-                  For <em>Interface to Agency:</em><a href="https://design.berkeley.edu/forum" target="_blank">MDes Forum on Emerging Technologies</a> at UC Berkeley.
+                  For <em>Interface to Agency: </em><a href="https://design.berkeley.edu/forum" target="_blank">MDes Forum on Emerging Technologies</a> at UC Berkeley.
 </a></em>
                   <br>
                   thanks <a href="http://ksteinfe.com/index.html" target="_blank">Kyle Steinfeld</a> and <a href="https://design.berkeley.edu/profiles/sabrina-merlo" target="_blank">Sabrina Merlo</a> for having me!
