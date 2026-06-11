@@ -4,22 +4,22 @@
 # Workflow:
 #   1. Media files (images + video) under portfolio/ are rsync'd straight to the
 #      server. They are NOT committed to git (see .gitignore).
-#   2. You stage the text/code/metadata changes you actually want yourself
-#      (git add <file> ...). This script commits + pushes ONLY what is staged.
-#   3. The server pulls and restarts.
+#   2. If you've staged changes (git add <file> ...), it commits + pushes ONLY
+#      those (with a confirm). If nothing is staged, it skips the commit.
+#   3. The server ALWAYS pulls (picking up any pushed commits) and restarts pm2 —
+#      even when there's no git activity, so media-only or already-committed
+#      updates still go live.
 #
-# Usage: ./update_portfolio.sh "commit message"
+# Usage: ./update_portfolio.sh ["commit message"]   (message only needed to commit)
 
 set -euo pipefail
 
 SERVER="root@45.79.81.173"
 SERVER_BASE="/root/shmspace/shmspace-backend"
 
-if [ -z "${1:-}" ]; then
-    echo "Usage: ./update_portfolio.sh \"commit message\""
-    exit 1
-fi
-COMMIT_MSG="$1"
+# Commit message is optional — only needed if you have staged changes to commit
+# (checked below). With nothing staged, the script still updates the server.
+COMMIT_MSG="${1:-}"
 
 # --- 1. Upload media to the server (never committed to git) ---------------------
 # A SINGLE rsync over the whole portfolio/ tree. rsync builds the file list on
@@ -82,27 +82,31 @@ else
     ssh "$SERVER" "rm -f '$LOG'"
 fi
 
-# --- 2. Commit only what YOU staged (no blanket `git add .`) ---------------------
+# --- 2. Commit staged changes (if any) ------------------------------------------
+# Optional: if nothing is staged we skip the commit but STILL update the server
+# below — media was already rsync'd, and there may be unpushed commits to deploy.
 echo ""
-echo "📁 Staged changes to be committed:"
 if git diff --cached --quiet; then
-    echo "  (nothing staged)"
+    echo "📁 Nothing staged — skipping commit (server still updates below)."
+else
+    echo "📁 Staged changes to be committed:"
+    git diff --cached --stat
+    if [ -z "$COMMIT_MSG" ]; then
+        echo ""
+        echo "⚠️  You have staged changes but gave no commit message."
+        echo "    Usage: ./update_portfolio.sh \"commit message\""
+        exit 1
+    fi
     echo ""
-    echo "⚠️  Nothing is staged, so there is nothing to commit."
-    echo "    Stage the files you want with:  git add <file> ..."
-    echo "    (media files are uploaded above and don't need committing)"
-    exit 1
+    read -r -p "Commit these staged changes? [y/N] " confirm
+    case "$confirm" in
+        [yY]|[yY][eE][sS]) git commit -m "$COMMIT_MSG" ;;
+        *) echo "Skipping commit; staged changes left untouched." ;;
+    esac
 fi
-git diff --cached --stat
 
-echo ""
-read -r -p "Commit and push these staged changes? [y/N] " confirm
-case "$confirm" in
-    [yY]|[yY][eE][sS]) ;;
-    *) echo "Aborted. Staged changes left untouched."; exit 1 ;;
-esac
-
-git commit -m "$COMMIT_MSG"
+# Push any local commits not yet on origin so the server's pull picks them up
+# (no-op / "Everything up-to-date" if there's nothing to push).
 git push
 
 # --- 3. Update the server -------------------------------------------------------
