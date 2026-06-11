@@ -1,0 +1,1 @@
+about (the shmuppetry rig) and shm's digital puppet rig + recordings of their shmuppet shows (performances, talks, lectures using the digital puppetry rig)
