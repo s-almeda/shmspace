@@ -49,20 +49,37 @@ echo "🗑  Checking for server media with no local copy..."
 MEDIA_FIND_SH='find . -type f \( -iname "*.mp4" -o -iname "*.mov" -o -iname "*.webm" -o -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.gif" -o -iname "*.webp" \) | sed "s|^\./||" | LC_ALL=C sort'
 LOCAL_LIST=$(cd ./portfolio && eval "$MEDIA_FIND_SH")
 REMOTE_LIST=$(ssh "$SERVER" "cd '$SERVER_BASE/portfolio' 2>/dev/null && $MEDIA_FIND_SH" || true)
-STALE=$(comm -13 <(printf '%s\n' "$LOCAL_LIST") <(printf '%s\n' "$REMOTE_LIST"))
 
+# Stale = files on the server but not local. Use grep -Fxv (fixed-string,
+# whole-line, inverted) rather than comm: comm assumes both inputs are sorted in
+# the *current locale's* collation, but we sorted with LC_ALL=C — in a UTF-8
+# shell that mismatch makes comm desync and report false positives. grep -Fxv is
+# collation-independent. Guard against an empty local list (which would otherwise
+# flag every server file) — that means find found nothing and is never correct.
+if [ -z "$LOCAL_LIST" ]; then
+    echo "  ⚠️  No local media found under ./portfolio — skipping stale check."
+    STALE=""
+else
+    STALE=$(printf '%s\n' "$REMOTE_LIST" | grep -Fxv -f <(printf '%s\n' "$LOCAL_LIST") || true)
+fi
+
+LOG="$SERVER_BASE/portfolio/_to_delete.txt"
 if [ -n "$STALE" ]; then
     count=$(printf '%s\n' "$STALE" | grep -c .)
     echo "  $count file(s) on server are not in your local repo:"
     printf '%s\n' "$STALE" | sed 's|^|    portfolio/|'
-    echo "  → appended to $SERVER_BASE/portfolio/_to_delete.txt (review & delete manually)"
+    echo "  → written to $LOG (review with ./delete_portfolio.sh)"
+    # Overwrite (not append) so the log always reflects the CURRENT stale set —
+    # no accumulation of duplicates or already-resolved entries.
     {
         echo "# $(date '+%Y-%m-%d %H:%M:%S') — server media with no local copy:"
-        printf 'portfolio/%s\n' "$STALE"
-        echo
-    } | ssh "$SERVER" "cat >> '$SERVER_BASE/portfolio/_to_delete.txt'"
+        # sed (not printf 'portfolio/%s') so EVERY line gets the prefix — printf
+        # with one multi-line arg would only prefix the first line.
+        printf '%s\n' "$STALE" | sed 's|^|portfolio/|'
+    } | ssh "$SERVER" "cat > '$LOG'"
 else
-    echo "  none — server media matches local."
+    echo "  none — server media matches local. Clearing any old delete log."
+    ssh "$SERVER" "rm -f '$LOG'"
 fi
 
 # --- 2. Commit only what YOU staged (no blanket `git add .`) ---------------------
