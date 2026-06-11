@@ -268,6 +268,87 @@
       window.location.hash = imagePath;
     }
 
+    // Legacy folder names -> current name. Extend here if the folder is renamed again.
+    const FOLDER_ALIASES = {
+      '00_interactive/': '0_FEATURED/',
+      '_featured/': '0_FEATURED/'
+    };
+
+    // Every valid file path currently in the tree (built from /api/portfolio-files).
+    function getAllPaths() {
+      return Array.from(document.querySelectorAll('.file-selector span[data-path]'))
+        .map(s => s.dataset.path);
+    }
+
+    // Resolve a (possibly stale) hash path to a real file.
+    // Returns { path } on success, { ambiguous: [...] } when a duplicate basename
+    // can't be disambiguated, or null when nothing matches.
+    function resolveHashPath(requested) {
+      const all = getAllPaths();
+
+      // 1. exact match
+      if (all.includes(requested)) return { path: requested };
+
+      // 2. alias the known folder renames, then retry exact
+      for (const [from, to] of Object.entries(FOLDER_ALIASES)) {
+        if (requested.startsWith(from)) {
+          const rewritten = to + requested.slice(from.length);
+          if (all.includes(rewritten)) return { path: rewritten };
+        }
+      }
+
+      // 3. filename search — duplicate-aware (many files share a basename across folders)
+      const reqBase = requested.split('/').pop().toLowerCase();
+      const reqStem = reqBase.replace(/\.[^.]+$/, '');
+      let candidates = all.filter(p => p.split('/').pop().toLowerCase() === reqBase);
+      if (candidates.length === 0) {
+        // retry ignoring extension (handles .HTML/.json/case drift)
+        candidates = all.filter(p =>
+          p.split('/').pop().toLowerCase().replace(/\.[^.]+$/, '') === reqStem);
+      }
+      if (candidates.length === 0) return null;
+      if (candidates.length === 1) return { path: candidates[0] };
+
+      // Multiple matches: prefer the one sharing the most trailing path segments
+      // with the requested path; if it's a genuine tie, hand back the list to choose.
+      const reqSegs = requested.toLowerCase().split('/');
+      const suffixScore = (p) => {
+        const segs = p.toLowerCase().split('/');
+        let i = segs.length - 1, j = reqSegs.length - 1, score = 0;
+        while (i >= 0 && j >= 0 && segs[i] === reqSegs[j]) { score++; i--; j--; }
+        return score;
+      };
+      const scored = candidates
+        .map(p => ({ p, s: suffixScore(p) }))
+        .sort((a, b) => b.s - a.s);
+      if (scored.length === 1 || scored[0].s > scored[1].s) return { path: scored[0].p };
+      return { ambiguous: candidates };
+    }
+
+    // Friendly fallback when a hash can't be resolved (or is ambiguous), instead of
+    // the broken 404 error-dialog path.
+    function showHashHelp(requested, candidates) {
+      const container = document.querySelector('.artwork-display > div');
+      if (!container) return;
+      const safe = requested.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      if (candidates && candidates.length) {
+        const links = candidates.map(p =>
+          `<li><a href="#${encodeURIComponent(p)}" style="color:#0000ee;text-decoration:underline;">${p}</a></li>`
+        ).join('');
+        container.innerHTML = `
+          <div style="padding:20px;font-family:Arial,sans-serif;line-height:1.6;">
+            <p>a few pieces share that name — did you mean…?</p>
+            <ul>${links}</ul>
+          </div>`;
+      } else {
+        container.innerHTML = `
+          <div style="padding:20px;font-family:Arial,sans-serif;line-height:1.6;">
+            <p>couldn't find <strong>${safe}</strong> — it may have been renamed or moved.</p>
+            <p>browse the tree on the left to find it. thanks for looking at my art. 🐌</p>
+          </div>`;
+      }
+    }
+
     async function displayImage(imagePath) {
       // Clean up any CSS injected by a previous interactive piece
       document.getElementById('interactive-piece-css')?.remove();
@@ -500,33 +581,18 @@ function buildTree(structure, parentElement, path = '') {
   // Frontend's function to load image from URL on page load
   function loadImageFromURL() {
     const hash = window.location.hash.substring(1); // Remove the #
-    if (hash) {
-      // Decode the URL in case it has special characters
-      const imagePath = decodeURIComponent(hash);
-      
-      // Wait for file tree to load, then display the image
-      setTimeout(() => {
-        displayImage(imagePath);
-        
-        // Also highlight it in the file tree
-        const fileLink = document.querySelector(`span[data-path="${imagePath}"]`);
-        if (fileLink) {
-          // Open parent folders if needed
-          let parent = fileLink.closest('details');
-          while (parent) {
-            parent.open = true;
-            parent = parent.parentElement.closest('details');
-          }
-          
-          // Scroll it into view
-          fileLink.scrollIntoView({ block: 'center', behavior: 'smooth' });
-          
-          // Highlight it
-          fileLink.style.backgroundColor = '#316AC5';
-          fileLink.style.color = 'white';
-        }
-      }, 500); // Wait for tree to build
-    }
+    if (!hash) return;
+    // Decode the URL in case it has special characters
+    const requested = decodeURIComponent(hash);
+
+    // Wait for the file tree to build, then resolve (handles legacy/renamed paths)
+    setTimeout(() => {
+      const res = resolveHashPath(requested);
+      if (!res) { showHashHelp(requested, null); return; }
+      if (res.ambiguous) { showHashHelp(requested, res.ambiguous); return; }
+      // displayImage opens parent folders, highlights, scrolls, and fixes the URL
+      displayImage(res.path);
+    }, 500); // Wait for tree to build
   }
 
   // Load file structure on page load
@@ -553,9 +619,12 @@ function buildTree(structure, parentElement, path = '') {
   // Listen for browser back/forward buttons
   window.addEventListener('hashchange', () => {
     const hash = window.location.hash.substring(1);
-    if (hash) {
-      displayImage(decodeURIComponent(hash));
-    }
+    if (!hash) return;
+    const requested = decodeURIComponent(hash);
+    const res = resolveHashPath(requested);
+    if (!res) { showHashHelp(requested, null); return; }
+    if (res.ambiguous) { showHashHelp(requested, res.ambiguous); return; }
+    displayImage(res.path);
   });
 
   //todo, add keyboard navigation?

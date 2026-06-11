@@ -34,6 +34,14 @@ app.get('/', (req, res) => {
     res.send("if you're reading this, the shmspace-backend works! updated march 17 @ 12:01AM");
 });
 
+// Redirect legacy folder names to the current one (00_interactive / _featured -> 0_FEATURED).
+// Must come before the static handler so old direct URLs (pages + assets) still resolve.
+// 302 (not 301): the name has churned before, so avoid browsers hard-caching the redirect.
+app.get('/portfolio/00_interactive/*', (_req, res) =>
+  res.redirect(302, '/portfolio/0_FEATURED/' + _req.params[0]));
+app.get('/portfolio/_featured/*', (_req, res) =>
+  res.redirect(302, '/portfolio/0_FEATURED/' + _req.params[0]));
+
 app.use('/portfolio', express.static(path.join(__dirname, 'portfolio')));
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
@@ -78,7 +86,7 @@ app.get('/api/portfolio-files', (req, res) => {
   res.json(structure);
 });
 
-app.get('/rsp', (_req, res) => res.redirect('/portfolio/00_interactive/artist_in_the_loop.html'));
+app.get('/rsp', (_req, res) => res.redirect('/portfolio/0_FEATURED/artist_in_the_loop.html'));
 app.get('/bart', (_req, res) => res.redirect('/api/bart/tube'));
 app.use('/api/bart', require('./bart/bart'));
 
