@@ -26,11 +26,11 @@
 
 
        .main-window {
-        width: calc(100vw - 40px);
+        width: calc(100vw - 20px);
         height: 90vh;
         margin: auto;
         margin-top: 10px;
-        max-width: 75vw;
+        max-width: 900px;
         box-sizing: border-box;
       }
 
@@ -176,6 +176,27 @@
       .tree-view a:visited {
         color: purple !important;
         text-decoration: underline;
+      }
+
+      /* mobile: drop the big horizontal paddings so text isn't squimshed */
+      @media (max-width: 600px) {
+        .main-window {
+          width: calc(100vw - 10px);
+        }
+
+        .window-body {
+          padding: 10px;
+        }
+
+        fieldset {
+          margin: 5px;
+          padding: 12px;
+          padding-top: 8px;
+        }
+
+        figure {
+          max-width: 95%;
+        }
       }
 
     </style>
