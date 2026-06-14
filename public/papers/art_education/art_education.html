@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The Future of Creative Education: What We Can Learn About Technology from Art Teachers and Their Classrooms. DIS 2026.">
+    <title>The Future of Creative Education — DIS 2026</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;%3E%3Ctext y=&#39;.9em&#39; font-size=&#39;90&#39;%3E%F0%9F%8E%A8%3C/text%3E%3C/svg%3E">
+    <link rel="stylesheet" href="https://unpkg.com/xp.css" />
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            padding: 10px;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #CDE9F9 0%, #FFF 40%, #FFF5EF 85.43%);
+            background-attachment: fixed;
+            color: #1a1a1a;
+            font-family: 'Pixelated MS Sans Serif', Arial, sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* in-page jump targets clear the top edge a little */
+        [id] { scroll-margin-top: 20px; }
+
+        /* ── clouds ── */
+        .cloud { position: fixed; z-index: 0; opacity: 0.85; pointer-events: none; }
+        .cloud-1 {
+            top: 60px; left: -150px;
+            animation: moveCloud1 45s linear infinite;
+        }
+        .cloud-2 {
+            bottom: 90px; left: -450px;
+            animation: moveCloud2 49s linear infinite;
+        }
+        @keyframes moveCloud1 {
+            0%   { transform: translateX(-50vw) scale(1.8); }
+            100% { transform: translateX(150vw) scale(1.8); }
+        }
+        @keyframes moveCloud2 {
+            0%   { transform: translateX(-60vw); }
+            100% { transform: translateX(160vw); }
+        }
+
+        /* ── page column of floating windows ── */
+        .paper-page {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 56px;
+            padding: 64px 20px 140px 20px;
+            width: 100%;
+            max-width: 1080px;
+            margin: 0 auto;
+        }
+
+        /* rows let a window sit left / center / right in the sky */
+        .row { display: flex; width: 100%; justify-content: center; }
+        .row.left  { justify-content: flex-start; }
+        .row.right { justify-content: flex-end; }
+
+        /* a wide window (~60%, fits the image) + a narrow window (~40%, the RQs)
+           sitting side by side. wraps to a stack on skinny screens, always in
+           normal flow so it pushes the rest of the page down (never overlaps). */
+        .pair {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;   /* each window is only as tall as its content */
+            gap: 16px;
+            width: 100%;
+            max-width: min(94vw, 780px);
+            margin: 0 auto;
+        }
+        .pair .paper-window { width: auto; }            /* flex controls width, not the default */
+        .pair-main { flex: 3 1 0; min-width: 300px; }   /* ~60% */
+        .pair-side { flex: 2 1 0; min-width: 220px; }   /* ~40% */
+        /* the explicit min-widths above override flex's default min-width:auto,
+           so the large image can't force its window wide; it just fills it.
+           when the row can't fit both min-widths, the windows wrap and stack. */
+        .pair .window-body img { display: block; width: 100%; height: auto; }
+
+        /* ── the reusable xp.css window (adapted from pieces.css) ── */
+        .paper-window {
+            width: min(92vw, 600px);
+            background: #ece9d8;
+            color: #000;
+            box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.45);
+        }
+        .paper-window.size-sm { width: min(86vw, 380px); }
+        .paper-window.size-md { width: min(90vw, 500px); }
+        .paper-window.size-lg { width: min(94vw, 680px); }
+
+        .paper-window .title-bar { padding: 6px 12px; height: 3.4em; }
+        .paper-window .title-bar-text { letter-spacing: 0.04em; }
+
+        .paper-window .window-body {
+            margin: 0;
+            padding: 18px 22px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        /* text-heavy windows: left-aligned, justified, comfortable measure */
+        .paper-window .window-body.text-body { align-items: stretch; }
+        .paper-window .window-body.text-body p {
+            margin: 0 0 0.6em 0;
+            text-align: justify;
+            font-size: 16px;
+            line-height: 1.55;
+            text-wrap: pretty;
+        }
+
+        /* ── header window ── */
+        .paper-title {
+            margin: 0;
+            font-size: 1.9em;
+            line-height: 1.15;
+            text-align: center;
+            color: #1C4ECF;
+            text-wrap: balance;
+        }
+        .paper-subtitle {
+            margin: 0;
+            font-size: 1.05em;
+            font-style: italic;
+            text-align: center;
+            color: #333;
+            text-wrap: balance;
+        }
+        .paper-venue { margin: 6px 0 0 0; font-size: 0.95em; text-align: center; }
+
+        /* ── authors ── */
+        .authors {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 18px;
+            width: 100%;
+        }
+        .author {
+            flex: 1 1 130px;
+            max-width: 160px;
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.3;
+        }
+        .author img {
+            width: 78px; height: 78px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #1C4ECF;
+            background: #fff;
+            margin-bottom: 5px;
+        }
+        .author .author-name { font-weight: bold; display: block; font-size: 13px; }
+        .author a { color: #1C4ECF; }
+        .author .author-aff { color: #444; }
+        .author .author-email { font-size: 11px; word-break: break-all; }
+
+        /* ── paper-link buttons (xp.css buttons, bigger text) ── */
+        .paper-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+        .paper-links button {
+            padding: 12px 18px;
+            font-size: 1.15em;
+            cursor: pointer;
+        }
+
+        /* ── figure window ── */
+        .fig-window .window-body { padding: 12px; background: #ece9d8; }
+        .fig-window img { display: block; width: 100%; height: auto; border: 1px solid #555; }
+        .fig-caption { margin: 0; font-size: 12px; font-style: italic; color: #333; text-align: center; }
+
+        /* ── research questions ── */
+        .rqs { margin: 0; padding-left: 1.4em; }
+        .rqs li { margin: 6px 0; font-size: 16px; line-height: 1.5; text-align: left; }
+        .rqs b { color: #8e401d; }
+
+        /* ── floating value illustrations (bare, no chrome) ── */
+        .values {
+            width: 100%;
+            max-width: 60vw;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 56px;
+        }
+        .value {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            width: 100%;
+        }
+        .value.reverse { flex-direction: row-reverse; }
+        .value img { width: 200px; height: auto; flex-shrink: 0; }
+        .value p {
+            margin: 0;
+            font-size: 1.7em;
+            line-height: 1.35;
+            color: #1a1a1a;
+            text-wrap: balance;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+        .value em { color: #1C4ECF; font-style: italic; }
+
+        /* ── talk details ── */
+        .talk-time { font-weight: bold; }
+        .talk-session { font-style: italic; }
+
+        /* ── gentle fade/slide-up reveal on scroll ── */
+        .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* ── mobile ── */
+        @media (max-width: 640px) {
+            .paper-page { gap: 38px; padding: 34px 14px 90px 14px; }
+            .row, .row.left, .row.right { justify-content: center; }
+            .pair { flex-direction: column; align-items: center; }
+            .pair .window-body img { max-height: 45vh; object-fit: contain; }
+            .paper-window,
+            .paper-window.size-sm,
+            .paper-window.size-md,
+            .paper-window.size-lg { width: 94vw; }
+            .values { max-width: 100%; gap: 38px; }
+            .value, .value.reverse { flex-direction: column; text-align: center; gap: 12px; }
+            .value img { width: 150px; }
+            .value p { font-size: 1.4em; }
+            .paper-title { font-size: 1.5em; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- drifting clouds -->
+    <svg class="cloud cloud-1" width="400" height="300" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="160" cy="120" rx="120" ry="100" fill="url(#g1)" />
+        <ellipse cx="240" cy="160" rx="100" ry="80" fill="url(#g2)" />
+        <ellipse cx="120" cy="180" rx="80" ry="60" fill="url(#g3)" />
+        <defs>
+            <linearGradient id="g1" x1="160" y1="40" x2="160" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0.2" stop-color="#F9EFE9" /><stop offset="1" stop-color="#F9EFE9" stop-opacity="0" /></linearGradient>
+            <linearGradient id="g2" x1="240" y1="100" x2="240" y2="220" gradientUnits="userSpaceOnUse"><stop offset="0.2" stop-color="#F9EFE9" /><stop offset="1" stop-color="#F9EFE9" stop-opacity="0" /></linearGradient>
+            <linearGradient id="g3" x1="120" y1="140" x2="120" y2="220" gradientUnits="userSpaceOnUse"><stop offset="0.2" stop-color="#F9EFE9" /><stop offset="1" stop-color="#F9EFE9" stop-opacity="0" /></linearGradient>
+        </defs>
+    </svg>
+    <svg class="cloud cloud-2" width="350" height="262.5" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="157.5" cy="122.5" rx="105" ry="87.5" fill="url(#g4)" />
+        <ellipse cx="227.5" cy="157.5" rx="87.5" ry="70" fill="url(#g5)" />
+        <ellipse cx="122.5" cy="192.5" rx="70" ry="52.5" fill="url(#g6)" />
+        <defs>
+            <linearGradient id="g4" x1="157.5" y1="52.5" x2="157.5" y2="192.5" gradientUnits="userSpaceOnUse"><stop offset="0.2" stop-color="#F9EFE9" /><stop offset="1" stop-color="#F9EFE9" stop-opacity="0" /></linearGradient>
+            <linearGradient id="g5" x1="227.5" y1="105" x2="227.5" y2="210" gradientUnits="userSpaceOnUse"><stop offset="0.2" stop-color="#F9EFE9" /><stop offset="1" stop-color="#F9EFE9" stop-opacity="0" /></linearGradient>
+            <linearGradient id="g6" x1="122.5" y1="157.5" x2="122.5" y2="227.5" gradientUnits="userSpaceOnUse"><stop offset="0.2" stop-color="#F9EFE9" /><stop offset="1" stop-color="#F9EFE9" stop-opacity="0" /></linearGradient>
+        </defs>
+    </svg>
+
+    <div class="paper-page">
+
+        <!-- Header window -->
+        <div class="row reveal">
+            <div class="window paper-window size-lg">
+                <div class="title-bar">
+                    <div class="title-bar-text">The Future of Creative Education @ DIS 2026</div>
+                    <div class="title-bar-controls">
+                        <a href="https://dl.acm.org/doi/10.1145/3800645.3812911" target="_blank" aria-label="Paper"><button aria-label="Help"></button></a>
+                        <a href="https://shmuh.co" target="_blank" aria-label="Close"><button aria-label="Close"></button></a>
+                    </div>
+                </div>
+                <div class="window-body">
+                    <h1 class="paper-title">The Future of Creative Education</h1>
+                    <p class="paper-subtitle">What We Can Learn About Technology from Art Teachers and Their Classrooms</p>
+                    <p class="paper-venue"><strong>DIS 2026</strong> — Designing Interactive Systems Conference, Singapore</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Authors window -->
+        <div class="row reveal">
+                    <div class="authors">
+                        <div class="author">
+                            <img src="../author_images/isabel.png" alt="Isabel Li">
+                            <a class="author-name" href="https://isabel.li/" target="_blank">Isabel Li</a>
+                            <div class="author-aff">Independent Researcher<br>San Francisco, CA</div>
+                            <a class="author-email" href="mailto:isabel.yueli@gmail.com">isabel.yueli@gmail.com</a>
+                        </div>
+                        <div class="author">
+                            <img src="../author_images/ace.png" alt="Ace S. Chen">
+                            <a class="author-name" href="https://www.aceschen.com/" target="_blank">Ace S. Chen</a>
+                            <div class="author-aff">UC Santa Cruz<br>Santa Cruz, CA</div>
+                            <a class="author-email" href="mailto:aceschen@ucsc.edu">aceschen@ucsc.edu</a>
+                        </div>
+                        <div class="author">
+                            <img src="../author_images/shm.jpeg" alt="Shm Garanganao Almeda">
+                            <a class="author-name" href="https://shmuh.co" target="_blank">Shm Garanganao Almeda</a>
+                            <div class="author-aff">UC Berkeley<br>Berkeley, CA</div>
+                            <a class="author-email" href="mailto:shm.almeda@berkeley.edu">shm.almeda@berkeley.edu</a>
+                        </div>
+                        <div class="author">
+                            <img src="../author_images/katie_chung.png" alt="Katie Chung">
+                            <a class="author-name" href="https://www.linkedin.com/in/katieyungchung/" target="_blank">Katie Chung</a>
+                            <div class="author-aff">UC Los Angeles<br>Los Angeles, CA</div>
+                            <a class="author-email" href="mailto:katieyungchung@g.ucla.edu">katieyungchung@g.ucla.edu</a>
+                        </div>
+                        <div class="author">
+                            <img src="../author_images/jingyi.png" alt="Jingyi Li">
+                            <a class="author-name" href="https://jingyi.me/" target="_blank">Jingyi Li</a>
+                            <div class="author-aff">Pomona College<br>Claremont, CA</div>
+                            <a class="author-email" href="mailto:jingyi.li@pomona.edu">jingyi.li@pomona.edu</a>
+                        </div>
+
+
+        <!-- Paper links window -->
+        <div class="row reveal" id="read-the-paper">
+            <div class="window paper-window size-md">
+                <div class="title-bar">
+                    <div class="title-bar-text">read the paper!</div>
+                </div>
+                <div class="window-body">
+                    <div class="paper-links">
+                        <button onclick="window.open('https://dl.acm.org/doi/10.1145/3800645.3812911', '_blank')">ACM Digital Library</button>
+                        <button onclick="window.open('dis26-95.pdf', '_blank')">PDF</button>
+                        <button onclick="window.open('https://drive.google.com/file/d/1ESHqXVvbtATjFr6FD1Jl6sGfvTxW5_1K/view?usp=drive_link', '_blank')">PDF (Google Drive)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                <!-- Abstract window -->
+        <div class="row reveal">
+            <div class="window paper-window size-lg">
+                <div class="title-bar">
+                    <div class="title-bar-text">about </div>
+                </div>
+                <div class="window-body text-body">
+                    <p>Art educators are on the front lines of designing a rising generation&rsquo;s relationship with creativity and media. While public access to generative AI tools has sparked new discussions and practices in creative communities, industries, and higher academia, secondary education art teachers often lack the digital literacy and resources to align emergent technology trends with classroom goals. 
+                        
+                                       </div>
+            </div>
+        </div>
+<!--  We interviewed 19 art educators across the United States, surfacing 1) constraints around technological access, guidance, and agency; 2) five core values for art education; and 3) the social-emotional labour educators perform to create classroom communities. Lensed by educator needs and the sociotechnical contexts they teach within, we call for researchers to critically consider how art education technology can motivate creative thinking, enable peer teaching among students, complement analogue art-making, and prioritise joy over results to better attend to classroom needs.</p>
+ -->
+
+        <!-- Research questions window -->
+        <div class="pair reveal">
+            <div class="window paper-window left size-sm" style="margin-right:5px; height:90%;">
+                <div class="title-bar">
+                    <div class="title-bar-text">
+                        We interviewed 19 high school art educators across the United States...
+                    </div>
+                </div>
+                <div class="window-body text-body">
+                                    <img src="fig1.png" alt="A high school art teacher with a thought bubble full of classroom technologies — a computer, camera, printer, drawing tablet, Wi-Fi, copyright symbol, and a crossed-out 'AI'.">
+                </div>
+            </div>
+            <div class="window right paper-window size-sm" style="margin: 10px">
+                <div class="title-bar">
+                    <div class="title-bar-text">...to investigate...</div>
+                    
+                </div>
+                <div class="window-body text-body">
+                    <ol class="rqs">
+                        <li><b>What kinds of <em>constraints</em></b> are shaping educators&rsquo; ability to use technology in their classrooms,</li>
+                        <li><b>What <em></em>values</em></b> art educators have for designing their classrooms and (non) use of technology, and</li>
+                        <li><b>How the <em>responsibilities</em></b> of teachers have evolved alongside new technologies.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Floating value illustrations -->
+        <div class="values">
+            <div class="value reveal">
+                <img src="access.png" alt="An unlocked padlock with a key, beside a laptop.">
+                <p>Teachers need <em>access</em> to adequate, working resources.</p>
+            </div>
+
+            <div class="value reverse reveal">
+                <img src="guidance.png" alt="An informational document with an info (i) icon.">
+                <p>Teachers need <em>guidance</em> on how to use and implement new tools!</p>
+            </div>
+
+            <div class="value reveal">
+                <img src="agency.png" alt="An art teacher with a lightbulb idea, pointing a finger.">
+                <p>Teachers are experts who need the <em>agency</em> to teach technology how <em>they</em> see fit!</p>
+            </div>
+        </div>
+
+        <!-- Call to researchers window -->
+        <div class="row reveal">
+            <div class="window paper-window size-lg">
+                <div class="title-bar">
+                    <div class="title-bar-text">our call to technology researchers and designers:</div>
+                </div>
+                <div class="window-body text-body">
+                    <p>Rather than introducing tools that impose norms of technology use onto the classroom, researchers might apply a lens that sees <strong>art teachers</strong> as expert <em><strong>designers of communities of practice</strong></em> &mdash; to learn from <em>them</em> how we might develop technology and policy to support healthier creative communities.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Talk window -->
+        <div class="row reveal">
+            <div class="window paper-window size-md">
+                <div class="title-bar">
+                    <div class="title-bar-text">want to learn more?</div>
+                </div>
+                <div class="window-body text-body">
+                    <p>Read our <a href="#read-the-paper">paper</a> or come see the talk at <strong>DIS 2026</strong>, at the <a href="https://programs.sigchi.org/dis/2026/program/content/257250" target="_blank"><em>Learning with (and About) Technology</em></a> session on Monday, June 15, 2&ndash;3:30 PM.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Gentle fade/slide-up as each element scrolls into view.
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    </script>
+
+</body>
+</html>
