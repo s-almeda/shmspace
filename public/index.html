@@ -22,6 +22,7 @@
   
   <!-- let's also include these javascript scripts. -->
   <!--script src = "tabs.js"></script-->
+  <script src="computer.js" defer></script>
 
 
 </head>
@@ -97,128 +98,17 @@
           <div class="col-4" id = "left-column" style="padding: 0.5vw; padding-right: 0.5vw; ">
             <!-- computer image -->
             <div class="image-container" style="align: center; display:flex; flex-direction: column; align-items: center; width: 100%;" >
-              <div style="width: 90%; padding: 1vw;">
-                <div id="computer-frame" style="position: relative; cursor: pointer;" title="click to switch">
+              <div class="computer-wrap">
+                <div id="computer-frame" title="click to switch between visual representations of shm">
                   <!-- computer frame with empty blue screen -->
-                  <img id="computer-base" src="images/computer_blank.svg" style="display: block; width: 100%;">
+                  <img id="computer-base" src="images/computer_blank.svg">
                   <!-- pressed frame overlay, fades out after a press -->
-                  <img id="computer-pressed" src="images/computer_blank_pressed.svg" style="position: absolute; top: 0; left: 0; width: 100%; opacity: 0; pointer-events: none;">
-                  <!-- drawing or photo of shm -->
-                  <img id="computer-drawing" src="images/shimage_drawing.png" alt="drawing of shm" style="display: block; position: absolute; left: 13%; top: 10%; width: 75%; height: 67%; object-fit: cover; border: 2px solid rgb(124 124 124 / 44%); border-radius: 3px; transform-origin: center center;">
-                  <img id="computer-photo" src="papers/author_images/shm.jpeg" alt="photo of shm" style="display: none; position: absolute; left: 13%; top: 10%; width: 75%; height: 67%; object-fit: cover; object-position: 50% 30%; border: 2px solid rgb(124 124 124 / 44%); border-radius: 3px; transform-origin: center center;">
-                  <!-- scratch canvas used for the pixel-dissolve transition -->
-                  <canvas id="computer-canvas" style="display: none; position: absolute; left: 13%; top: 10%; width: 75%; height: 67%; border: 2px solid rgb(124 124 124 / 44%); border-radius: 3px;"></canvas>
+                  <img id="computer-pressed" src="images/computer_blank_pressed.svg">
+                  <!-- drawing or photo of shm (computer.js picks/swaps which one shows) -->
+                  <img id="computer-drawing" class="computer-screen" src="images/shimage_drawing.png" alt="drawing of shm" style="display: block;">
+                  <img id="computer-photo" class="computer-screen" src="papers/author_images/shm.jpeg" alt="photo of shm" style="display: none; object-position: 50% 30%;">
                 </div>
               </div>
-              <script>
-                (function () {
-                  var frame = document.getElementById('computer-frame');
-                  var base = document.getElementById('computer-base');
-                  var pressed = document.getElementById('computer-pressed');
-                  var drawing = document.getElementById('computer-drawing');
-                  var photo = document.getElementById('computer-photo');
-                  var BASE = 'images/computer_blank.svg';
-                  var HOVER = 'images/computer_blank_hover.svg';
-                  // preload so the frame doesn't flash on first hover
-                  new Image().src = HOVER;
-                  function show(showPhoto) {
-                    drawing.style.display = showPhoto ? 'none' : 'block';
-                    photo.style.display = showPhoto ? 'block' : 'none';
-                  }
-                  // randomly pick one on load
-                  show(Math.random() < 0.5);
-                  // click the screen to switch, with a pixel-dissolve transition:
-                  // current image gets chunkier, swap, new image sharpens back in.
-                  var canvas = document.getElementById('computer-canvas');
-                  var ctx = canvas.getContext('2d');
-                  var buf = document.createElement('canvas');     // small offscreen buffer
-                  var bctx = buf.getContext('2d');
-                  var POSY_DRAWING = 0.5, POSY_PHOTO = 0.30;       // vertical object-position
-                  var MAXCELLS = 150, MINCELLS = 50, STEP = 130;    // smooth->chunky, ms/phase
-                  var animating = false;
-
-                  // draw an image "cover"-style (crop to fill, vertical bias posY) into a context
-                  function drawCover(c, img, posY, w, h) {
-                    var iw = img.naturalWidth, ih = img.naturalHeight;
-                    if (!iw || !ih) return;
-                    var scale = Math.max(w / iw, h / ih);
-                    var dw = iw * scale, dh = ih * scale;
-                    c.clearRect(0, 0, w, h);
-                    c.drawImage(img, (w - dw) / 2, (h - dh) * posY, dw, dh);
-                  }
-
-                  // render img to the canvas pixelated at `cells` blocks across
-                  function pixelDraw(img, posY, cells) {
-                    var w = canvas.width, h = canvas.height;
-                    var bw = Math.max(1, Math.round(cells));
-                    var bh = Math.max(1, Math.round(cells * h / w));
-                    buf.width = bw; buf.height = bh;
-                    bctx.imageSmoothingEnabled = true;
-                    drawCover(bctx, img, posY, bw, bh);            // shrink into tiny buffer
-                    ctx.imageSmoothingEnabled = false;
-                    ctx.clearRect(0, 0, w, h);
-                    ctx.drawImage(buf, 0, 0, bw, bh, 0, 0, w, h);  // blow it up, nearest-neighbor
-                  }
-
-                  frame.addEventListener('click', function () {
-                    if (animating) return;
-                    animating = true;
-                    var showPhoto = photo.style.display === 'none';
-                    var cur = showPhoto ? drawing : photo;
-                    var next = showPhoto ? photo : drawing;
-                    var curPosY = showPhoto ? POSY_DRAWING : POSY_PHOTO;
-                    var nextPosY = showPhoto ? POSY_PHOTO : POSY_DRAWING;
-
-                    // show the canvas first, THEN measure it (a display:none element measures 0),
-                    // size its resolution to match, draw, and take over from the img
-                    canvas.style.display = 'block';
-                    var rect = canvas.getBoundingClientRect();
-                    canvas.width = Math.max(1, Math.round(rect.width));
-                    canvas.height = Math.max(1, Math.round(rect.height));
-                    pixelDraw(cur, curPosY, MAXCELLS);
-                    cur.style.display = 'none';
-
-                    var t0 = null;
-                    function down(ts) {
-                      if (t0 === null) t0 = ts;
-                      var p = Math.min(1, (ts - t0) / STEP);
-                      pixelDraw(cur, curPosY, MAXCELLS - (MAXCELLS - MINCELLS) * p);
-                      if (p < 1) requestAnimationFrame(down);
-                      else { t0 = null; requestAnimationFrame(up); }
-                    }
-                    function up(ts) {
-                      if (t0 === null) t0 = ts;
-                      var p = Math.min(1, (ts - t0) / STEP);
-                      pixelDraw(next, nextPosY, MINCELLS + (MAXCELLS - MINCELLS) * p);
-                      if (p < 1) requestAnimationFrame(up);
-                      else {
-                        show(showPhoto);            // reveal the real (crisp) image
-                        canvas.style.display = 'none';
-                        animating = false;
-                      }
-                    }
-                    requestAnimationFrame(down);
-                  });
-                  // hover swaps the frame's power LED
-                  frame.addEventListener('mouseenter', function () { base.src = HOVER; });
-                  frame.addEventListener('mouseleave', function () { base.src = BASE; });
-                  // press: show pressed frame instantly, hold, then fade it out.
-                  // (base stays underneath, so it looks a little darker mid-fade — that's fine.)
-                  var fadeTimer;
-                  frame.addEventListener('mousedown', function () {
-                    clearTimeout(fadeTimer);
-                    pressed.style.transition = 'none';
-                    pressed.style.opacity = '1';
-                  });
-                  frame.addEventListener('mouseup', function () {
-                    clearTimeout(fadeTimer);
-                    fadeTimer = setTimeout(function () {
-                      pressed.style.transition = 'opacity 0.2s ease';
-                      pressed.style.opacity = '0';
-                    }, 100);
-                  });
-                })();
-              </script>
             </div>
 
             

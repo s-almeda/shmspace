@@ -1097,3 +1097,35 @@ button[aria-disabled="true"] {
 .news-text {
   text-align: left;
 }
+
+/* ---- home page interactive computer (see computer.js) ---- */
+.computer-wrap {
+  width: 90%;
+  padding: 1vw;
+}
+#computer-frame {
+  position: relative;
+  cursor: pointer;
+}
+#computer-base {
+  display: block;
+  width: 100%;
+}
+#computer-pressed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+.computer-screen {
+  position: absolute;
+  left: 13%;
+  top: 10%;
+  width: 75%;
+  height: 67%;
+  object-fit: cover;
+  border: 3px solid rgb(124 124 124 / 44%);
+  border-radius: 3px;
+}
