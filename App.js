@@ -79,36 +79,23 @@ app.get('/facial_recognishm/puppets-list', function (_req, res) {
     res.json(files);
 });
 
-// SHMUH.CO/...
-app.get('/artographer', (_req, res) => {
-    res.redirect('https://artographer.snailbunny.site/');
-});
+// SHMUH.CO/... short URL -> destination. add a line here to add a redirect.
+const redirects = {
+    '/artographer':   'https://artographer.snailbunny.site/',
+    '/bart':          'https://art.snailbunny.site/portfolio/0_FEATURED/shm_X_bart.html',
+    '/walo':          'https://drive.google.com/file/d/1084qTZ1h9WmhtC-w2g-UyvVDSoCoEfzg/view?usp=sharing',
+    '/shmuppetry':    'https://art.snailbunny.site/portfolio/0_FEATURED/shmuppetry.html',
+    '/tube':          'https://art.snailbunny.site/api/bart/tube',
+    '/art_education': '/papers/art_education/',
+    '/art-education': '/papers/art_education/',
+};
+for (const [from, to] of Object.entries(redirects)) {
+    app.get(from, (_req, res) => res.redirect(to));
+}
 
-app.get('/bart', (_req, res) => {
-    res.redirect('https://art.snailbunny.site/portfolio/0_FEATURED/shm_X_bart.html');
-});
-
-
-
+// param redirect — keeps its own route since it interpolates the path segment
 app.get('/artographer/:path', (_req, res) => {
     res.redirect(`https://artographer.snailbunny.site/${_req.params.path}`);
-});
-app.get('/walo', (_req, res) => {
-    res.redirect('https://drive.google.com/file/d/1084qTZ1h9WmhtC-w2g-UyvVDSoCoEfzg/view?usp=sharing');
-});
-app.get('/shmuppetry', (_req, res) => {
-    res.redirect('https://art.snailbunny.site/portfolio/0_FEATURED/shmuppetry.html');
-});
-
-app.get('/tube', (_req, res) => {
-    res.redirect('https://art.snailbunny.site/api/bart/tube');
-});
-
-app.get('/art-education', (_req, res) => {
-    res.redirect('/papers/art_education/');
-});
-app.get('/art_education', (_req, res) => {
-    res.redirect('/papers/art_education/');
 });
 
 // Generic puppeteering rig — all puppet routes live alongside the rig.
