@@ -1,0 +1,236 @@
+/* papers.css
+   shared styles for paper landing pages — a column of floating xp.css windows
+   over a drifting cloudy sky. built on top of xp.css.
+
+   usage in public/papers/<name>/<name>.html:
+     <link rel="stylesheet" href="https://unpkg.com/xp.css" />
+     <link rel="stylesheet" href="../papers.css" />        (load AFTER xp.css)
+   then wrap content in <div class="paper-page"> … </div> and drop in the two
+   .cloud SVGs. see art_education for a full example.
+   ------------------------------------------------------------ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 10px;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #CDE9F9 0%, #FFF 40%, #FFF5EF 85.43%);
+    background-attachment: fixed;
+    color: #1a1a1a;
+    font-family: 'Pixelated MS Sans Serif', Arial, sans-serif;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+/* in-page jump targets clear the top edge a little */
+[id] { scroll-margin-top: 20px; }
+
+/* ── drifting clouds (behind the windows) ── */
+.cloud { position: fixed; z-index: 0; opacity: 0.85; pointer-events: none; }
+.cloud-1 {
+    top: 60px; left: -150px;
+    animation: moveCloud1 45s linear infinite;
+}
+.cloud-2 {
+    bottom: 90px; left: -450px;
+    animation: moveCloud2 49s linear infinite;
+}
+@keyframes moveCloud1 {
+    0%   { transform: translateX(-50vw) scale(1.8); }
+    100% { transform: translateX(150vw) scale(1.8); }
+}
+@keyframes moveCloud2 {
+    0%   { transform: translateX(-60vw); }
+    100% { transform: translateX(160vw); }
+}
+
+/* ── page column of floating windows ── */
+.paper-page {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 56px;
+    padding: 64px 20px 140px 20px;
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+/* rows let a window sit left / center / right in the sky */
+.row { display: flex; width: 100%; justify-content: center; }
+.row.left  { justify-content: flex-start; }
+.row.right { justify-content: flex-end; }
+
+/* a wide window (~60%) + a narrow window (~40%) sitting side by side.
+   wraps to a stack on skinny screens, always in normal flow so it pushes
+   the rest of the page down (never overlaps). */
+.pair {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;   /* each window is only as tall as its content */
+    gap: 16px;
+    width: 100%;
+    max-width: min(94vw, 780px);
+    margin: 0 auto;
+}
+.pair .paper-window { width: auto; }            /* flex controls width, not the default */
+.pair-main { flex: 3 1 0; min-width: 300px; }   /* ~60% */
+.pair-side { flex: 2 1 0; min-width: 220px; }   /* ~40% */
+/* the explicit min-widths above override flex's default min-width:auto,
+   so a large image can't force its window wide; it just fills it.
+   when the row can't fit both min-widths, the windows wrap and stack. */
+.pair .window-body img { display: block; width: 100%; height: auto; }
+
+/* ── the reusable xp.css window (adapted from pieces.css) ── */
+.paper-window {
+    width: min(92vw, 600px);
+    background: #ece9d8;
+    color: #000;
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.45);
+}
+.paper-window.size-sm { width: min(86vw, 380px); }
+.paper-window.size-md { width: min(90vw, 500px); }
+.paper-window.size-lg { width: min(94vw, 680px); }
+
+.paper-window .title-bar { padding: 6px 12px; height: 3.4em; }
+.paper-window .title-bar-text { letter-spacing: 0.04em; }
+
+.paper-window .window-body {
+    margin: 0;
+    padding: 18px 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+/* text-heavy windows: left-aligned, justified, comfortable measure */
+.paper-window .window-body.text-body { align-items: stretch; }
+.paper-window .window-body.text-body p {
+    margin: 0 0 0.6em 0;
+    text-align: justify;
+    font-size: 16px;
+    line-height: 1.55;
+    text-wrap: pretty;
+}
+
+/* ── header window ── */
+.paper-title {
+    margin: 0;
+    font-size: 1.9em;
+    line-height: 1.15;
+    text-align: center;
+    color: #1C4ECF;
+    text-wrap: balance;
+}
+.paper-subtitle {
+    margin: 0;
+    font-size: 1.05em;
+    font-style: italic;
+    text-align: center;
+    color: #333;
+    text-wrap: balance;
+}
+.paper-venue { margin: 6px 0 0 0; font-size: 0.95em; text-align: center; }
+
+/* ── authors ── */
+.authors {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 18px;
+    width: 100%;
+}
+.author {
+    flex: 1 1 130px;
+    max-width: 160px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.3;
+}
+.author img {
+    width: 78px; height: 78px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #1C4ECF;
+    background: #fff;
+    margin-bottom: 5px;
+}
+.author .author-name { font-weight: bold; display: block; font-size: 13px; }
+.author a { color: #1C4ECF; }
+.author .author-aff { color: #444; }
+.author .author-email { font-size: 11px; word-break: break-all; }
+
+/* ── paper-link buttons (xp.css buttons, bigger text) ── */
+.paper-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.paper-links button {
+    padding: 12px 18px;
+    font-size: 1.15em;
+    cursor: pointer;
+}
+
+/* ── figure window ── */
+.fig-window .window-body { padding: 12px; background: #ece9d8; }
+.fig-window img { display: block; width: 100%; height: auto; border: 1px solid #555; }
+.fig-caption { margin: 0; font-size: 12px; font-style: italic; color: #333; text-align: center; }
+
+/* ── ordered/numbered list inside a window (e.g. research questions) ── */
+.rqs { margin: 0; padding-left: 1.4em; }
+.rqs li { margin: 6px 0; font-size: 16px; line-height: 1.5; text-align: left; }
+.rqs b { color: #8e401d; }
+
+/* ── floating illustration + statement rows (bare, no window chrome) ── */
+.values {
+    width: 100%;
+    max-width: 60vw;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+}
+.value {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+}
+.value.reverse { flex-direction: row-reverse; }
+.value img { width: 200px; height: auto; flex-shrink: 0; }
+.value p {
+    margin: 0;
+    font-size: 1.7em;
+    line-height: 1.35;
+    color: #1a1a1a;
+    text-wrap: balance;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.value em { color: #1d8e45; font-style: italic; }
+
+/* ── misc text helpers ── */
+.talk-time { font-weight: bold; }
+.talk-session { font-style: italic; }
+
+/* ── gentle fade/slide-up reveal on scroll ── */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── mobile ── */
+@media (max-width: 640px) {
+    .paper-page { gap: 38px; padding: 34px 14px 90px 14px; }
+    .row, .row.left, .row.right { justify-content: center; }
+    .paper-window,
+    .paper-window.size-sm,
+    .paper-window.size-md,
+    .paper-window.size-lg { width: 94vw; }
+    .values { max-width: 100%; gap: 38px; }
+    .value, .value.reverse { flex-direction: column; text-align: center; gap: 12px; }
+    .value img { width: 150px; }
+    .value p { font-size: 1.4em; }
+    .paper-title { font-size: 1.5em; }
+}
