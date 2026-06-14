@@ -224,8 +224,6 @@
         @media (max-width: 640px) {
             .paper-page { gap: 38px; padding: 34px 14px 90px 14px; }
             .row, .row.left, .row.right { justify-content: center; }
-            .pair { flex-direction: column; align-items: center; }
-            .pair .window-body img { max-height: 45vh; object-fit: contain; }
             .paper-window,
             .paper-window.size-sm,
             .paper-window.size-md,
@@ -350,20 +348,19 @@
 
         <!-- Research questions window -->
         <div class="pair reveal">
-            <div class="window paper-window left size-sm" style="margin-right:5px; height:90%;">
+            <div class="window paper-window pair-main">
                 <div class="title-bar">
                     <div class="title-bar-text">
                         We interviewed 19 high school art educators across the United States...
                     </div>
                 </div>
-                <div class="window-body text-body">
-                                    <img src="fig1.png" alt="A high school art teacher with a thought bubble full of classroom technologies — a computer, camera, printer, drawing tablet, Wi-Fi, copyright symbol, and a crossed-out 'AI'.">
+                <div class="window-body">
+                    <img src="fig1.png" alt="A high school art teacher with a thought bubble full of classroom technologies — a computer, camera, printer, drawing tablet, Wi-Fi, copyright symbol, and a crossed-out 'AI'.">
                 </div>
             </div>
-            <div class="window right paper-window size-sm" style="margin: 10px">
+            <div class="window paper-window pair-side">
                 <div class="title-bar">
                     <div class="title-bar-text">...to investigate...</div>
-                    
                 </div>
                 <div class="window-body text-body">
                     <ol class="rqs">
