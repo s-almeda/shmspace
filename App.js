@@ -59,6 +59,16 @@ app.get('/recognize_me', function (req, res) {
     res.sendFile(publicPath + '/facial_recognishm/index.html');
 });
 
+// each paper lives in public/papers/<name>/<name>.html — /papers/<name> serves it.
+// drop in a new public/papers/<folder>/<folder>.html and the same URL scheme just works.
+app.get('/papers/:paper', function (req, res, next) {
+    const paper = req.params.paper;
+    if (!/^[a-zA-Z0-9_-]+$/.test(paper)) return next(); // reject odd/unsafe names
+    res.sendFile(path.join(publicPath, 'papers', paper, paper + '.html'), function (err) {
+        if (err) next(); // fall through to 404 if that paper folder/file doesn't exist
+    });
+});
+
 // Returns sorted list of image filenames from the puppets folder
 app.get('/facial_recognishm/puppets-list', function (_req, res) {
     const fs = require('fs');
