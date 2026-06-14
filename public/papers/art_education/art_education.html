@@ -25,6 +25,8 @@
 
         /* in-page jump targets clear the top edge a little */
         [id] { scroll-margin-top: 20px; }
+        /* the "read the paper" jump lands toward the upper-center, not the tippy top */
+        #read-the-paper { scroll-margin-top: 28vh; }
 
         /* ── clouds ── */
         .cloud { position: fixed; z-index: 0; opacity: 0.85; pointer-events: none; }
@@ -210,7 +212,7 @@
             text-wrap: balance;
             text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
         }
-        .value em { color: #1C4ECF; font-style: italic; }
+        .value em { color: #1d8e45; font-style: italic; }
 
         /* ── talk details ── */
         .talk-time { font-weight: bold; }
@@ -358,9 +360,9 @@
                     <img src="fig1.png" alt="A high school art teacher with a thought bubble full of classroom technologies — a computer, camera, printer, drawing tablet, Wi-Fi, copyright symbol, and a crossed-out 'AI'.">
                 </div>
             </div>
-            <div class="window paper-window pair-side">
+            <div class="window paper-window pair-side" style="margin-top:15px;">
                 <div class="title-bar">
-                    <div class="title-bar-text">...to investigate...</div>
+                    <div class="title-bar-text">...asking...</div>
                 </div>
                 <div class="window-body text-body">
                     <ol class="rqs">
@@ -399,7 +401,7 @@
                     <div class="title-bar-text">our call to technology researchers and designers:</div>
                 </div>
                 <div class="window-body text-body">
-                    <p>Rather than introducing tools that impose norms of technology use onto the classroom, researchers might apply a lens that sees <strong>art teachers</strong> as expert <em><strong>designers of communities of practice</strong></em> &mdash; to learn from <em>them</em> how we might develop technology and policy to support healthier creative communities.</p>
+                    <p>rather than introducing tools that impose norms of technology use onto the classroom, researchers might apply a lens that sees <strong>art teachers</strong> as expert <em><strong>designers of communities of practice</strong></em> &mdash; to learn from <em>them</em> how we might develop technology and policy to support a brighter and more sustainable future for creative communities.</p>
                 </div>
             </div>
         </div>
@@ -411,7 +413,7 @@
                     <div class="title-bar-text">want to learn more?</div>
                 </div>
                 <div class="window-body text-body">
-                    <p>Read our <a href="#read-the-paper">paper</a> or come see the talk at <strong>DIS 2026</strong>, at the <a href="https://programs.sigchi.org/dis/2026/program/content/257250" target="_blank"><em>Learning with (and About) Technology</em></a> session on Monday, June 15, 2&ndash;3:30 PM.</p>
+                    <p>read our <a href="#read-the-paper">paper</a> or come see the talk at <strong>DIS 2026</strong>, at the <a href="https://programs.sigchi.org/dis/2026/program/content/257250" target="_blank"><em>Learning with (and About) Technology</em></a> session on Monday, June 15, 2&ndash;3:30 PM.</p>
                 </div>
             </div>
         </div>
