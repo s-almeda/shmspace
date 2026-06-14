@@ -18,18 +18,22 @@
     input[type="checkbox"] + label::after {
       top: 0 !important;
     }
+
+    /* While assets load, the main window shows #loading-body (a progress bar);
+       loader.js swaps it for the real #main-body on window load. */
+    #loading-body { text-align: center; }
+    #loading-body progress { width: 100%; max-width: 400px; }
   </style>
   
   <!-- let's also include these javascript scripts. -->
   <!--script src = "tabs.js"></script-->
+  <script src="loader.js" defer></script>
   <script src="computer.js" defer></script>
 
 
 </head>
 
 <body>
-
-
 
 <div id="background-wrap">
     <div class="x1">
@@ -60,7 +64,7 @@
 </div>
 
 
-<div class="window">
+<div class="window"> <!-- MAIN WINDOW -->
   <div class="title-bar">
     <div class="title-bar-text">
       shm garanganao almeda 
@@ -68,7 +72,19 @@
     </div>
   </div> <!--end window header-->
 
-  <div class="window-body">
+  <!-- shown while assets load; loader.js swaps it for #main-body on window load -->
+  <div class="window-body" id="loading-body">
+    <div role="tab-panel">
+      <fieldset>
+        <legend style="text-align:left;"> now loading...</legend>
+    <div style="margin: 20px 0 20px; text-align: center;">... shm is preparing; please wait warmly ...</div>
+    <progress id="loader-progress" max="100" value="0"></progress>
+
+    </fieldset>
+    </div>
+  </div>
+
+  <div class="window-body" id="main-body" style="display: none;">
     <section class="tabs">
       <menu role="tablist" aria-labelledby="tablist-1" class="manual">
         <!-- TAB MENU BAR! -->
