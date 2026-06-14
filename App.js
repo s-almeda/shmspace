@@ -104,6 +104,13 @@ app.get('/tube', (_req, res) => {
     res.redirect('https://art.snailbunny.site/api/bart/tube');
 });
 
+app.get('/art-education', (_req, res) => {
+    res.redirect('/papers/art_education/');
+});
+app.get('/art_education', (_req, res) => {
+    res.redirect('/papers/art_education/');
+});
+
 // Generic puppeteering rig — all puppet routes live alongside the rig.
 app.use(require('./public/puppets/puppet_routes')(publicPath));
 
