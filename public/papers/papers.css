@@ -19,8 +19,30 @@ html, body {
     background-attachment: fixed;
     color: #1a1a1a;
     font-family: 'Pixelated MS Sans Serif', Arial, sans-serif;
-    overflow-x: hidden;
     scroll-behavior: smooth;
+}
+
+/* ── scrollbars ──
+   the root (<html>) owns the ONE and only vertical scrollbar for the whole page,
+   and it's permanently reserved (scroll, not auto) so it can never flicker in and
+   out as the reveal animations / drifting clouds change the layout height.
+   nothing else is allowed to spawn its own vertical scrollbar — see below. */
+html {
+    overflow-x: hidden;      /* never a horizontal scrollbar */
+    overflow-y: scroll;      /* the single, always-present main scrollbar */
+}
+body {
+    /* `clip` trims sideways overflow WITHOUT turning <body> into a second scroll
+       container (which is what `hidden` here did, causing the phantom 2nd bar). */
+    overflow-x: clip;
+    overflow-y: visible;     /* body defers vertical scrolling to <html> */
+}
+
+/* belt-and-suspenders: no inner container is ever permitted to grow its own
+   vertical scrollbar — they all overflow visibly into the single page scroll. */
+.paper-page, .row, .pair, .values, .value,
+.authors, .author, .paper-window, .window-body, .paper-links {
+    overflow-y: visible;
 }
 
 /* in-page jump targets clear the top edge a little */
