@@ -81,7 +81,7 @@ app.get('/facial_recognishm/puppets-list', function (_req, res) {
 
 // SHMUH.CO/... short URL -> destination. add a line here to add a redirect.
 const redirects = {
-    '/artographer':   'https://artographer.snailbunny.site/',
+    '/artographer':   '/papers/artographer/',
     '/bart':          'https://art.snailbunny.site/portfolio/0_FEATURED/shm_X_bart.html',
     '/walo':          'https://drive.google.com/file/d/1084qTZ1h9WmhtC-w2g-UyvVDSoCoEfzg/view?usp=sharing',
     '/shmuppetry':    'https://art.snailbunny.site/portfolio/0_FEATURED/shmuppetry.html',

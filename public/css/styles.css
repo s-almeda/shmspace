@@ -61,7 +61,7 @@ iframe{
 
   /* WIDTH */
   min-width: 360px;
-  max-width:85vw;
+  max-width:90vw;
   margin-left: auto;
   margin-right: auto;
 
@@ -386,6 +386,22 @@ details[open] summary p{
 
 /* -- MOBILE/ skinty view -- --*/
 @media (max-width : 750px) {
+  /* on phones the fixed grass hills don't reliably reach the very bottom of the
+     screen (iOS Safari anchors fixed elements to the larger layout viewport, so
+     the visible bottom edge can peek through). instead of fighting that, tint the
+     bottom of the sky itself grass-green: this rides the SAME body→canvas
+     background propagation as desktop (no <html> background, no z-index tricks),
+     so it can't hide the hills. green starts early (~68%) so it's reached well
+     before the visible bottom even when vh overshoots the visible area. */
+  body {
+    background: linear-gradient(186deg,
+        #0360C8 5%,
+        #267FD3 42%,
+        #A4C5AB 62%,
+        #81C827 78%,
+        #175E2F 100%);
+  }
+
   #files_moving_bottom{
     display: flex;
   }
@@ -529,6 +545,10 @@ details[open] summary p{
 
 /* --  clouds based on code from Mark Bowley on codepen:  -----
 https://codepen.io/Mark_Bowley/pen/LYZEBq */
+/* NOTE: deliberately NO background on <html>. With html left transparent, the
+   body's gradient *propagates to the canvas* and paints at the very back of the
+   page — which is what lets the z-index:-1 grass hills show in front of it.
+   Putting a background on <html> stops that propagation and hides the hills. */
 body {
   background: linear-gradient(186deg, #0360C8 6.25%, #267FD3 55%, #A4C5AB 83%, #A4C5AB 100%);
   /*font: 100% Arial, Sans Serif;*/
@@ -536,6 +556,9 @@ body {
   width: 100%;
   margin: 0;
   padding: 0;
+  /* 100vh (the LARGER, toolbar-hidden viewport) on purpose: it keeps the page
+     covered when the mobile toolbar retracts. 100dvh would size to the smaller
+     toolbar-shown viewport and leave a white strip below when the bar hides. */
   height: 100vh;
 }
 
