@@ -17,6 +17,7 @@
     { "source": "/rsp0", "destination": "https://art.snailbunny.site/portfolio/0_FEATURED/artist_in_the_loop.html" },
     { "source": "/bart", "destination": "https://art.snailbunny.site/portfolio/0_FEATURED/shm_X_bart.html" },
     { "source": "/walo", "destination": "https://drive.google.com/file/d/1084qTZ1h9WmhtC-w2g-UyvVDSoCoEfzg/view?usp=sharing" },
+    { "source": "/cse", "destination": "https://drive.google.com/file/d/1JDzBXyb7YiO4BK5YCuQgzFMALVSlMYr1/view", "permanent": false },
     { "source": "/shmuppetry", "destination": "https://art.snailbunny.site/portfolio/0_FEATURED/shmuppetry.html" },
     { "source": "/tube", "destination": "https://art.snailbunny.site/api/bart/tube" },
     { "source": "/artographer/:path+", "destination": "https://artographer.snailbunny.site/:path*" }
