@@ -7,6 +7,7 @@
     { "source": "/artographer", "destination": "/papers/artographer/" },
     { "source": "/art_education", "destination": "/papers/art_education/" },
     { "source": "/art-education", "destination": "/papers/art_education/" },
+    { "source": "/papers/:paper([^/.]+)", "destination": "/papers/:paper/" },
     { "source": "/aitl", "destination": "https://art.snailbunny.site/portfolio/0_FEATURED/artist_in_the_loop.html" },
     { "source": "/rsp", "destination": "https://art.snailbunny.site/portfolio/0_FEATURED/artist_in_the_loop.html" },
     { "source": "/rsp0", "destination": "https://art.snailbunny.site/portfolio/0_FEATURED/artist_in_the_loop.html" },
