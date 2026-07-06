@@ -63,8 +63,8 @@
         .stage { position: relative; height: 30vh; aspect-ratio: 1576 / 1080; }
         .stage .stage-video { width: 100%; height: 100%; object-fit: contain; display: block; border-radius: 4px; opacity: 0; transition: opacity .6s ease; }
         .stage .guy { position: absolute; bottom: 0; height: 40%; width: auto; z-index: 3; opacity: 0; transition: opacity .5s ease; }
-        .stage .guy-researcher { left: 0; transform: translateX(-38%); }
-        .stage .guy-participant { right: 0; transform: translateX(38%); }
+        .stage .guy-researcher { left: 0; transform: translateX(-30%); }
+        .stage .guy-participant { right: 0; transform: translateX(30%); }
         /* six speech bubbles: 3 per guy. Bubble 1 sits lowest, 3 highest, with
            z-index climbing so higher bubbles layer over lower ones. */
         .stage .bubble { position: absolute; width: auto; opacity: 0; transform: translateY(30px); transition: opacity .5s ease, transform .8s cubic-bezier(.2, .8, .25, 1); }
@@ -87,6 +87,19 @@
         .stage.loaded .b-r3 { transition-delay: 2.4s; }
         @media (prefers-reduced-motion: reduce) {
             .stage .stage-video, .stage .guy, .stage .bubble { transition: none; }
+        }
+        /* skinnier screens: pull the guys + bubbles in toward center so they
+           don't overhang off the edges of the narrower video. Bubbles move via
+           left/right only (their transform carries the float-up animation). */
+        @media (max-width: 500px) {
+            .stage .guy-researcher  { transform: translateX(25%); }
+            .stage .guy-participant { transform: translateX(-25%); }
+            .stage .b-l1 { left: 10%; }
+            .stage .b-l2 { left: 2%; }
+            .stage .b-l3 { left: 12%; }
+            .stage .b-r1 { right: 16%; }
+            .stage .b-r2 { right: 7%; }
+            .stage .b-r3 { right: 12%; }
         }
         /* fixation clip: rounded, shadowed frame; video is slightly wider and
            nudged left so its left edge is cropped a bit by the frame */
