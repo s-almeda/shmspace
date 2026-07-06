@@ -15,6 +15,17 @@
         /* page-specific: the "read the paper" jump lands toward the upper-center */
         #read-the-paper { scroll-margin-top: 28vh; }
 
+        /* keep the last two authors together so a line-wrap never leaves a single
+           author orphaned on the final row: they act as one atomic flex item that
+           mirrors the parent's gap and takes up two author-slots' worth of space */
+        .author-pair {
+            display: flex;
+            gap: 18px;
+            flex: 2 1 278px;   /* 2*130px basis + the 18px gap, grows like two authors */
+            max-width: 338px;  /* 2*160px + 18px, matches two singles at their cap */
+            justify-content: center;
+        }
+
         /* the 20 study participants: small, overlapping, rightmost on top,
            sliding out to the right as the row scrolls into view */
         .participants {
@@ -43,40 +54,44 @@
         @media (prefers-reduced-motion: reduce) {
             .window-body .participants .participant { transition: opacity .5s; transform: none; }
         }
-        /* Figure 1 hero: study-demo gif flanked by the researcher + participant
+        /* Figure 1 teaser: study-demo video flanked by the researcher + participant
            guys, with speech bubbles rising out of each. Whole thing == 30vh;
            guys are 40% of that (12vh) and overhang only sideways. */
-        .hero-fig { width: 100%; margin: 6px 0 2px; display: flex; justify-content: center; }
-        /* aspect-ratio reserves the box (30vh tall) before the gif loads, so the
-           header window shows instantly with no reflow when the gif arrives */
-        .hero-stage { position: relative; height: 30vh; aspect-ratio: 1576 / 1080; }
-        .hero-stage .hero-gif { width: 100%; height: 100%; object-fit: contain; display: block; border-radius: 4px; opacity: 0; transition: opacity .6s ease; }
-        .hero-stage .hero-guy { position: absolute; bottom: 0; height: 40%; width: auto; z-index: 3; opacity: 0; transition: opacity .5s ease; }
-        .hero-stage .hero-researcher { left: 0; transform: translateX(-38%); }
-        .hero-stage .hero-participant { right: 0; transform: translateX(38%); }
+        .teaser { width: 100%; margin: 6px 0 2px; display: flex; justify-content: center; }
+        /* aspect-ratio reserves the box (30vh tall) before the video loads, so the
+           header window shows instantly with no reflow when the video arrives */
+        .stage { position: relative; height: 30vh; aspect-ratio: 1576 / 1080; }
+        .stage .stage-video { width: 100%; height: 100%; object-fit: contain; display: block; border-radius: 4px; opacity: 0; transition: opacity .6s ease; }
+        .stage .guy { position: absolute; bottom: 0; height: 40%; width: auto; z-index: 3; opacity: 0; transition: opacity .5s ease; }
+        .stage .guy-researcher { left: 0; transform: translateX(-38%); }
+        .stage .guy-participant { right: 0; transform: translateX(38%); }
         /* six speech bubbles: 3 per guy. Bubble 1 sits lowest, 3 highest, with
            z-index climbing so higher bubbles layer over lower ones. */
-        .hero-stage .hero-bubbles { position: absolute; width: auto; opacity: 0; transform: translateY(30px); transition: opacity .5s ease, transform .8s cubic-bezier(.2, .8, .25, 1); }
-        .hero-stage .b-l1 { height: 16%; left: 0%;  bottom: 40%; z-index: 4; }
-        .hero-stage .b-l2 { height: 17%; left: -7%; bottom: 47%; z-index: 5; }
-        .hero-stage .b-l3 { height: 19%; left: 3%;  bottom: 52%; z-index: 6; }
-        .hero-stage .b-r1 { height: 16%; right: 5%;  bottom: 30%; z-index: 4; }
-        .hero-stage .b-r2 { height: 17%; right: -5%; bottom: 38%; z-index: 5; }
-        .hero-stage .b-r3 { height: 18%; right: 5%;  bottom: 45%; z-index: 6; }
-        /* staggered load-in once the gif finishes: gif -> both guys -> left bubbles -> right bubbles */
-        .hero-stage.gif-loaded .hero-gif { opacity: 1; }
-        .hero-stage.gif-loaded .hero-guy { opacity: 1; transition-delay: .5s; }
+        .stage .bubble { position: absolute; width: auto; opacity: 0; transform: translateY(30px); transition: opacity .5s ease, transform .8s cubic-bezier(.2, .8, .25, 1); }
+        .stage .b-l1 { height: 16%; left: 0%;  bottom: 40%; z-index: 4; }
+        .stage .b-l2 { height: 17%; left: -7%; bottom: 47%; z-index: 5; }
+        .stage .b-l3 { height: 19%; left: 3%;  bottom: 52%; z-index: 6; }
+        .stage .b-r1 { height: 16%; right: 5%;  bottom: 30%; z-index: 4; }
+        .stage .b-r2 { height: 17%; right: -5%; bottom: 38%; z-index: 5; }
+        .stage .b-r3 { height: 18%; right: 5%;  bottom: 45%; z-index: 6; }
+        /* staggered load-in once the video finishes: gif -> both guys -> left bubbles -> right bubbles */
+        .stage.loaded .stage-video { opacity: 1; }
+        .stage.loaded .guy { opacity: 1; transition-delay: .5s; }
         /* float-up order: left1 -> right1 -> left2 -> right2 -> left3 -> right3 */
-        .hero-stage.gif-loaded .hero-bubbles { opacity: 1; transform: translateY(0); }
-        .hero-stage.gif-loaded .b-l1 { transition-delay: .9s; }
-        .hero-stage.gif-loaded .b-r1 { transition-delay: 1.2s; }
-        .hero-stage.gif-loaded .b-l2 { transition-delay: 1.5s; }
-        .hero-stage.gif-loaded .b-r2 { transition-delay: 1.8s; }
-        .hero-stage.gif-loaded .b-l3 { transition-delay: 2.1s; }
-        .hero-stage.gif-loaded .b-r3 { transition-delay: 2.4s; }
+        .stage.loaded .bubble { opacity: 1; transform: translateY(0); }
+        .stage.loaded .b-l1 { transition-delay: .9s; }
+        .stage.loaded .b-r1 { transition-delay: 1.2s; }
+        .stage.loaded .b-l2 { transition-delay: 1.5s; }
+        .stage.loaded .b-r2 { transition-delay: 1.8s; }
+        .stage.loaded .b-l3 { transition-delay: 2.1s; }
+        .stage.loaded .b-r3 { transition-delay: 2.4s; }
         @media (prefers-reduced-motion: reduce) {
-            .hero-stage .hero-gif, .hero-stage .hero-guy, .hero-stage .hero-bubbles { transition: none; }
+            .stage .stage-video, .stage .guy, .stage .bubble { transition: none; }
         }
+        /* fixation clip: rounded, shadowed frame; video is slightly wider and
+           nudged left so its left edge is cropped a bit by the frame */
+        .video-frame { border-radius: 12px; overflow: hidden; box-shadow: 0 6px 16px rgba(0, 0, 0, .18); line-height: 0; }
+        .video-frame video { display: block; width: 104%; margin-left: -4%; }
     </style>
 </head>
 <body>
@@ -117,17 +132,17 @@
                 </div>
                 
                 <div class="window-body">
-                     <figure class="hero-fig">
-                <div class="hero-stage">
-                    <video class="hero-gif" src="artographer_study_demo.mp4" autoplay muted loop playsinline preload="auto" aria-label="Screen recording of the Artographer interface during a study session."></video>
-                    <img class="hero-bubbles b-l1" src="left1.png" alt="">
-                    <img class="hero-bubbles b-r1" src="right1.png" alt="">
-                    <img class="hero-bubbles b-l2" src="left2.png" alt="">
-                    <img class="hero-bubbles b-r2" src="right2.png" alt="">
-                    <img class="hero-bubbles b-l3" src="left3.png" alt="">
-                    <img class="hero-bubbles b-r3" src="right3.png" alt="">
-                    <img class="hero-guy hero-researcher" src="researcher.png" alt="A researcher figure">
-                    <img class="hero-guy hero-participant" src="participant.png" alt="A participant figure">
+                     <figure class="teaser">
+                <div class="stage">
+                    <video class="stage-video" src="artographer_study_demo.mp4" autoplay muted loop playsinline preload="auto" aria-label="Screen recording of the Artographer interface during a study session."></video>
+                    <img class="bubble b-l1" src="left1.png" alt="">
+                    <img class="bubble b-r1" src="right1.png" alt="">
+                    <img class="bubble b-l2" src="left2.png" alt="">
+                    <img class="bubble b-r2" src="right2.png" alt="">
+                    <img class="bubble b-l3" src="left3.png" alt="">
+                    <img class="bubble b-r3" src="right3.png" alt="">
+                    <img class="guy guy-researcher" src="researcher.png" alt="A researcher figure">
+                    <img class="guy guy-participant" src="participant.png" alt="A participant figure">
                 </div>
             </figure>
                     <h1 class="paper-title">Artographer</h1>
@@ -173,6 +188,8 @@
                             <div class="author-aff">University of Washington</div>
                             <a class="author-email" href="mailto:bhalp@uw.edu">bhalp@uw.edu</a>
                         </div>
+                        <!-- last two grouped so a wrap never orphans a single author -->
+                        <div class="author-pair">
                         <div class="author">
                             <a class="author-photo" href="https://people.eecs.berkeley.edu/~bjoern/" target="_blank"><img src="../author_images/bjoern.png" alt="Bjoern Hartmann"></a>
                             <a class="author-name" href="https://people.eecs.berkeley.edu/~bjoern/" target="_blank">Bjoern Hartmann</a>
@@ -185,24 +202,27 @@
                             <div class="author-aff">Cornell Tech</div>
                             <a class="author-email" href="mailto:maxkreminski@gmail.com">maxkreminski@gmail.com</a>
                         </div>
-
+                        </div>
+                        </div>
+                        </div>
 
         <!-- Paper links window -->
-        <div class="pair reveal" id="read-the-paper">
-            <div class="window paper-window size-md pair-main">
+        <div class=" pair reveal" id="read-the-paper" >
+            <div class="window paper-window size-md pair-side">
                 <div class="title-bar">
                     <div class="title-bar-text">read the paper!</div>
                 </div>
                 <div class="window-body">
                     <div class="paper-links">
-                        <button onclick="window.open('https://arxiv.org/abs/2512.02288v2', '_blank')">arXiv</button>
-                        <button disabled onclick="window.open('https://doi.org/10.1145/3803784.3807532', '_blank')">ACM Digital Library</button>
+                                               <button disabled onclick="window.open('https://doi.org/10.1145/3803784.3807532', '_blank')">ACM Digital Library</button>
                         <button onclick="window.open('artographer_final.pdf', '_blank')">PDF</button>
                         <button onclick="window.open('https://drive.google.com/file/d/1K5hCimJGfBOD5GLv3rC8HxjqLu418kOk/view?usp=drive_link', '_blank')">PDF (Google Drive)</button>
+                         <button onclick="window.open('https://arxiv.org/abs/2512.02288v2', '_blank')">arXiv</button>
+
                     </div>
                 </div>
             </div>
-            <div class="window paper-window size-md pair-side" style="margin-top:15px;">
+            <div class="window paper-window size-md pair-main" style="margin-top:15px;">
                 <div class="title-bar">
                     <div class="title-bar-text">check it out!</div>
                 </div>
@@ -261,7 +281,7 @@
                     <div class="title-bar-text">to characterize art exploration within a <em>curatorial</em> media interface...</div>
                 </div>
                 <div class="window-body">
-                    <video style="width: 100%;" src="fixation.mp4" autoplay muted loop playsinline preload="auto" aria-label="artographer interface"></video>
+                    <div class="video-frame"><video src="fixation.mp4" autoplay muted loop playsinline preload="auto" aria-label="artographer interface"></video></div>
                     <div class="participants reveal" aria-label="20 study participants, including artists and art history scholars">
                         <img class="participant" src="artist.png"             alt="p1 was an artist" style="transition-delay:0ms">
                         <img class="participant" src="artist_scholar.png"      alt="p2 was an artist-scholar" style="transition-delay:55ms">
@@ -287,7 +307,7 @@
 We traced how 20 participants, including 9 art history scholars, used Artographer to explore, discover and collect across art space.                    
                 </div>
             </div>
-            <div class="window paper-window pair-side" style="margin-top:15px;">
+            <div class="window paper-window pair-side" style="margin-top:25px;">
                 <div class="title-bar">
                     <div class="title-bar-text">...investigating...</div>
                 </div>
@@ -338,7 +358,7 @@ We traced how 20 participants, including 9 art history scholars, used Artographe
                     <div class="title-bar-text">want to learn more?</div>
                 </div>
                 <div class="window-body text-body">
-                    <p>read our <a href="#read-the-paper">paper</a> or come see the talk at <strong>C&amp;C 2026</strong>, at the <a href="https://programs.sigchi.org/c&c/2026/program/content/260592" target="_blank"><em>Generative AI as Probe</em></a> session, on Tuesday, July 14, 4:30&ndash;6:00 PM, in the Platform Theatre.</p>
+                    <p>read our <a href="#read-the-paper">paper</a>, or come see the talk at <strong>C&amp;C 2026</strong> in the <a href="https://programs.sigchi.org/c&c/2026/program/content/260592" target="_blank"><em>Generative AI as Probe</em></a> session on Tuesday, July 14, 4:30&ndash;6:00 PM, in the Platform Theatre.</p>
                 </div>
             </div>
         </div>
@@ -357,18 +377,18 @@ We traced how 20 participants, including 9 art history scholars, used Artographe
         }, { threshold: 0.12 });
         document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
 
-        // Hero figure staggered load-in: reveal the guys + speech bubbles only
-        // once the (large) demo gif has finished loading. CSS handles the timing.
-        const heroStage = document.querySelector('.hero-stage');
-        const heroGif = heroStage && heroStage.querySelector('.hero-gif');
-        if (heroGif) {
-            const revealHero = () => heroStage.classList.add('gif-loaded');
-            const isVideo = heroGif.tagName === 'VIDEO';
-            const ready = isVideo ? heroGif.readyState >= 2 : (heroGif.complete && heroGif.naturalWidth);
-            if (ready) revealHero();
+        // Teaser staggered load-in: reveal the guys + speech bubbles only
+        // once the (large) demo video has finished loading. CSS handles the timing.
+        const stageEl = document.querySelector('.stage');
+        const videoEl = stageEl && stageEl.querySelector('.stage-video');
+        if (videoEl) {
+            const showFig = () => stageEl.classList.add('loaded');
+            const isVideo = videoEl.tagName === 'VIDEO';
+            const ready = isVideo ? videoEl.readyState >= 2 : (videoEl.complete && videoEl.naturalWidth);
+            if (ready) showFig();
             else {
-                heroGif.addEventListener(isVideo ? 'loadeddata' : 'load', revealHero);
-                heroGif.addEventListener('error', revealHero); // fail-safe: still show the guys
+                videoEl.addEventListener(isVideo ? 'loadeddata' : 'load', showFig);
+                videoEl.addEventListener('error', showFig); // fail-safe: still show the guys
             }
         }
     </script>

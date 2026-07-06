@@ -97,7 +97,7 @@ body {
     gap: 16px;
     width: 100%;
     max-width: min(94vw, 780px);
-    margin: 0 auto;
+    margin: 3em auto;
 }
 .pair .paper-window { width: auto; }            /* flex controls width, not the default */
 .pair-main { flex: 3 1 0; min-width: 300px; }   /* ~60% */
