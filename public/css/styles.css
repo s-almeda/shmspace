@@ -200,7 +200,7 @@ iframe{
 }
 
 /* --  MOBILE/ skinty view -- --*/
-@media (max-width: 650px){
+@media (max-width: 720px){
   .project-conference{
 
     font-size: max(2.5vw, 10pt);
