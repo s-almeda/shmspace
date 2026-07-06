@@ -4,9 +4,9 @@
   "outputDirectory": "public",
   "installCommand": "echo 'no build deps needed'",
   "redirects": [
-    { "source": "/artographer", "destination": "/papers/artographer" },
-    { "source": "/art_education", "destination": "/papers/art_education" },
-    { "source": "/art-education", "destination": "/papers/art_education" },
+    { "source": "/artographer", "destination": "/papers/artographer/" },
+    { "source": "/art_education", "destination": "/papers/art_education/" },
+    { "source": "/art-education", "destination": "/papers/art_education/" },
     { "source": "/aitl", "destination": "https://art.snailbunny.site/portfolio/0_FEATURED/artist_in_the_loop.html" },
     { "source": "/rsp", "destination": "https://art.snailbunny.site/portfolio/0_FEATURED/artist_in_the_loop.html" },
     { "source": "/rsp0", "destination": "https://art.snailbunny.site/portfolio/0_FEATURED/artist_in_the_loop.html" },
@@ -27,6 +27,6 @@
     { "source": "/puppets/hand-puppets-list/:collection", "destination": "/puppets/hand-puppets-list/:collection.json" },
     { "source": "/puppets/head-puppets-list/:collection", "destination": "/puppets/head-puppets-list/:collection.json" },
     { "source": "/puppets/shows/:show/script", "destination": "/puppets/shows/:show/game_script.json" },
-    { "source": "/papers/:paper", "destination": "/papers/:paper/:paper.html" }
+    { "source": "/papers/:paper/", "destination": "/papers/:paper/:paper.html" }
   ]
 }
