@@ -130,13 +130,18 @@ iframe{
     display: inline;
     overflow: hidden;
     margin-bottom: 13px;
-    max-height: 38vh
-    
+    max-height: 38vh;
+    width: auto;
+    overflow-x: hidden;
+    max-width: 98%;
+
 }
 .project-img img{
     display: inline;
-    max-height: 25vh; /* Limits width */
     width: auto;
+    max-width: 98%;
+  
+
 }
 .col-5{
   flex-grow: 1;
@@ -181,6 +186,7 @@ iframe{
     color: #000;
     font-size: max(0.2vh, 12pt);
     padding: 0 2ch;
+    padding-bottom: 1.5ch;
     flex-wrap: wrap;
     align-content: center;
     justify-content: flex-end;
@@ -195,7 +201,6 @@ iframe{
   .project-conference{
 
     font-size: max(2.5vw, 10pt);
-        padding: 0 2ch;
     position: relative;
     top: 0;
   }
