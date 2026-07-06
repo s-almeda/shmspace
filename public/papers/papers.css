@@ -251,7 +251,7 @@ body {
 
 /* ── mobile ── */
 @media (max-width: 640px) {
-    .paper-page { gap: 38px; padding: 34px 14px 90px 14px; }
+    .paper-page { gap: 38px; padding: 34px 14px 30px 14px; }
     .row, .row.left, .row.right { justify-content: center; }
     .paper-window,
     .paper-window.size-sm,

@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Artographer: A Curatorial Interface for Art Space Exploration">
-    <title>Artographer — C&C 2026 </title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;%3E%3Ctext y=&#39;.9em&#39; font-size=&#39;90&#39;%3E%F0%9F%8E%A8%3C/text%3E%3C/svg%3E">
+    <title>Artographer</title>
+
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;%3E%3Ctext y=&#39;.9em&#39; font-size=&#39;90&#39;%3E%F0%9F%96%BC%3C/text%3E%3C/svg%3E">
     <link rel="stylesheet" href="https://unpkg.com/xp.css" />
 
     <link rel="stylesheet" href="../papers.css" />
@@ -13,6 +14,69 @@
     <style>
         /* page-specific: the "read the paper" jump lands toward the upper-center */
         #read-the-paper { scroll-margin-top: 28vh; }
+
+        /* the 20 study participants: small, overlapping, rightmost on top,
+           sliding out to the right as the row scrolls into view */
+        .participants {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding: 13.5px 0;
+            overflow: hidden;
+        }
+        .window-body .participants .participant {
+            flex: 0 0 auto;
+            width: 8.25%;
+            height: auto;
+            opacity: 0;
+            transform: translateX(-55px);
+            transition: opacity .1s, transform .6s cubic-bezier(.2, .8, .25, 1);
+        }
+        .window-body .participants .participant + .participant {
+            margin-left: -3.6%;
+        }
+        .window-body .participants.visible .participant {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .window-body .participants .participant { transition: opacity .5s; transform: none; }
+        }
+        /* Figure 1 hero: study-demo gif flanked by the researcher + participant
+           guys, with speech bubbles rising out of each. Whole thing == 30vh;
+           guys are 40% of that (12vh) and overhang only sideways. */
+        .hero-fig { width: 100%; margin: 6px 0 2px; display: flex; justify-content: center; }
+        /* aspect-ratio reserves the box (30vh tall) before the gif loads, so the
+           header window shows instantly with no reflow when the gif arrives */
+        .hero-stage { position: relative; height: 30vh; aspect-ratio: 1576 / 1080; }
+        .hero-stage .hero-gif { width: 100%; height: 100%; object-fit: contain; display: block; border-radius: 4px; opacity: 0; transition: opacity .6s ease; }
+        .hero-stage .hero-guy { position: absolute; bottom: 0; height: 40%; width: auto; z-index: 3; opacity: 0; transition: opacity .5s ease; }
+        .hero-stage .hero-researcher { left: 0; transform: translateX(-38%); }
+        .hero-stage .hero-participant { right: 0; transform: translateX(38%); }
+        /* six speech bubbles: 3 per guy. Bubble 1 sits lowest, 3 highest, with
+           z-index climbing so higher bubbles layer over lower ones. */
+        .hero-stage .hero-bubbles { position: absolute; width: auto; opacity: 0; transform: translateY(30px); transition: opacity .5s ease, transform .8s cubic-bezier(.2, .8, .25, 1); }
+        .hero-stage .b-l1 { height: 16%; left: 0%;  bottom: 40%; z-index: 4; }
+        .hero-stage .b-l2 { height: 17%; left: -7%; bottom: 47%; z-index: 5; }
+        .hero-stage .b-l3 { height: 19%; left: 3%;  bottom: 52%; z-index: 6; }
+        .hero-stage .b-r1 { height: 16%; right: 5%;  bottom: 30%; z-index: 4; }
+        .hero-stage .b-r2 { height: 17%; right: -5%; bottom: 38%; z-index: 5; }
+        .hero-stage .b-r3 { height: 18%; right: 5%;  bottom: 45%; z-index: 6; }
+        /* staggered load-in once the gif finishes: gif -> both guys -> left bubbles -> right bubbles */
+        .hero-stage.gif-loaded .hero-gif { opacity: 1; }
+        .hero-stage.gif-loaded .hero-guy { opacity: 1; transition-delay: .5s; }
+        /* float-up order: left1 -> right1 -> left2 -> right2 -> left3 -> right3 */
+        .hero-stage.gif-loaded .hero-bubbles { opacity: 1; transform: translateY(0); }
+        .hero-stage.gif-loaded .b-l1 { transition-delay: .9s; }
+        .hero-stage.gif-loaded .b-r1 { transition-delay: 1.2s; }
+        .hero-stage.gif-loaded .b-l2 { transition-delay: 1.5s; }
+        .hero-stage.gif-loaded .b-r2 { transition-delay: 1.8s; }
+        .hero-stage.gif-loaded .b-l3 { transition-delay: 2.1s; }
+        .hero-stage.gif-loaded .b-r3 { transition-delay: 2.4s; }
+        @media (prefers-reduced-motion: reduce) {
+            .hero-stage .hero-gif, .hero-stage .hero-guy, .hero-stage .hero-bubbles { transition: none; }
+        }
     </style>
 </head>
 <body>
@@ -43,7 +107,7 @@
 
         <!-- Header window -->
         <div class="row reveal">
-            <div class="window paper-window size-lg">
+            <div class="window paper-window size-lg" style="gap: 0px;">
                 <div class="title-bar">
                     <div class="title-bar-text">Artographer @ C&C 2026</div>
                     <div class="title-bar-controls">
@@ -53,9 +117,22 @@
                 </div>
                 
                 <div class="window-body">
+                     <figure class="hero-fig">
+                <div class="hero-stage">
+                    <video class="hero-gif" src="artographer_study_demo.mp4" autoplay muted loop playsinline preload="auto" aria-label="Screen recording of the Artographer interface during a study session."></video>
+                    <img class="hero-bubbles b-l1" src="left1.png" alt="">
+                    <img class="hero-bubbles b-r1" src="right1.png" alt="">
+                    <img class="hero-bubbles b-l2" src="left2.png" alt="">
+                    <img class="hero-bubbles b-r2" src="right2.png" alt="">
+                    <img class="hero-bubbles b-l3" src="left3.png" alt="">
+                    <img class="hero-bubbles b-r3" src="right3.png" alt="">
+                    <img class="hero-guy hero-researcher" src="researcher.png" alt="A researcher figure">
+                    <img class="hero-guy hero-participant" src="participant.png" alt="A participant figure">
+                </div>
+            </figure>
                     <h1 class="paper-title">Artographer</h1>
-                    <p class="paper-subtitle">A Curatorial Interface for Art Space Exploration</p>
-                    <p class="paper-venue">In the <a href="https://programs.sigchi.org/c&c/2026/program/content/260592" target="_blank"><em>Generative AI as Creative Probe</em></a> session at the ACM <strong>Creativity & Cognition Conference</strong> (<strong>C&C 2026</strong>) in London.</p></div>
+                    <p class="paper-subtitle" style="padding-top: 0px;">A Curatorial Interface for Art Space Exploration</p>
+                    <p class="paper-venue">In the <a href="https://programs.sigchi.org/c&c/2026/program/content/260592" target="_blank"><em>Generative&nbsp;AI&nbsp;as&nbsp;Creative&nbsp;Probe</em></a> session, at the ACM Creativity&nbsp;&amp;&nbsp;Cognition Conference <strong>(C&C&nbsp;2026)</strong> in London.</p></div>
                 </div>
             </div>
         </div>
@@ -111,8 +188,8 @@
 
 
         <!-- Paper links window -->
-        <div class="row reveal" id="read-the-paper">
-            <div class="window paper-window size-md">
+        <div class="pair reveal" id="read-the-paper">
+            <div class="window paper-window size-md pair-main">
                 <div class="title-bar">
                     <div class="title-bar-text">read the paper!</div>
                 </div>
@@ -125,9 +202,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-                <div class="row reveal" id="read-the-paper">
-            <div class="window paper-window size-md">
+            <div class="window paper-window size-md pair-side" style="margin-top:15px;">
                 <div class="title-bar">
                     <div class="title-bar-text">check it out!</div>
                 </div>
@@ -142,17 +217,38 @@
         </div>
 
                 <!-- Abstract window -->
-        <div class="row reveal">
+        <!-- <div class="row reveal">
             <div class="window paper-window size-lg">
                 <div class="title-bar">
                     <div class="title-bar-text">about </div>
                 </div>
                 <div class="window-body text-body">
-                    <p>
-                        Relating new art &amp; media to previously established works is crucial in creating and engaging with art &amp; culture... but mainstream AI interfaces &amp; media platforms tend to <em>obscure</em> and <em>extract</em> from culture, instead of supporting meaningful engagement with it. Can we imagine new ways of designing with data to support media ecosystems where history & culture can thrive?
-                        </p>
+
                         
                                        </div>
+            </div>
+        </div> -->
+
+
+        <!-- what is it-->
+        <div class="row reveal">
+            <div class="window paper-window size-lg">
+                <div class="title-bar">
+                    <div class="title-bar-text">what is it?</div>
+                </div>
+                <div class="window-body text-body">
+                                        <p>
+                        Relating new art &amp; media to previously established works is crucial in creating and engaging with art &amp; culture... but mainstream AI interfaces &amp; media platforms tend to <em>obscure</em> and <em>extract</em> from culture, instead of supporting meaningful engagement with it.
+                        </p>
+                        <p>
+                        Can we imagine new ways of designing with data to support media ecosystems where history & culture can thrive?
+                        </p>
+                    <p> <img style="width: 100%;" src="interface_screenshot.png" alt="artographer interface">
+
+                    Artographer is an interface for exploring a curated dataset of around 16,000 historical artworks as a zoomable, similarity-
+                    clustered map, constructed from multiple embedding models’ representations of each artwork’s visual and semantic features.
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -160,17 +256,33 @@
         <div class="pair reveal">
             <div class="window paper-window pair-main">
                 <div class="title-bar">
-                    <div class="title-bar-text">what we did</div>
+                    <div class="title-bar-text">to characterize art exploration within a <em>curatorial</em> media interface...</div>
                 </div>
                 <div class="window-body">
-                    <img src="fig1.png" alt="artographer interface">
-
-                    Artographer is an interface for exploring a curated dataset of around 16,000 historical artworks as a zoomable, similarity-
-clustered map, constructed from multiple embedding models’ representations of each artwork’s visual and semantic features.
-<br>
-                    <img src="fig1.png" alt="lil guys">
-<br>
-We traced how 20 participants, including 9 art history scholars, used Artographer to discover and collect across art space.                    
+                    <img style="width: 100%;" src="fixation.gif" alt="artographer interface">
+                    <div class="participants reveal" aria-label="20 study participants, including artists and art history scholars">
+                        <img class="participant" src="artist.png"             alt="p1 was an artist" style="transition-delay:0ms">
+                        <img class="participant" src="artist_scholar.png"      alt="p2 was an artist-scholar" style="transition-delay:55ms">
+                        <img class="participant" src="participant_normal.png"  alt="p3 was a participant" style="transition-delay:110ms">
+                        <img class="participant" src="participant_normal.png"  alt="p4 was a participant" style="transition-delay:165ms">
+                        <img class="participant" src="scholar.png"             alt="p5 was a scholar" style="transition-delay:220ms">
+                        <img class="participant" src="participant_normal.png"  alt="p6 was a novice" style="transition-delay:275ms">
+                        <img class="participant" src="participant_normal.png"  alt="p7 was a novice" style="transition-delay:330ms">
+                        <img class="participant" src="artist.png"              alt="p8 was an artist" style="transition-delay:385ms">
+                        <img class="participant" src="artist_scholar.png"      alt="p9 was an artist-scholar" style="transition-delay:440ms">
+                        <img class="participant" src="participant_normal.png"  alt="p10 was a novice" style="transition-delay:495ms">
+                        <img class="participant" src="participant_normal.png"  alt="p11 was a novice" style="transition-delay:550ms">
+                        <img class="participant" src="artist_scholar.png"      alt="p12 was an artist-scholar" style="transition-delay:605ms">
+                        <img class="participant" src="artist_scholar.png"      alt="p13 was an artist-scholar" style="transition-delay:660ms">
+                        <img class="participant" src="scholar.png"             alt="p14 was a scholar" style="transition-delay:715ms">
+                        <img class="participant" src="artist.png"              alt="p15 was an artist" style="transition-delay:770ms">
+                        <img class="participant" src="artist_scholar.png"      alt="p16 was an artist-scholar" style="transition-delay:825ms">
+                        <img class="participant" src="artist.png"              alt="p17 was an artist" style="transition-delay:880ms">
+                        <img class="participant" src="participant_normal.png"  alt="p18 was a novice" style="transition-delay:935ms">
+                        <img class="participant" src="artist_scholar.png"      alt="p19 was an artist-scholar" style="transition-delay:990ms">
+                        <img class="participant" src="scholar.png"             alt="p20 was a scholar" style="transition-delay:1045ms">
+                    </div>
+We traced how 20 participants, including 9 art history scholars, used Artographer to explore, discover and collect across art space.                    
                 </div>
             </div>
             <div class="window paper-window pair-side" style="margin-top:15px;">
@@ -179,8 +291,8 @@ We traced how 20 participants, including 9 art history scholars, used Artographe
                 </div>
                 <div class="window-body text-body">
                     <ol class="rqs">
-                        <li>How can computational curation shape the way we encounter media?</li>
-                         <li>How might users explore and engage with media presented in an alternative way (in this case, as a zoomable, similarity-clustered map?)</li>
+                        <li>How can <b>computational curation</b> shape the ways we <b>encounter</b> media?</li>
+                         <li>How might users explore and engage with an alternative media presentation&mdash;in this case, <b>a zoomable, similarity-clustered visual-spatial map</b>?</li>
                         <li>How can we apply this understanding to design <b>curatorial</b> media systems&mdash;ways of presenting media that facilitate more meaningful engagement?</li>
 
                     </ol>
@@ -216,17 +328,6 @@ We traced how 20 participants, including 9 art history scholars, used Artographe
             </div>
         </div> -->
 
-        <!-- Call to researchers window -->
-        <div class="row reveal">
-            <div class="window paper-window size-lg">
-                <div class="title-bar">
-                    <div class="title-bar-text">our call to technology researchers and designers:</div>
-                </div>
-                <div class="window-body text-body">
-                    <p>we should build systems that curate and present artworks with intentionality! todo make this longer lol</p>
-                </div>
-            </div>
-        </div>
 
         <!-- Talk window -->
         <div class="row reveal">
@@ -235,7 +336,7 @@ We traced how 20 participants, including 9 art history scholars, used Artographe
                     <div class="title-bar-text">want to learn more?</div>
                 </div>
                 <div class="window-body text-body">
-                    <p>read our <a href="#read-the-paper">paper</a> or come see the talk at <strong>C&amp;C 2026</strong>, at the <a href="https://programs.sigchi.org/c&c/2026/program/content/260592" target="_blank"><em>Generative AI as Probe</em></a> session on Tuesday, July 14, 4:30&ndash;6:00 PM, in the Platform Theatre.</p>
+                    <p>read our <a href="#read-the-paper">paper</a> or come see the talk at <strong>C&amp;C 2026</strong>, at the <a href="https://programs.sigchi.org/c&c/2026/program/content/260592" target="_blank"><em>Generative AI as Probe</em></a> session, on Tuesday, July 14, 4:30&ndash;6:00 PM, in the Platform Theatre.</p>
                 </div>
             </div>
         </div>
@@ -253,6 +354,21 @@ We traced how 20 participants, including 9 art history scholars, used Artographe
             });
         }, { threshold: 0.12 });
         document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+        // Hero figure staggered load-in: reveal the guys + speech bubbles only
+        // once the (large) demo gif has finished loading. CSS handles the timing.
+        const heroStage = document.querySelector('.hero-stage');
+        const heroGif = heroStage && heroStage.querySelector('.hero-gif');
+        if (heroGif) {
+            const revealHero = () => heroStage.classList.add('gif-loaded');
+            const isVideo = heroGif.tagName === 'VIDEO';
+            const ready = isVideo ? heroGif.readyState >= 2 : (heroGif.complete && heroGif.naturalWidth);
+            if (ready) revealHero();
+            else {
+                heroGif.addEventListener(isVideo ? 'loadeddata' : 'load', revealHero);
+                heroGif.addEventListener('error', revealHero); // fail-safe: still show the guys
+            }
+        }
     </script>
 
 </body>
