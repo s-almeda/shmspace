@@ -6,6 +6,9 @@
   "redirects": [
     { "source": "/artographer", "destination": "/papers/artographer/" },
     { "source": "/artographer/", "destination": "/papers/artographer/" },
+    { "source": "/infinitecats", "destination": "https://infinitecat.vercel.app" },
+    { "source": "/infinitecats/", "destination": "https://infinitecat.vercel.app" },
+    { "source": "/infinite_cats", "destination": "https://infinitecat.vercel.app" },
     { "source": "/art_education", "destination": "/papers/art_education/" },
     { "source": "/art-education", "destination": "/papers/art_education/" },
     { "source": "/papers/:paper([^/.]+)", "destination": "/papers/:paper/" },
