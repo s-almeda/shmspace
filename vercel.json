@@ -5,6 +5,7 @@
   "installCommand": "echo 'no build deps needed'",
   "redirects": [
     { "source": "/artographer", "destination": "/papers/artographer/" },
+    { "source": "/artographer/", "destination": "/papers/artographer/" },
     { "source": "/art_education", "destination": "/papers/art_education/" },
     { "source": "/art-education", "destination": "/papers/art_education/" },
     { "source": "/papers/:paper([^/.]+)", "destination": "/papers/:paper/" },
@@ -15,7 +16,7 @@
     { "source": "/walo", "destination": "https://drive.google.com/file/d/1084qTZ1h9WmhtC-w2g-UyvVDSoCoEfzg/view?usp=sharing" },
     { "source": "/shmuppetry", "destination": "https://art.snailbunny.site/portfolio/0_FEATURED/shmuppetry.html" },
     { "source": "/tube", "destination": "https://art.snailbunny.site/api/bart/tube" },
-    { "source": "/artographer/:path*", "destination": "https://artographer.snailbunny.site/:path*" }
+    { "source": "/artographer/:path+", "destination": "https://artographer.snailbunny.site/:path*" }
   ],
   "rewrites": [
     { "source": "/api/:path*", "destination": "https://shmuh.co/api/:path*" },
