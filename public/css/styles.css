@@ -139,9 +139,12 @@ iframe{
 .project-img img{
     display: inline;
     width: auto;
+    height: auto;
     max-width: 98%;
-  
-
+    /* cap the IMAGE's height (not just the container) so tall images scale
+       down to fit instead of overflowing and getting clipped vertically */
+    max-height: 38vh;
+    object-fit: contain;
 }
 .col-5{
   flex-grow: 1;
@@ -407,7 +410,7 @@ details[open] summary p{
     min-height: 200px;
   }
 
-  .project-img{
+  /* .project-img{
     flex: 2 1 auto;
     width: 100%;
     overflow-x: hidden;
@@ -415,7 +418,7 @@ details[open] summary p{
   }
   .project-img img{
     flex: 2 1 auto;
-  }
+  } */
 
 
 }
@@ -479,17 +482,6 @@ details[open] summary p{
     justify-content: center;
     align-items: center;
     display: flex;
-  }
-  .project-img{
-    flex: 2 1 auto;
-    justify-content: center;
-    align-items: center;
-    max-height: 100%;
-
-  }
-  .project-img img{
-    flex: 2 1 auto;
-    max-width: 90%;
   }
 
   .hasTooltip .tooltip{
