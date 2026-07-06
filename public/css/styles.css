@@ -421,7 +421,7 @@ details[open] summary p{
 }
 
 /* -- MOBILE/ skinty view -- --*/
-@media (max-width : 750px) {
+@media (max-width : 720px) {
   /* on phones the fixed grass hills don't reliably reach the very bottom of the
      screen (iOS Safari anchors fixed elements to the larger layout viewport, so
      the visible bottom edge can peek through). instead of fighting that, tint the
@@ -1132,7 +1132,7 @@ button[aria-disabled="true"] {
   }
 }
 
-@media (max-width: 750px) {
+@media (max-width: 730px) {
   .news-item {
     grid-template-columns: auto 1fr;
     gap: 1em;
