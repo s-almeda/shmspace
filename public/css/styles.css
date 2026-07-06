@@ -168,6 +168,37 @@ iframe{
   flex-flow: row;
   flex-wrap: nowrap;
   flex-direction: column;
+  position: relative;
+}
+
+/* conference/award label pulled out of the legend: small, black, upright.
+   default (mobile-first) = below the legend, right-aligned, above the image */
+.project-conference{
+    font-family: "Pixelated MS Sans Serif", Arial;
+    display: flex;
+    width: 100%;
+    text-align: right;
+    color: #000;
+    font-size: max(0.2vh, 12pt);
+    padding: 0 2ch;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: flex-end;
+    font-style: normal;
+    position: absolute;
+    top: -2em;
+    
+}
+
+/* --  MOBILE/ skinty view -- --*/
+@media (max-width: 650px){
+  .project-conference{
+
+    font-size: max(2.5vw, 10pt);
+        padding: 0 2ch;
+    position: relative;
+    top: 0;
+  }
 }
 
 .row{
