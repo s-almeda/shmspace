@@ -12,11 +12,15 @@
 //   "potatoOverlay": "foo.png"  → graphic drawn on the potato (from the show's stage/ dir)
 // In freeplay the "detect potatoes" checkbox drives it, on by default.
 //
-// Model hosting: the .onnx is ~12MB, so it is NOT deployed to Vercel (see .vercelignore) —
-// in prod we pull it from jsDelivr, which serves it straight out of the public GitHub repo
-// at zero bandwidth cost to us. Locally we use the file on disk (faster, works offline).
-// The CDN URL is pinned to a tag so jsDelivr can cache it permanently; bump MODEL_TAG when
-// you retrain and re-tag.
+// Model hosting: the .onnx is ~12MB. In prod we pull it from jsDelivr, which serves it
+// straight out of the public GitHub repo at zero bandwidth cost to us; locally we use the
+// file on disk (faster, works offline). The CDN URL is pinned to a tag so jsDelivr can
+// cache it permanently — bump MODEL_TAG when you retrain and re-tag.
+//
+// The file IS still present in the Vercel deploy (a .vercelignore doesn't exclude it —
+// Vercel only honours that for CLI deploys, not Git-integration builds), but nothing ever
+// requests that copy, so it costs deployment storage and no bandwidth. To actually keep it
+// out of the deploy it would have to live outside public/.
 
 const MODEL_TAG   = 'v2.5.0';
 const MODEL_PATH  = '/puppets/potato_model/potato.onnx';

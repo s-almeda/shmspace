@@ -214,9 +214,16 @@ as before; it's just not in git.
 > fresh clone will not bring them back.
 
 `potato.onnx` is the one big tracked file (11.6 MB) — it stays in the public GitHub repo so
-**jsDelivr** can serve it, and [.vercelignore](../../.vercelignore) keeps it out of the
-deploy so it costs no Vercel bandwidth. everything else the rig loads at runtime (face-api
+**jsDelivr** can serve it, which is where prod fetches it from (see `MODEL_TAG` in
+[potato.js](js/features/potato.js)). everything else the rig loads at runtime (face-api
 weights, MediaPipe wasm, onnxruntime-web) already comes from CDNs.
+
+> a `.vercelignore` does **not** keep files out of a Git-integration deploy — Vercel only
+> applies it to CLI deploys. so `potato.onnx`, `roster_editor.html` and
+> `dataset_review.html` are all still uploaded and reachable by direct URL. nothing links
+> or requests them (prod's model comes from jsDelivr; the tool pages are filtered out of
+> the directory and their save routes don't exist), so the cost is deployment storage, not
+> bandwidth. the only real fix is moving them outside `public/`.
 
 ---
 
