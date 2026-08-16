@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>puppet rig — directory</title>
+  <style>
+    body { margin: 0; background: #111; color: #eee; font: 14px/1.5 system-ui, sans-serif; }
+    header { padding: 16px 20px; border-bottom: 1px solid #333; }
+    header h1 { margin: 0; font-size: 18px; }
+    header p { margin: 4px 0 0; color: #888; font-size: 13px; }
+    main { padding: 20px; max-width: 860px; }
+    section { margin-bottom: 26px; }
+    section h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.06em; color: #9cf; border-bottom: 1px solid #2a2a2a; padding-bottom: 6px; }
+    .card { display: block; text-decoration: none; color: inherit; background: #1b1b1b; border: 1px solid #333; border-left: 5px solid #555; border-radius: 8px; padding: 12px 14px; margin: 8px 0; }
+    .card:hover { border-color: #666; background: #222; }
+    .card .name { font-weight: 700; font-size: 15px; }
+    .card .url { color: #6aa9ff; font-size: 12px; font-family: ui-monospace, monospace; }
+    .card .sub { color: #999; font-size: 12px; margin-top: 3px; }
+    .chips { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px; }
+    .chip { background: #2a2a2a; color: #bbb; font-size: 11px; padding: 2px 7px; border-radius: 10px; }
+    .empty { color: #777; font-style: italic; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 8px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🎛️ puppet rig — directory</h1>
+    <p>All routes, discovered automatically. (Some tools only work when running <code>node App.js</code> locally.)</p>
+  </header>
+  <main>
+    <section id="rigs-sec">
+      <h2>Rigs (freeplay variants)</h2>
+      <div id="rigs" class="grid"></div>
+    </section>
+    <section id="shows-sec">
+      <h2>Shows</h2>
+      <div id="shows" class="grid"></div>
+    </section>
+    <section id="pages-sec">
+      <h2>Tools &amp; pages</h2>
+      <div id="pages" class="grid"></div>
+    </section>
+  </main>
+
+  <script type="module">
+    const data = await fetch('/puppets/directory-data').then(r => r.json()).catch(() => ({ rigs: [], shows: [], pages: [] }));
+
+    const el = (html) => { const d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstChild; };
+    const title = (s) => s.replace(/[_-]/g, ' ');
+
+    // The deployed build ships a trimmed directory (local-only rigs, tool pages and shows
+    // are omitted — see build-manifests.js). Hide whole sections rather than showing
+    // "none found", and note why.
+    if (!data.local) {
+      document.querySelector('header p').textContent =
+        'The live demo. Local-only tools (dataset capture, face enrollment) and the shows themselves only exist when running node App.js — see the repo.';
+    }
+
+    // Rigs — "default" is plain /puppets; others are ?rig=<name>
+    const rigsEl = document.getElementById('rigs');
+    if (!data.rigs.length) rigsEl.innerHTML = '<span class="empty">no rig manifests found</span>';
+    data.rigs.forEach(r => {
+      const isDefault = r.name === 'default';
+      const url = isDefault ? '/puppets' : `/puppets?rig=${r.name}`;
+      const name = r.title || (isDefault ? 'default (freeplay)' : r.name);
+      const chips = (r.features || []).map(f => `<span class="chip">${f}</span>`).join('');
+      const a = el(`<a class="card" href="${url}">
+        <div class="name"></div>
+        <div class="url">${url}</div>
+        <div class="chips">${chips}</div>
+      </a>`);
+      a.querySelector('.name').textContent = name;
+      rigsEl.appendChild(a);
+    });
+
+    // Shows — ?show=<name>
+    const showsEl = document.getElementById('shows');
+    if (!data.shows.length) document.getElementById('shows-sec').style.display = 'none';
+    data.shows.forEach(s => {
+      const url = `/puppets?show=${s}`;
+      const a = el(`<a class="card" href="${url}"><div class="name"></div><div class="url">${url}</div></a>`);
+      a.querySelector('.name').textContent = title(s);
+      showsEl.appendChild(a);
+    });
+
+    // Tool pages — static .html files, plus a view of the rig's source. The /puppets/source
+    // route is an express handler (text/plain), so it only exists locally; the deployed
+    // directory links to GitHub instead.
+    const pagesEl = document.getElementById('pages');
+    const entries = data.pages.map(f => ({ url: `/puppets/${f}`, label: title(f.replace(/\.html$/, '')) }));
+    entries.push(data.local
+      ? { url: '/puppets/source', label: 'rig source (raw HTML)' }
+      : { url: 'https://github.com/s-almeda/shmspace/blob/main/public/puppets/index.html', label: 'rig source on GitHub ↗' });
+    entries.forEach(p => {
+      const a = el(`<a class="card" href="${p.url}"><div class="name"></div><div class="url">${p.url}</div></a>`);
+      a.querySelector('.name').textContent = p.label;
+      pagesEl.appendChild(a);
+    });
+  </script>
+</body>
+</html>

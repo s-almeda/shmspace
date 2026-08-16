@@ -1,0 +1,10 @@
+{
+  "_note": "Enroll faces into the recognition roster. Run local (node App.js), open /puppets?rig=enroll, hit showtime. Type a name (e.g. shm), then press E a few times per person from different angles/expressions. Saves to face_ids/roster.json (localhost only). Then test with ?rig=facetest.",
+  "title": "face enroll",
+  "local": true,
+  "features": [
+    "faceEnroll",
+    "bbox",
+    "facemesh"
+  ]
+}

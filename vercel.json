@@ -33,6 +33,9 @@
     { "source": "/puppets/hand-puppets-list/:collection", "destination": "/puppets/hand-puppets-list/:collection.json" },
     { "source": "/puppets/head-puppets-list/:collection", "destination": "/puppets/head-puppets-list/:collection.json" },
     { "source": "/puppets/shows/:show/script", "destination": "/puppets/shows/:show/game_script.json" },
+    { "source": "/puppets/shows/:show/rig", "destination": "/puppets/shows/:show/rig.json" },
+    { "source": "/puppets/directory", "destination": "/puppets/directory.html" },
+    { "source": "/puppets/directory-data", "destination": "/puppets/directory-data.json" },
     { "source": "/papers/:paper/", "destination": "/papers/:paper/:paper.html" }
   ]
 }

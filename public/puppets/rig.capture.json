@@ -1,0 +1,8 @@
+{
+  "_note": "Teachable-style capture + train, fully local (run node App.js). Open /puppets?rig=capture, hit showtime. A blue target box jumps around the frame: put the potato in it and press SPACE \u2014 each shot saves a raw frame + auto YOLO label into potato_model/dataset/. Do ~40-150 with variety (distance, in-hand, corners). Then click 'train on captured frames' to finetune YOLOv8 locally and export potato_model/potato.onnx. Requires potato_model/train_config.json pointing at your venv python (see train_config.example.json).",
+  "title": "potato capture mode",
+  "local": true,
+  "features": [
+    "capture"
+  ]
+}

@@ -78,4 +78,36 @@ for (const c of collections) {
     );
 }
 
+// --- directory data (rigs, shows, tool pages) for the directory page -----------
+// This is the PUBLIC directory, so it deliberately advertises less than the local one
+// served by puppet_routes.js. Excluded here:
+//   * rigs marked "local": true    — capture/enroll depend on localhost-only POST routes
+//   * tool pages                   — roster_editor + dataset_review likewise
+//   * shows                        — their slides/stage media isn't deployed (see
+//                                    .gitignore), so they'd render as broken scenes.
+//                                    The scripts themselves stay fetchable at
+//                                    /puppets/shows/<name>/script for anyone curious.
+// Run `node App.js` locally to get the full directory with everything in it.
+const rigs = fs.readdirSync(puppetsRoot)
+    .filter(f => /^rig\..+\.json$/.test(f))
+    .map(f => {
+        const name = f.replace(/^rig\./, '').replace(/\.json$/, '');
+        let title = null, features = [], local = false;
+        try {
+            const j = JSON.parse(fs.readFileSync(path.join(puppetsRoot, f), 'utf8'));
+            title = j.title || null; features = j.features || []; local = !!j.local;
+        } catch (e) {}
+        return { name, title, features, local };
+    })
+    .filter(r => !r.local)
+    .map(({ name, title, features }) => ({ name, title, features }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+writeJson(path.join('puppets', 'directory-data.json'), {
+    local: false,
+    rigs,
+    shows: [],
+    pages: [],
+});
+
 console.log('Manifests built.');

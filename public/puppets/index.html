@@ -20,6 +20,7 @@
         <!-- <div id="titleSub">use your hands as puppets</div> -->
       </div>
       <div class="title-bar-controls">
+                <a href="/puppets/directory"><button aria-label="Minimize"></button></a>
         <a href="https://art.snailbunny.site/portfolio/0_FEATURED/shmuppetry.html"><button aria-label="Help"></button></a>
         <a href="https://art.snailbunny.site/portfolio/0_FEATURED/shmuppetry.html"><button aria-label="Close"></button></a>
       </div>
@@ -28,7 +29,12 @@
     <div class="window-body">
       <!-- always-visible start state -->
       <div id="startScreen">
-        <button id="startBtn"> it's showtime! </button>
+        <!-- shown until everything blocking has loaded; then the button takes its place -->
+        <div id="rigLoading">
+          <progress id="rigLoaderBar" max="100" value="0"></progress>
+          <div id="rigLoaderLabel">puppets are preparing; please wait warmly.</div>
+        </div>
+        <button id="startBtn" hidden> it's showtime! </button>
       </div>
 
       <!-- error state -->
@@ -60,6 +66,9 @@
 
       <!-- analysis panel (right side, hover to reveal) -->
       <div id="analysisPanel">
+        <menu role="tablist">
+          <button id="panel-tab" role="tab" aria-selected="true" aria-controls="checkboxGroup">control panel</button>
+        </menu>
         <fieldset>
           <div id="checkboxGroup">
             <div class="field-row disabled">
@@ -89,7 +98,7 @@
             </div>
             <div class="field-row">
               <input id="check-bbox" type="checkbox">
-              <label for="check-bbox">put face in "<u>B</u>ox"?</label>
+              <label for="check-bbox">Face "<u>B</u>ox"?</label>
             </div>
             <div class="field-row">
               <input id="check-gestures" type="checkbox" checked>
@@ -174,7 +183,7 @@
             <button id="edit-btn" class="show-only" style="flex: 1; font-size: 11px; display: none;">edit</button>
             <button id="reset-scene-btn" class="show-only" style="flex: 1; font-size: 11px; display: none;">reset</button>
             <button id="save-scene-btn" class="show-only" style="flex: 1; font-size: 11px; display: none;">save scene</button>
-            <button id="copy-scene-btn" style="flex: 1; font-size: 11px;">copy scene</button>
+            <button id="copy-scene-btn" style="flex: 1; font-size: 11px;">copy scene json</button>
           </div>
         </fieldset>
       </div>
@@ -311,32 +320,146 @@
       return { start() { if (rafId) cancelAnimationFrame(rafId); requestAnimationFrame(loop); } };
     }
 
-    // ── Load models ──────────────────────────────────────────────────
-    await Promise.all([
-      faceapi.nets.tinyFaceDetector.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights'),
-      faceapi.nets.faceLandmark68TinyNet.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights'),
-      faceapi.nets.ageGenderNet.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights'),
-      faceapi.nets.faceExpressionNet.loadFromUri('https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights'),
-    ]);
+    // ── Boot progress ────────────────────────────────────────────────
+    // There's a lot to fetch before the camera can start, and with no feedback people
+    // click "it's showtime!" over and over waiting for it to do something. So the button
+    // stays hidden behind a progress bar until everything BLOCKING is in. The deferred
+    // models (age/expression, hands, face id, potato) keep streaming afterwards and light
+    // up their own controls as they land.
+    const loaderBox   = document.getElementById('rigLoading');
+    const loaderBar   = document.getElementById('rigLoaderBar');
+    const bootBtn     = document.getElementById('startBtn');
+    let   bootFinished = false;
+    const boot = (pct) => { if (loaderBar) loaderBar.value = pct; };
+    const bootDone = () => {
+      if (bootFinished) return;
+      bootFinished = true;
+      boot(100);
+      if (loaderBox) loaderBox.style.display = 'none';
+      if (bootBtn) bootBtn.hidden = false;
+    };
+    // safety net — never trap someone behind the bar if a fetch hangs
+    setTimeout(bootDone, 20000);
 
-    const raceModel  = await tf.loadGraphModel('/puppets/face_model/model.json');
+    // ── Load models ──────────────────────────────────────────────────
+    // Only the two nets the rig can't draw a frame without are awaited: the detector and
+    // the landmark model (head puppets track off those). The age/gender/expression nets
+    // feed readouts that all START SWITCHED OFF, so they stream in behind the scenes and
+    // light up their own checkboxes on arrival — same pattern as the potato and face-id
+    // models. Keeps the wait between opening the page and "it's showtime!" short.
+    const WEIGHTS_URI = 'https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights';
+    boot(10);
+    await Promise.all([
+      faceapi.nets.tinyFaceDetector.loadFromUri(WEIGHTS_URI),
+      faceapi.nets.faceLandmark68TinyNet.loadFromUri(WEIGHTS_URI),
+    ]);
+    boot(40);
+
+    // Deferred: until these land, detectFace runs a shorter chain and the results carry
+    // no .age / .gender / .expressions — every consumer below guards for that.
+    let extraNetsReady = false;
+    const extraNetsPromise = Promise.all([
+      faceapi.nets.ageGenderNet.loadFromUri(WEIGHTS_URI),
+      faceapi.nets.faceExpressionNet.loadFromUri(WEIGHTS_URI),
+    ]).then(() => { extraNetsReady = true; })
+      .catch(e => console.warn('face-api age/expression nets failed to load', e));
+
     const gameScript = isShowMode
       ? await fetch(`/puppets/shows/${showName}/script`).then(r => r.json())
       : [];
     let currentScene = 0;
 
-    // ── MediaPipe hand landmarker ─────────────────────────────────────
-    const filesetResolver = await FilesetResolver.forVisionTasks(
-      'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm'
+    // ── Feature enablement ────────────────────────────────────────────
+    // Which capabilities this rig instance runs, as a list of feature ids. Sources,
+    // highest priority first:
+    //   1. ?features=a,b,c   explicit override (testing)
+    //   2. ?rig=<name>       → /puppets/rig.<name>.json   (swap in a named rig)
+    //   3. a show's manifest → /puppets/shows/<show>/rig.json
+    //   4. defaults — a show with no manifest gets the full legacy set (so existing
+    //      shows are unchanged); freeplay loads the editable /puppets/rig.default.json.
+    // The default/freeplay feature set lives in rig.default.json (edit it to add the
+    // race model back, drop a feature, etc.) rather than being hardcoded here.
+    const ALL_FEATURES = ['race','age','gender','emotion','facemesh','bbox','gestures','hands','headPuppets'];
+    const fetchRig = (url) => fetch(url).then(r => r.ok ? r.json() : null).catch(() => null);
+
+    const params        = new URLSearchParams(location.search);
+    const featuresParam = params.get('features');
+    const rigParam      = params.get('rig');
+    const rigManifest =
+        rigParam     ? await fetchRig(`/puppets/rig.${rigParam}.json`)
+      : isShowMode   ? await fetchRig(`/puppets/shows/${showName}/rig`)
+      :                await fetchRig('/puppets/rig.default.json');
+
+    const enabled = new Set(
+      featuresParam !== null                 ? featuresParam.split(',').map(s => s.trim()).filter(Boolean)
+      : Array.isArray(rigManifest?.features) ? rigManifest.features
+      : isShowMode                           ? ALL_FEATURES                          // legacy show, no manifest
+      :                                        ALL_FEATURES.filter(f => f !== 'race') // freeplay fallback if file missing
     );
-    const handLandmarker = await HandLandmarker.createFromOptions(filesetResolver, {
-      baseOptions: {
-        modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
-        delegate: 'GPU'
-      },
-      numHands: 2,
-      runningMode: 'VIDEO'
-    });
+
+    // Feature hook arrays — populated by dynamically-imported feature modules (see the
+    // feature loader further down). Empty here means the seams are pure no-ops.
+    const featureHooks = { onFace: [], onFrame: [], drawFace: [], drawHand: [], onScene: [] };
+    let featureCtx = null;
+
+    // Optional per-rig titlebar label. A rig manifest may set "title"; when present (and
+    // not in show mode, which already sets its own title) reflect it in the window title +
+    // browser tab. No "title" in the manifest → the default titlebar is left untouched.
+    if (!isShowMode && rigManifest?.title) {
+      const url = `shmuh.co/puppets${rigParam ? '?rig=' + rigParam : ''}`;
+      document.getElementById('titleMain').textContent = `puppet rig: ${rigManifest.title} | by shm | ${url}`;
+      document.title = `${rigManifest.title} | puppet rig`;
+    }
+
+    // Hide analysis-panel rows for capabilities this rig doesn't include, and keep
+    // them unchecked so nothing activates them. (Enabled != active: an enabled feature
+    // still starts off and is turned on by a scene toggle or keypress.)
+    const FEATURE_ROWS = { race:'check-race', age:'check-age', gender:'check-gender', emotion:'check-emotion', facemesh:'check-facemesh', bbox:'check-bbox', gestures:'check-gestures', hands:'check-hands', headPuppets:'check-head-puppets' };
+    for (const [feat, id] of Object.entries(FEATURE_ROWS)) {
+      if (enabled.has(feat)) continue;
+      const cb = document.getElementById(id);
+      if (!cb) continue;
+      cb.checked = false;
+      const row = cb.closest('.field-row');
+      if (row) row.style.display = 'none';
+    }
+
+    // Checkboxes whose model is still downloading are disabled, so a click can never
+    // silently do nothing. Each re-enables itself when its load settles.
+    function gateOnLoad(featureIds, promise) {
+      const boxes = featureIds
+        .filter(f => enabled.has(f))
+        .map(f => document.getElementById(FEATURE_ROWS[f]))
+        .filter(Boolean);
+      boxes.forEach(cb => { cb.disabled = true; });
+      promise.finally(() => boxes.forEach(cb => { cb.disabled = false; }));
+    }
+    gateOnLoad(['age', 'gender', 'emotion'], extraNetsPromise);
+    // (the 'hands' gate lives just below handLandmarkerPromise — it's declared later)
+
+    // The "race" TF model is heavy and only some rigs use it — load it lazily.
+    const raceModel = enabled.has('race')
+      ? await tf.loadGraphModel('/puppets/face_model/model.json')
+      : null;
+
+    // ── MediaPipe hand landmarker ─────────────────────────────────────
+    // Also deferred — the wasm bundle + hand model are the single biggest download here.
+    // detectHands no-ops until it resolves, and the hand-puppet checkbox stays inert.
+    let handLandmarker = null;
+    const handLandmarkerPromise = (async () => {
+      const filesetResolver = await FilesetResolver.forVisionTasks(
+        'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm'
+      );
+      handLandmarker = await HandLandmarker.createFromOptions(filesetResolver, {
+        baseOptions: {
+          modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
+          delegate: 'GPU'
+        },
+        numHands: 2,
+        runningMode: 'VIDEO'
+      });
+    })().catch(e => console.warn('mediapipe hand landmarker failed to load', e));
+    gateOnLoad(['hands'], handLandmarkerPromise);
 
     // ── Inference canvas (race model) ────────────────────────────────
     const inferCanvas = document.createElement('canvas');
@@ -382,6 +505,7 @@
 
     // Preload every collection up-front so switching (and per-scene snap-back)
     // is synchronous — no fetch race when loadScene() applies a puppetNum.
+    boot(55);
     const collectionNames = await fetch('/puppets/collections').then(r => r.json()).catch(() => []);
     if (!collectionNames.includes(homeCollection)) collectionNames.push(homeCollection);
 
@@ -570,6 +694,9 @@
     let winkDetected      = false;
     let lastDetections    = [];
     let popupDismissed    = false;
+    // Vestigial action-gating state (setActionRequired is a no-op stub). Declared so the
+    // smile-highlight check and copy-scene read a defined value instead of throwing.
+    let currentActionRequired = null;
 
     // ── Condition registry ────────────────────────────────────────────
     const CONDITIONS = {
@@ -579,7 +706,7 @@
       },
       smile: {
         active: false,
-        check: () => lastDetections.length > 0 && lastDetections[0].expressions.happy > 0.7,
+        check: () => lastDetections.length > 0 && (lastDetections[0].expressions?.happy ?? 0) > 0.7,
       },
       wink: {
         active: false,
@@ -594,7 +721,7 @@
         check: () => {
           if (!lastDetections.length) return false;
           const r = lastDetections[0];
-          return r.expressions.happy > 0.7
+          return (r.expressions?.happy ?? 0) > 0.7
               && r.gender === 'female'
               && r.genderProbability > 0.7
               && lastRaceClass === 'Asian';
@@ -702,16 +829,21 @@
       }
 
       if (document.getElementById('check-bbox').checked) {
-        const boxColor  = prettyCute ? 'rgba(255, 182, 193, 0.9)'
-                        : detect_shm ? 'rgba(144, 189, 66, 0.9)'
-                        : 'rgba(255, 255, 255, 0.85)';
         const textColor = 'rgba(0, 0, 0, 1.0)';
         const fontSize  = prettyCute ? 45 : 42;
         faceDisplay.boxes.forEach(box => {
+          // faceId (when enabled) supplies a per-face { label, color } — it replaces the
+          // generic "face"/age-gender label and colors each box per person.
+          const ident = featureCtx?.identifyFace?.(box);
+          const boxColor = ident?.color
+                         ?? (prettyCute ? 'rgba(255, 182, 193, 0.9)'
+                          : detect_shm  ? 'rgba(144, 189, 66, 0.9)'
+                          :               'rgba(255, 255, 255, 0.85)');
+          const label = ident?.label
+                      ?? (prettyCute ? 'pretty cute!' : detect_shm ? 'shm garanganao almeda' : box.label);
           ctx.strokeStyle = boxColor;
           ctx.lineWidth = 3.5;
           ctx.strokeRect(box.x, box.y, box.w, box.h);
-          const label = prettyCute ? 'pretty cute!' : detect_shm ? 'shm garanganao almeda' : box.label;
           if (label) {
             ctx.save();
             ctx.scale(-1, 1);
@@ -822,6 +954,8 @@
         });
       }
 
+      featureHooks.drawFace.forEach(fn => fn(ctx, featureCtx));
+
       ctx.globalAlpha = 1;
     }
 
@@ -837,12 +971,15 @@
       const cropY = (vidH * coverScale - elemH) / 2;
       const toElem = (x, y) => ({ x: x * coverScale - cropX, y: y * coverScale - cropY });
 
-      const results = await faceapi
+      // The age/gender/expression nets load in the background — until they're here, run
+      // the short chain so face tracking (and head puppets) work from the first frame.
+      let chain = faceapi
         .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-        .withFaceLandmarks(true)
-        .withAgeAndGender()
-        .withFaceExpressions();
+        .withFaceLandmarks(true);
+      if (extraNetsReady) chain = chain.withAgeAndGender().withFaceExpressions();
+      const results = await chain;
       lastDetections = results;
+      featureHooks.onFace.forEach(fn => fn(results, featureCtx));
 
       const showFace    = document.getElementById('check-facemesh').checked;
       const showRace    = document.getElementById('check-race').checked;
@@ -886,7 +1023,7 @@
         document.getElementById('result-emotion').innerHTML = '';
       }
 
-      prettyCute = detect_prettyCute && primary.expressions.happy > 0.7;
+      prettyCute = detect_prettyCute && (primary.expressions?.happy ?? 0) > 0.7;
 
       faceTarget = {
         width: elemW, height: elemH,
@@ -896,8 +1033,9 @@
           const br = toElem(b.x + b.width, b.y + b.height);
           const { x, y } = tl;
           const w = br.x - tl.x, h = br.y - tl.y;
-          const emotion = Object.entries(r.expressions).sort((a, b) => b[1] - a[1])[0][0];
-          const age     = Math.round(r.age);
+          // r.expressions / r.age / r.gender are absent until the deferred nets land.
+          const emotion = r.expressions ? Object.entries(r.expressions).sort((a, b) => b[1] - a[1])[0][0] : '';
+          const age     = Number.isFinite(r.age) ? Math.round(r.age) : null;
           const isFem   = r.gender === 'female';
           const parts   = [];
           if (showEmotion && emotion && emotion !== 'neutral') parts.push(emotion);
@@ -928,7 +1066,7 @@
 
     // ── predictRace ───────────────────────────────────────────────────
     async function predictRace() {
-      if (video.readyState < 2) return;
+      if (!raceModel || video.readyState < 2) return;
       inferCtx.save();
       inferCtx.translate(224, 0);
       inferCtx.scale(-1, 1);
@@ -969,6 +1107,7 @@
 
     const handCanvas = document.getElementById('handCanvas');
     const handCtx    = handCanvas.getContext('2d');
+    let lastHandLandmarks = []; // last MediaPipe hand landmarks (exposed to feature modules)
     let lastHandTime      = -1;
     let lastThumbsUpTime  = 0; // cooldown for thumbs-up
     const GESTURE_COOLDOWN = 800; // ms
@@ -1030,7 +1169,9 @@
       if (now === lastHandTime) return;
       lastHandTime = now;
 
+      if (!handLandmarker) return;   // still streaming in — see handLandmarkerPromise
       const handResults = handLandmarker.detectForVideo(video, now);
+      lastHandLandmarks = handResults.landmarks || [];
       if (!handResults.landmarks || !handResults.landmarks.length) return;
 
       const handSlider = parseFloat(document.getElementById('puppet-size')?.value ?? 1.1);
@@ -1084,6 +1225,7 @@
         handCtx.restore();
       });
 
+      featureHooks.drawHand.forEach(fn => fn(handCtx, featureCtx));
     }
 
     // ── Scene system ──────────────────────────────────────────────────
@@ -1100,6 +1242,7 @@
         if (key === 'detectShm') { detect_shm = val; return; }
         if (key === 'dialogueHover') { document.body.classList.toggle('dialogue-hover-mode', !!val); return; }
         if (key === 'audio') { return; } // handled in loadScene via loadSlide() — not a checkbox
+        if (!enabled.has(key)) return; // capability not in this rig's manifest
         const cb = document.getElementById(checkMap[key]);
         if (cb && cb.checked !== val) { cb.checked = val; cb.dispatchEvent(new Event('change')); }
       });
@@ -1222,7 +1365,9 @@
       // Optional: legacy toggle + dialogue support
       if (scene.toggles) applyToggles(scene.toggles);
       if (scene.dialogue) {
-        applyDialogue(scene.dialogue, instant || scene.dialogue?.instant);
+        // Potato scenes run heavy per-frame inference that starves the typewriter timer,
+        // so show their dialogue instantly.
+        applyDialogue(scene.dialogue, instant || scene.dialogue?.instant || !!scene.potato);
       } else {
         document.getElementById('dialogueOverlay').classList.remove('visible');
       }
@@ -1233,6 +1378,7 @@
       // Capture the scene's state as the edit-mode baseline (for dirty detection).
       editBaseline = snapshotState();
 
+      featureHooks.onScene.forEach(fn => fn(scene, featureCtx));
       console.log(`scene ${scene.id ?? (index + 1)} loaded`);
     }
 
@@ -1261,6 +1407,81 @@
 
     const blurhash = createBlurhashRenderer(bgCanvas, video);
 
+    // ── Feature module loader ─────────────────────────────────────────
+    // New capabilities live in their own ES modules under js/features/ and are
+    // imported only when enabled. Each default-exports
+    //   { id, loadModels?, onFace?, onFrame?, drawFace?, drawHand?, onScene? }
+    // whose hooks get pushed into featureHooks and called from the existing loops.
+    // (No modules registered yet — this is the seam later checkpoints plug into.)
+    const FEATURE_MODULES = {
+      faceId:          () => import('/puppets/js/features/faceId.js'),
+      faceEnroll:      () => import('/puppets/js/features/faceEnroll.js'),
+      potato:          () => import('/puppets/js/features/potato.js'),
+      capture:         () => import('/puppets/js/features/capture.js'),
+      stagePuppets:    () => import('/puppets/js/features/stagePuppets.js'),
+      drawing:         () => import('/puppets/js/features/drawing.js'),
+    };
+
+    // Insert an overlay <canvas> into the webcam stack (same box as faceCanvas).
+    // Feature modules that render their own layer call this.
+    function createLayer(id, { zIndex = 6 } = {}) {
+      let c = document.getElementById(id);
+      if (c) return c;
+      c = document.createElement('canvas');
+      c.id = id;
+      c.style.cssText = `position:absolute; inset:0; width:100%; height:100%; z-index:${zIndex}; pointer-events:none;`;
+      handCanvas.parentElement.appendChild(c);
+      return c;
+    }
+
+    // Append a feature's control UI into the analysis panel; returns the container.
+    function registerPanelHTML(html) {
+      // Append the content's root element directly (no wrapper div) so a feature's
+      // top-level `.field-row` becomes a *direct* child of #checkboxGroup and inherits
+      // the zoom-compensating `max-width: calc(100%/1.25)` cap — otherwise it spills
+      // ~25% off the panel's right edge.
+      const tmp = document.createElement('div');
+      tmp.innerHTML = html.trim();
+      const node = tmp.firstElementChild;
+      document.getElementById('checkboxGroup').appendChild(node);
+      return node;
+    }
+
+    // Shared surface handed to feature modules. Getters expose live rig state.
+    featureCtx = {
+      video, faceCanvas, handCanvas, slideCanvas, bgCanvas,
+      faceapi, tf,
+      get handLandmarker() { return handLandmarker; },   // null until it finishes loading
+      LERP, FADE_IN, FADE_OUT, makeMediaEl,
+      isShowMode, showName, homeCollection, enabled, manifest: rigManifest,
+      get faceTarget()     { return faceTarget; },
+      get faceDisplay()    { return faceDisplay; },
+      get lastDetections() { return lastDetections; },
+      get handLandmarks()  { return lastHandLandmarks; }, // normalized [ {x,y,z}... ] per hand
+      get currentScene()   { return currentScene; },
+      getEl: (id) => document.getElementById(id),
+      createLayer, registerPanelHTML,
+      loadScene: (i, instant) => loadScene(i, instant),
+    };
+
+    // Import + initialise enabled feature modules (existing checkbox features are
+    // not modules and are skipped here).
+    boot(80);
+    for (const id of enabled) {
+      const importer = FEATURE_MODULES[id];
+      if (!importer) continue;
+      try {
+        const mod = (await importer()).default;
+        if (mod.loadModels) await mod.loadModels(featureCtx);
+        ['onFace','onFrame','drawFace','drawHand','onScene'].forEach(h => {
+          if (typeof mod[h] === 'function') featureHooks[h].push(mod[h].bind(mod));
+        });
+      } catch (e) { console.warn(`feature "${id}" failed to load`, e); }
+    }
+
+    // Everything blocking is in — swap the bar for the button.
+    bootDone();
+
     async function startCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -1279,6 +1500,15 @@
         setInterval(detectFace, 100);
         setInterval(detectHands, 33);
         setInterval(checkConditions, 100);
+        // Per-frame loop for feature modules that need raw video every frame
+        // (e.g. object detection). Only runs when a module registers an onFrame hook.
+        if (featureHooks.onFrame.length) {
+          (function featureFrameLoop() {
+            requestAnimationFrame(featureFrameLoop);
+            if (video.readyState < 2) return;
+            featureHooks.onFrame.forEach(fn => fn(video, featureCtx));
+          })();
+        }
 
         cameraReady = true;
         document.body.classList.add('camera-ready');
@@ -1290,10 +1520,20 @@
           gameStarted = true;
           setTimeout(() => {
             analysisPanel.classList.add('visible');
-            const hCb = document.getElementById('check-hands');
-            if (hCb && !hCb.checked) { hCb.checked = true; hCb.dispatchEvent(new Event('change')); }
-            const hpCb = document.getElementById('check-head-puppets');
-            if (hpCb && !hpCb.checked) { hpCb.checked = true; hpCb.dispatchEvent(new Event('change')); }
+            // Freeplay auto-reveal — but only for capabilities this rig actually includes
+            // (otherwise a rig like ?rig=capture would silently run hidden puppets).
+            if (enabled.has('hands')) {
+              // wait for the hand model — flipping this on early would tick a box that
+              // does nothing until mediapipe lands
+              handLandmarkerPromise.finally(() => {
+                const hCb = document.getElementById('check-hands');
+                if (hCb && !hCb.checked) { hCb.checked = true; hCb.dispatchEvent(new Event('change')); }
+              });
+            }
+            if (enabled.has('headPuppets')) {
+              const hpCb = document.getElementById('check-head-puppets');
+              if (hpCb && !hpCb.checked) { hpCb.checked = true; hpCb.dispatchEvent(new Event('change')); }
+            }
             document.getElementById('dialogueOverlay').classList.add('visible');
           }, 1800);
         }
@@ -1514,6 +1754,10 @@
       if (headPuppetPositionOverride)          state.headPuppetPosition = headPuppetPositionOverride;
       if (headXOffset)                         state.headXOffset = headXOffset;
       if (headYOffset)                         state.headYOffset = headYOffset;
+      // Stage puppets (absolute list). Included when any are shown, or when the scene
+      // already declared a stage (so an emptied stage saves as [] rather than being lost).
+      const stage = featureCtx?.getStagePuppets?.();
+      if (stage && (stage.length || gameScript[currentScene]?.stage !== undefined)) state.stage = stage;
       return state;
     }
     function isSceneDirty() {
@@ -1580,7 +1824,7 @@
         // Merge over the original (keeps id, slide, _note, actionRequired, …) but drop
         // managed optional keys that are at their default this scene.
         const merged = { ...orig, ...snap };
-        ['collection', 'headPuppetPosition', 'headXOffset', 'headYOffset'].forEach(k => {
+        ['collection', 'headPuppetPosition', 'headXOffset', 'headYOffset', 'stage'].forEach(k => {
           if (!(k in snap)) delete merged[k];
         });
         gameScript[currentScene] = merged;
@@ -1630,7 +1874,7 @@
         actionRequired: currentActionRequired
       };
       navigator.clipboard.writeText(JSON.stringify(scene, null, 2))
-        .then(() => flashBtn(document.getElementById('copy-scene-btn'), 'copy scene'));
+        .then(() => flashBtn(document.getElementById('copy-scene-btn'), 'copy scene json'));
     });
 
     // Scene nav
@@ -1686,9 +1930,14 @@
         return;
       }
 
-      // Toggle checkboxes
+      // Toggle checkboxes (skip capabilities this rig doesn't include — row hidden)
       const id = keyMap[ev.key.toLowerCase()];
-      if (id) { const cb = document.getElementById(id); if (cb) { cb.checked = !cb.checked; cb.dispatchEvent(new Event('change')); } }
+      if (id) {
+        const cb = document.getElementById(id);
+        if (cb && cb.closest('.field-row')?.style.display !== 'none') {
+          cb.checked = !cb.checked; cb.dispatchEvent(new Event('change'));
+        }
+      }
 
       // T: toggle dialogue hover-fade mode
       if (ev.key.toLowerCase() === 't') {

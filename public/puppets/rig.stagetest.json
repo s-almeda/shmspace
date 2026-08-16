@@ -1,0 +1,5 @@
+{
+  "_note": "Test independent stage puppets + pngtuber mode: /puppets?rig=stagetest. Click 'enable mic', then use left/mid/right to place the puppet, upload a rest frame (and optional talk frame), and toggle bounce / animate mouth. Talk into the mic — it should bounce and swap frames on volume. In a real show, drive puppets from a scene's \"stage\" command array instead.",
+  "title": "stage puppet test",
+  "features": ["stagePuppets"]
+}

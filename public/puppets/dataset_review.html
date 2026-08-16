@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>potato dataset review</title>
+  <style>
+    body { margin: 0; background: #111; color: #eee; font: 13px/1.4 system-ui, sans-serif; }
+    header { position: sticky; top: 0; background: #1b1b1b; padding: 10px 14px; border-bottom: 1px solid #333; z-index: 1; }
+    header h1 { font-size: 15px; margin: 0 0 4px; }
+    header .stats { color: #9cf; }
+    header label { color: #aaa; margin-left: 14px; }
+    #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; padding: 14px; }
+    .cell { background: #1b1b1b; border: 1px solid #333; border-radius: 6px; padding: 6px; }
+    .cell.bad { border-color: #e55; }
+    .cell canvas { width: 100%; height: auto; display: block; border-radius: 4px; background: #000; }
+    .cell .meta { margin-top: 4px; color: #888; font-size: 11px; word-break: break-all; }
+    .cell .warn { color: #e77; }
+    #empty { padding: 40px; text-align: center; color: #888; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🥔 potato dataset review</h1>
+    <div class="stats" id="stats">loading…</div>
+    <div>
+      <label><input type="checkbox" id="only-bad"> show only missing/empty labels</label>
+      <label><input type="checkbox" id="big"> bigger tiles</label>
+    </div>
+  </header>
+  <div id="grid"></div>
+  <div id="empty" style="display:none;"></div>
+
+  <script type="module">
+    const IMG_BASE = '/puppets/potato_model/dataset/images/';
+    const LBL_BASE = '/puppets/potato_model/dataset/labels/';
+    const grid = document.getElementById('grid');
+    const statsEl = document.getElementById('stats');
+    const emptyEl = document.getElementById('empty');
+
+    const names = await fetch('/puppets/dataset-list').then(r => r.json()).catch(() => []);
+    if (!names.length) {
+      emptyEl.style.display = 'block';
+      emptyEl.textContent = 'No captured frames found. Capture some at /puppets?rig=capture first (and run node App.js locally).';
+      statsEl.textContent = '0 images';
+    }
+
+    let boxTotal = 0, badTotal = 0;
+    const cells = [];
+
+    for (const name of names) {
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      const canvas = document.createElement('canvas');
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      cell.appendChild(canvas);
+      cell.appendChild(meta);
+      grid.appendChild(cell);
+
+      // Load label + image in parallel, then draw box overlay.
+      const labelText = await fetch(LBL_BASE + name + '.txt').then(r => r.ok ? r.text() : '').catch(() => '');
+      const boxes = labelText.trim().split('\n').filter(Boolean).map(line => {
+        const [cls, cx, cy, w, h] = line.trim().split(/\s+/).map(Number);
+        return { cls, cx, cy, w, h };
+      });
+      boxTotal += boxes.length;
+      const bad = boxes.length === 0;
+      if (bad) { badTotal++; cell.classList.add('bad'); }
+
+      const img = new Image();
+      img.onload = () => {
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const g = canvas.getContext('2d');
+        g.drawImage(img, 0, 0);
+        g.lineWidth = Math.max(2, img.naturalWidth / 200);
+        g.strokeStyle = 'rgba(120, 220, 255, 0.95)';
+        g.fillStyle = 'rgba(120, 220, 255, 0.95)';
+        g.font = `${Math.max(12, img.naturalWidth / 40)}px sans-serif`;
+        boxes.forEach(b => {
+          const x = (b.cx - b.w / 2) * img.naturalWidth;
+          const y = (b.cy - b.h / 2) * img.naturalHeight;
+          const w = b.w * img.naturalWidth;
+          const h = b.h * img.naturalHeight;
+          g.strokeRect(x, y, w, h);
+        });
+      };
+      img.src = IMG_BASE + name + '.jpg';
+
+      meta.innerHTML = bad
+        ? `${name}<br><span class="warn">⚠ no label</span>`
+        : `${name}<br>${boxes.length} box${boxes.length === 1 ? '' : 'es'}`;
+      cells.push({ cell, bad });
+    }
+
+    statsEl.textContent = `${names.length} images · ${boxTotal} boxes · ${badTotal} missing labels`;
+
+    document.getElementById('only-bad').addEventListener('change', (e) => {
+      const on = e.target.checked;
+      cells.forEach(({ cell, bad }) => { cell.style.display = (on && !bad) ? 'none' : ''; });
+    });
+    document.getElementById('big').addEventListener('change', (e) => {
+      grid.style.gridTemplateColumns = e.target.checked
+        ? 'repeat(auto-fill, minmax(420px, 1fr))'
+        : 'repeat(auto-fill, minmax(220px, 1fr))';
+    });
+  </script>
+</body>
+</html>

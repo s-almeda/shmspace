@@ -1,0 +1,5 @@
+{
+  "_note": "Default rig for freeplay (/puppets with no ?show) — this is what the public demo at shmuh.co/puppets loads. Every feature here costs zero deployed bytes except potato (its ~12MB .onnx is served from jsDelivr, not Vercel). Deliberately excluded: 'race' (9.2MB face_model, not deployed), and the local-only tools 'capture'/'faceEnroll' (their save routes only exist under `node App.js`). Add \"race\" back here if you want the race model in freeplay. Shows override this with their own shows/<name>/rig.json; ?rig=<name> loads rig.<name>.json; ?features=a,b,c overrides everything.",
+  "title": null,
+  "features": ["age", "gender", "emotion", "facemesh", "bbox", "gestures", "hands", "headPuppets", "drawing", "stagePuppets", "faceId", "potato"]
+}

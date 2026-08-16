@@ -144,3 +144,36 @@ public/facial_recognishm/puppets-list.json
 public/puppets/collections.json
 public/puppets/hand-puppets-list/
 public/puppets/head-puppets-list/
+
+# potato detector — local training artifacts (not committed)
+public/puppets/potato_model/dataset/
+public/puppets/potato_model/captures/
+public/puppets/potato_model/runs/
+public/puppets/potato_model/train.log
+public/puppets/potato_model/train_config.json
+
+# face enrollment reference photos (personal; only roster.json descriptors are kept)
+public/puppets/face_ids/refs/
+
+# ── shmuppetry 2.5.0: performance assets stay LOCAL ───────────────────────────
+# The public demo at shmuh.co/puppets is freeplay only, and needs just the "default"
+# puppet collection. Everything below still lives in the working tree — the rig runs
+# from disk locally exactly as before — it's simply not tracked, so it never lands in
+# git or on Vercel. BACK THESE UP OUTSIDE THE REPO: git is no longer their second copy.
+
+# training weights (potato.onnx IS tracked — jsDelivr serves it to prod from GitHub)
+public/puppets/potato_model/*.pt
+# race classifier (~9MB, not in the default rig)
+public/puppets/face_model/
+
+# puppet collections other than the public "default" set
+public/puppets/hand_puppets/*
+!public/puppets/hand_puppets/default/
+public/puppets/head_puppets/*
+!public/puppets/head_puppets/default/
+
+# show media — game_script.json + rig.json stay tracked (they're the interesting
+# artifact, and shmuppetry.html links one as an example); the media does not.
+public/puppets/shows/*/slides/
+public/puppets/shows/*/stage/
+public/puppets/directory-data.json

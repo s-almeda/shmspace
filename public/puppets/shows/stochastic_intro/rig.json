@@ -1,0 +1,5 @@
+{
+  "_note": "Feature set for the stochastic_intro talk. Includes the critique models (race/age/gender/emotion) used in the recognition beat, faceId (shm + max), potato detection + overlays, and finger-paint drawing.",
+  "title": "stochastic intro",
+  "features": ["hands", "headPuppets", "gestures", "facemesh", "bbox", "race", "age", "gender", "emotion", "faceId", "potato", "drawing", "stagePuppets"]
+}

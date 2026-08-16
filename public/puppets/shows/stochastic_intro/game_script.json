@@ -1,0 +1,987 @@
+[
+  {
+    "id": 1,
+    "leftPuppet": null,
+    "toggles": {
+      "hands": false,
+      "gestures": false,
+      "headPuppets": false,
+      "facemesh": false,
+      "bbox": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "what's up chat. I'm shm!"
+    }
+  },
+  {
+    "id": 2,
+    "leftPuppet": 0,
+    "_note": "hand puppets 0 shm+bear, 1 BiD logo, 2 Smithsonian logo — jumps to 0; cycle with ' / ;",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "I am, for a little while longer, a PhD Candidate at UC Berkeley in the Berkeley Institute of Design Lab. In September I'm starting as a postdoctoral fellow with The Smithsonian!"
+    },
+    "rightPuppet": null,
+    "headPuppet": 0,
+    "puppetSize": 1.1,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    }
+  },
+  {
+    "id": 3,
+    "leftPuppet": 3,
+    "_note": "hand puppets 3 Adobe Research, 4 Midjourney Storytelling Lab, 5 tiat — cycle for each 'here'",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "You may know me for being a critical HCI + AI + Design researcher and creative technologist---I've been publishing papers and performing stunts at places like here, here, and here!"
+    },
+    "rightPuppet": null,
+    "headPuppet": 0,
+    "puppetSize": 1.1,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    }
+  },
+  {
+    "id": 4,
+    "leftPuppet": 6,
+    "_note": "hand puppet 6: bPigment",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "my research has gone from designing novel color mixing and digital painting systems…"
+    }
+  },
+  {
+    "id": 5,
+    "leftPuppet": 7,
+    "_note": "hand puppet 7: CSE",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "to empirically studying creative communities, and the sociotechnical ecosystems that support them — including the supportive and disruptive roles that technology can play in those ecosystems —"
+    },
+    "rightPuppet": null,
+    "headPuppet": 0,
+    "puppetSize": 1.1,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    }
+  },
+  {
+    "id": 6,
+    "leftPuppet": null,
+    "slide": "artographer.webm",
+    "toggles": {
+      "audio": true
+    },
+    "_note": "full-screen artographer video",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "…to my current focus on cultural and historical data work, designing interactions that lead us towards engaging with, appreciating, and sustaining human artists and art-making."
+    }
+  },
+  {
+    "id": 7,
+    "leftPuppet": 8,
+    "slide": null,
+    "toggles": {
+      "audio": false
+    },
+    "_note": "hand puppets 8, 9, 10: photos/videos of teaching + student work — cycle",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "I've also had the privilege of teaching Creative Programming and Electronics at Berkeley for the past 3 years, together with the great Dr. Sudhu Tewari, and getting to take credit for our students' amazing work."
+    }
+  },
+  {
+    "id": 8,
+    "leftPuppet": 11,
+    "_note": "hand puppets 11–15: shm's art (5) — cycle",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "…but the role and identity I've laid claim to, and have held most dear, for the longest time, is being...an artist!"
+    },
+    "rightPuppet": null,
+    "headPuppet": 0,
+    "puppetSize": 1.1,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    }
+  },
+  {
+    "id": 9,
+    "leftPuppet": 17,
+    "_note": "hand puppets 16–20: shm's college art (5) — cycle",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "Before my PhD, I studied computer science & fine art at The College of New Jersey, with a focus on self-portraiture, oil painting and charcoal."
+    },
+    "rightPuppet": null,
+    "headPuppet": 0,
+    "puppetSize": 1.1,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    }
+  },
+  {
+    "id": 10,
+    "leftPuppet": null,
+    "_note": "clear, no puppets",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "and before that, I was...… and I know this revelation may be shocking to some…"
+    },
+    "rightPuppet": null,
+    "headPuppet": 0,
+    "puppetSize": 1.1,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    }
+  },
+  {
+    "id": 11,
+    "leftPuppet": 21,
+    "_note": "hand puppet 21-24: cycle through photos of shm in theatre",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "…a theatre kid."
+    }
+  },
+  {
+    "id": 12,
+    "leftPuppet": 25,
+    "_note": "hand puppet 25: performance text png",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "these days, I've been interested in combining my love of performance…"
+    }
+  },
+  {
+    "id": 13,
+    "leftPuppet": 25,
+    "headPuppet": 0,
+    "headPuppetPosition": "heading",
+    "toggles": {
+      "headPuppets": true
+    },
+    "_note": "head puppet 0: visual art png. instant:true so 'visual art' just appears (no retype)",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "instant": true,
+      "text": "these days, I've been interested in combining my love of performance… visual art…"
+    }
+  },
+  {
+    "id": 14,
+    "leftPuppet": 25,
+    "rightPuppet": 26,
+    "_note": "hand puppet 23: creative computation png (right hand). keep head puppet. static append",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "instant": true,
+      "text": "these days, I've been interested in combining my love of performance… visual art… and creative computation."
+    }
+  },
+  {
+    "id": 15,
+    "leftPuppet": 25,
+    "rightPuppet": 26,
+    "_note": "keep all three puppets stable so shm can smush them together",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "I'm curious what each of these mediums & practices can learn and take and shift in each other, and I think the best and most fun way to investigate this has been through creative practice and making and performing."
+    },
+    "headPuppet": 0,
+    "puppetSize": 1.1,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": true,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    },
+    "headPuppetPosition": "heading"
+  },
+  {
+    "id": 16,
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "headPuppet": null,
+    "slide": "performance_painting.webm",
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": true,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false,
+      "audio": false
+    },
+    "_note": "full-screen video of shm performing painting",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "I've been experimenting with performing self-portraiture, the act of painting my self, alongside a computational system that is also trying to 'paint' me. I'll be performing this piece next week at Central St. Martens in London!"
+    },
+    "puppetSize": 1.1
+  },
+  {
+    "id": 17,
+    "slide": null,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": true,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false,
+      "audio": false
+    },
+    "stage": [
+      {
+        "id": "sock",
+        "image": "000_sock_puppet.png",
+        "talkImage": "001_sock_puppet_open.png",
+        "at": {
+          "x": 0.22,
+          "y": 0.42
+        },
+        "size": 0.62,
+        "pngtuber": {
+          "bounce": true,
+          "talk": true
+        }
+      }
+    ],
+    "_note": "left stage puppet: sock puppet, bouncing + mouth-animated (enable mic in the panel first!)",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "as you can maybe see. I've been experimenting with digital puppetry."
+    },
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "headPuppet": null,
+    "puppetSize": 1.1
+  },
+  {
+    "id": 18,
+    "_note": "sock stage puppet persists",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "compared to my other work, I really like how this use of 'AI' has given me the opportunity to express and practice, develop, and embody some of my opinions about it. Namely,"
+    }
+  },
+  {
+    "id": 19,
+    "stage": [],
+    "_note": "nothing on screen",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "that I don't want our society to train some fancy big model capable of artificial general intelligence."
+    }
+  },
+  {
+    "id": 20,
+    "stage": [
+      {
+        "id": "sock",
+        "image": "000_sock_puppet.png",
+        "talkImage": "001_sock_puppet_open.png",
+        "at": {
+          "x": 0.22,
+          "y": 0.44
+        },
+        "size": 0.56,
+        "pngtuber": {
+          "bounce": true,
+          "talk": true
+        }
+      },
+      {
+        "id": "sockhat",
+        "image": "002_hat_puppet.png",
+        "talkImage": "003_hat_puppet_open.png",
+        "at": {
+          "x": 0.5,
+          "y": 0.41
+        },
+        "size": 0.58,
+        "pngtuber": {
+          "bounce": true,
+          "talk": true
+        }
+      },
+      {
+        "id": "sockpup",
+        "image": "004_hat_puppeteer_puppet.png",
+        "talkImage": "005_hat_puppeteer_puppet_open.png",
+        "at": {
+          "x": 0.78,
+          "y": 0.44
+        },
+        "size": 0.62,
+        "pngtuber": {
+          "bounce": true,
+          "talk": true
+        }
+      }
+    ],
+    "_note": "three stage puppets L/M/R: sock, sock+hat, sock+puppeteer — each bounces + animates",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "I want us to make a bunch of scrappy little models capable of real specific stupidity."
+    },
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "headPuppet": null,
+    "puppetSize": 1.1,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": true,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    }
+  },
+  {
+    "id": 21,
+    "potato": true,
+    "toggles": {
+      "hands": false,
+      "bbox": false
+    },
+    "stage": [],
+    "_note": "potato tracking ON (box + 'potato' label), everything else off",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "for example, yesterday I took a small, general-purpose potato detection dataset. which already is pretty stupid. and I trained it to bias it towards recognizing this specific potato."
+    }
+  },
+  {
+    "id": 22,
+    "potato": false,
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "and it brought me to reflect on how. I'm very tired of technology designed to be 'general purpose', and I'll give you two reasons why."
+    },
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "headPuppet": null,
+    "puppetSize": 1.1,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": false,
+      "gestures": false,
+      "headPuppets": true,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    }
+  },
+  {
+    "id": 23,
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "one, anything that presents itself as 'general' inherently perpetuates, and helps codify, some way of framing the world that says"
+    }
+  },
+  {
+    "id": 24,
+    "drawing": true,
+    "drawingClear": true,
+    "drawingColor": "#ffffff",
+    "_note": "drawing mode ON (white) — shm draws the normal distribution",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "those at the center of some general, normal distribution are a priority, and anyone in the margins is an unfortunate edge case"
+    }
+  },
+  {
+    "id": 25,
+    "drawing": false,
+    "drawingClear": true,
+    "_note": "clear the drawing, drawing mode off",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "and two, because anything designed to perform generally tends to perform.... generically.  which is boring."
+    },
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "headPuppet": null,
+    "puppetSize": 1.1,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": false,
+      "gestures": false,
+      "headPuppets": true,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    }
+  },
+  {
+    "id": 26,
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "I am not often moved by genericism."
+    }
+  },
+  {
+    "id": 27,
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "speed": "fast",
+      "text": "every piece of media, and every person and animal and plant and bug that I have loved, I loved because it is distinct and impossibly specific and therefore an absolute miracle to share even a moment with, as I too am but a finite blip within an infinite void of space and time and—"
+    }
+  },
+  {
+    "id": 28,
+    "potato": true,
+    "_note": "potato capture, normal bounding box",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "—um…. back to why I trained this model to recognize this specific potato."
+    }
+  },
+  {
+    "id": 29,
+    "potato": true,
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "it's because I really wanted to be able to do this, specifically."
+    }
+  },
+  {
+    "id": 30,
+    "potato": true,
+    "potatoManualTrigger": true,
+    "potatoOverlay": "mr_potato_head.png",
+    "_note": "Mr. Potato Head accessories appear on the potato. Manual fallback ('p') armed.",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "…"
+    }
+  },
+  {
+    "id": 31,
+    "potato": true,
+    "potatoManualTrigger": true,
+    "potatoOverlay": "mr_potato_head.png",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "…and this, of course."
+    }
+  },
+  {
+    "id": 32,
+    "potato": true,
+    "potatoManualTrigger": true,
+    "potatoOverlay": "mrs_potatohead.png",
+    "_note": "Mrs. Potato Head accessories on the potato",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "…"
+    }
+  },
+  {
+    "id": 33,
+    "potato": false,
+    "leftPuppet": 27,
+    "toggles": {
+      "hands": true
+    },
+    "_note": "hand puppet 24: legacy BART costume",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "something I love about doing performance art in collaboration with technology, including stuff like costume making…."
+    }
+  },
+  {
+    "id": 34,
+    "leftPuppet": 27,
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "this is my BART costume."
+    }
+  },
+  {
+    "id": 35,
+    "leftPuppet": 28,
+    "_note": "hand puppet 25: 2nd / new BART costume",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "…and this is my 2nd BART costume."
+    }
+  },
+  {
+    "id": 36,
+    "leftPuppet": null,
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "is that it creates these stakes, where you have to solve problems you never even imagined being a problem. for example, last night, I was doing this in my kitchen."
+    },
+    "rightPuppet": null,
+    "headPuppet": null,
+    "puppetSize": 1.1,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": true,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    }
+  },
+  {
+    "id": 37,
+    "slide": "potatoes.webm",
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": true,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false,
+      "audio": true
+    },
+    "_note": "full-screen video of shm doing the potato training",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "…to collect a training dataset. of this specific potato."
+    },
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "headPuppet": null,
+    "puppetSize": 1.1
+  },
+  {
+    "id": 38,
+    "slide": null,
+    "toggles": {
+      "audio": false
+    },
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "and in a world shaped by the desperate clawing of technosolutionism, and a subsequent overabundance of technology solutions,"
+    }
+  },
+  {
+    "id": 39,
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "and this inordinate pressure on computer scientists and technology designers, like myself and my peers and students, to always be inventing bigger and smarter technology solutions..."
+    },
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "headPuppet": 0,
+    "puppetSize": 1.1,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    }
+  },
+  {
+    "id": 40,
+    "potato": true,
+    "potatoOverlay": "walter_dog.png",
+    "_note": "potato overlay: a silly cat",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "it's kind of artistically cathartic to invent low-stakes problems, for a particularly stupid and useless potato AI to solve."
+    }
+  },
+  {
+    "id": 41,
+    "potato": false,
+    "toggles": {
+      "bbox": true,
+      "facemesh": true,
+      "race": true,
+      "age": true,
+      "gender": true,
+      "emotion": true,
+      "hands": false,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    },
+    "_note": "face mesh on",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "as an edge-case kind of person, it's also been so cathartic and interesting to use this medium to confront and explore these questions of recognition. of masking."
+    },
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "headPuppet": 0,
+    "puppetSize": 1.1
+  },
+  {
+    "id": 42,
+    "toggles": {
+      "race": true,
+      "gender": true,
+      "age": true,
+      "emotion": true,
+      "bbox": true
+    },
+    "_note": "surveillance-critique models on: race/gender/age/emotion + bbox",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "of what it means to be recognized by a system. to make yourself recognizable, legible."
+    }
+  },
+  {
+    "id": 43,
+    "actionRequired": "smile",
+    "_note": "stage direction: smile to continue",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "what it means to live in a world where the thing you are recognized as is not authentic to who you are, or how you feel on the inside."
+    }
+  },
+  {
+    "id": 44,
+    "faceId": true,
+    "toggles": {
+      "race": false,
+      "gender": false,
+      "age": false,
+      "emotion": false,
+      "facemesh": false,
+      "bbox": true
+    },
+    "_note": "switch to specific face recognition (faceId ON). bbox on so names label the faces.",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "I've recently started playing with specific face recognition. max, will you come stand in front of my webcam."
+    }
+  },
+  {
+    "id": 45,
+    "_note": "stage direction: max asks the computer to see them",
+    "dialogue": {
+      "show": false
+    }
+  },
+  {
+    "id": 46,
+    "slide": "max_training.webm",
+    "toggles": {
+      "audio": true
+    },
+    "_note": "full-screen video of shm training the system to recognize max (phone photos to webcam)",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "for context, I trained the system to recognize max like this — by holding up photos of their face on my phone to the webcam yesterday. so I hope this works. (hopefully, we tested this…)"
+    }
+  },
+  {
+    "id": 47,
+    "slide": null,
+    "toggles": {
+      "audio": false,
+      "bbox": true
+    },
+    "_note": "shm + max face recognition mode",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "…"
+    }
+  },
+  {
+    "id": 48,
+    "_note": "shm + max face recognition mode",
+    "dialogue": {
+      "show": true,
+      "characterName": "max",
+      "text": "wow shm you are so cool. and very tall."
+    },
+    "leftPuppet": null,
+    "rightPuppet": null,
+    "headPuppet": 0,
+    "puppetSize": 1.1,
+    "toggles": {
+      "bbox": true,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": false,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    }
+  },
+  {
+    "id": 49,
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "gee thanks max. anyway, I think the narrative and rhetorical possibilities here are super intriguing. what does it mean to be recognized, and labeled?"
+    }
+  },
+  {
+    "id": 50,
+    "faceLabels": {
+      "max": "SCARY VILLAIN",
+      "shm": "VALIANT HERO"
+    },
+    "_note": "relabel: max → SCARY VILLAIN, shm → VALIANT HERO (this frame + next)",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "what could it mean for those labels to change?"
+    }
+  },
+  {
+    "id": 51,
+    "faceLabels": {
+      "max": "SCARY VILLAIN",
+      "shm": "VALIANT HERO"
+    },
+    "_note": "stage direction: shm looks at max and gets scared",
+    "dialogue": {
+      "show": false
+    }
+  },
+  {
+    "id": 52,
+    "faceLabels": null,
+    "toggles": {
+      "bbox": false
+    },
+    "_note": "revert labels; drop the box",
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "ok, thank you max. and thanks everyone for your time and attention, and to our community leaders and organizers for allowing me to be a part of this beautiful program and community."
+    }
+  },
+  {
+    "id": 53,
+    "dialogue": {
+      "show": true,
+      "characterName": "shm",
+      "text": "I'm really excited to create art, and experiences, together, with all of you, this summer at stochastic — in this really distinct moment of time and space that I, miraculously, get to share together with each of you."
+    }
+  },
+  {
+    "id": 54,
+    "drawing": true,
+    "drawingClear": true,
+    "drawingColor": "#b4dd1e",
+    "_note": "drawing mode ON — shm draws something beautiful; narrator caption",
+    "dialogue": {
+      "show": true,
+      "characterName": "narrator",
+      "text": "and then shm drew something beautiful to express their gratitude and appreciation"
+    }
+  },
+  {
+    "id": 55,
+        "drawing": false,
+        "drawingClear": true,
+    "leftPuppet": null,
+    "rightPuppet": 29,
+    "slide": null,
+    "toggles": {
+      "bbox": false,
+      "facemesh": false,
+      "race": false,
+      "age": false,
+      "gender": false,
+      "emotion": false,
+      "hands": true,
+      "gestures": false,
+      "headPuppets": true,
+      "detectShm": false,
+      "detectPrettyCute": false,
+      "dialogueHover": false
+    },
+    "dialogue": null,
+    "headPuppet": 3,
+    "puppetSize": 2,
+    "headPuppetPosition": "mask",
+    "headXOffset": 400,
+    "headYOffset": -10
+  }
+]

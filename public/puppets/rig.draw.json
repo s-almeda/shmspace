@@ -1,0 +1,5 @@
+{
+  "_note": "Finger-paint drawing mode: /puppets?rig=draw. Toggle 'drawing mode' (or press d), then point ONE index finger up to draw at your fingertip; make a fist or show a second hand to pause. Pick color/size, clear the canvas. Hands feature is on so puppets can show alongside.",
+  "title": "drawing",
+  "features": ["drawing"]
+}

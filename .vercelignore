@@ -1,0 +1,16 @@
+# Files that stay in git but are deliberately NOT uploaded to Vercel.
+#
+# potato.onnx (~12MB) is the puppet rig's object detector. It has to stay in the public
+# GitHub repo because jsDelivr serves it from there in production (see
+# public/puppets/js/features/potato.js) — but shipping it in the deploy too would just
+# burn Vercel bandwidth on every visitor for a file they'd fetch from the CDN anyway.
+public/puppets/potato_model/*.onnx
+public/puppets/potato_model/*.pt
+
+# Local-only tool pages. Both depend on localhost-only express routes (roster saving,
+# dataset listing) that simply don't exist in prod, so deployed they're dead ends that
+# also happen to render the face roster. Keep them in git for `node App.js`; keep them
+# off the public site. People are added to the roster by hand-editing
+# public/puppets/face_ids/roster.json and committing.
+public/puppets/roster_editor.html
+public/puppets/dataset_review.html

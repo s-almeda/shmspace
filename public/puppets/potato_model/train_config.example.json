@@ -1,0 +1,4 @@
+{
+  "_note": "Copy this file to train_config.json (same folder) and set 'python' to the absolute path of the venv python that has ultralytics installed. Get it by running:  venv_pls && python3 -c \"import sys; print(sys.executable)\"  . The rig's train button (/puppets?rig=capture) spawns that interpreter. If train_config.json is absent, the server falls back to the POTATO_PYTHON env var, then plain 'python3'.",
+  "python": "/absolute/path/to/your/venv/bin/python"
+}

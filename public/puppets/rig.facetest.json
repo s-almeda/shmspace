@@ -1,0 +1,5 @@
+{
+  "_note": "Test face recognition against the enrolled roster: /puppets?rig=facetest. The primary face gets labeled live (green 'shm garanganao almeda' for shm, name for others, 'someone' otherwise). Adjust match strictness in the panel. Enroll people first with ?rig=enroll.",
+  "title": "face id test",
+  "features": ["faceId", "bbox", "facemesh"]
+}

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>face roster editor</title>
+  <style>
+    body { margin: 0; background: #111; color: #eee; font: 14px/1.5 system-ui, sans-serif; }
+    header { position: sticky; top: 0; background: #1b1b1b; padding: 12px 16px; border-bottom: 1px solid #333; display: flex; align-items: center; gap: 14px; z-index: 1; }
+    header h1 { font-size: 16px; margin: 0; }
+    #save { padding: 7px 16px; background: #2a6; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+    #save:disabled { opacity: 0.5; cursor: default; }
+    #msg { color: #9cf; }
+    main { padding: 16px; max-width: 720px; }
+    .person { display: flex; align-items: center; gap: 12px; background: #1b1b1b; border: 1px solid #333; border-left: 6px solid #78c8ff; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+    .person .label { font-weight: 700; min-width: 80px; }
+    .person .count { color: #888; font-size: 12px; }
+    .person input[type=text] { flex: 1; min-width: 80px; background: #111; color: #eee; border: 1px solid #444; border-radius: 4px; padding: 6px 8px; }
+    .person input[type=color] { width: 40px; height: 32px; border: none; background: none; cursor: pointer; }
+    .person button.del { background: #a33; color: #fff; border: none; border-radius: 4px; padding: 6px 10px; cursor: pointer; }
+    #empty { color: #888; padding: 30px 0; }
+    .hint { color: #777; font-size: 12px; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>face roster editor</h1>
+    <button id="save">save roster</button>
+    <span id="msg"></span>
+  </header>
+  <main>
+    <div id="list"></div>
+    <div id="empty" style="display:none;">No one enrolled yet. Enroll faces at <code>/puppets?rig=enroll</code>.</div>
+    <div class="hint">Set each person's display name (shown on their bounding box) and color. Delete removes a person entirely. "samples" is how many face descriptors are stored. Changes save to face_ids/roster.json (localhost only).</div>
+  </main>
+
+  <script type="module">
+    const listEl = document.getElementById('list');
+    const emptyEl = document.getElementById('empty');
+    const saveBtn = document.getElementById('save');
+    const msgEl = document.getElementById('msg');
+
+    let roster = await fetch('/puppets/face_ids/roster.json').then(r => r.ok ? r.json() : []).catch(() => []);
+    if (!Array.isArray(roster)) roster = [];
+
+    function defaultColor(label) { return label === 'shm' ? '#90bd42' : '#78c8ff'; }
+
+    // Greedy diversity prune: repeatedly drop the descriptor closest to another sample
+    // (the most redundant), keeping the most varied `target` descriptors.
+    const dist = (a, b) => { let s = 0; for (let i = 0; i < a.length; i++) { const d = a[i] - b[i]; s += d * d; } return Math.sqrt(s); };
+    function pruneDescriptors(desc, target) {
+      const d = desc.slice();
+      while (d.length > target) {
+        let worst = -1, worstNN = Infinity;
+        for (let i = 0; i < d.length; i++) {
+          let nn = Infinity;
+          for (let j = 0; j < d.length; j++) { if (i === j) continue; const dd = dist(d[i], d[j]); if (dd < nn) nn = dd; }
+          if (nn < worstNN) { worstNN = nn; worst = i; }
+        }
+        d.splice(worst, 1);
+      }
+      return d;
+    }
+
+    function render() {
+      listEl.innerHTML = '';
+      emptyEl.style.display = roster.length ? 'none' : 'block';
+      roster.forEach((p, i) => {
+        const color = p.color || defaultColor(p.label);
+        const row = document.createElement('div');
+        row.className = 'person';
+        row.style.borderLeftColor = color;
+        row.innerHTML = `
+          <span class="label"></span>
+          <input type="color" value="${color}">
+          <input type="text" placeholder="display name (default: ${p.label})">
+          <span class="count">${(p.descriptors || []).length} samples</span>
+          <label style="font-size:12px; color:#aaa;">simplify to <input type="number" class="simp-n" min="1" value="${Math.min(50, (p.descriptors || []).length)}" style="width:56px; background:#111; color:#eee; border:1px solid #444; border-radius:4px; padding:5px;"></label>
+          <button class="simp">simplify</button>
+          <button class="del">delete</button>`;
+        row.querySelector('.label').textContent = p.label;
+        const colorEl = row.querySelector('input[type=color]');
+        const nameEl = row.querySelector('input[type=text]');
+        nameEl.value = p.name || '';
+        colorEl.addEventListener('input', () => { p.color = colorEl.value; row.style.borderLeftColor = colorEl.value; });
+        nameEl.addEventListener('input', () => { p.name = nameEl.value.trim() || undefined; });
+        row.querySelector('.simp').addEventListener('click', () => {
+          const d = p.descriptors || [];
+          const n = parseInt(row.querySelector('.simp-n').value, 10);
+          if (!n || n < 1 || n >= d.length) { alert(`enter a number between 1 and ${d.length - 1}`); return; }
+          p.descriptors = pruneDescriptors(d, n);
+          msgEl.textContent = `${p.label}: ${d.length} → ${p.descriptors.length} (unsaved — click save)`;
+          render();
+        });
+        row.querySelector('.del').addEventListener('click', () => {
+          if (confirm(`Delete "${p.label}" and all ${(p.descriptors || []).length} samples?`)) {
+            roster.splice(i, 1); render();
+          }
+        });
+        listEl.appendChild(row);
+      });
+    }
+    render();
+
+    saveBtn.addEventListener('click', async () => {
+      saveBtn.disabled = true; msgEl.textContent = 'saving…';
+      // normalize: ensure each has a color; drop undefined names
+      const out = roster.map(p => ({
+        label: p.label,
+        ...(p.name ? { name: p.name } : {}),
+        color: p.color || defaultColor(p.label),
+        descriptors: p.descriptors || [],
+      }));
+      try {
+        const r = await fetch('/puppets/roster-save', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(out),
+        }).then(x => x.json());
+        msgEl.textContent = r?.ok ? '✅ saved' : '❌ ' + (r?.error || 'failed');
+      } catch (e) {
+        msgEl.textContent = '❌ save failed (is node App.js running?)';
+      }
+      saveBtn.disabled = false;
+    });
+  </script>
+</body>
+</html>

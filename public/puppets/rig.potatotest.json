@@ -1,0 +1,5 @@
+{
+  "_note": "Test rig for the potato detector in freeplay. Load with /puppets?rig=potatotest. Enables potato + hands (for the manual fallback) + a few visuals. Not used by any show.",
+  "title": "potato detection test",
+  "features": ["potato"]
+}
