@@ -366,9 +366,6 @@
           parent = parent.parentElement.closest('details');
         }
         
-        // Scroll it into view
-        fileLink.scrollIntoView({ block: 'center', behavior: 'smooth' });
-        
         // Remove previous highlights
         document.querySelectorAll('.file-selector span[data-path]').forEach(span => {
           span.style.backgroundColor = '';
