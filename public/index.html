@@ -26,6 +26,24 @@
     #loading-body,
     #loading-body { text-align: center; }
     #loading-body progress { width: 100%; max-width: 400px; }
+
+    /* Title-bar sock puppet: swaps to the open-mouth frame on hover so it
+       looks like it's talking. Both frames are stacked so neither reflows. */
+    #sock-puppet-link {
+      margin-left: auto;
+      display: inline-grid;
+      line-height: 0;
+    }
+    #sock-puppet-link img {
+      grid-area: 1 / 1;
+      height: 1.6em;
+      width: auto;
+    }
+    #sock-puppet-link .sock-talk { visibility: hidden; transform: rotate(6deg); }
+    #sock-puppet-link:hover .sock-rest,
+    #sock-puppet-link:focus-visible .sock-rest { visibility: hidden; }
+    #sock-puppet-link:hover .sock-talk,
+    #sock-puppet-link:focus-visible .sock-talk { visibility: visible; }
   </style>
   
   <!-- let's also include these javascript scripts. -->
@@ -72,7 +90,10 @@
     <div class="title-bar-text" style="display: flex; align-items: center; flex: 1; margin-right: 0;">
       shm garanganao almeda 
       <!--SUBTITLE: <span style="font-size: 0.65em"> is looking for summer internships ;-) </span-->
-        <a href="/shmuppetry" style="margin-left: auto;"><img style="height: 1.1em; width: auto" src="https://art.snailbunny.site/portfolio/0_FEATURED/assets/001_sock_puppet_open.png" alt="Sock Puppet"></a>
+        <a href="/shmuppetry" id="sock-puppet-link" title="shmuppetry">
+          <img class="sock-rest" src="https://art.snailbunny.site/portfolio/original/309_sock_rest.png" alt="Sock Puppet">
+          <img class="sock-talk" src="https://art.snailbunny.site/portfolio/original/310_sock_talk.png" alt="" aria-hidden="true">
+        </a>
     </div>
   </div> <!--end window header-->
 
