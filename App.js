@@ -82,13 +82,13 @@ app.get('/facial_recognishm/puppets-list', function (_req, res) {
 // SHMUH.CO/... short URL -> destination. add a line here to add a redirect.
 const redirects = {
     '/artographer':   '/papers/artographer/',
-    '/aitl':          'https://art.snailbunny.site/portfolio/0_FEATURED/artist_in_the_loop.html',
-    '/rsp':           'https://art.snailbunny.site/portfolio/0_FEATURED/artist_in_the_loop.html',
-    '/rsp0':          'https://art.snailbunny.site/portfolio/0_FEATURED/artist_in_the_loop.html',   
-    '/bart':          'https://art.snailbunny.site/portfolio/0_FEATURED/shm_X_bart.html',
+    '/aitl':          'https://art.shmuh.co/portfolio/0_FEATURED/artist_in_the_loop.html',
+    '/rsp':           'https://art.shmuh.co/portfolio/0_FEATURED/artist_in_the_loop.html',
+    '/rsp0':          'https://art.shmuh.co/portfolio/0_FEATURED/artist_in_the_loop.html',   
+    '/bart':          'https://art.shmuh.co/portfolio/0_FEATURED/shm_X_bart.html',
     '/walo':          'https://drive.google.com/file/d/1084qTZ1h9WmhtC-w2g-UyvVDSoCoEfzg/view?usp=sharing',
-    '/shmuppetry':    'https://art.snailbunny.site/portfolio/0_FEATURED/shmuppetry.html',
-    '/tube':          'https://art.snailbunny.site/api/bart/tube',
+    '/shmuppetry':    'https://art.shmuh.co/portfolio/0_FEATURED/shmuppetry.html',
+    '/tube':          'https://art.shmuh.co/api/bart/tube',
     '/art_education': '/papers/art_education/',
     '/art-education': '/papers/art_education/',
 };
@@ -98,7 +98,7 @@ for (const [from, to] of Object.entries(redirects)) {
 
 // param redirect — keeps its own route since it interpolates the path segment
 app.get('/artographer/:path', (_req, res) => {
-    res.redirect(`https://artographer.snailbunny.site/${_req.params.path}`);
+    res.redirect(`https://artographer.shmuh.co/${_req.params.path}`);
 });
 
 // Generic puppeteering rig — all puppet routes live alongside the rig.

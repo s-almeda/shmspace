@@ -1,7 +1,7 @@
 # BART API (`/api/bart`)
 
 ## Live URL
-- `https://art.snailbunny.site/api/bart/`
+- `https://art.shmuh.co/api/bart/`
 
 ## Config
 - 511 API KEY IN `.env`:
@@ -68,17 +68,17 @@ Response shape:
 ## Example curls
 
 ```bash
-curl -X POST https://art.snailbunny.site/api/bart/testmode \
+curl -X POST https://art.shmuh.co/api/bart/testmode \
   -H "Content-Type: application/json" \
   -d '{"enabled": false}'
 
-curl https://art.snailbunny.site/api/bart/next
+curl https://art.shmuh.co/api/bart/next
 
-curl -X POST https://art.snailbunny.site/api/bart/testmode \
+curl -X POST https://art.shmuh.co/api/bart/testmode \
   -H "Content-Type: application/json" \
   -d '{"enabled":true}'
 
-curl https://art.snailbunny.site/api/bart/next
+curl https://art.shmuh.co/api/bart/next
 ```
 
 Observed behavior:
@@ -102,7 +102,7 @@ Observed behavior:
 ## Request/response sequence (ESP32 -> Snailbunny API)
 
 ESP32 sends requests to:
-- `GET https://art.snailbunny.site/api/bart/next`
+- `GET https://art.shmuh.co/api/bart/next`
 
 Expected response:
 ```json

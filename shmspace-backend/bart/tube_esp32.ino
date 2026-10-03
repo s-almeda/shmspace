@@ -3,7 +3,7 @@
  *
  * One ESP32 controls all 3 physical tubes (heaters on pins 4, 5, 19) and one NeoPixel LED.
  * Connects to wifi (see NETWORKS), then every 5s polls:
- *   GET https://art.snailbunny.site/api/bart/tube/tube_arrivals
+ *   GET https://art.shmuh.co/api/bart/tube/tube_arrivals
  *
  * Example response:
  *   {
@@ -23,7 +23,7 @@
 #include <Preferences.h>
 
 // ── Config ────────────────────────────────────────────────────────────────────
-const char* server = "art.snailbunny.site";
+const char* server = "art.shmuh.co";
 const char* path   = "/api/bart/tube/tube_arrivals";
 
 const unsigned long POLL_INTERVAL  = 5000;   // how often to check the server (ms)

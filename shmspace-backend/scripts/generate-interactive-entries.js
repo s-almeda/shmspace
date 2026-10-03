@@ -23,7 +23,7 @@ const path = require('path');
 const INTERACTIVE_DIR = path.join(__dirname, '..', 'portfolio', '0_FEATURED');
 const ASSETS_DIR = path.join(INTERACTIVE_DIR, 'assets');
 const BASE_LOCAL_URL = 'http://localhost:3001/portfolio/0_FEATURED';
-const BASE_PROD_URL = 'https://art.snailbunny.site/portfolio/0_FEATURED';
+const BASE_PROD_URL = 'https://art.shmuh.co/portfolio/0_FEATURED';
 const SCREENSHOT_WIDTH = 1280;
 const SCREENSHOT_HEIGHT = 720;
 

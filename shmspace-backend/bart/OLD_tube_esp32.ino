@@ -6,7 +6,7 @@
  * First, it tries to connect to wifi (see NETWORKS array) and remembers the last-working network in flash for faster reconnects.
  * Then, once we're connected to wifi.....
  * Every 5s, polls:
- *   GET https://art.snailbunny.site/api/bart/tube/tube_arrivals
+ *   GET https://art.shmuh.co/api/bart/tube/tube_arrivals
  * which returns a 3-slot array of real BART trains inside the Transbay Tube.
  *
  * Example response:
@@ -36,7 +36,7 @@
 // ── Per-device config ─────────────────────────────────────────────────────────
 const int TUBE_NUM = 0;  // CHANGE to 1 or 2 on the other two devices
 
-const char* server = "art.snailbunny.site";
+const char* server = "art.shmuh.co";
 const char* path   = "/api/bart/tube/tube_arrivals";
 
 const unsigned long POLL_INTERVAL  = 5000;   // how often to check the server (ms)
