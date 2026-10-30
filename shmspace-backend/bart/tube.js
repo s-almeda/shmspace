@@ -22,6 +22,8 @@ const TUBE_TRAVEL_MINS   = 4 + 40 / 60;  // ~4:40 — one-way travel time throug
 const WO_SB_OFFSET_MINS  = 2 + 15 / 60;  // ~2:15 — WO dwell + surface transit to tube entrance (SB)
 const WO_NB_EXIT_MINS    = 2;             // ~2:00 — NB train exits tube this many mins before WO arrival
 
+const NUM_SLOTS = 4;  // max trains tracked in the tube at once
+
 function minsUntil(isoTime, now) {
   return (new Date(isoTime) - now) / 60000;
 }
@@ -58,7 +60,7 @@ const tubeAssignments = new Map();
 // Cleared when the train exits the tube.
 const playedTrains = new Set();
 
-// Round-robin cursor so tube assignments distribute across all 3 slots
+// Round-robin cursor so tube assignments distribute across all slots
 let nextSlot = 0;
 
 try {
@@ -81,16 +83,10 @@ router.get('/', (_req, res) => {
   res.sendFile(path.join(__dirname, 'tube.html'));
 });
 
-// The only data endpoint. Returns a 3-slot array:
-//   tubes[0..2] — null, or the train assigned to that slot.
-//
-// ESP32 logic (same code on all 3, only TUBE_NUM differs):
-//   prevKey = ""
-//   on each poll:
-//     t = response.tubes[TUBE_NUM]
-//     k = t ? (t.vehicleRef || t.line+t.dest) : ""
-//     if k != "" && k != prevKey → lightUp(t.color, 3000ms)
-//     prevKey = k
+// The only data endpoint. Returns a NUM_SLOTS-length array:
+//   tubes[0..NUM_SLOTS-1] — null, or the train assigned to that slot.
+// Slot index is arbitrary; clients pick which physical tube to fire from the
+// train's line (e.g. "Yellow-N" → yellow tube). A new key in any slot = new train.
 router.get('/tube_arrivals', (_req, res) => {
   const cache = getCache();
   const allInTube = getInTube(cache);
@@ -102,18 +98,18 @@ router.get('/tube_arrivals', (_req, res) => {
   for (const k of playedTrains)
     if (!active.has(k)) playedTrains.delete(k);
 
-  // Assign new unplayed trains to slots; evict oldest if all 3 full.
+  // Assign new unplayed trains to slots; evict oldest if all slots full.
   // playedTrains prevents evicted trains from recapturing a slot and re-firing.
-  const tubes = [null, null, null];
+  const tubes = Array(NUM_SLOTS).fill(null);
   let changed = false;
   for (const t of allInTube) {
     const key = trainKey(t);
     if (!tubeAssignments.has(key) && !playedTrains.has(key)) {
       const usedIdxs = [...tubeAssignments.values()].map(v => v.idx);
-      const offset = [0, 1, 2].find(j => !usedIdxs.includes((nextSlot + j) % 3));
+      const offset = [...Array(NUM_SLOTS).keys()].find(j => !usedIdxs.includes((nextSlot + j) % NUM_SLOTS));
       if (offset !== undefined) {
-        const idx = (nextSlot + offset) % 3;
-        nextSlot = (idx + 1) % 3;
+        const idx = (nextSlot + offset) % NUM_SLOTS;
+        nextSlot = (idx + 1) % NUM_SLOTS;
         tubeAssignments.set(key, { idx, assignedAt: Date.now() });
       } else {
         // All slots occupied — evict the oldest to make room

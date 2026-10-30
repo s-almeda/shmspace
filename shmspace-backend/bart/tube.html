@@ -14,7 +14,7 @@
     .slot-label { font-size: 0.6rem; color: #666; margin-bottom: 2px; }
     .slot-val { padding: 4px 2px; background: #5b5b5b; border: 2px inset #999; color: #999; overflow-wrap: break-word; }
     .slot-val.occupied { color: #555; }
-    .slot-val.sounding { background: #ffffff !important; color: #000; font-weight: bold; }
+    .slot-val.sounding { background: var(--c, #ffffff) !important; color: #000; font-weight: bold; }
     .ev-label { font-size: 0.6rem; color: #888; font-family: 'Lucida Console', monospace; margin: 6px 0 2px; padding-bottom: 2px; border-bottom: 1px solid #2a2a2a; }
     .ev-label.alert { color: #ffaa00; }
     .ev-list { font-family: 'Lucida Console', monospace; font-size: 0.72rem; margin-bottom: 4px; min-height: 1.4em; }
@@ -38,7 +38,7 @@
           <legend style="font-weight:bold; color:#eee"> This is a web monitor for the <em>Transbay Tubes</em> sound sculpture. <span id="badge" style="display:none;background:#c00;color:#fff;font-size:0.6rem;padding:1px 4px;margin-left:6px">TEST MODE</span>
 </legend>
 <p>This sound sculpture is an instrument played by the Bay Area Rapid Transit (BART) system.</p>
-          When a BART train enters the underwater Transbay Tube connecting San Francisco and Oakland, the sculpture lights up to indicate the train's line color (Red, Yellow, Green, or Blue), and makes a sound (by heating one of the sculpture's 3 tubes).
+          When a BART train enters the underwater Transbay Tube connecting San Francisco and Oakland, the sculpture lights up to indicate the train's line color (Red, Yellow, Green, or Blue), and makes a sound (by heating the one of the sculpture's 4 tubes that matches the train's line color).
       
           <p><span style="color: #82c4ff;">UPDATE 5/20/2026:</span> Transbay Tubes made <a href="https://www.bart.gov/news/articles/2026/news20260520" target="_blank">BART news!</a> Thank you Michelle and Javier for interviewing us; it was a lovely experience! </p>
         
@@ -108,9 +108,10 @@
     <fieldset>
       <legend>tubes</legend>
       <div class="slots">
-        <div class="slot"><div class="slot-label">TUBE 0 · 7.7s</div><div class="slot-val" id="s0">[ — ]</div></div>
-        <div class="slot"><div class="slot-label">TUBE 1 · 8.5s</div><div class="slot-val" id="s1">[ — ]</div></div>
-        <div class="slot"><div class="slot-label">TUBE 2 · 11.2s</div><div class="slot-val" id="s2">[ — ]</div></div>
+        <div class="slot"><div class="slot-label" id="l0"></div><div class="slot-val" id="s0">[ — ]</div></div>
+        <div class="slot"><div class="slot-label" id="l1"></div><div class="slot-val" id="s1">[ — ]</div></div>
+        <div class="slot"><div class="slot-label" id="l2"></div><div class="slot-val" id="s2">[ — ]</div></div>
+        <div class="slot"><div class="slot-label" id="l3"></div><div class="slot-val" id="s3">[ — ]</div></div>
       </div>
     </fieldset>
     <fieldset>
@@ -149,30 +150,43 @@
 <script>
   const POLL = 5000;
 
-  // Heater sequences matching tube_esp32.ino exactly.
+  // One tube per transbay line. A train fires the tube matching its line
+  // (e.g. "Yellow-N" → Yellow tube), regardless of which server slot it's in.
+  // Heater sequences should match tube_esp32.ino.
   // Each segment: { on: bool, ms: number } — the pin state and how long it holds.
-  // Total = sum of all segment ms.
-  const TUBE_SEQS = [
-    // tube0 / redPin:    ON 5500 → OFF 500 → ON 500 → OFF 500 → ON 700 → OFF  = 7700ms
-    { name: 'tube0',    totalMs: 7700,
+  const TUBES = [
+    // ON 5500 → OFF 500 → ON 500 → OFF 500 → ON 700 → OFF  = 7700ms
+    { line: 'Red',    color: '#ff4444',
       segments: [{on:true,ms:5500},{on:false,ms:500},{on:true,ms:500},{on:false,ms:500},{on:true,ms:700}] },
-    // tube1 / yellowPin: ON 7500 → OFF 500 → ON 500 → OFF                     = 8500ms
-    { name: 'tube1', totalMs: 8500,
+    // ON 7500 → OFF 500 → ON 500 → OFF                     = 8500ms
+    { line: 'Yellow', color: '#ffd700',
       segments: [{on:true,ms:7500},{on:false,ms:500},{on:true,ms:500}] },
-    // tube2 / greenPin:  ON 9000 → OFF 500 → ON 500 → OFF 500 → ON 700 → OFF  = 11200ms
-    { name: 'tube2', totalMs: 11200,
+    // ON 9000 → OFF 500 → ON 500 → OFF 500 → ON 700 → OFF  = 11200ms
+    { line: 'Green',  color: '#44ff88',
       segments: [{on:true,ms:9000},{on:false,ms:500},{on:true,ms:500},{on:false,ms:500},{on:true,ms:700}] },
+    // TODO: placeholder — replace with the blue tube's real heater sequence
+    { line: 'Blue',   color: '#4a9eff',
+      segments: [{on:true,ms:7500},{on:false,ms:500},{on:true,ms:500}] },
   ];
+  for (const tb of TUBES) tb.totalMs = tb.segments.reduce((sum, s) => sum + s.ms, 0);
 
-  const prevKey     = ['','',''];
+  TUBES.forEach((tb, i) => {
+    const label = document.getElementById('l' + i);
+    label.textContent = tb.line.toUpperCase() + ' · ' + (tb.totalMs/1000).toFixed(1) + 's';
+    label.style.color = tb.color;
+    document.getElementById('s' + i).style.setProperty('--c', tb.color);
+  });
+
   const activatedKeys = new Set();
+  const tubeTimers  = TUBES.map(() => []);
   let firstPoll = true;
   const fireLog = [];
 
   function key(t) { return t.vehicleRef || (t.line + '|' + t.dest); }
+  function tubeFor(t) { return TUBES.findIndex(tb => t.line.startsWith(tb.line)); }
 
   function playTube(tubeIdx, train) {
-    const seq = TUBE_SEQS[tubeIdx];
+    const seq = TUBES[tubeIdx];
     const el  = document.getElementById('s' + tubeIdx);
     const led = document.getElementById('led');
 
@@ -181,21 +195,25 @@
     led.style.boxShadow  = '0 0 14px ' + train.color;
     setTimeout(() => { led.style.background = '#222'; led.style.boxShadow = 'none'; }, seq.totalMs);
 
-    // Animate slot: replay each segment's on/off state
+    // Restart the animation if this tube is already mid-sequence
+    tubeTimers[tubeIdx].forEach(clearTimeout);
+    tubeTimers[tubeIdx] = [];
+    const later = (fn, ms) => tubeTimers[tubeIdx].push(setTimeout(fn, ms));
+
+    // Animate tube: replay each segment's on/off state
     let t = 0;
     for (const seg of seq.segments) {
-      const delay = t;
-      setTimeout(() => { el.className = 'slot-val ' + (seg.on ? 'sounding' : 'occupied'); }, delay);
+      later(() => { el.className = 'slot-val ' + (seg.on ? 'sounding' : 'occupied'); }, t);
       t += seg.ms;
     }
-    setTimeout(() => { el.className = 'slot-val occupied'; }, t); // final off
+    later(() => { el.className = 'slot-val occupied'; }, t); // final off
 
     // Append to fire log
     const ts   = new Date().toLocaleTimeString();
     const vref = train.vehicleRef ? ` #${train.vehicleRef}` : '';
     const entry = `<div class="log-row"><span class="ts">${ts}</span> · `
       + `<span style="color:${train.color};font-weight:bold">${train.line}</span>${vref} → ${train.dest} entered the tube! `
-      + `· fired <b>tube${tubeIdx}</b> (${seq.name} heater) · LED for ${(seq.totalMs/1000).toFixed(1)}s</div>`;
+      + `· fired <b style="color:${seq.color}">${seq.line.toLowerCase()} tube</b> · LED for ${(seq.totalMs/1000).toFixed(1)}s</div>`;
     fireLog.unshift(entry);
     if (fireLog.length > 30) fireLog.pop();
     document.getElementById('log-entries').innerHTML = fireLog.join('');
@@ -210,45 +228,28 @@
     document.getElementById('fetched').textContent = data.fetchedAt
       ? 'data ' + new Date(data.fetchedAt).toLocaleTimeString() : '';
 
-    const tubes = data.tubes || [null,null,null];
-    const currentKeys = new Set(tubes.filter(Boolean).map(key));
+    // Server slots are just a list of trains in the tube; which slot doesn't matter
+    const trains = (data.tubes || []).filter(Boolean);
+    const currentKeys = new Set(trains.map(key));
     for (const k of activatedKeys) if (!currentKeys.has(k)) activatedKeys.delete(k);
 
-    if (firstPoll) {
-      firstPoll = false;
-      tubes.forEach((t, i) => {
-        const el = document.getElementById('s' + i);
-        if (!t) { el.textContent = '[ — ]'; return; }
-        const k = key(t);
-        prevKey[i] = k;
-        activatedKeys.add(k);
-        el.textContent = '[ ' + t.line + (t.vehicleRef ? ' #'+t.vehicleRef : '') + ' ]';
-        el.className = 'slot-val occupied';
-      });
-      return;
-    }
-
-    tubes.forEach((t, i) => {
-      const el = document.getElementById('s' + i);
-      if (!t) {
-        el.textContent = '[ — ]';
-        if (!el.classList.contains('sounding')) el.className = 'slot-val';
-        prevKey[i] = '';
-        return;
-      }
+    // New trains fire their line's tube. On first poll, just snapshot (no firing).
+    for (const t of trains) {
       const k = key(t);
-      el.textContent = '[ ' + t.line + (t.vehicleRef ? ' #'+t.vehicleRef : '') + ' ]';
-      if (k !== prevKey[i]) {
-        prevKey[i] = k;
-        if (!activatedKeys.has(k)) {
-          activatedKeys.add(k);
-          playTube(i, t);
-        } else if (!el.classList.contains('sounding')) {
-          el.className = 'slot-val occupied';
-        }
-      } else if (!el.classList.contains('sounding')) {
-        el.className = 'slot-val occupied';
-      }
+      if (activatedKeys.has(k)) continue;
+      activatedKeys.add(k);
+      const i = tubeFor(t);
+      if (!firstPoll && i !== -1) playTube(i, t);
+    }
+    firstPoll = false;
+
+    TUBES.forEach((tb, i) => {
+      const el   = document.getElementById('s' + i);
+      const here = trains.filter(t => tubeFor(t) === i);
+      el.textContent = here.length
+        ? '[ ' + here.map(t => t.line + (t.vehicleRef ? ' #'+t.vehicleRef : '')).join(', ') + ' ]'
+        : '[ — ]';
+      if (!el.classList.contains('sounding')) el.className = 'slot-val' + (here.length ? ' occupied' : '');
     });
 
     if (document.querySelector('details[open]'))
