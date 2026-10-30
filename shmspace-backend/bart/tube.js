@@ -125,7 +125,7 @@ router.get('/tube_arrivals', (_req, res) => {
     }
     const entry = tubeAssignments.get(key);
     if (entry !== undefined)
-      tubes[entry.idx] = { line: t.line, dest: t.dest, vehicleRef: t.vehicleRef || null, color: lineColor(t.line), minutesUntil: t.minutesUntil };
+      tubes[entry.idx] = { id: key, line: t.line, dest: t.dest, vehicleRef: t.vehicleRef || null, color: lineColor(t.line), minutesUntil: t.minutesUntil };
   }
 
   if (changed) persistAssignments();

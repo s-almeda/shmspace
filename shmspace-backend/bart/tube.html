@@ -182,7 +182,7 @@
   let firstPoll = true;
   const fireLog = [];
 
-  function key(t) { return t.vehicleRef || (t.line + '|' + t.dest); }
+  function key(t) { return t.id; }
   function tubeFor(t) { return TUBES.findIndex(tb => t.line.startsWith(tb.line)); }
 
   function playTube(tubeIdx, train) {
