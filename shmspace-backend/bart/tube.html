@@ -152,33 +152,34 @@
 
   // One tube per transbay line. A train fires the tube matching its line
   // (e.g. "Yellow-N" → Yellow tube), regardless of which server slot it's in.
-  // Heater sequences should match tube_esp32.ino.
-  // Each segment: { on: bool, ms: number } — the pin state and how long it holds.
   const TUBES = [
-    // ON 5500 → OFF 500 → ON 500 → OFF 500 → ON 700 → OFF  = 7700ms
-    { line: 'Red',    color: '#ff4444',
-      segments: [{on:true,ms:5500},{on:false,ms:500},{on:true,ms:500},{on:false,ms:500},{on:true,ms:700}] },
-    // ON 7500 → OFF 500 → ON 500 → OFF                     = 8500ms
-    { line: 'Yellow', color: '#ffd700',
-      segments: [{on:true,ms:7500},{on:false,ms:500},{on:true,ms:500}] },
-    // ON 9000 → OFF 500 → ON 500 → OFF 500 → ON 700 → OFF  = 11200ms
-    { line: 'Green',  color: '#44ff88',
-      segments: [{on:true,ms:9000},{on:false,ms:500},{on:true,ms:500},{on:false,ms:500},{on:true,ms:700}] },
-    // TODO: placeholder — replace with the blue tube's real heater sequence
-    { line: 'Blue',   color: '#4a9eff',
-      segments: [{on:true,ms:7500},{on:false,ms:500},{on:true,ms:500}] },
+    { line: 'Red',    color: '#ff4444' },
+    { line: 'Yellow', color: '#ffd700' },
+    { line: 'Green',  color: '#44ff88' },
+    { line: 'Blue',   color: '#4a9eff' },
   ];
-  for (const tb of TUBES) tb.totalMs = tb.segments.reduce((sum, s) => sum + s.ms, 0);
+  // How long a tube (and the LED) lights up on the page when its train enters.
+  // Not tied to the real heater times.
+  const LIGHT_MS = 8000;
+
+  // Label over each tube: line name + time until that line's next train enters
+  function setLabel(i, nextMins) {
+    const label = document.getElementById('l' + i);
+    const next  = nextMins === undefined ? ''
+      : nextMins === null ? ' · none soon'
+      : nextMins < 1      ? ' · next <1m'
+      :                     ' · next in ' + nextMins + 'm';
+    label.textContent = TUBES[i].line.toUpperCase() + next;
+  }
 
   TUBES.forEach((tb, i) => {
-    const label = document.getElementById('l' + i);
-    label.textContent = tb.line.toUpperCase() + ' · ' + (tb.totalMs/1000).toFixed(1) + 's';
-    label.style.color = tb.color;
+    setLabel(i);
+    document.getElementById('l' + i).style.color = tb.color;
     document.getElementById('s' + i).style.setProperty('--c', tb.color);
   });
 
   const activatedKeys = new Set();
-  const tubeTimers  = TUBES.map(() => []);
+  const tubeTimers  = TUBES.map(() => null);
   let firstPoll = true;
   const fireLog = [];
 
@@ -190,30 +191,22 @@
     const el  = document.getElementById('s' + tubeIdx);
     const led = document.getElementById('led');
 
-    // LED on for full sequence duration
+    // LED on while the tube is lit
     led.style.background = train.color;
     led.style.boxShadow  = '0 0 14px ' + train.color;
-    setTimeout(() => { led.style.background = '#222'; led.style.boxShadow = 'none'; }, seq.totalMs);
+    setTimeout(() => { led.style.background = '#222'; led.style.boxShadow = 'none'; }, LIGHT_MS);
 
-    // Restart the animation if this tube is already mid-sequence
-    tubeTimers[tubeIdx].forEach(clearTimeout);
-    tubeTimers[tubeIdx] = [];
-    const later = (fn, ms) => tubeTimers[tubeIdx].push(setTimeout(fn, ms));
-
-    // Animate tube: replay each segment's on/off state
-    let t = 0;
-    for (const seg of seq.segments) {
-      later(() => { el.className = 'slot-val ' + (seg.on ? 'sounding' : 'occupied'); }, t);
-      t += seg.ms;
-    }
-    later(() => { el.className = 'slot-val occupied'; }, t); // final off
+    // Light the tube (restarts the timer if it's already lit)
+    clearTimeout(tubeTimers[tubeIdx]);
+    el.className = 'slot-val sounding';
+    tubeTimers[tubeIdx] = setTimeout(() => { el.className = 'slot-val occupied'; }, LIGHT_MS);
 
     // Append to fire log
     const ts   = new Date().toLocaleTimeString();
     const vref = train.vehicleRef ? ` #${train.vehicleRef}` : '';
     const entry = `<div class="log-row"><span class="ts">${ts}</span> · `
       + `<span style="color:${train.color};font-weight:bold">${train.line}</span>${vref} → ${train.dest} entered the tube! `
-      + `· fired <b style="color:${seq.color}">${seq.line.toLowerCase()} tube</b> · LED for ${(seq.totalMs/1000).toFixed(1)}s</div>`;
+      + `· fired <b style="color:${seq.color}">${seq.line.toLowerCase()} tube</b></div>`;
     fireLog.unshift(entry);
     if (fireLog.length > 30) fireLog.pop();
     document.getElementById('log-entries').innerHTML = fireLog.join('');
@@ -259,6 +252,14 @@
   async function pollEvents() {
     const data = await fetch('/api/bart/tube/events').then(r=>r.json()).catch(()=>null);
     if (!data) return;
+
+    // Soonest train about to enter the tube, per line (null = none in the next 15m)
+    TUBES.forEach((tb, i) => {
+      const mins = data.events
+        .filter(e => e.status === 'entering' && e.line.startsWith(tb.line))
+        .map(e => e.minutes);
+      setLabel(i, mins.length ? Math.min(...mins) : null);
+    });
 
     const imminent = data.events.filter(e => e.status !== 'in_tube' && e.minutes <= 5)
                                 .sort((a,b) => a.minutes - b.minutes);
